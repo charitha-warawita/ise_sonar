@@ -6,3 +6,9 @@
 /IntelligentSampleEnginePOC.UI/.vs/IntelligentSampleEnginePOC.UI
 /IntelligentSampleEnginePOC.UI/IntelligentSampleEnginePOC.UI/bin/Debug/net6.0
 /IntelligentSampleEnginePOC.UI/IntelligentSampleEnginePOC.UI/obj
+/IntelligentSampleEnginePOC.API/.vs
+/IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API/bin/Debug/net6.0
+/IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API/obj
+/IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API.Core/bin/Debug/net6.0
+/IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API.Core/obj
+*.v2
