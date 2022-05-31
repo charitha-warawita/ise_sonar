@@ -9,6 +9,11 @@ namespace IntelligentSampleEnginePOC.UI.Models
 {
     public class Project
     {
+        public Project()
+        {
+            TargetAudiences = new List<TargetAudience>();
+        }
+
         public Guid Id { get; set; }
         [StringLength(60, MinimumLength = 3)]
         [Required]
