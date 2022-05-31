@@ -1,0 +1,80 @@
+﻿@using IntelligentSampleEnginePOC.UI.Utilities
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model Project
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create new survey</h1>
+<hr />
+
+@using (Html.BeginForm("Create", "Project", FormMethod.Post, new { id = "Form1" }))
+{
+    <div class="row">
+        <div class="col-lg-2">Name</div>
+        <div class="col-lg-10">
+            @Html.TextBoxFor(a => a.Name, new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-2">Reference</div>
+        <div class="col-lg-10">
+            @Html.TextBoxFor(a => a.Reference, new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-2">User Name</div>
+        <div class="col-lg-10">
+            @Html.TextBoxFor(a => a.User.Name, new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-2">Email</div>
+        <div class="col-lg-10">
+            @Html.TextBoxFor(a => a.User.Email, new { @class = "form-control" }) 
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-2">Start Date</div>
+        <div class="col-lg-10">
+            <input asp-for="StartDate" class="form-control" />
+            @*@Html.TextBoxFor(a => a.StartDate, new { @class = "form-control" })*@
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-2">Fielding Period</div>
+        <div class="col-lg-10">
+            <input asp-for="FieldingPeriod" class="form-control" />
+            @*@Html.TextBoxFor(a => a.FieldingPeriod, new { @class = "form-control" })*@
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-2">Link to Survey</div>
+        <div class="col-lg-10">
+            @Html.TextBoxFor(a => a.LinkToSurvey, new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-12"><input type="submit" value="Submit" class="btn btn-primary"></div>
+    </div>
+}
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

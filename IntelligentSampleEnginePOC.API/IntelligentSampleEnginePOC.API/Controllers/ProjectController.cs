@@ -1,4 +1,5 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Model;
+using IntelligentSampleEnginePOC.API.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,15 +10,21 @@ namespace IntelligentSampleEnginePOC.API.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
+        IProjectService _projectService;
+        public ProjectController(IProjectService projectService)
+        {
+            _projectService = projectService;
+        }
+
         [HttpPost]
         public ActionResult Post([FromBody] Project project)
         {
             //Yet to do
+            var resultProject = _projectService.CreateProject(project);
 
-            if (project != null)
+            if (resultProject != null)
             {
-                project.Id = Guid.NewGuid();
-                return Ok(project);
+                return Ok(resultProject);
             }
             else
                 return StatusCode(500, "Error occured");
@@ -49,38 +56,29 @@ namespace IntelligentSampleEnginePOC.API.Controllers
                 return StatusCode(500, "Id not found");
         }
 
-        [HttpGet("status/{status}")]
-        public ActionResult GetByStatus(int status)
-        {
-            //Yet to do 
-
-            if (status > -1)
-            {
-                return Ok(new List<Project> { new Project() }) ;
-            }
-            else
-                return StatusCode(500, "No projects found on this status");
-        }
-
-        [HttpGet("recent/{maxNumber}")]
-        public ActionResult GetRecentProjects(int maxNumber)
-        {
-            //Yet to do 
-
-            if (maxNumber > -1 && maxNumber < 100)
-            {
-                return Ok(new List<Project> { new Project() });
-            }
-            else
-                return StatusCode(500, "No projects found on this status");
-        }
-
         [HttpGet]
-        public ActionResult GetAll()
+        public ActionResult GetAll(int? status, string? searchString, int? recentCount)
         {
-            //Yet to do 
+            //Yet to do
 
-            return Ok(new List<Project> { new Project() });
+            IEnumerable<Project> projects = new List<Project>
+                {
+                    new Project() { Id = Guid.NewGuid(), Name = "Your ongoing diary study", Status = Status.Draft, LastUpdate = DateTime.Today.AddDays(-10) },
+                    new Project() { Id = Guid.NewGuid(), Name = "Rewarding you every day", Status = Status.Created, LastUpdate = DateTime.Today.AddDays(-20) },
+                    new Project() { Id = Guid.NewGuid(), Name = "Drinks survey", Status = Status.Live, LastUpdate = DateTime.Today.AddDays(-30) },
+                    new Project() { Id = Guid.NewGuid(), Name = "All about cars", Status = Status.Paused, LastUpdate = DateTime.Today.AddDays(-40) },
+                    new Project() { Id = Guid.NewGuid(), Name = "Stocks Study", Status = Status.Complete, LastUpdate = DateTime.Today.AddDays(-50) },
+                    new Project() { Id = Guid.NewGuid(), Name = "Fast track you rewards", Status = Status.Closed, LastUpdate = DateTime.Today.AddDays(-60) },
+                    new Project() { Id = Guid.NewGuid(), Name = "Rewards and surveys", Status = Status.Halted, LastUpdate = DateTime.Today.AddDays(-70) },
+                    new Project() { Id = Guid.NewGuid(), Name = "Machine study", Status = Status.Paused, LastUpdate = DateTime.Today.AddDays(-80) },
+                };
+
+            if (status != null && status > -1 && status < 7)
+                projects = projects.Where(x => (int)x.Status == status);
+            if (!string.IsNullOrEmpty(searchString))
+                projects = projects.Where(x => x.Name.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
+
+            return Ok(projects);
         }
 
         [HttpPost]
