@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntelligentSampleEnginePOC.API.Core.Model
+namespace IntelligentSampleEnginePOC.UI.Models
 {
     public class QuotaGroup
     {

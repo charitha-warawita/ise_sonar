@@ -13,7 +13,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
         public string Reference { get; set; }
         public User User { get; set; }
         public DateTime LastUpdate { get; set; }
-        public DateTime FieldPeriod { get; set; }
+        public DateTime StartDate { get; set; }
+        public int FieldingPeriod { get; set; }
         public Status Status { get; set; }
         public string LinkToSurvey { get; set; }
         public List<TargetAudience> TargetAudiences { get; set; }

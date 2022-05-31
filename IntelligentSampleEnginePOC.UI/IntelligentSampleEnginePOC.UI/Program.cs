@@ -1,7 +1,23 @@
+using IntelligentSampleEnginePOC.UI.Configurations;
+using IntelligentSampleEnginePOC.UI.Core;
+using System.Net.Http.Headers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var iseApiSettings = builder.Configuration.GetSection("ISEApiSettings");
+builder.Services.Configure<ISEApiSettings>(iseApiSettings);
+
+builder.Services.AddHttpClient<IProjectVMService, ProjectVMService>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ISEApiSettings:Url"));
+    client.DefaultRequestHeaders.Accept.Clear();
+    client.DefaultRequestHeaders.Accept.Add(
+        new MediaTypeWithQualityHeaderValue("application/json"));
+}).SetHandlerLifetime(TimeSpan.FromMinutes(5));
+
 
 var app = builder.Build();
 
@@ -22,6 +38,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Project}/{action=Index}/{id?}");
 
 app.Run();
