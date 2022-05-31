@@ -14,6 +14,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
         public int Limit { get; set; }
         public string LimitType { get; set; }
         public List<Qualification> Qualifications { get; set; }
-        public List<Quota> Quotas { get; set; }
+        public List<QuotaGroup> QuotaGroups { get; set; }
     }
 }

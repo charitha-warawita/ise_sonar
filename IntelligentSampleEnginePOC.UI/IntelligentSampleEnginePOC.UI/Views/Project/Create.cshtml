@@ -14,67 +14,221 @@
 
 @using (Html.BeginForm("Create", "Project", FormMethod.Post, new { id = "Form1" }))
 {
-    <div class="row">
-        <div class="col-lg-2">Name</div>
-        <div class="col-lg-10">
-            @Html.TextBoxFor(a => a.Name, new { @class = "form-control" })
+    <div id="1">
+        <div class="row">
+            <div class="col-lg-2">Name</div>
+            <div class="col-lg-10">
+                @Html.TextBoxFor(a => a.Name, new { @class = "form-control" })
+            </div>
         </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-lg-2">Reference</div>
-        <div class="col-lg-10">
-            @Html.TextBoxFor(a => a.Reference, new { @class = "form-control" })
+        <br />
+        <div class="row">
+            <div class="col-lg-2">Reference</div>
+            <div class="col-lg-10">
+                @Html.TextBoxFor(a => a.Reference, new { @class = "form-control" })
+            </div>
         </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-lg-2">User Name</div>
-        <div class="col-lg-10">
-            @Html.TextBoxFor(a => a.User.Name, new { @class = "form-control" })
+        <br />
+        <div class="row">
+            <div class="col-lg-2">User Name</div>
+            <div class="col-lg-10">
+                @Html.TextBoxFor(a => a.User.Name, new { @class = "form-control" })
+            </div>
         </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-lg-2">Email</div>
-        <div class="col-lg-10">
-            @Html.TextBoxFor(a => a.User.Email, new { @class = "form-control" }) 
+        <br />
+        <div class="row">
+            <div class="col-lg-2">Email</div>
+            <div class="col-lg-10">
+                @Html.TextBoxFor(a => a.User.Email, new { @class = "form-control" }) 
+            </div>
         </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-lg-2">Start Date</div>
-        <div class="col-lg-10">
-            <input asp-for="StartDate" class="form-control" />
-            @*@Html.TextBoxFor(a => a.StartDate, new { @class = "form-control" })*@
+        <br />
+        <div class="row">
+            <div class="col-lg-2">Start Date</div>
+            <div class="col-lg-10">
+                <input asp-for="StartDate" class="form-control" />
+                @*@Html.TextBoxFor(a => a.StartDate, new { @class = "form-control" })*@
+            </div>
         </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-lg-2">Fielding Period</div>
-        <div class="col-lg-10">
-            <input asp-for="FieldingPeriod" class="form-control" />
-            @*@Html.TextBoxFor(a => a.FieldingPeriod, new { @class = "form-control" })*@
+        <br />
+        <div class="row">
+            <div class="col-lg-2">Fielding Period</div>
+            <div class="col-lg-10">
+                <input asp-for="FieldingPeriod" class="form-control" />
+                @*@Html.TextBoxFor(a => a.FieldingPeriod, new { @class = "form-control" })*@
+            </div>
         </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-lg-2">Link to Survey</div>
-        <div class="col-lg-10">
-            @Html.TextBoxFor(a => a.LinkToSurvey, new { @class = "form-control" })
+        <br />
+        <div class="row">
+            <div class="col-lg-2">Link to Survey</div>
+            <div class="col-lg-10">
+                @Html.TextBoxFor(a => a.LinkToSurvey, new { @class = "form-control" })
+            </div>
         </div>
+        <br />
     </div>
-    <br />
+    <div id="2" style="display:none">
+        <h4>Create new Target Audience</h4>
+        <br />
+        <div class="row">
+            <div class="col-lg-2">Target Audience Name</div>
+            <div class="col-lg-10">
+                @Html.TextBoxFor(a => a.TargetAudiences[0].Name, new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-lg-2">TA Number</div>
+            <div class="col-lg-10">
+                @Html.TextBoxFor(a => a.TargetAudiences[0].TANumber, new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-lg-2">Limit</div>
+            <div class="col-lg-10">
+                @Html.TextBoxFor(a => a.TargetAudiences[0].Limit, new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-lg-2">Limit Type</div>
+            <div class="col-lg-10">
+                @Html.TextBoxFor(a => a.TargetAudiences[0].LimitType, new { @class = "form-control" }) 
+            </div>
+        </div>
+        <br />
+        <h5>Select qualification: </h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TargetAudiences[0].Qualifications[0].Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TargetAudiences[0].Qualifications[0].IsActive)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TargetAudiences[0].Qualifications[0].PreCodes)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TargetAudiences[0].Qualifications[0].LogicalOperator)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TargetAudiences[0].Qualifications[0].NumberOfRequiredConditions)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TargetAudiences[0].Qualifications[0].Order)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model.TargetAudiences[0].Qualifications)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsActive)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PreCodes)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LogicalOperator)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NumberOfRequiredConditions)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Order)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table><br />
+        <h5>Select Quota groups: </h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TargetAudiences[0].QuotaGroups[0].Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TargetAudiences[0].QuotaGroups[0].IsActive)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TargetAudiences[0].QuotaGroups[0].Quotas[0].QuotaName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TargetAudiences[0].QuotaGroups[0].Quotas[0].Limit)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TargetAudiences[0].QuotaGroups[0].Quotas[0].Precode)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model.TargetAudiences[0].QuotaGroups)
+                {
+                    @foreach(var subItem in item.Quotas)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsActive)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => subItem.QuotaName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => subItem.Limit)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => subItem.Precode)
+                            </td>
+                        </tr>
+                    }
+                    
+                }
+            </tbody>
+        </table>
+    </div>
     <div class="row">
-        <div class="col-lg-12"><input type="submit" value="Submit" class="btn btn-primary"></div>
+        <div class="col-lg-2"><input id="btnNext" type="button" value="Next" class="btn btn-primary"></div>
+        <div class="col-lg-10"><input type="submit" value="Submit" class="btn btn-primary"></div>
     </div>
 }
 
 <div>
+    <br />
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        
+            var nextElement = document.getElementById("btnNext");
+            var div1 = document.getElementById("1");
+            var div2 = document.getElementById("2");
+            nextElement.onclick = function() {
+                if(div1.style.display !== "none") {
+                    div1.style.display = "none";
+                    div2.style.display = "block";
+                    nextElement.setAttribute('value','Previous');
+                } else {
+                    div1.style.display = "block";
+                    div2.style.display = "none";
+                    nextElement.setAttribute('value','Next');
+                }
+            };
+
+    </script>
 }
+
+
 

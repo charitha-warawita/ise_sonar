@@ -20,7 +20,8 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            Project project = new Project();
+            return View(project);
         }
 
         // POST: Project/Create
