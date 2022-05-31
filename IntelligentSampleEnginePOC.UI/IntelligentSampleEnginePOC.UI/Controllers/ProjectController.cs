@@ -29,13 +29,18 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Project project)
+        public async Task<IActionResult> Create(Project project, string submitButton)
         {
             if (ModelState.IsValid)
             {
                 var result = await _service.CreateProject(project);
-                /*_context.Add(movie);
-                await _context.SaveChangesAsync();*/
+
+                if(submitButton == "Launch")
+                {
+                    //Write something to launch project
+                }
+
+
                 return RedirectToAction(nameof(Index));
             }
             return View(project);

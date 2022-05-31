@@ -15,6 +15,8 @@
 @using (Html.BeginForm("Create", "Project", FormMethod.Post, new { id = "Form1" }))
 {
     <div id="1">
+        <h4>Section 1: Enter project details</h4>
+        <br />
         <div class="row">
             <div class="col-lg-2">Name</div>
             <div class="col-lg-10">
@@ -68,7 +70,7 @@
         <br />
     </div>
     <div id="2" style="display:none">
-        <h4>Create new Target Audience</h4>
+        <h4>Section 2: Create new Target Audience</h4>
         <br />
         <div class="row">
             <div class="col-lg-2">Target Audience Name</div>
@@ -127,22 +129,22 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Name)
+                            @Html.TextBoxFor(modelItem => item.Name)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.IsActive)
+                            @Html.EditorFor(modelItem => item.IsActive)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.PreCodes)
+                            @Html.TextBoxFor(modelItem => item.PreCodes)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.LogicalOperator)
+                            @Html.TextBoxFor(modelItem => item.LogicalOperator)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.NumberOfRequiredConditions)
+                            @Html.TextBoxFor(modelItem => item.NumberOfRequiredConditions)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Order)
+                            @Html.TextBoxFor(modelItem => item.Order)
                         </td>
                     </tr>
                 }
@@ -176,19 +178,19 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Name)
+                                @Html.TextBoxFor(modelItem => item.Name)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.IsActive)
+                                @Html.EditorFor(modelItem => item.IsActive)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => subItem.QuotaName)
+                                @Html.TextBoxFor(modelItem => subItem.QuotaName)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => subItem.Limit)
+                                @Html.TextBoxFor(modelItem => subItem.Limit)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => subItem.Precode)
+                                @Html.TextBoxFor(modelItem => subItem.Precode)
                             </td>
                         </tr>
                     }
@@ -199,7 +201,10 @@
     </div>
     <div class="row">
         <div class="col-lg-2"><input id="btnNext" type="button" value="Next" class="btn btn-primary"></div>
-        <div class="col-lg-10"><input type="submit" value="Submit" class="btn btn-primary"></div>
+        <div class="col-lg-10">
+            <input id="btnLaunch" type="submit" style="display:none; float: right;" name="submitButton" value="Launch" class="btn btn-primary">
+            <input id="btnSubmit" type="submit" style="display:none; float: right; margin-right:20px;" name="submitButton" value="Save as draft" class="btn btn-primary">
+        </div>
     </div>
 }
 
@@ -213,6 +218,8 @@
     <script type="text/javascript">
         
             var nextElement = document.getElementById("btnNext");
+            var submitElement = document.getElementById("btnSubmit");
+            var launchElement = document.getElementById("btnLaunch");
             var div1 = document.getElementById("1");
             var div2 = document.getElementById("2");
             nextElement.onclick = function() {
@@ -220,10 +227,16 @@
                     div1.style.display = "none";
                     div2.style.display = "block";
                     nextElement.setAttribute('value','Previous');
+                    // submitElement.setAttribute('value', 'Submit');
+                    submitElement.style.display = "block";
+                    launchElement.style.display = "block";
                 } else {
                     div1.style.display = "block";
                     div2.style.display = "none";
                     nextElement.setAttribute('value','Next');
+                    submitElement.style.display = "none";
+                    launchElement.style.display = "none";
+                    // submitElement.setAttribute('value','Save and Exit');
                 }
             };
 
