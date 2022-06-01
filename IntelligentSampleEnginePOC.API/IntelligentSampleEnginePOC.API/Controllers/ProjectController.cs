@@ -19,16 +19,13 @@ namespace IntelligentSampleEnginePOC.API.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] Project project)
         {
-            //Yet to do
             var resultProject = _projectService.CreateProject(project);
-
             if (resultProject != null)
             {
                 return Ok(resultProject);
             }
             else
                 return StatusCode(500, "Error occured");
-            
         }
 
         [HttpPut]
@@ -42,6 +39,18 @@ namespace IntelligentSampleEnginePOC.API.Controllers
                 return StatusCode(500,"Error occured");
 
         }
+
+        /*[HttpGet("template")]
+        public ActionResult GetEmptyProjectTemplate()
+        {
+            var projectTemplate = _projectService.GetProjectTemplate();
+            if (projectTemplate != null)
+            {
+                return Ok(projectTemplate);
+            }
+            else
+                return StatusCode(500, "Error response");
+        }*/
 
         [HttpGet("id/{id}")]
         public ActionResult GetById(string id)
@@ -59,29 +68,11 @@ namespace IntelligentSampleEnginePOC.API.Controllers
         [HttpGet]
         public ActionResult GetAll(int? status, string? searchString, int? recentCount)
         {
-            //Yet to do
-
-            IEnumerable<Project> projects = new List<Project>
-                {
-                    new Project() { Id = Guid.NewGuid(), Name = "Your ongoing diary study", Status = Status.Draft, LastUpdate = DateTime.Today.AddDays(-10) },
-                    new Project() { Id = Guid.NewGuid(), Name = "Rewarding you every day", Status = Status.Created, LastUpdate = DateTime.Today.AddDays(-20) },
-                    new Project() { Id = Guid.NewGuid(), Name = "Drinks survey", Status = Status.Live, LastUpdate = DateTime.Today.AddDays(-30) },
-                    new Project() { Id = Guid.NewGuid(), Name = "All about cars", Status = Status.Paused, LastUpdate = DateTime.Today.AddDays(-40) },
-                    new Project() { Id = Guid.NewGuid(), Name = "Stocks Study", Status = Status.Complete, LastUpdate = DateTime.Today.AddDays(-50) },
-                    new Project() { Id = Guid.NewGuid(), Name = "Fast track you rewards", Status = Status.Closed, LastUpdate = DateTime.Today.AddDays(-60) },
-                    new Project() { Id = Guid.NewGuid(), Name = "Rewards and surveys", Status = Status.Halted, LastUpdate = DateTime.Today.AddDays(-70) },
-                    new Project() { Id = Guid.NewGuid(), Name = "Machine study", Status = Status.Paused, LastUpdate = DateTime.Today.AddDays(-80) },
-                };
-
-            if (status != null && status > -1 && status < 7)
-                projects = projects.Where(x => (int)x.Status == status);
-            if (!string.IsNullOrEmpty(searchString))
-                projects = projects.Where(x => x.Name.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
-
-            return Ok(projects);
+            var projectLists = _projectService.GetProjects(status, searchString, recentCount);
+            return Ok(projectLists);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public ActionResult LaunchProject(Project project)
         {
             //Yet to do 
@@ -90,6 +81,6 @@ namespace IntelligentSampleEnginePOC.API.Controllers
                 return Ok(new CintResponse());
             else
                 return StatusCode(500, "The current project is not launched");
-        }
+        }*/
     }
 }

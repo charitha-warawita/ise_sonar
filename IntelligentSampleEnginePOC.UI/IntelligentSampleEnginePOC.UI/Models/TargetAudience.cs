@@ -27,8 +27,8 @@ namespace IntelligentSampleEnginePOC.UI.Models
                     IsActive = true,
                     Quotas = new List<Quota>
                     {
-                        new Quota { QuotaName = "Young", Limit = 70, Precode="18-35", MinAge = 18, MaxAge = 35 },
-                        new Quota { QuotaName = "Old", Limit = 30, Precode="36-70", MinAge = 36, MaxAge = 70 }
+                        new Quota { Id = Guid.NewGuid(), QuotaName = "Young", Limit = 70, Precode="18-35", MinAge = 18, MaxAge = 35 },
+                        new Quota { Id = Guid.NewGuid(), QuotaName = "Old", Limit = 30, Precode="36-70", MinAge = 36, MaxAge = 70 }
                     }
                 },
                 new QuotaGroup
@@ -38,8 +38,8 @@ namespace IntelligentSampleEnginePOC.UI.Models
                     IsActive = true,
                     Quotas = new List<Quota>
                     {
-                        new Quota { QuotaName = "Male", Limit = 50, Precode = "1", Gender = 1 },
-                        new Quota { QuotaName = "Female", Limit = 50, Precode = "2", Gender = 2 }
+                        new Quota { Id = Guid.NewGuid(), QuotaName = "Male", Limit = 50, Precode = "1", Gender = 1 },
+                        new Quota { Id = Guid.NewGuid(), QuotaName = "Female", Limit = 50, Precode = "2", Gender = 2 }
                     }
                 }
             };

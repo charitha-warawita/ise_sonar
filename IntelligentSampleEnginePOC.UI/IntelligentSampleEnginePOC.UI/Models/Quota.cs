@@ -6,16 +6,9 @@ using System.Threading.Tasks;
 
 namespace IntelligentSampleEnginePOC.UI.Models
 {
-    public class QuotaGroup
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public bool IsActive { get; set; }
-        public List<Quota> Quotas { get; set; }
-    }
-
     public class Quota
     {
+        public Guid Id { get; set; }
         public string QuotaName { get; set; }
         public int Limit { get; set; }
         public string Precode { get; set; }

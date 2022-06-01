@@ -6,6 +6,8 @@ namespace IntelligentSampleEnginePOC.UI.Core
     {
         Task<ProjectViewModel> GetProjectVM(string status, string searchString);
 
+        // Task<Project> GetEmptyProjectTemplate();
+
         Task<Project> CreateProject(Project project);
     }
 }

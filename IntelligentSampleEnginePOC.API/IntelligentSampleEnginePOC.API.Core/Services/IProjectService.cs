@@ -1,4 +1,5 @@
-﻿using IntelligentSampleEnginePOC.API.Core.Model;
+﻿using Model = IntelligentSampleEnginePOC.API.Core.Model;
+using DBModel = IntelligentSampleEnginePOC.API.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 {
     public interface IProjectService
     {
-        public Project CreateProject(Project project);
+        Model.Project CreateProject(Model.Project project);
+
+        List<DBModel.Project> GetProjects(int? status, string? searchString, int? recentCount);
     }
 }
