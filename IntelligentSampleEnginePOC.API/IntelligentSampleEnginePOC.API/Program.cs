@@ -1,4 +1,6 @@
 using IntelligentSampleEnginePOC.API.Core.Services;
+using IntelligentSampleEnginePOC.API.DB;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddTransient<IProjectService, ProjectService>();
+builder.Services.AddDbContext<ISEdbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("iseDb")));
 
 var app = builder.Build();
 

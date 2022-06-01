@@ -4,6 +4,7 @@ using IntelligentSampleEnginePOC.UI.Utilities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using System.Text;
+using System.Text.Json;
 
 namespace IntelligentSampleEnginePOC.UI.Core
 {
@@ -52,11 +53,22 @@ namespace IntelligentSampleEnginePOC.UI.Core
             return projectViewModel;
         }
 
+        /*public Task<Project> GetEmptyProjectTemplate()
+        {
+
+        }*/
+
         public async Task<Project> CreateProject(Project project)
         {
-            
+            if(project == null)
+                throw new ArgumentNullException(nameof(project));
+
             StringBuilder urlBuilder = new StringBuilder();
             urlBuilder.Append(Path.Combine(_settings.Url, _settings.Path));
+            var jsonString = JsonSerializer.Serialize(project);
+
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(urlBuilder.ToString(), project);
+            response.EnsureSuccessStatusCode();
 
             return project;
         }
