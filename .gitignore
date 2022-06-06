@@ -19,3 +19,6 @@
 /IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API.Core/bin/Release/net6.0
 /IntelligentSampleEnginePOC.UI/IntelligentSampleEnginePOC.UI/bin/Release/net6.0
 /IntelligentSampleEnginePOC.UI/IntelligentSampleEnginePOC.UI/Properties/PublishProfiles
+/IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API.Http/bin
+/IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API.Http/obj
+/IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API.Http/Properties/PublishProfiles

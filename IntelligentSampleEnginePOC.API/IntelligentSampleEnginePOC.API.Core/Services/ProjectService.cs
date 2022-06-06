@@ -18,9 +18,12 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         private DBModel.TargetAudienceQualification targetAudienceQualification { get; set; }
         private DBModel.TargetAudienceQuotaGroup TargetAudienceQuotaGroup { get; set; }
 
-        public ProjectService(DBModel.ISEdbContext context)
+        private ICintService cintService { get; set; }
+
+        public ProjectService(DBModel.ISEdbContext context, ICintService cintService)
         {
             _dataContext = context;
+            this.cintService = cintService;
         }
         public Model.Project CreateProject(Model.Project project)
         {
@@ -30,6 +33,22 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             _dataContext.SaveChanges();
 
             return project;
+        }
+
+        public async Task<bool> LaunchProject(Model.Project project)
+        {
+            if (project == null)
+                throw new ArgumentNullException("project model not found", nameof(project));
+
+            if(string.IsNullOrEmpty(project.Name))
+            {
+                // This means the project ID and first we need to retrieve all project details and then form json request to CINT API
+            }
+
+            var cintRequest = cintService.ConvertProjectToCintRequest(project);
+            return await cintService.CallCintApi(cintRequest);
+
+
         }
 
         public List<DBModel.Project> GetProjects(int? status, string? searchString, int? recentCount)

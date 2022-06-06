@@ -51,33 +51,43 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Project project, string submitButton)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if(project != null)
+                if (ModelState.IsValid)
                 {
-                    project.Id = Guid.NewGuid();
-                    project.LastUpdate = DateTime.UtcNow;
-                    if (project.User != null)
-                        project.User.Id = Guid.NewGuid();
-                    if(project.TargetAudiences.Any())
+                    if (project != null)
                     {
-                        foreach(var item in project.TargetAudiences)
+                        project.Id = Guid.NewGuid();
+                        project.LastUpdate = DateTime.UtcNow;
+                        if (project.User != null)
+                            project.User.Id = Guid.NewGuid();
+                        if (project.TargetAudiences.Any())
                         {
-                            item.Id = Guid.NewGuid();
+                            foreach (var item in project.TargetAudiences)
+                            {
+                                item.Id = Guid.NewGuid();
+                            }
                         }
                     }
+                    var result = await _service.CreateProject(project);
+
+                    if (submitButton == "Launch")
+                    {
+                        _service.LaunchProject(project);
+                        //Write something to launch project
+                    }
+
+
+                    return RedirectToAction(nameof(Index));
                 }
-                var result = await _service.CreateProject(project);
-
-                if(submitButton == "Launch")
-                {
-                    //Write something to launch project
-                }
-
-
-                return RedirectToAction(nameof(Index));
+                return View(project);
             }
-            return View(project);
+            catch(Exception ex)
+            {
+                _logger.Log(LogLevel.Error, "Exception occured - " + ex.Message, ex);
+
+            }
+            return View();
         }
     }
 }

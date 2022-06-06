@@ -72,5 +72,22 @@ namespace IntelligentSampleEnginePOC.UI.Core
 
             return project;
         }
+
+        public async Task<bool> LaunchProject(Project project)
+        {
+            if (project == null)
+                throw new ArgumentNullException(nameof(project));
+
+            StringBuilder urlBuilder = new StringBuilder();
+            urlBuilder.Append(Path.Combine(_settings.Url, _settings.Path));
+            urlBuilder.Append("/launch");
+            var jsonString = JsonSerializer.Serialize(project);
+
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(urlBuilder.ToString(), project);
+            response.EnsureSuccessStatusCode();
+
+            
+            return response.IsSuccessStatusCode;
+        }
     }
 }

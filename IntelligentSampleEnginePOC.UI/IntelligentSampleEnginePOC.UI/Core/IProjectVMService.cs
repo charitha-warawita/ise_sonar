@@ -9,5 +9,7 @@ namespace IntelligentSampleEnginePOC.UI.Core
         // Task<Project> GetEmptyProjectTemplate();
 
         Task<Project> CreateProject(Project project);
+
+        Task<bool> LaunchProject(Project project);
     }
 }
