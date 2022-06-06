@@ -1,21 +1,33 @@
 ﻿using IntelligentSampleEnginePOC.UI.Core;
 using IntelligentSampleEnginePOC.UI.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace IntelligentSampleEnginePOC.UI.Controllers
 {
     public class ProjectController : Controller
     {
         private IProjectVMService _service { get; set; }
-        public ProjectController(IProjectVMService service)
+        private readonly ILogger<HomeController> _logger;
+        public ProjectController(IProjectVMService service, ILogger<HomeController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index(string status, string searchString)
         {
-            var result = await _service.GetProjectVM(status, searchString);
-            return View(result);
+            try
+            {
+                var result = await _service.GetProjectVM(status, searchString);
+                _logger.Log(LogLevel.Information, "Prejects returned: " + JsonSerializer.Serialize(result));
+                return View(result);
+            }
+            catch(Exception ex)
+            {
+                _logger.Log(LogLevel.Error, "SSL Exception occured - " + ex.Message, ex);
+            }
+            return View();
         }
 
         public IActionResult Create()
@@ -39,33 +51,41 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Project project, string submitButton)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if(project != null)
+                if (ModelState.IsValid)
                 {
-                    project.Id = Guid.NewGuid();
-                    project.LastUpdate = DateTime.UtcNow;
-                    if (project.User != null)
-                        project.User.Id = Guid.NewGuid();
-                    if(project.TargetAudiences.Any())
+                    if (project != null)
                     {
-                        foreach(var item in project.TargetAudiences)
+                        project.Id = Guid.NewGuid();
+                        project.LastUpdate = DateTime.UtcNow;
+                        if (project.User != null)
+                            project.User.Id = Guid.NewGuid();
+                        if (project.TargetAudiences.Any())
                         {
-                            item.Id = Guid.NewGuid();
+                            foreach (var item in project.TargetAudiences)
+                            {
+                                item.Id = Guid.NewGuid();
+                            }
                         }
                     }
+
+                    if (submitButton == "Launch")
+                        await _service.LaunchProject(project);
+                    else
+                        await _service.CreateProject(project);
+        
+
+                    return RedirectToAction(nameof(Index));
                 }
-                var result = await _service.CreateProject(project);
-
-                if(submitButton == "Launch")
-                {
-                    //Write something to launch project
-                }
-
-
-                return RedirectToAction(nameof(Index));
+                return View(project);
             }
-            return View(project);
+            catch(Exception ex)
+            {
+                _logger.Log(LogLevel.Error, "Exception occured - " + ex.Message, ex);
+
+            }
+            return View();
         }
     }
 }

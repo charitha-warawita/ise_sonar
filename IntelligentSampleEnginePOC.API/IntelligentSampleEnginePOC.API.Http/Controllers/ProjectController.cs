@@ -1,10 +1,11 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Model;
 using IntelligentSampleEnginePOC.API.Core.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace IntelligentSampleEnginePOC.API.Controllers
+namespace IntelligentSampleEnginePOC.API.Http.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -19,13 +20,20 @@ namespace IntelligentSampleEnginePOC.API.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] Project project)
         {
-            var resultProject = _projectService.CreateProject(project);
-            if (resultProject != null)
+            try
             {
-                return Ok(resultProject);
+                var resultProject = _projectService.CreateProject(project);
+                if (resultProject != null)
+                {
+                    return Ok(resultProject);
+                }
+                else
+                    return StatusCode(500, "Error occured");
             }
-            else
-                return StatusCode(500, "Error occured");
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Exception occured - " + ex.Message);
+            }
         }
 
         [HttpPost("launch")]

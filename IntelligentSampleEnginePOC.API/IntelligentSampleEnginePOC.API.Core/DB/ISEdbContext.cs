@@ -52,6 +52,10 @@ namespace IntelligentSampleEnginePOC.API.DB
 
                 entity.Property(e => e.UserId).HasMaxLength(50);
 
+                entity.Property(e => e.CintSelfLink).HasMaxLength(500);
+                entity.Property(e => e.CintCurrentCostLink).HasMaxLength(500);
+                entity.Property(e => e.CintTestingLink).HasMaxLength(500);
+
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Projects)
                     .HasForeignKey(d => d.UserId)

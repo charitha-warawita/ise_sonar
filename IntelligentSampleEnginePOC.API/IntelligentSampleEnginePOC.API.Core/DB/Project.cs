@@ -22,5 +22,9 @@ namespace IntelligentSampleEnginePOC.API.DB
 
         public virtual User? User { get; set; }
         public virtual ICollection<ProjectTargetAudience> ProjectTargetAudiences { get; set; }
+        public int? CintResponseId { get; set; }
+        public string? CintSelfLink { get; set; }
+        public string? CintCurrentCostLink { get; set; }
+        public string? CintTestingLink { get; set; }
     }
 }

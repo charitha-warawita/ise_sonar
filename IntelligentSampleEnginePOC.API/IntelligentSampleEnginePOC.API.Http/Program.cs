@@ -8,7 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+
 builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddTransient<IProjectService, ProjectService>();
 builder.Services.AddDbContext<ISEdbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("iseDb")));
 
@@ -30,13 +32,21 @@ builder.Services.AddHttpClient<ICintService, CintService>(client =>
     return handler;
 })
 .SetHandlerLifetime(TimeSpan.FromMinutes(5));
-
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c => c.SwaggerDoc ("v1", 
+    new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Intelligent Sample Engine API - Proof of Concept version" }));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+/*if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}*/
 
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthorization();
 

@@ -46,6 +46,7 @@ namespace IntelligentSampleEnginePOC.UI.Core
             projectViewModel.Statuses = new SelectList(statusList);
             if(response.IsSuccessStatusCode)
             {
+                var text = await response.Content.ReadAsStringAsync();
                 var projects = await response.Content.ReadFromJsonAsync<List<Project>>();
                 projectViewModel.Projects = projects;
             }
@@ -70,6 +71,23 @@ namespace IntelligentSampleEnginePOC.UI.Core
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(urlBuilder.ToString(), project);
             response.EnsureSuccessStatusCode();
 
+            return project;
+        }
+
+        public async Task<Project> LaunchProject(Project project)
+        {
+            if (project == null)
+                throw new ArgumentNullException(nameof(project));
+
+            StringBuilder urlBuilder = new StringBuilder();
+            urlBuilder.Append(Path.Combine(_settings.Url, _settings.Path));
+            urlBuilder.Append("/launch");
+            var jsonString = JsonSerializer.Serialize(project);
+
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(urlBuilder.ToString(), project);
+            response.EnsureSuccessStatusCode();
+
+            
             return project;
         }
     }

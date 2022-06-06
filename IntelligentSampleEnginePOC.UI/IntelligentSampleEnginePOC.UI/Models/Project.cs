@@ -13,6 +13,11 @@ namespace IntelligentSampleEnginePOC.UI.Models
         {
             TargetAudiences = new List<TargetAudience>() 
             { new TargetAudience() };
+
+            CintResponseId = 0;
+            CintSelfLink = "NA";
+            CintCurrentCostLink = "NA";
+            CintTestingLink = "NA";
         }
 
         public Guid Id { get; set; }
@@ -28,5 +33,9 @@ namespace IntelligentSampleEnginePOC.UI.Models
         public Status Status { get; set; }
         public string LinkToSurvey { get; set; }
         public List<TargetAudience> TargetAudiences { get; set; }
+        public int CintResponseId { get; set; }
+        public string CintSelfLink { get; set; }
+        public string CintCurrentCostLink { get; set; }
+        public string CintTestingLink { get; set; }
     }
 }
