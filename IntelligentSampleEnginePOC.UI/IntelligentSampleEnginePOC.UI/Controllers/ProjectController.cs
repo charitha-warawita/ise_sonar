@@ -1,21 +1,33 @@
 ﻿using IntelligentSampleEnginePOC.UI.Core;
 using IntelligentSampleEnginePOC.UI.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace IntelligentSampleEnginePOC.UI.Controllers
 {
     public class ProjectController : Controller
     {
         private IProjectVMService _service { get; set; }
-        public ProjectController(IProjectVMService service)
+        private readonly ILogger<HomeController> _logger;
+        public ProjectController(IProjectVMService service, ILogger<HomeController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index(string status, string searchString)
         {
-            var result = await _service.GetProjectVM(status, searchString);
-            return View(result);
+            try
+            {
+                var result = await _service.GetProjectVM(status, searchString);
+                _logger.Log(LogLevel.Information, "Prejects returned: " + JsonSerializer.Serialize(result));
+                return View(result);
+            }
+            catch(Exception ex)
+            {
+                _logger.Log(LogLevel.Error, "SSL Exception occured - " + ex.Message, ex);
+            }
+            return View();
         }
 
         public IActionResult Create()

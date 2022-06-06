@@ -14,3 +14,8 @@
 *.v2
 /IntelligentSampleEnginePOC.UI/IntelligentSampleEnginePOC.UI.Tests/bin/Debug/net6.0
 /IntelligentSampleEnginePOC.UI/IntelligentSampleEnginePOC.UI.Tests/obj
+/IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API/bin/Release/net6.0
+/IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API/Properties/PublishProfiles
+/IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API.Core/bin/Release/net6.0
+/IntelligentSampleEnginePOC.UI/IntelligentSampleEnginePOC.UI/bin/Release/net6.0
+/IntelligentSampleEnginePOC.UI/IntelligentSampleEnginePOC.UI/Properties/PublishProfiles

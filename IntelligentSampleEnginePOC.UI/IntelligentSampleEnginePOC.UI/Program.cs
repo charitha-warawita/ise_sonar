@@ -16,7 +16,13 @@ builder.Services.AddHttpClient<IProjectVMService, ProjectVMService>(client =>
     client.DefaultRequestHeaders.Accept.Clear();
     client.DefaultRequestHeaders.Accept.Add(
         new MediaTypeWithQualityHeaderValue("application/json"));
-}).SetHandlerLifetime(TimeSpan.FromMinutes(5));
+}).ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler =  new HttpClientHandler();
+    handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+    return handler;
+})
+.SetHandlerLifetime(TimeSpan.FromMinutes(5));
 
 
 var app = builder.Build();
