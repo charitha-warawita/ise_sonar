@@ -1,5 +1,6 @@
 using IntelligentSampleEnginePOC.UI.Configurations;
 using IntelligentSampleEnginePOC.UI.Core;
+using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddControllersWithViews();
 
 var iseApiSettings = builder.Configuration.GetSection("ISEApiSettings");
 builder.Services.Configure<ISEApiSettings>(iseApiSettings);
+
 
 builder.Services.AddHttpClient<IProjectVMService, ProjectVMService>(client =>
 {

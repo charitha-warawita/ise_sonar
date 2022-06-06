@@ -20,7 +20,38 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             _settings = options.Value;
         }
 
-        public CintRequest ConvertProjectToCintRequest(Project project)
+        public async Task<Project> CallCint(Project project)
+        {
+            var cintRequest = ConvertProjectToCintRequest(project);
+            var cintResponse = await CallCintApi(cintRequest);
+            return AddCintResponseToProject(cintResponse, project);
+
+        }
+
+        private Project AddCintResponseToProject(CintResponse response, Project project)
+        {
+            if(response != null)
+            {
+                project.CintResponseId = response.id;
+                if(response.links.Any())
+                {
+                    foreach(var item in response.links)
+                    {
+                        if (item.rel == "self")
+                            project.CintSelfLink = item.href;
+                        else if (item.rel == "currentCost")
+                            project.CintCurrentCostLink = item.href;
+                        else if (item.rel == "testing")
+                            project.CintTestingLink = item.href;
+                    }
+                }
+            }
+            return project;
+        }
+
+
+
+        private CintRequest ConvertProjectToCintRequest(Project project)
         {
             var cintRequest = new CintRequest();
 
@@ -67,7 +98,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             return cintRequest;
         }
 
-        public async Task<bool> CallCintApi(CintRequest request)
+        private async Task<CintResponse> CallCintApi(CintRequest request)
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(Path.Combine(_settings.Url, _settings.Path));
@@ -76,7 +107,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(builder.ToString(), request);
             response.EnsureSuccessStatusCode();
 
-            return response.IsSuccessStatusCode;
+            var cintResponse = await response.Content.ReadFromJsonAsync<CintResponse>();
+            return cintResponse;
         }
     }
 }

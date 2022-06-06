@@ -9,8 +9,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 {
     public interface ICintService
     {
-        CintRequest ConvertProjectToCintRequest(Project project);
-
-        Task<bool> CallCintApi(CintRequest request);
+        Task<Project> CallCint(Project project);
     }
 }

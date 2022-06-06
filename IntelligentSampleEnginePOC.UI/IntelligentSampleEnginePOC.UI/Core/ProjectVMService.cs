@@ -46,6 +46,7 @@ namespace IntelligentSampleEnginePOC.UI.Core
             projectViewModel.Statuses = new SelectList(statusList);
             if(response.IsSuccessStatusCode)
             {
+                var text = await response.Content.ReadAsStringAsync();
                 var projects = await response.Content.ReadFromJsonAsync<List<Project>>();
                 projectViewModel.Projects = projects;
             }
@@ -73,7 +74,7 @@ namespace IntelligentSampleEnginePOC.UI.Core
             return project;
         }
 
-        public async Task<bool> LaunchProject(Project project)
+        public async Task<Project> LaunchProject(Project project)
         {
             if (project == null)
                 throw new ArgumentNullException(nameof(project));
@@ -87,7 +88,7 @@ namespace IntelligentSampleEnginePOC.UI.Core
             response.EnsureSuccessStatusCode();
 
             
-            return response.IsSuccessStatusCode;
+            return project;
         }
     }
 }

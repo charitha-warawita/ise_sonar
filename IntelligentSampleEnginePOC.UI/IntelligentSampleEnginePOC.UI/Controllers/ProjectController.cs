@@ -69,14 +69,12 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
                             }
                         }
                     }
-                    var result = await _service.CreateProject(project);
 
                     if (submitButton == "Launch")
-                    {
-                        _service.LaunchProject(project);
-                        //Write something to launch project
-                    }
-
+                        await _service.LaunchProject(project);
+                    else
+                        await _service.CreateProject(project);
+        
 
                     return RedirectToAction(nameof(Index));
                 }

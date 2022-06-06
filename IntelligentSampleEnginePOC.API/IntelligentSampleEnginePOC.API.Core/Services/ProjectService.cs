@@ -29,13 +29,15 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             if(project == null)
                 throw new ArgumentNullException("Project model not found", nameof(project));
+            project.Status = Model.Status.Draft;
+            project.CintResponseId = 0;
             ModelMapping(project);
             _dataContext.SaveChanges();
 
             return project;
         }
 
-        public async Task<bool> LaunchProject(Model.Project project)
+        public async Task<Model.Project> LaunchProject(Model.Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("project model not found", nameof(project));
@@ -45,10 +47,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 // This means the project ID and first we need to retrieve all project details and then form json request to CINT API
             }
 
-            var cintRequest = cintService.ConvertProjectToCintRequest(project);
-            return await cintService.CallCintApi(cintRequest);
-
-
+            project = await cintService.CallCint(project);
+            project.Status = Model.Status.Created;
+            ModelMapping(project);
+            _dataContext.SaveChanges();
+            return project;
         }
 
         public List<DBModel.Project> GetProjects(int? status, string? searchString, int? recentCount)

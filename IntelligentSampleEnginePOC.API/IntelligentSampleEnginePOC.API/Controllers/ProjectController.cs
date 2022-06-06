@@ -34,7 +34,7 @@ namespace IntelligentSampleEnginePOC.API.Controllers
             try
             {
                 var result = await _projectService.LaunchProject(project);
-                if (result)
+                if (result != null)
                 {
                     return Ok(result);
                 }
