@@ -1,0 +1,104 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model ProjectViewModel
+
+@{
+    ViewData["Title"] = "Project Dashboard";
+}
+
+<h1>Project Dashboard</h1>
+
+<p>
+    <a asp-controller="Project" asp-action="Create"> Create New</a>
+</p>
+<form asp-controller="Dashboard" asp-action="index" method="get">
+    <p>
+        <select asp-for="Status" asp-items="Model.Statuses">
+            <option value="">All</option>
+        </select>
+
+        Name: <input type="text" asp-for="SearchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<table class="table">
+    <tbody>
+            @foreach(var item in Model.Projects)
+            {
+                <tr>
+                    <div class="proj">
+                        <h2>@item.Name</h2>
+                        <h5>Status: @item.Status</h5>
+                        <p><b>Start date is set to</b> @item.StartDate</p>
+                        <p><b>Last updated on</b> @item.LastUpdate</p>
+                                        
+                        @if(item.CintTestingLink != "NA")
+                        {
+                            <p><b>Cint testing link: </b><a href="@item.CintTestingLink">@item.CintTestingLink</a></p>
+                        }
+                        else
+                        {
+                            <p><b>Cint testing link: </b>@item.CintTestingLink</p>
+                        }
+                                        
+                                        
+                        @if(item.Status == Status.Draft)
+                        {
+                            <div  style="float:right"><a asp-action="Edit" asp-route-id="@item.Id">Edit</a>|
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a></div>
+                        }
+                        else
+                        {
+                            <div style="float:right"><a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a></div>
+                        }
+                    </div>
+                </tr>
+            }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <style type="text/css">
+        .proj {
+            display: grid;
+            grid-gap: 15px;
+            /*grid-template-columns: repeat(auto-fit, 200px);*/
+            /*box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;*/
+            box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+            border-radius: 25px;
+            margin: 30px;
+            padding: 30px;
+            background-color: #F8F8F8
+        }
+
+        .proj:hover{
+            background: #DCDCDC; /* make this whatever you want */
+        }
+
+        .proj a {
+            appearance: button; /* CSS3 */    
+            -webkit-appearance: button; /* Safari and Chrome */
+            -moz-appearance: button; /* Firefox */
+            -ms-appearance: button; /* Internet Explorer */
+            -o-appearance: button; /* Opera */
+            cursor: default;
+        }
+    </style>
+    <!--<script type="text/javascript">
+        
+$('.proj').click(function() {
+    var id = $(this).attr("id");
+    var detailsElement = $("details_" + id);
+    alert("id: " + id + "; details: " + detailsElement);
+    detailsElement.click();
+    
+})
+
+    </script>-->
+}
