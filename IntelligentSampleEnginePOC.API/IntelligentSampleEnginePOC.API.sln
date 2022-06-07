@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentSampleEnginePOC.API", "IntelligentSampleEnginePOC.API\IntelligentSampleEnginePOC.API.csproj", "{DFB3EF3A-587B-4325-8F89-9C2682D512F2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentSampleEnginePOC.API.Core", "IntelligentSampleEnginePOC.API.Core\IntelligentSampleEnginePOC.API.Core.csproj", "{6B71FA42-E387-4418-9E8F-56B314A31ECE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentSampleEnginePOC.API.Http", "IntelligentSampleEnginePOC.API.Http\IntelligentSampleEnginePOC.API.Http.csproj", "{7A6A8B71-D7AA-4B5E-9DAE-737B11DBEE30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentSampleEnginePOC.API.Http", "IntelligentSampleEnginePOC.API.Http\IntelligentSampleEnginePOC.API.Http.csproj", "{7A6A8B71-D7AA-4B5E-9DAE-737B11DBEE30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DFB3EF3A-587B-4325-8F89-9C2682D512F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DFB3EF3A-587B-4325-8F89-9C2682D512F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DFB3EF3A-587B-4325-8F89-9C2682D512F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DFB3EF3A-587B-4325-8F89-9C2682D512F2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6B71FA42-E387-4418-9E8F-56B314A31ECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6B71FA42-E387-4418-9E8F-56B314A31ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B71FA42-E387-4418-9E8F-56B314A31ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
