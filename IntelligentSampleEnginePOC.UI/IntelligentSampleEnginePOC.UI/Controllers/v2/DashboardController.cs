@@ -3,13 +3,13 @@ using IntelligentSampleEnginePOC.UI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
-namespace IntelligentSampleEnginePOC.UI.Controllers
+namespace IntelligentSampleEnginePOC.UI.Controllers.v2
 {
-    public class ProjectController : Controller
+    public class DashboardController : Controller
     {
         private IProjectVMService _service { get; set; }
         private readonly ILogger<HomeController> _logger;
-        public ProjectController(IProjectVMService service, ILogger<HomeController> logger)
+        public DashboardController(IProjectVMService service, ILogger<HomeController> logger)
         {
             _service = service;
             _logger = logger;
@@ -23,7 +23,7 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
                 _logger.Log(LogLevel.Information, "Prejects returned: " + JsonSerializer.Serialize(result));
                 return View(result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, "SSL Exception occured - " + ex.Message, ex);
             }
@@ -36,7 +36,7 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
             return View(project);
         }
 
-        
+
         // POST: Project/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -67,13 +67,13 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
                         await _service.LaunchProject(project);
                     else
                         await _service.CreateProject(project);
-        
 
-                    return RedirectToAction(nameof(Index), "Dashboard");
+
+                    return RedirectToAction(nameof(Index));
                 }
                 return View(project);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, "Exception occured - " + ex.Message, ex);
 
