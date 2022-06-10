@@ -23,7 +23,7 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
                 _logger.Log(LogLevel.Information, "Prejects returned: " + JsonSerializer.Serialize(result));
                 return View(result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, "SSL Exception occured - " + ex.Message, ex);
             }
@@ -36,7 +36,7 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
             return View(project);
         }
 
-        
+
         // POST: Project/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -67,18 +67,29 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
                         await _service.LaunchProject(project);
                     else
                         await _service.CreateProject(project);
-        
+
 
                     return RedirectToAction(nameof(Index), "Dashboard");
                 }
                 return View(project);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, "Exception occured - " + ex.Message, ex);
 
             }
             return View();
+        }
+
+        public IActionResult Details(string? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var project = new Project();
+            return View(project);
         }
     }
 }

@@ -8,11 +8,13 @@
     ViewData["Title"] = "Project Dashboard";
 }
 
-<h1>Project Dashboard</h1>
+<h1>Project Dashboard</h1><br/>
 
 <p>
-    <a asp-controller="Project" asp-action="Create"> Create New</a>
+    <a asp-controller="Project" asp-action="Create" class="btn btn-primary">Create New Project</a>
 </p>
+
+<div class="list">
 <form asp-controller="Dashboard" asp-action="index" method="get">
     <p>
         <select asp-for="Status" asp-items="Model.Statuses">
@@ -26,42 +28,50 @@
 
 <table class="table">
     <tbody>
-            @foreach(var item in Model.Projects)
-            {
-                <tr>
-                    <div class="proj">
-                        <h2>@item.Name</h2>
-                        <h5>Status: @item.Status</h5>
-                        <p><b>Start date is set to</b> @item.StartDate</p>
-                        <p><b>Last updated on</b> @item.LastUpdate</p>
-                                        
-                        @if(item.CintTestingLink != "NA")
-                        {
-                            <p><b>Cint testing link: </b><a href="@item.CintTestingLink">@item.CintTestingLink</a></p>
-                        }
-                        else
-                        {
-                            <p><b>Cint testing link: </b>@item.CintTestingLink</p>
-                        }
-                                        
-                                        
-                        @if(item.Status == Status.Draft)
-                        {
-                            <div  style="float:right"><a asp-action="Edit" asp-route-id="@item.Id">Edit</a>|
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a></div>
-                        }
-                        else
-                        {
-                            <div style="float:right"><a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a></div>
-                        }
-                    </div>
-                </tr>
+            @{
+                var count = 0;
+                foreach(var item in Model.Projects)
+                {
+                    var editId = "edit_" + count;
+                    var detailsId = "details_" + count;
+                    var deleteId = "delete_" + count;
+                    <tr>
+                        <div id="@count" class="proj">
+                            <h2>@item.Name</h2>
+                            <h5>Status: @item.Status</h5>
+                            <p><b>Start date is set to</b> @item.StartDate</p>
+                            <p><b>Last updated on</b> @item.LastUpdate</p>
+                                                            
+                            @if(item.CintTestingLink != "NA")
+                            {
+                                <p><b>Cint testing link: </b><a href="@item.CintTestingLink">@item.CintTestingLink</a></p>
+                            }
+                            else
+                            {
+                                <p><b>Cint testing link: </b>@item.CintTestingLink</p>
+                            }
+                                                            
+                                                            
+                            @if(item.Status == Status.Draft)
+                            {
+                                <div  style="float:right"><a id=@editId asp-controller="Project" asp-action="Edit" asp-route-id="@item.Id">Edit</a>|
+                                <a id=@deleteId asp-controller="Project" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                <a id=@detailsId asp-controller="Project" class="hide" asp-action="Details" asp-route-id="@item.Id">Details</a></div>
+                            }
+                            else
+                            {
+                                <div style="float:right">
+                                <a id=@deleteId asp-controller="Project" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                <a id=@detailsId asp-controller="Project" class="hide" asp-action="Details" asp-route-id="@item.Id">Details</a></div>
+                            }
+                        </div>
+                    </tr>
+                    count++;
+                }
             }
     </tbody>
 </table>
-
+</div>
 @section Scripts
 {
     <style type="text/css">
@@ -78,7 +88,7 @@
         }
 
         .proj:hover{
-            background: #DCDCDC; /* make this whatever you want */
+            background: #C0C0C0; /* make this whatever you want */
         }
 
         .proj a {
@@ -89,16 +99,27 @@
             -o-appearance: button; /* Opera */
             cursor: default;
         }
-    </style>
-    <!--<script type="text/javascript">
-        
-$('.proj').click(function() {
-    var id = $(this).attr("id");
-    var detailsElement = $("details_" + id);
-    alert("id: " + id + "; details: " + detailsElement);
-    detailsElement.click();
-    
-})
 
-    </script>-->
+        .list {
+            margin-top: 20px;
+            border-radius:25px; 
+            padding: 20px; 
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+            background-color: #DCDCDC;
+        }
+
+        .hide {
+            display: none;
+        }
+
+
+    </style>
+    <script type="text/javascript">
+        
+    $('.proj').click(function() {
+        var id = $(this).attr("id");
+        (document.getElementById("details_" + id)).click();
+    })
+
+    </script>
 }
