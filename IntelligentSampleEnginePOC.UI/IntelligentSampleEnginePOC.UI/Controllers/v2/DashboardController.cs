@@ -80,5 +80,51 @@ namespace IntelligentSampleEnginePOC.UI.Controllers.v2
             }
             return View();
         }
+        public async Task<IActionResult> Edit(string id)
+
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _service.EditProject(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return View(result);
+
+        }
+        // POST: Project/Update
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(Project project, string submitButton)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    
+
+                    if (submitButton == "Launch")
+                        await _service.LaunchProject(project);
+                    else
+                        await _service.UpdateProject(project);
+
+
+                    return RedirectToAction(nameof(Index), "Dashboard");
+                }
+                return View(project);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, "Exception occured - " + ex.Message, ex);
+
+            }
+            return View();
+        }
     }
 }

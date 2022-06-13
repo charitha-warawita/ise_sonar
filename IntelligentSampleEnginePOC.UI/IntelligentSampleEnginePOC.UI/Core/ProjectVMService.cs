@@ -27,24 +27,24 @@ namespace IntelligentSampleEnginePOC.UI.Core
 
             var queryString = new List<string>();
             if (!string.IsNullOrEmpty(status))
-                queryString.Add("status="+(int)(EnumHelpers<Status>.Parse(status)));
+                queryString.Add("status=" + (int)(EnumHelpers<Status>.Parse(status)));
             if (!string.IsNullOrEmpty(searchString))
-                queryString.Add("searchstring="+searchString);
+                queryString.Add("searchstring=" + searchString);
 
             queryString.Add("recentCount=20");
 
-            if(queryString.Any())
+            if (queryString.Any())
             {
                 urlBuilder.Append("?");
-                foreach(var item in queryString)
+                foreach (var item in queryString)
                 {
-                    urlBuilder.Append(item+"&");
+                    urlBuilder.Append(item + "&");
                 }
-            }    
+            }
             HttpResponseMessage response = await _httpClient.GetAsync(urlBuilder.ToString());
             var projectViewModel = new ProjectViewModel();
             projectViewModel.Statuses = new SelectList(statusList);
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 var text = await response.Content.ReadAsStringAsync();
                 var projects = await response.Content.ReadFromJsonAsync<List<Project>>();
@@ -61,7 +61,7 @@ namespace IntelligentSampleEnginePOC.UI.Core
 
         public async Task<Project> CreateProject(Project project)
         {
-            if(project == null)
+            if (project == null)
                 throw new ArgumentNullException(nameof(project));
 
             StringBuilder urlBuilder = new StringBuilder();
@@ -87,8 +87,48 @@ namespace IntelligentSampleEnginePOC.UI.Core
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(urlBuilder.ToString(), project);
             response.EnsureSuccessStatusCode();
 
-            
+
+            return project;
+        }
+
+        public async Task<Project> EditProject(string id)
+        {
+            //List<Status> statusList = EnumHelpers<Status>.GetValues().ToList();
+            StringBuilder urlBuilder = new StringBuilder();
+            urlBuilder.Append(Path.Combine(_settings.Url, _settings.Path));
+            urlBuilder.Append("/id/");
+            urlBuilder.Append(id);
+            HttpResponseMessage response = await _httpClient.GetAsync(urlBuilder.ToString());
+            var project = new Project();
+            // projectViewModel.Statuses = new SelectList(statusList);
+            if (response.IsSuccessStatusCode)
+            {
+                var text = await response.Content.ReadAsStringAsync();
+                project = await response.Content.ReadFromJsonAsync<Project>();
+                //await UpdateProject(project);
+                //EditProjectModel.Projects = projects;
+            }
+
+
+            return project;
+        }
+
+        public async Task<Project> UpdateProject(Project project)
+        {
+            if (project == null)
+                throw new ArgumentNullException(nameof(project));
+
+            StringBuilder urlBuilder = new StringBuilder();
+            urlBuilder.Append(Path.Combine(_settings.Url, _settings.Path));
+            urlBuilder.Append("/update");
+            var jsonString = JsonSerializer.Serialize(project);
+
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(urlBuilder.ToString(), project);
+            response.EnsureSuccessStatusCode();
+
             return project;
         }
     }
+
+       
 }

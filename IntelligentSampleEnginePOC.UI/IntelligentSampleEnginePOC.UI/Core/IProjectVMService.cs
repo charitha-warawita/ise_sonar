@@ -11,5 +11,7 @@ namespace IntelligentSampleEnginePOC.UI.Core
         Task<Project> CreateProject(Project project);
 
         Task<Project> LaunchProject(Project project);
+       Task<Project> EditProject(string id);
+        Task<Project> UpdateProject(Project project);
     }
 }

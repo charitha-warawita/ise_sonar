@@ -15,5 +15,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         List<DBModel.Project> GetProjects(int? status, string? searchString, int? recentCount);
 
         Task<Model.Project> LaunchProject(Model.Project project);
+        Model.Project GetProjects(string Id);
+        Model.Project UpdateProject(Model.Project project);
     }
 }

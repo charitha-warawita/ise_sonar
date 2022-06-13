@@ -55,15 +55,23 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             }
         }
 
-        [HttpPut]
-        public ActionResult Put([FromBody] Project project)
+        [HttpPost("update")]
+        public ActionResult UpdateProject([FromBody] Project project)
         {
-            //Yet to do
-
-            if (project != null)
-                return Ok(project);
-            else
-                return StatusCode(500,"Error occured");
+            try
+            {
+                var resultProject = _projectService.UpdateProject(project);
+                if (resultProject != null)
+                {
+                    return Ok(resultProject);
+                }
+                else
+                    return StatusCode(500, "Error occured");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Exception occured - " + ex.Message);
+            }
 
         }
 
@@ -82,14 +90,15 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         [HttpGet("id/{id}")]
         public ActionResult GetById(string id)
         {
-            //Yet to do 
+            var project = _projectService.GetProjects(id);
+            return Ok(project);
 
-            if (!string.IsNullOrEmpty(id))
-            {
-                return Ok(new Project());
-            }
-            else
-                return StatusCode(500, "Id not found");
+            //if (!string.IsNullOrEmpty(id))
+            //{
+            //    return Ok(new Project());
+            //}
+            //else
+            //    return StatusCode(500, "Id not found");
         }
 
         [HttpGet]
