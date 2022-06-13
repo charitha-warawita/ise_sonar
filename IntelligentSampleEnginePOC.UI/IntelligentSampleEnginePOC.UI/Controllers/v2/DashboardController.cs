@@ -107,7 +107,8 @@ namespace IntelligentSampleEnginePOC.UI.Controllers.v2
             {
                 if (ModelState.IsValid)
                 {
-                    
+                    if (project != null)
+                        project.LastUpdate = DateTime.UtcNow;
 
                     if (submitButton == "Launch")
                         await _service.LaunchProject(project);

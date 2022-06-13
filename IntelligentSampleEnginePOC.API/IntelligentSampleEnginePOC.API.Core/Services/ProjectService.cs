@@ -149,46 +149,62 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                             }
                         }
                     }
-                    var taQuotaList = _dataContext.TargetAudienceQuotaGroups.Where(x => x.TargetAudienceId == ta.Id).ToList();
-                    var idQuotaList = new List<string>();
-                    if (taQuotaList.Any())
+
+                    // Find QuotaGroup ID from Target audience - Quota group mapping table
+                    var taQuotaGroupList = _dataContext.TargetAudienceQuotaGroups.Where(x => x.TargetAudienceId == ta.Id).ToList();
+
+
+                    var idQuotaGroupList = new List<string>();
+                    // Find Quota Groups from mapping table
+                    if (taQuotaGroupList.Any())
                     {
-                        foreach (var taQuota in taQuotaList)
+                        projectModel.TargetAudiences[0].QuotaGroups = new List<Model.QuotaGroup>();
+                        foreach (var taQuota in taQuotaGroupList)
                         {
-                            idQuotaList.Add(taQuota.QuotaGroupId);
+                            idQuotaGroupList.Add(taQuota.QuotaGroupId);
                         }
-                        //idQuotaList.Clear();
-                        //idQuotaList.Add("49ea854b-fa04-4718-a2df-c52dd1d76dad");
-                        //idQuotaList.Add("eb7ef5d4-c4ba-41dd-9e25-d49e2eec0258");
-
-                        var quotaList = _dataContext.QuotaGroups.Where(x => idQuotaList.Contains(x.Id)).ToList();
-                        var idList = new List<string>();
-
-                        if(quotaList.Any())
+                        
+                        //Find Quota Groups
+                        var quotaGroupList = _dataContext.QuotaGroups.Where(x => idQuotaGroupList.Contains(x.Id)).ToList();
+                        
+                        if(quotaGroupList.Any())
                         {
-                            foreach(var item in quotaList)
+                            foreach(var qgItem in quotaGroupList)
                             {
-                                idList.Add(item.Id);
-                            }
-                        }
+                                var quotaGroup = new Model.QuotaGroup();
+                                quotaGroup.Id = Guid.Parse(qgItem.Id);
+                                quotaGroup.Name = qgItem.Name;
+                                quotaGroup.IsActive = qgItem.IsActive ?? false;
+                                quotaGroup.Quotas = new List<Model.Quota>();
 
+                                var quotagroupquotaList = _dataContext.QuotaGroupQuota.Where(x => x.QuotaGroupId == qgItem.Id).ToList();
+                                if(quotagroupquotaList.Any())
+                                {
+                                    var idqgqList = new List<string>();
+                                    foreach(var ll in quotagroupquotaList)
+                                    {
+                                        idqgqList.Add(ll.QuotaId);
+                                    }
 
-                        var quotaItemsList = _dataContext.Quota.Where(x => idList.Contains(x.Id)).ToList();
-                        if (quotaList.Any())
-                        {
-                            projectModel.TargetAudiences[0].QuotaGroups = new List<Model.QuotaGroup>();
-                            foreach (var qu in quotaList)
-                            {
-                                var quotaData = new Model.QuotaGroup();
-                                quotaData.Name = qu.Name;
-                                quotaData.IsActive = qu.IsActive != null ? qu.IsActive.Value : false;
-                                projectModel.TargetAudiences[0].QuotaGroups.Add(quotaData);
-                                //quotaData.Name = qu.Name;
-                                //quotaData.limi = qu.Limit != null && qu.Limit.Value > 0;
+                                    var quotaList = _dataContext.Quota.Where(x => idqgqList.Contains(x.Id)).ToList();
+
+                                    if (quotaList.Any())
+                                    {
+                                        foreach (var tim in quotaList)
+                                        {
+                                            var quota = new Model.Quota();
+                                            quota.Id = Guid.Parse(tim.Id);
+                                            quota.QuotaName = tim.QuotaName;
+                                            quota.Limit = tim.Limit?? 0;
+                                            quota.Precode = tim.PreCode;
+                                            quotaGroup.Quotas.Add(quota);
+                                        }
+                                    }
+                                }
+                                projectModel.TargetAudiences[0].QuotaGroups.Add(quotaGroup);
                             }
                         }
                     }
-
                 }
             }
             
@@ -267,58 +283,60 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
             else
             {
-                
-                    foreach (var item in project.TargetAudiences)
+                var tempProject1 = JsonSerializer.Deserialize<DBModel.Project>(JsonSerializer.Serialize(project));
+                if(tempProject1 != null)
+                    _dataContext.Update(tempProject1);
+                /*foreach (var item in project.TargetAudiences)
+                {
+                    var tempTA = JsonSerializer.Deserialize<DBModel.TargetAudience>(JsonSerializer.Serialize(item));
+                    _dataContext.Update(new DBModel.ProjectTargetAudience { Id = project.Id.ToString(), Project = tempProject, TargetAudience = tempTA });
+
+                    if (_dataContext.Qualifications.Any())
                     {
-                        var tempTA = JsonSerializer.Deserialize<DBModel.TargetAudience>(JsonSerializer.Serialize(item));
-                        _dataContext.Add(new DBModel.ProjectTargetAudience { Id = project.Id.ToString(), Project = tempProject, TargetAudience = tempTA });
-
-                        if (_dataContext.Qualifications.Any())
+                        foreach (var existingQ in _dataContext.Qualifications)
                         {
-                            foreach (var existingQ in _dataContext.Qualifications)
-                            {
-                                _dataContext.Add(new DBModel.TargetAudienceQualification { Id = project.Id.ToString(), TargetAudience = tempTA, Qualification = existingQ });
-                            }
+                            _dataContext.Update(new DBModel.TargetAudienceQualification { TargetAudience = tempTA, Qualification = existingQ });
                         }
-                        else
+                    }
+                    else
+                    {
+                        foreach (var subItem in item.Qualifications)
                         {
-                            foreach (var subItem in item.Qualifications)
-                            {
-                                var tempQ = JsonSerializer.Deserialize<DBModel.Qualification>(JsonSerializer.Serialize(subItem));
-                                _dataContext.Add(new DBModel.TargetAudienceQualification { Id = project.Id.ToString(), TargetAudience = tempTA, Qualification = tempQ });
-                            }
+                            var tempQ = JsonSerializer.Deserialize<DBModel.Qualification>(JsonSerializer.Serialize(subItem));
+                            _dataContext.Update(new DBModel.TargetAudienceQualification { Id = project.Id.ToString(), TargetAudience = tempTA, Qualification = tempQ });
                         }
+                    }
 
-                        if (_dataContext.QuotaGroups.Any())
+                    if (_dataContext.QuotaGroups.Any())
+                    {
+                        foreach (var existingQG in _dataContext.QuotaGroups)
                         {
-                            foreach (var existingQG in _dataContext.QuotaGroups)
-                            {
-                                _dataContext.Add(new DBModel.TargetAudienceQuotaGroup { Id = project.Id.ToString(), TargetAudience = tempTA, QuotaGroup = existingQG });
-                            }
+                            _dataContext.Update(new DBModel.TargetAudienceQuotaGroup { Id = project.Id.ToString(), TargetAudience = tempTA, QuotaGroup = existingQG });
                         }
-                        else
+                    }
+                    else
+                    {
+                        foreach (var subItem2 in item.QuotaGroups)
                         {
-                            foreach (var subItem2 in item.QuotaGroups)
-                            {
-                                var tempQuotaGroup = JsonSerializer.Deserialize<DBModel.QuotaGroup>(JsonSerializer.Serialize(subItem2));
-                                _dataContext.Add(new DBModel.TargetAudienceQuotaGroup { Id = project.Id.ToString(), TargetAudience = tempTA, QuotaGroup = tempQuotaGroup });
+                            var tempQuotaGroup = JsonSerializer.Deserialize<DBModel.QuotaGroup>(JsonSerializer.Serialize(subItem2));
+                            _dataContext.Update(new DBModel.TargetAudienceQuotaGroup { Id = project.Id.ToString(), TargetAudience = tempTA, QuotaGroup = tempQuotaGroup });
 
-                                foreach (var lowerItem in subItem2.Quotas)
-                                {
-                                    var tempQuota = JsonSerializer.Deserialize<DBModel.Quotum>(JsonSerializer.Serialize(lowerItem));
-                                    _dataContext.Add(new DBModel.QuotaGroupQuotum { Id = project.Id.ToString(), QuotaGroup = tempQuotaGroup, Quota = tempQuota });
-                                }
+                            foreach (var lowerItem in subItem2.Quotas)
+                            {
+                                var tempQuota = JsonSerializer.Deserialize<DBModel.Quotum>(JsonSerializer.Serialize(lowerItem));
+                                _dataContext.Update(new DBModel.QuotaGroupQuotum { Id = project.Id.ToString(), QuotaGroup = tempQuotaGroup, Quota = tempQuota });
                             }
                         }
                     }
-       
-            }
+            }*/
+
+        }
             foreach (var item in project.TargetAudiences)
             {
-                var tempTA = JsonSerializer.Deserialize<DBModel.TargetAudience>(JsonSerializer.Serialize(item));
+                /*var tempTA = JsonSerializer.Deserialize<DBModel.TargetAudience>(JsonSerializer.Serialize(item));
                 _dataContext.Update(new DBModel.ProjectTargetAudience { Id = project.Id.ToString(), Project = tempProject, TargetAudience = tempTA });
-
-                if (_dataContext.Qualifications.Any())
+                */
+                /*if (_dataContext.Qualifications.Any())
                 {
                     foreach (var existingQ in _dataContext.Qualifications)
                     {
@@ -332,9 +350,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                         var tempQ = JsonSerializer.Deserialize<DBModel.Qualification>(JsonSerializer.Serialize(subItem));
                         _dataContext.Update(new DBModel.TargetAudienceQualification { Id = project.Id.ToString(), TargetAudience = tempTA, Qualification = tempQ });
                     }
-                }
+                }*/
 
-                if (_dataContext.QuotaGroups.Any())
+                /*if (_dataContext.QuotaGroups.Any())
                 {
                     foreach (var existingQG in _dataContext.QuotaGroups)
                     {
@@ -354,7 +372,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                             _dataContext.Update(new DBModel.QuotaGroupQuotum { Id = project.Id.ToString(), QuotaGroup = tempQuotaGroup, Quota = tempQuota });
                         }
                     }
-                }
+                }*/
             }
         }
 

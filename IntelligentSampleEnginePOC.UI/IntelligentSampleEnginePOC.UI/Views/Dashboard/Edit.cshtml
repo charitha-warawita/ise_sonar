@@ -190,9 +190,9 @@
                 </tr>
             </thead>
             <tbody>
-                @*@foreach(var item in Model.TargetAudiences[0].QuotaGroups)
+               @foreach(var item in Model.TargetAudiences[0].QuotaGroups)
                 {
-                    @foreach(var subItem in item ?.Quotas)
+                    @foreach(var subItem in item?.Quotas)
                     {
                         <tr>
                             <td>
@@ -213,7 +213,7 @@
                         </tr>
                     }
                     
-                }*@
+                }
             </tbody>
         </table>
     </div>
