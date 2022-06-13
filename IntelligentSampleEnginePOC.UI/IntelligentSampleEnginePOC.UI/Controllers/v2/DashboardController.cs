@@ -29,56 +29,5 @@ namespace IntelligentSampleEnginePOC.UI.Controllers.v2
             }
             return View();
         }
-
-        public IActionResult Create()
-        {
-            Project project = new Project();
-            return View(project);
-        }
-
-
-        // POST: Project/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Project project, string submitButton)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    if (project != null)
-                    {
-                        project.Id = Guid.NewGuid();
-                        project.LastUpdate = DateTime.UtcNow;
-                        if (project.User != null)
-                            project.User.Id = Guid.NewGuid();
-                        if (project.TargetAudiences.Any())
-                        {
-                            foreach (var item in project.TargetAudiences)
-                            {
-                                item.Id = Guid.NewGuid();
-                            }
-                        }
-                    }
-
-                    if (submitButton == "Launch")
-                        await _service.LaunchProject(project);
-                    else
-                        await _service.CreateProject(project);
-
-
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(project);
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Error, "Exception occured - " + ex.Message, ex);
-
-            }
-            return View();
-        }
     }
 }
