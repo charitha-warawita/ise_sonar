@@ -36,7 +36,6 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
             return View(project);
         }
 
-
         // POST: Project/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -69,7 +68,7 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
                         await _service.CreateProject(project);
 
 
-                    return RedirectToAction(nameof(Index), "Dashboard");
+                    return RedirectToAction(nameof(Index));
                 }
                 return View(project);
             }
@@ -81,7 +80,7 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
             return View();
         }
 
-       
+
         //Edit call  POST: Project/Edit/5
         public async Task<IActionResult> Edit(string id)
 
@@ -111,7 +110,8 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
+                    if (project != null)
+                        project.LastUpdate = DateTime.UtcNow;
 
                     if (submitButton == "Launch")
                         await _service.LaunchProject(project);
