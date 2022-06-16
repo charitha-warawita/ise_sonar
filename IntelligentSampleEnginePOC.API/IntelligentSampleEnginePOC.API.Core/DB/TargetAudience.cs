@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace IntelligentSampleEnginePOC.API.DB
+namespace IntelligentSampleEnginePOC.API.Core.DB
 {
     public partial class TargetAudience
     {
         public TargetAudience()
         {
-            ProjectTargetAudiences = new HashSet<ProjectTargetAudience>();
-            TargetAudienceQualifications = new HashSet<TargetAudienceQualification>();
-            TargetAudienceQuotaGroups = new HashSet<TargetAudienceQuotaGroup>();
+            Qualifications = new HashSet<Qualification>();
+            Quota = new HashSet<Quotum>();
         }
 
         public string Id { get; set; } = null!;
@@ -17,9 +16,10 @@ namespace IntelligentSampleEnginePOC.API.DB
         public int? Tanumber { get; set; }
         public int? Limit { get; set; }
         public string? LimitType { get; set; }
+        public string ProjectId { get; set; } = null!;
 
-        public virtual ICollection<ProjectTargetAudience> ProjectTargetAudiences { get; set; }
-        public virtual ICollection<TargetAudienceQualification> TargetAudienceQualifications { get; set; }
-        public virtual ICollection<TargetAudienceQuotaGroup> TargetAudienceQuotaGroups { get; set; }
+        public virtual Project Project { get; set; } = null!;
+        public virtual ICollection<Qualification> Qualifications { get; set; }
+        public virtual ICollection<Quotum> Quota { get; set; }
     }
 }

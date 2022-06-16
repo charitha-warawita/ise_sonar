@@ -1,5 +1,5 @@
 ﻿using Model = IntelligentSampleEnginePOC.API.Core.Model;
-using DBModel = IntelligentSampleEnginePOC.API.DB;
+using DBModel = IntelligentSampleEnginePOC.API.Core.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;

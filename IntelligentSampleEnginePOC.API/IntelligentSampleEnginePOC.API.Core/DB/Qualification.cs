@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace IntelligentSampleEnginePOC.API.DB
+namespace IntelligentSampleEnginePOC.API.Core.DB
 {
     public partial class Qualification
     {
-        public Qualification()
-        {
-            TargetAudienceQualifications = new HashSet<TargetAudienceQualification>();
-        }
-
         public string Id { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string? LogicalOperator { get; set; }
@@ -17,7 +12,8 @@ namespace IntelligentSampleEnginePOC.API.DB
         public bool? IsActive { get; set; }
         public string? PreCodes { get; set; }
         public int? QualificationOrder { get; set; }
+        public string TargetAudienceId { get; set; } = null!;
 
-        public virtual ICollection<TargetAudienceQualification> TargetAudienceQualifications { get; set; }
+        public virtual TargetAudience TargetAudience { get; set; } = null!;
     }
 }

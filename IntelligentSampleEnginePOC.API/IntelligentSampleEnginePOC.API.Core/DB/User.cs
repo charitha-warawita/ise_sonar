@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace IntelligentSampleEnginePOC.API.DB
+namespace IntelligentSampleEnginePOC.API.Core.DB
 {
     public partial class User
     {

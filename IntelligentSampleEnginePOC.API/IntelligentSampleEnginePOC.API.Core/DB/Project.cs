@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace IntelligentSampleEnginePOC.API.DB
+namespace IntelligentSampleEnginePOC.API.Core.DB
 {
     public partial class Project
     {
         public Project()
         {
-            ProjectTargetAudiences = new HashSet<ProjectTargetAudience>();
+            TargetAudiences = new HashSet<TargetAudience>();
         }
 
         public string Id { get; set; } = null!;
@@ -19,12 +19,12 @@ namespace IntelligentSampleEnginePOC.API.DB
         public int? FieldingPeriod { get; set; }
         public int? Status { get; set; }
         public string? LinkToSurvey { get; set; }
-
-        public virtual User? User { get; set; }
-        public virtual ICollection<ProjectTargetAudience> ProjectTargetAudiences { get; set; }
         public int? CintResponseId { get; set; }
         public string? CintSelfLink { get; set; }
         public string? CintCurrentCostLink { get; set; }
         public string? CintTestingLink { get; set; }
+
+        public virtual User? User { get; set; }
+        public virtual ICollection<TargetAudience> TargetAudiences { get; set; }
     }
 }

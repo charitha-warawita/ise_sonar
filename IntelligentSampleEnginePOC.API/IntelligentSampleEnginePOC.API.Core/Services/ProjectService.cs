@@ -1,26 +1,24 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Data;
 using Model = IntelligentSampleEnginePOC.API.Core.Model;
-using DBModel = IntelligentSampleEnginePOC.API.DB;
+using DBModel = IntelligentSampleEnginePOC.API.Core.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
+using IntelligentSampleEnginePOC.API.Core.DB;
 
 namespace IntelligentSampleEnginePOC.API.Core.Services
 {
     public class ProjectService : IProjectService
     {
-        private readonly DBModel.ISEdbContext _dataContext;
-        private DBModel.ProjectTargetAudience projectTargetAudience { get; set; }
-        private DBModel.QuotaGroupQuotum quotaGroupQuotum { get; set; }
-        private DBModel.TargetAudienceQualification targetAudienceQualification { get; set; }
-        private DBModel.TargetAudienceQuotaGroup TargetAudienceQuotaGroup { get; set; }
+        private readonly ISEdbContext _dataContext;
+        
 
         private ICintService cintService { get; set; }
 
-        public ProjectService(DBModel.ISEdbContext context, ICintService cintService)
+        public ProjectService(ISEdbContext context, ICintService cintService)
         {
             _dataContext = context;
             this.cintService = cintService;
@@ -29,11 +27,44 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             if (project == null)
                 throw new ArgumentNullException("Project model not found", nameof(project));
+
+
+            project = SetupGuids(project);
+            project.LastUpdate = DateTime.UtcNow;
             project.Status = Model.Status.Draft;
             project.CintResponseId = 0;
-            ModelMapping(project);
+            ModelMapping(project, true);
             _dataContext.SaveChanges();
 
+            return project;
+        }
+
+        private Model.Project SetupGuids(Model.Project project)
+        {
+            //Setting up IDs
+            if (project?.Id == Guid.Empty)
+                project.Id = Guid.NewGuid();
+
+            if (project?.User != null && project?.User?.Id == Guid.Empty)
+                project.User.Id = Guid.NewGuid();
+
+            if (project.TargetAudiences.Any())
+            {
+                foreach (var item in project.TargetAudiences)
+                {
+                    if (item?.Id == Guid.Empty)
+                        item.Id = Guid.NewGuid();
+
+                    if (item.Qualifications.Any())
+                    {
+                        foreach (var subItem in item.Qualifications)
+                        {
+                            if (subItem?.Id == Guid.Empty)
+                                subItem.Id = Guid.NewGuid();
+                        }
+                    }
+                }
+            }
             return project;
         }
 
@@ -46,17 +77,18 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             {
                 // This means the project ID and first we need to retrieve all project details and then form json request to CINT API
             }
-
+            project = SetupGuids(project);
+            project.LastUpdate = DateTime.UtcNow;
             project = await cintService.CallCint(project);
             project.Status = Model.Status.Created;
-            ModelMapping(project);
+            ModelMapping(project, true);
             _dataContext.SaveChanges();
             return project;
         }
 
-        public List<DBModel.Project> GetProjects(int? status, string? searchString, int? recentCount)
+        public List<Project> GetProjects(int? status, string? searchString, int? recentCount)
         {
-            IEnumerable<DBModel.Project> currProjects = _dataContext.Projects;
+            IEnumerable<Project> currProjects = _dataContext.Projects;
 
             if (status != null && status > -1 && status < 7)
             {
@@ -78,7 +110,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         public Model.Project GetProjects(string? id)
 
         {
-            IEnumerable<DBModel.Project> currProjects = _dataContext.Projects;
+            IEnumerable<Project> currProjects = _dataContext.Projects;
 
             var currProject = currProjects.Where(x => x.Id == id).FirstOrDefault();
             var projectModel = new Model.Project();
@@ -101,113 +133,36 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
                 }
             }
-            var taList = currProject.ProjectTargetAudiences.ToList();
-            var taProject = _dataContext.ProjectTargetAudiences.Where(x => x.ProjectId == currProject.Id).FirstOrDefault();
-            if (taProject != null)
+
+            if(!currProject.TargetAudiences.Any())
             {
-                var taId = taProject.TargetAudienceId;
-                var ta = _dataContext.TargetAudiences.Where(x => x.Id == taId).FirstOrDefault();
-                if (ta != null)
+                var targetAudience = _dataContext.TargetAudiences.Where(x => x.ProjectId == currProject.Id).FirstOrDefault();
+                if(targetAudience != null)
                 {
-                    projectModel.TargetAudiences = new List<Model.TargetAudience>()
+                    projectModel.TargetAudiences = new List<Model.TargetAudience>();
+                    var taModel = new Model.TargetAudience
                     {
-                        new Model.TargetAudience()
-
-                        {
-                            Id = Guid.Parse(ta.Id),
-                            Name =ta.Name,
-                            TANumber =ta.Tanumber != null ? ta.Tanumber.Value : 0,
-                            Limit = ta.Limit != null ? ta.Limit.Value : 0,
-                            LimitType = String.IsNullOrEmpty(ta.LimitType) ? String.Empty : ta.LimitType,
-
-                        }
-
+                        Id = Guid.Parse(targetAudience.Id), TANumber = targetAudience.Tanumber ?? 0, Name = targetAudience.Name, Limit = targetAudience.Limit ?? 0, LimitType = targetAudience.LimitType ?? String.Empty,
                     };
-                    var taQualList = _dataContext.TargetAudienceQualifications.Where(x => x.TargetAudienceId == ta.Id).ToList();
-                    var idsList = new List<string>();
-                    if (taQualList.Any()) 
+                    taModel.Qualifications = new List<Model.Qualification>();
+                    taModel.QuotaGroups = new List<Model.QuotaGroup>();
+
+                    var qualifications = _dataContext.Qualifications.Where(x => x.TargetAudienceId == targetAudience.Id).ToList();
+                    if(qualifications.Any())
                     {
-                        foreach (var taQual in taQualList)
+                        foreach(var item in qualifications)
                         {
-                            idsList.Add(taQual.QualificationId);
-                        }
-                        var qaList = _dataContext.Qualifications;//.Where(x => idsList.Contains(x.Id)).ToList();
-                        if (qaList.Any())
-                        {
-                            projectModel.TargetAudiences[0].Qualifications = new List<Model.Qualification>();
-                            foreach (var qa in qaList)
+                            taModel.Qualifications.Add(new Model.Qualification
                             {
-                                var qaQual = new Model.Qualification();
-                                qaQual.Id = Guid.Parse(qa.Id);
-                                qaQual.Name = qa.Name;
-                                qaQual.IsActive = qa.IsActive != null ? qa.IsActive.Value : false;
-                                qaQual.PreCodes = String.IsNullOrEmpty(qa.PreCodes) ? String.Empty : qa.PreCodes;
-                                qaQual.LogicalOperator = String.IsNullOrEmpty(qa.LogicalOperator) ? String.Empty : qa.LogicalOperator;
-                                qaQual.NumberOfRequiredConditions = qa.NumberOfRequiredConditions != null ? qa.NumberOfRequiredConditions.Value : 0;
-                                qaQual.Order = qa.QualificationOrder != null ? qa.QualificationOrder.Value : 0;
-                                projectModel.TargetAudiences[0].Qualifications.Add(qaQual);
-                            }
+                                Id = Guid.Parse(item.Id), IsActive = item.IsActive?? false, LogicalOperator = item.LogicalOperator ?? String.Empty, Name = item.Name, 
+                                NumberOfRequiredConditions = item.NumberOfRequiredConditions ?? 0, Order = item.QualificationOrder?? 0, PreCodes = item.PreCodes ?? String.Empty
+                            });
                         }
                     }
-
-                    // Find QuotaGroup ID from Target audience - Quota group mapping table
-                    var taQuotaGroupList = _dataContext.TargetAudienceQuotaGroups.Where(x => x.TargetAudienceId == ta.Id).ToList();
-
-
-                    var idQuotaGroupList = new List<string>();
-                    // Find Quota Groups from mapping table
-                    if (taQuotaGroupList.Any())
-                    {
-                        projectModel.TargetAudiences[0].QuotaGroups = new List<Model.QuotaGroup>();
-                        foreach (var taQuota in taQuotaGroupList)
-                        {
-                            idQuotaGroupList.Add(taQuota.QuotaGroupId);
-                        }
-                        
-                        //Find Quota Groups
-                        var quotaGroupList = _dataContext.QuotaGroups.Where(x => idQuotaGroupList.Contains(x.Id)).ToList();
-                        
-                        if(quotaGroupList.Any())
-                        {
-                            foreach(var qgItem in quotaGroupList)
-                            {
-                                var quotaGroup = new Model.QuotaGroup();
-                                quotaGroup.Id = Guid.Parse(qgItem.Id);
-                                quotaGroup.Name = qgItem.Name;
-                                quotaGroup.IsActive = qgItem.IsActive ?? false;
-                                quotaGroup.Quotas = new List<Model.Quota>();
-
-                                var quotagroupquotaList = _dataContext.QuotaGroupQuota.Where(x => x.QuotaGroupId == qgItem.Id).ToList();
-                                if(quotagroupquotaList.Any())
-                                {
-                                    var idqgqList = new List<string>();
-                                    foreach(var ll in quotagroupquotaList)
-                                    {
-                                        idqgqList.Add(ll.QuotaId);
-                                    }
-
-                                    var quotaList = _dataContext.Quota.Where(x => idqgqList.Contains(x.Id)).ToList();
-
-                                    if (quotaList.Any())
-                                    {
-                                        foreach (var tim in quotaList)
-                                        {
-                                            var quota = new Model.Quota();
-                                            quota.Id = Guid.Parse(tim.Id);
-                                            quota.QuotaName = tim.QuotaName;
-                                            quota.Limit = tim.Limit?? 0;
-                                            quota.Precode = tim.PreCode;
-                                            quotaGroup.Quotas.Add(quota);
-                                        }
-                                    }
-                                }
-                                projectModel.TargetAudiences[0].QuotaGroups.Add(quotaGroup);
-                            }
-                        }
-                    }
+                    projectModel.TargetAudiences.Add(taModel);
                 }
             }
-            
+
             return projectModel;
         }
 
@@ -215,9 +170,10 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             if (project == null)
                 throw new ArgumentNullException("Project model not found", nameof(project));
+            project.LastUpdate = DateTime.UtcNow;
             project.Status = Model.Status.Draft;
             project.CintResponseId = 0;
-            ModelMapping(project);
+            ModelMapping(project, false);
             _dataContext.SaveChanges();
 
             return project;
@@ -230,149 +186,30 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         /// </summary>
         /// <param name="project"></param>
 
-        private void ModelMapping(Model.Project project)
+        private void ModelMapping(Model.Project project, bool isCreateCall)
         {
-            var tempProject = JsonSerializer.Deserialize<DBModel.Project>(JsonSerializer.Serialize(project));
-            var tempTAList = new List<DBModel.TargetAudience>();
-            if (project.Id == null)
+            var tempProject = JsonSerializer.Deserialize<Project>(JsonSerializer.Serialize(project));
+
+            //Manually map Quotas
+            /*if(project.TargetAudiences.Any())
             {
-                foreach (var item in project.TargetAudiences)
+                for(int i= 0; i<project.TargetAudiences.Count; i++)
                 {
-                    var tempTA = JsonSerializer.Deserialize<DBModel.TargetAudience>(JsonSerializer.Serialize(item));
-                    _dataContext.Add(new DBModel.ProjectTargetAudience { Id = Guid.NewGuid().ToString(), Project = tempProject, TargetAudience = tempTA });
-
-                    if (_dataContext.Qualifications.Any())
+                    if (project.TargetAudiences[i].QuotaGroups.Any())
                     {
-                        foreach (var existingQ in _dataContext.Qualifications)
-                        {
-                            _dataContext.Add(new DBModel.TargetAudienceQualification { Id = Guid.NewGuid().ToString(), TargetAudience = tempTA, Qualification = existingQ });
-                        }
-                    }
-                    else
-                    {
-                        foreach (var subItem in item.Qualifications)
-                        {
-                            var tempQ = JsonSerializer.Deserialize<DBModel.Qualification>(JsonSerializer.Serialize(subItem));
-                            _dataContext.Add(new DBModel.TargetAudienceQualification { Id = Guid.NewGuid().ToString(), TargetAudience = tempTA, Qualification = tempQ });
-                        }
-                    }
-
-                    if (_dataContext.QuotaGroups.Any())
-                    {
-                        foreach (var existingQG in _dataContext.QuotaGroups)
-                        {
-                            _dataContext.Add(new DBModel.TargetAudienceQuotaGroup { Id = Guid.NewGuid().ToString(), TargetAudience = tempTA, QuotaGroup = existingQG });
-                        }
-                    }
-                    else
-                    {
-                        foreach (var subItem2 in item.QuotaGroups)
-                        {
-                            var tempQuotaGroup = JsonSerializer.Deserialize<DBModel.QuotaGroup>(JsonSerializer.Serialize(subItem2));
-                            _dataContext.Add(new DBModel.TargetAudienceQuotaGroup { Id = Guid.NewGuid().ToString(), TargetAudience = tempTA, QuotaGroup = tempQuotaGroup });
-
-                            foreach (var lowerItem in subItem2.Quotas)
-                            {
-                                var tempQuota = JsonSerializer.Deserialize<DBModel.Quotum>(JsonSerializer.Serialize(lowerItem));
-                                _dataContext.Add(new DBModel.QuotaGroupQuotum { Id = Guid.NewGuid().ToString(), QuotaGroup = tempQuotaGroup, Quota = tempQuota });
-                            }
+                        for (int j =0; j < project.TargetAudiences[i].QuotaGroups.Count; j++)
+                        { 
                         }
                     }
                 }
-            }
-
-            else
-            {
-                var tempProject1 = JsonSerializer.Deserialize<DBModel.Project>(JsonSerializer.Serialize(project));
-                if(tempProject1 != null)
-                    _dataContext.Update(tempProject1);
-                /*foreach (var item in project.TargetAudiences)
-                {
-                    var tempTA = JsonSerializer.Deserialize<DBModel.TargetAudience>(JsonSerializer.Serialize(item));
-                    _dataContext.Update(new DBModel.ProjectTargetAudience { Id = project.Id.ToString(), Project = tempProject, TargetAudience = tempTA });
-
-                    if (_dataContext.Qualifications.Any())
-                    {
-                        foreach (var existingQ in _dataContext.Qualifications)
-                        {
-                            _dataContext.Update(new DBModel.TargetAudienceQualification { TargetAudience = tempTA, Qualification = existingQ });
-                        }
-                    }
-                    else
-                    {
-                        foreach (var subItem in item.Qualifications)
-                        {
-                            var tempQ = JsonSerializer.Deserialize<DBModel.Qualification>(JsonSerializer.Serialize(subItem));
-                            _dataContext.Update(new DBModel.TargetAudienceQualification { Id = project.Id.ToString(), TargetAudience = tempTA, Qualification = tempQ });
-                        }
-                    }
-
-                    if (_dataContext.QuotaGroups.Any())
-                    {
-                        foreach (var existingQG in _dataContext.QuotaGroups)
-                        {
-                            _dataContext.Update(new DBModel.TargetAudienceQuotaGroup { Id = project.Id.ToString(), TargetAudience = tempTA, QuotaGroup = existingQG });
-                        }
-                    }
-                    else
-                    {
-                        foreach (var subItem2 in item.QuotaGroups)
-                        {
-                            var tempQuotaGroup = JsonSerializer.Deserialize<DBModel.QuotaGroup>(JsonSerializer.Serialize(subItem2));
-                            _dataContext.Update(new DBModel.TargetAudienceQuotaGroup { Id = project.Id.ToString(), TargetAudience = tempTA, QuotaGroup = tempQuotaGroup });
-
-                            foreach (var lowerItem in subItem2.Quotas)
-                            {
-                                var tempQuota = JsonSerializer.Deserialize<DBModel.Quotum>(JsonSerializer.Serialize(lowerItem));
-                                _dataContext.Update(new DBModel.QuotaGroupQuotum { Id = project.Id.ToString(), QuotaGroup = tempQuotaGroup, Quota = tempQuota });
-                            }
-                        }
-                    }
             }*/
 
-        }
-            foreach (var item in project.TargetAudiences)
+            if (tempProject != null)
             {
-                /*var tempTA = JsonSerializer.Deserialize<DBModel.TargetAudience>(JsonSerializer.Serialize(item));
-                _dataContext.Update(new DBModel.ProjectTargetAudience { Id = project.Id.ToString(), Project = tempProject, TargetAudience = tempTA });
-                */
-                /*if (_dataContext.Qualifications.Any())
-                {
-                    foreach (var existingQ in _dataContext.Qualifications)
-                    {
-                        _dataContext.Update(new DBModel.TargetAudienceQualification { Id = project.Id.ToString(), TargetAudience = tempTA, Qualification = existingQ });
-                    }
-                }
+                if (isCreateCall)
+                    _dataContext.Add(tempProject);
                 else
-                {
-                    foreach (var subItem in item.Qualifications)
-                    {
-                        var tempQ = JsonSerializer.Deserialize<DBModel.Qualification>(JsonSerializer.Serialize(subItem));
-                        _dataContext.Update(new DBModel.TargetAudienceQualification { Id = project.Id.ToString(), TargetAudience = tempTA, Qualification = tempQ });
-                    }
-                }*/
-
-                /*if (_dataContext.QuotaGroups.Any())
-                {
-                    foreach (var existingQG in _dataContext.QuotaGroups)
-                    {
-                        _dataContext.Update(new DBModel.TargetAudienceQuotaGroup { Id = project.Id.ToString(), TargetAudience = tempTA, QuotaGroup = existingQG });
-                    }
-                }
-                else
-                {
-                    foreach (var subItem2 in item.QuotaGroups)
-                    {
-                        var tempQuotaGroup = JsonSerializer.Deserialize<DBModel.QuotaGroup>(JsonSerializer.Serialize(subItem2));
-                        _dataContext.Update(new DBModel.TargetAudienceQuotaGroup { Id = project.Id.ToString(), TargetAudience = tempTA, QuotaGroup = tempQuotaGroup });
-
-                        foreach (var lowerItem in subItem2.Quotas)
-                        {
-                            var tempQuota = JsonSerializer.Deserialize<DBModel.Quotum>(JsonSerializer.Serialize(lowerItem));
-                            _dataContext.Update(new DBModel.QuotaGroupQuotum { Id = project.Id.ToString(), QuotaGroup = tempQuotaGroup, Quota = tempQuota });
-                        }
-                    }
-                }*/
+                    _dataContext.Update(tempProject);
             }
         }
 

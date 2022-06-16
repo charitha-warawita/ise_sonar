@@ -1,6 +1,6 @@
 using IntelligentSampleEnginePOC.API;
+using IntelligentSampleEnginePOC.API.Core.DB;
 using IntelligentSampleEnginePOC.API.Core.Services;
-using IntelligentSampleEnginePOC.API.DB;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 

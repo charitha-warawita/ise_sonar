@@ -47,20 +47,20 @@ namespace IntelligentSampleEnginePOC.UI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (project != null)
-                    {
-                        project.Id = Guid.NewGuid();
-                        project.LastUpdate = DateTime.UtcNow;
-                        if (project.User != null)
-                            project.User.Id = Guid.NewGuid();
-                        if (project.TargetAudiences.Any())
-                        {
-                            foreach (var item in project.TargetAudiences)
-                            {
-                                item.Id = Guid.NewGuid();
-                            }
-                        }
-                    }
+                    //if (project != null)
+                    //{
+                    //    project.Id = Guid.NewGuid();
+                    //    project.LastUpdate = DateTime.UtcNow;
+                    //    if (project.User != null)
+                    //        project.User.Id = Guid.NewGuid();
+                    //    if (project.TargetAudiences.Any())
+                    //    {
+                    //        foreach (var item in project.TargetAudiences)
+                    //        {
+                    //            item.Id = Guid.NewGuid();
+                    //        }
+                    //    }
+                    //}
 
                     if (submitButton == "Launch")
                         await _service.LaunchProject(project);
