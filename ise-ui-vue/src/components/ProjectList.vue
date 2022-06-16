@@ -15,14 +15,15 @@
             </li>
         </ul><br /><br/>
         <div class="d-flex">
-            <input class="form-control me-2" type="name" placeholder="Type name here" v-model="searchName">
-            <input class="form-control me-2" type="date" placeholder="Start date  ." aria-label="Date" v-model="searchStartDate">
-            <button class="btn btn-outline-success searchButton me-2 " @click="filterByNameStartDate">Filter</button>
-            <button class="btn btn-outline-success searchButton me-2" @click="clearFilters">Clear</button>
+            <input class="form-control me-2" type="name" placeholder="Type name here" v-model="sName">
+            <input class="form-control me-2" type="date" placeholder="Start date  ." aria-label="Date" v-model="sDate">
+            <a class="btn btn-outline-success searchButton me-2 " v-on:click="filterByNameStartDate('test')">Filter</a>
+            <a class="btn btn-outline-success searchButton me-2" v-on:click="clearFilters('test')">Clear</a>
         </div>
         <br/><br/>
 
         <ProjectListTable class="projListTable" :fields='displayfields' :projects='currentProject' :fieldTitles='displayFieldFormatted'></ProjectListTable>
+        <ProjectListTable style="display:none" class="projListTable" :fields='displayfields' :projects='tempProject' :fieldTitles='displayFieldFormatted'></ProjectListTable>
         
  
     </div>
@@ -32,46 +33,68 @@ import {useProjectStore} from '@/stores/projectStore'
 import {storeToRefs} from 'pinia'
 import ProjectListTable from '@/components/ProjectListTable.vue'
 import ProjectModel from '@/models/projectModel.js'
+import {ref} from "vue"
 
 // console.log(storeToRefs(useProjectStore()).projects);
 var useProjStore = useProjectStore()
 const { projects, getDraftProjects, getActiveProjects, getClosedProjects } = storeToRefs(useProjStore)
 const displayfields = ProjectModel.displayfields
 const displayFieldFormatted = ProjectModel.displayFieldFormatted
+
+const activetab = ref('All')
+let currentProject = projects.value
+const searchName = ref('')
+const searchStartDate = ref('')
+
+function filterStatus(status) {
+    console.log("filter by status start");
+    if(this !== undefined) 
+        this.currentProject = useProjectStore().getProjectByStatus(status);
+    else
+        currentProject = useProjectStore().getProjectByStatus(status);
+        
+        console.log("filter by status end");
+}
 </script>
 <script>
 export default {
     name: "projectList",
-    props: {
-        activetab: {
+    /*props: {
+        sName: {
             type: String,
-            default: 'All'
+            default: ''
+        },
+        sDate: {
+            type: String,
+            default: ''
         }
-    },
-    components: { ProjectListTable },
+    },*/
     data() {
+        console.log('cp => ' + JSON.stringify(this.cp));
         return {
-            currentProject: this.projects,
-            searchName: '',
-            searchStartDate: ''
-
+            sName: '',
+            sDate: '',
+            tempProject: this.projects
         }
     },
     methods: {
-        filterStatus(status) {
-            // let test = this.useProjStore.getProjectByStatus(status);
-            this.currentProject = this.useProjStore.getProjectByStatus(status);
+        filterByNameStartDate(test) {
+            console.log("filter start");
+            var test = this.useProjStore.getProjectByNameStartDate(this.sName, this.sDate);
+            this.currentProject = test;
+            this.tempProject = test;
+            console.log("filter end - " + this.currentProject);
         },
-        filterByNameStartDate()
-        {
-            this.currentProject = this.useProjStore.getProjectByNameStartDate(this.searchName, this.searchStartDate);
-        },
-        clearFilters()
-        {
-            this.searchName = ''; this.searchStartDate = '';
-            this.currentProject = this.useProjStore.getProjectByNameStartDate('','');
+        clearFilters(test) {
+            console.log("clear start");
+            this.sName = '';
+            this.sDate = '';
+            var test = this.useProjStore.getProjectByNameStartDate('','');
+            this.currentProject = test;
+            this.tempProject = test;
+            console.log("clear end - " + this.currentProject);
         }
-    },
+    }
 }
 </script>
 <style>

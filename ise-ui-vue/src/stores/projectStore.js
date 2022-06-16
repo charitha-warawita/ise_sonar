@@ -315,6 +315,7 @@ export const useProjectStore = defineStore('project', {
             return result;*/
         },
         getProjectByNameStartDate(name, startDate) {
+            
             if((name !== undefined && name !== "") && startDate !== undefined && startDate !== "" ) {
                 return this.projects.filter(project => (project.name.toLowerCase()).includes(name.toLowerCase()) && project.startDate.includes(startDate));
             } else if(name !== undefined && name !== "") {
@@ -325,6 +326,26 @@ export const useProjectStore = defineStore('project', {
             }
 
             return this.projects;
+        },
+        getProjectByNameStartDateTrial(name, startDate) {
+            if((name !== undefined && name !== "") && startDate !== undefined && startDate !== "" ) {
+                const values = this.projects.filter(project => {
+                    return (project.name.toLowerCase()).includes(name.toLowerCase()) && project.startDate.includes(startDate);
+                });
+            } else if(name !== undefined && name !== "") {
+                const values = this.projects.filter(project => {
+                    return (project.name.toLowerCase()).includes(name.toLowerCase());
+                });
+            } 
+            else if(startDate !== undefined && startDate !== "" ) {
+                const values = this.projects.filter(project => {
+                    return (project.startDate.includes(startDate))
+                });
+            }
+
+            return this.projects;
         }
+
+
     }
 })
