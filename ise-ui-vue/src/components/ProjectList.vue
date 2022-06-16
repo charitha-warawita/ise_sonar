@@ -2,16 +2,16 @@
     <div>
         <ul class="nav nav-pills nav-fill border-bottom">
             <li class="nav-item">
-            <a v-on:click="activetab=-1; filterStatus(-1)" :class="[activetab === -1 ? 'active' : '']" class="nav-link" aria-current="page" href="#">All</a>
+            <a v-on:click="activetab='All'; filterStatus('All')" :class="[activetab === 'All' ? 'active' : '']" class="nav-link" aria-current="page" href="#">All</a>
             </li>
             <li class="nav-item">
-            <a v-on:click="activetab=2; filterStatus(2)" :class="[activetab === 2 ? 'active' : '']" class="nav-link" href="#">Active</a>
+            <a v-on:click="activetab='Active'; filterStatus('Active')" :class="[activetab === 'Active' ? 'active' : '']" class="nav-link" href="#">Active</a>
             </li>
             <li class="nav-item">
-            <a v-on:click="activetab=0; filterStatus(0)" :class="[activetab === 0 ? 'active' : '']" class="nav-link" href="#">Draft</a>
+            <a v-on:click="activetab='Draft'; filterStatus('Draft')" :class="[activetab === 'Draft' ? 'active' : '']" class="nav-link" href="#">Draft</a>
             </li>
             <li class="nav-item">
-            <a v-on:click="activetab=5; filterStatus(5)" :class="[activetab === 5 ? 'active' : '']" class="nav-link" href="#">Closed</a>
+            <a v-on:click="activetab='Closed'; filterStatus('Closed')" :class="[activetab === 'Closed' ? 'active' : '']" class="nav-link" href="#">Closed</a>
             </li>
         </ul><br /><br/>
         <div class="d-flex">
@@ -44,8 +44,8 @@ export default {
     name: "projectList",
     props: {
         activetab: {
-            type: Number,
-            default: -1
+            type: String,
+            default: 'All'
         }
     },
     components: { ProjectListTable },
