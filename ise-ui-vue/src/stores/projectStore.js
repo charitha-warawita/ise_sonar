@@ -274,26 +274,45 @@ export const useProjectStore = defineStore('project', {
             "cintSelfLink": "NA",
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
-        }]
+        }],
+        currentProjects: [],
+        searchByName: '',
+        searchByStartDate: '',
+        currentStatus: 'All'
     }),
     getters: {
         getDraftProjects: (state) => {
             return state.projects.filter(project => project.status === 0);
-        },
-        getActiveProjects: (state) => {
-            return state.projects.filter(project => project.status === 2);
-        },
-        getClosedProjects: (state) => {
-            return state.projects.filter(project => project.status === 5);
         }
     },
     actions: {
-        addProject(name) {
-            this.projects.push({
-                id: "", name, reference: "ref"
-            });
+        setDefaultProjectList() {
+            console.log("came into this function");
+            this.searchByName = ''
+            this.searchByStartDate = ''
+            this.currentProjects = this.projects
+            this.currentStatus = 'All'
         },
-        getProjectByStatus(status) {
+        getProjectsBySearchNameAndStartDate (status) {
+            console.log("came in.. " + status);
+            if(status !== undefined || status !== '')
+                this.currentStatus = status
+
+            var curr = [];
+            if(this.currentStatus !== 'All') {
+                curr = this.projects.filter(project => project.status === this.currentStatus)
+            }
+            else {
+                curr = this.projects
+            }
+            if(this.searchByName !== '')
+                curr = curr.filter(project => (project.name.toLowerCase()).includes(this.searchByName.toLowerCase()))
+            if(this.searchByStartDate !== '')
+                curr = curr.filter(project => (project.startDate.includes(this.searchByStartDate)))
+            
+            this.currentProjects = curr;
+        }
+        /*getProjectByStatus(status) {
             if(status === 'All') {
                 return this.projects;
             } else {
@@ -301,7 +320,7 @@ export const useProjectStore = defineStore('project', {
             }
             
             // promise not required at this point of time
-            /*var result = new Promise((resolve, reject) => {
+            var result = new Promise((resolve, reject) => {
                 setTimeout(() => {
                     var currProj = [];
                     if(status === -1) {
@@ -312,40 +331,7 @@ export const useProjectStore = defineStore('project', {
                     resolve(currProj)
                 }, 1);
             });
-            return result;*/
-        },
-        getProjectByNameStartDate(name, startDate) {
-            
-            if((name !== undefined && name !== "") && startDate !== undefined && startDate !== "" ) {
-                return this.projects.filter(project => (project.name.toLowerCase()).includes(name.toLowerCase()) && project.startDate.includes(startDate));
-            } else if(name !== undefined && name !== "") {
-                return this.projects.filter(project => (project.name.toLowerCase()).includes(name.toLowerCase()));
-            }
-            else if(startDate !== undefined && startDate !== "" ) {
-                return this.projects.filter(project => project.startDate.includes(startDate));
-            }
-
-            return this.projects;
-        },
-        getProjectByNameStartDateTrial(name, startDate) {
-            if((name !== undefined && name !== "") && startDate !== undefined && startDate !== "" ) {
-                const values = this.projects.filter(project => {
-                    return (project.name.toLowerCase()).includes(name.toLowerCase()) && project.startDate.includes(startDate);
-                });
-            } else if(name !== undefined && name !== "") {
-                const values = this.projects.filter(project => {
-                    return (project.name.toLowerCase()).includes(name.toLowerCase());
-                });
-            } 
-            else if(startDate !== undefined && startDate !== "" ) {
-                const values = this.projects.filter(project => {
-                    return (project.startDate.includes(startDate))
-                });
-            }
-
-            return this.projects;
-        }
-
-
+            return result;
+        },*/
     }
 })

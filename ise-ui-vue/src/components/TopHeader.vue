@@ -11,7 +11,7 @@
               <a class="nav-link active" aria-current="page" href="/">Projects</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" aria-current="create" href="/">Create Projects</a>
+              <a class="nav-link" aria-current="create" href="/create">Create Projects</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/about">About</a>
