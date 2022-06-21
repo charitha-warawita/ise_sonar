@@ -47,7 +47,7 @@
                         <div class="accordion-item customItem">
                             <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseTwo-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                <b>Target Audience</b>
+                                <b>Target Audience - {{ta.id}}</b>
                             </button>
                             </h2>
                             <div :id="'panelsStayOpen-collapseTwo-' + ta.id" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
@@ -131,6 +131,7 @@
                                         <div class="col-md-12">
                                             <button class="btn btn-outline-success searchButton me-2 " v-on:click="useProjStore.AddQualificationElement(ta.qualifications)">Add Qualification</button>
                                             <button class="btn btn-outline-success searchButton me-2 " v-on:click="useProjStore.AddQuotaElement(ta.quotas)">Add Quota</button>
+                                            <button :class="{ hidden: ta.id === 1 }" style="float: right" class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.CancelTargetAudience(ta)">Cancel Target Audience</button>
                                         </div>
                                     </div>
                                 </div>
@@ -142,7 +143,7 @@
                 </div>
             </div>
             <div class="col-4">
-                <div style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; min-height: 00px; padding: 15px;">
+                <div style="box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; padding: 15px;">
                     <div class="row">
                         <div class="col-md-12">
                             <button class="btn btn-outline-success searchButton me-2" style="width:100%" v-on:click="useProjStore.CalculateCharges()">Calculate Charges</button>
@@ -169,12 +170,12 @@
                             </div><div class="breakDiv"></div><hr/><div class="breakDiv"></div>
                         </div>
                         
-                        <div class="col-md-6">
-                            <label for="inputEmail4" class="form-label"><h4>Total</h4></label>
+                        <div class="col-md-12">
+                            <label for="inputEmail4" class="form-label" style="margin: auto"><h4>Total: {{totalCost}} USD</h4></label>
                         </div>
-                        <div class="col-md-6">
+                        <!--<div class="col-md-6">
                             <label for="inputEmail4" class="form-label"><h4>{{totalCost}} USD</h4></label>
-                        </div><div class="breakDiv"></div><hr>
+                        </div>--><div class="breakDiv"></div><hr>
                         <div class="col-md-12">
                             <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="useProjStore.CalculateCharges()">Create Project</button>
                             <button class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" v-on:click="useProjStore.CalculateCharges()">Save as Draft</button>
@@ -206,6 +207,9 @@ onMounted(() => {
 })
 </script>
 <style>
+.hidden {
+    display: none;
+}
 .subDiv {
     margin: 20px auto;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -221,6 +225,7 @@ onMounted(() => {
 
 .customItem {
     margin-bottom: 10px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 input[type=checkbox] {

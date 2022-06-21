@@ -46,6 +46,10 @@ export const useProjectStore = defineStore('project', {
             };
             this.project.projectTargetAudiences.push(ta)
         },
+        CancelTargetAudience(ta) {
+            var removeIndex = this.project.projectTargetAudiences.map(item => item.id).indexOf(ta.id);
+            ~removeIndex && this.project.projectTargetAudiences.splice(removeIndex, 1);
+        },
         AddQualificationElement(quals) {
             console.log("Came to add qualifications")
             var qual = {
