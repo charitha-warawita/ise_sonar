@@ -8,13 +8,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Projects</a>
+              <RouterLink @click="activate(1)" :class="{ active : active_el == 1 }" class="nav-link" to="/">Projects</RouterLink>
             </li>
             <li class="nav-item">
-              <a class="nav-link" aria-current="create" href="/create">Create Projects</a>
+              <RouterLink @click="activate(2)" :class="{ active : active_el == 2 }" class="nav-link" to="/create">Create Projects</RouterLink>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/about">About</a>
+              <RouterLink @click="activate(3)" :class="{ active : active_el == 3 }" class="nav-link" to="/about">About</RouterLink>
             </li>
             <!--<li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -41,7 +41,16 @@
 </template>
 <script>
 export default {
-    
+  data() {
+    return {
+      active_el: 1
+    }
+  },
+  methods:{
+    activate:function(el){
+        this.active_el = el;
+    }
+  }    
 }
 </script>
 <style>

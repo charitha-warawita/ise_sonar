@@ -201,6 +201,7 @@ const { project, basicSettingDesc, totalCost } = storeToRefs(useProjStore)
 
 onMounted(() => {
     // console.log('on mounted call');
+    useProjStore.$reset()
     useProjStore.AddTargetAudienceElement()
 })
 </script>

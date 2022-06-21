@@ -29,7 +29,7 @@ export const useProjectStore = defineStore('project', {
     getters: {
     },
     actions: {
-        AddTargetAudienceElement() {
+        AddTargetAudienceElement() {  
             var id = this.project.projectTargetAudiences.length;
             var ta = {
                 "id": id+1,
