@@ -2,71 +2,232 @@
 <PageTitle title="Create new project"></PageTitle>
     <div class="container">
         <div class="row">
-            <div class="col-9">
-                <div class="accordion" id="accordionPanelsStayOpenExample" style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
-                    <div class="accordion-item">
+            <div class="col-8">
+                <div class="accordion" id="accordionPanelsStayOpenExample">
+                    <div class="accordion-item customItem">
                         <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                        <div class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                            <span>Basic Settings</span><br/>
-                            <span>small text</span>
-                        </div>
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            <b>Basic Settings</b>
+                        </button>
                         </h2>
                         <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
                             <div class="accordion-body">
-                                <input class="form-control me-2" type="name" placeholder="Type name here" v-model="currentText">
-                                <input class="form-control me-2" type="name" placeholder="Type name here" v-model="sName">
-                                <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                <div class='basicSetting'>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="inputEmail4" class="form-label">Name</label>
+                                            <input type="text" class="form-control" id="inputEmail4" v-model="project.name">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputEmail4" class="form-label">Maconomy Reference</label>
+                                            <input type="text" class="form-control" id="inputEmail4" v-model="project.reference">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputEmail4" class="form-label">User</label>
+                                            <input type="text" class="form-control" id="inputEmail4" v-model="project.user.name">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputEmail4" class="form-label">User Email</label>
+                                            <input type="email" class="form-control" id="inputEmail4" v-model="project.user.email">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputEmail4" class="form-label">Start Date</label>
+                                            <input type="date" class="form-control" id="inputEmail4" v-model="project.startDate">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputEmail4" class="form-label">Fielding Period</label>
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="project.fieldingPeriod">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                            Accordion Item #2
-                        </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-                            <div class="accordion-body">
-                                <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    <div v-if="project.projectTargetAudiences" v-for="ta in project.projectTargetAudiences" :key="ta.id">
+                        <div class="accordion-item customItem">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseTwo-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                <b>Target Audience</b>
+                            </button>
+                            </h2>
+                            <div :id="'panelsStayOpen-collapseTwo-' + ta.id" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
+                                <div class="accordion-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-12">
+                                            <label for="inputEmail4" class="form-label">Name</label>
+                                            <input type="text" class="form-control" id="inputEmail4" v-model="ta.name">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputEmail4" class="form-label">Target Audience Order</label>
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="ta.audienceNumber">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputEmail4" class="form-label">Estimated IR (in %)</label>
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="ta.estimatedIR">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputEmail4" class="form-label">Estimated LOI (in mins)</label>
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="ta.estimatedLOI">
+                                        </div>
+                                        <!--<div class="col-md-6">
+                                            <label for="inputEmail4" class="form-label">Cost per Interview (in USD)</label>
+                                            <input type="text" class="form-control" id="inputEmail4" v-model="ta.costPerInterview">
+                                        </div>-->
+                                        <div class="col-md-6">
+                                            <label for="inputEmail4" class="form-label">Wanted Completes Count</label>
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="ta.wantedCompletes">
+                                        </div>
+                                        <div class="row g-3 subDiv" v-if="ta.qualifications.length > 0">
+                                        <h5>Qualifications</h5>
+                                            <div class="row g-3 subDivQ" v-for="qual in ta.qualifications" :key="qual.id">
+                                                <div class="col-md-12"><b>Qualification details</b>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="inputEmail4" class="form-label">Name</label>
+                                                    <input type="text" class="form-control" id="inputEmail4" v-model="qual.Name">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="inputEmail4" class="form-label">Qualification Condition</label>
+                                                    <input type="text" class="form-control" id="inputEmail4" v-model="qual.condition">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="inputEmail4" class="form-label">Order</label>
+                                                    <input type="number" class="form-control" id="inputEmail4" v-model="qual.order">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="inputEmail4" class="form-label">Enabled</label>
+                                                    <div class="form-control" style="border: none"><input type="checkbox" id="inputEmail4" v-model="qual.isActive"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 subDiv" v-if="ta.quotas.length > 0">
+                                        <h5>Quotas</h5>
+                                            <div class="row g-3 subDivQ" v-for="quota in ta.quotas" :key="quota.id">
+                                                <div class="col-md-12"><b>Quota details</b>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="inputEmail4" class="form-label">Name</label>
+                                                    <input type="text" class="form-control" id="inputEmail4" v-model="quota.Name">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="inputEmail4" class="form-label">Condition</label>
+                                                    <input type="text" class="form-control" id="inputEmail4" v-model="quota.condition">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="inputEmail4" class="form-label">Limit</label>
+                                                    <input type="number" class="form-control" id="inputEmail4" v-model="quota.limit">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="inputEmail4" class="form-label">Limit Type</label>
+                                                    <input type="text" class="form-control" id="inputEmail4" v-model="quota.limitType">
+                                                </div>
+                                                <div class="col-md-6"/>
+                                                <div class="col-md-6">
+                                                    <label for="inputEmail4" class="form-label">Enabled</label>
+                                                    <div class="form-control" style="border: none"><input type="checkbox" id="inputEmail4" v-model="quota.isActive"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button class="btn btn-outline-success searchButton me-2 " v-on:click="useProjStore.AddQualificationElement(ta.qualifications)">Add Qualification</button>
+                                            <button class="btn btn-outline-success searchButton me-2 " v-on:click="useProjStore.AddQuotaElement(ta.quotas)">Add Quota</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                            Accordion Item #3
-                        </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-                            <div class="accordion-body">
-                                <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    <button class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.AddTargetAudienceElement()">Add another Target Audience</button>
+
+                </div>
+            </div>
+            <div class="col-4">
+                <div style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; min-height: 00px; padding: 15px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-outline-success searchButton me-2" style="width:100%" v-on:click="useProjStore.CalculateCharges()">Calculate Charges</button>
+                        </div><div class="breakDiv"></div>
+                        <div class="row" v-if="project.projectTargetAudiences" v-for="ta in project.projectTargetAudiences" :key="ta.id">
+                            <h5>Estimation of Target audience - {{ta.id}} </h5><div class="breakDiv"></div>
+                            <div class="col-md-8">
+                                <label for="inputEmail4" class="form-label">CPI</label>
                             </div>
+                            <div class="col-md-4">
+                                <label for="inputEmail4" class="form-label">{{ta.costPerInterview}} USD</label>
+                            </div>
+                            <div class="col-md-8">
+                                <label for="inputEmail4" class="form-label">CPTG</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="inputEmail4" class="form-label">{{ta.cptg}} USD</label>
+                            </div><div class="col-md-12"></div>
+                            <div class="col-md-8">
+                                <label for="inputEmail4" class="form-label"><b>Subtotal</b></label>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="inputEmail4" class="form-label"><b>{{ta.subtotal}} USD</b></label>
+                            </div><div class="breakDiv"></div><hr/><div class="breakDiv"></div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="inputEmail4" class="form-label"><h4>Total</h4></label>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputEmail4" class="form-label"><h4>{{totalCost}} USD</h4></label>
+                        </div><div class="breakDiv"></div><hr>
+                        <div class="col-md-12">
+                            <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="useProjStore.CalculateCharges()">Create Project</button>
+                            <button class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" v-on:click="useProjStore.CalculateCharges()">Save as Draft</button>
+                            <button class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" v-on:click="useProjStore.CalculateCharges()">Cancel</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-3"><div style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; min-height: 00px;">
-            This is test</div></div>
         </div>
     </div>
 
 
         
 </template>
-<script>
+<script setup>
 import PageTitle from '@/components/PageTitle.vue'
-export default {
-  components: { PageTitle },
-  data() {
-    return {
-        'currentText': ''
-    }
-  }
-}
+import {useProjectStore} from '@/stores/projectStore'
+import {storeToRefs} from 'pinia'
+import { onMounted } from 'vue'
+
+var useProjStore = useProjectStore()
+const { project, basicSettingDesc, totalCost } = storeToRefs(useProjStore)
+
+
+onMounted(() => {
+    // console.log('on mounted call');
+    useProjStore.AddTargetAudienceElement()
+})
 </script>
 <style>
-.test {
-    display: block;
+.subDiv {
+    margin: 20px auto;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    padding-bottom: 20px;
+    background-color: #E8E8E8;
+}
+
+.subDivQ {
+    margin: 10px auto;
+    background-color: white;
+    padding-bottom: 20px;
+}
+
+.customItem {
+    margin-bottom: 10px;
+}
+
+input[type=checkbox] {
+    transform: scale(1.5);
+}
+
+.breakDiv {
+    margin:10px 0;
 }
     
 </style>

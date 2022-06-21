@@ -25,7 +25,7 @@
     </div>
 </template>
 <script setup>
-import {useProjectStore} from '@/stores/projectStore'
+import {useProjectsStore} from '@/stores/projectsStore'
 import {storeToRefs} from 'pinia'
 import ProjectListTable from '@/components/ProjectListTable.vue'
 import ProjectModel from '@/models/projectModel.js'
@@ -33,7 +33,7 @@ import {ref} from "vue"
 import { onMounted } from 'vue'
 
 // console.log(storeToRefs(useProjectStore()).projects);
-var useProjStore = useProjectStore()
+var useProjStore = useProjectsStore()
 const { projects, searchByName, searchByStartDate, currentProjects, currentStatus, getDraftProjects } = storeToRefs(useProjStore)
 const displayfields = ProjectModel.displayfields
 const displayFieldFormatted = ProjectModel.displayFieldFormatted

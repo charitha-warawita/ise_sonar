@@ -2,336 +2,119 @@ import { defineStore } from "pinia";
 
 export const useProjectStore = defineStore('project', {
     state: () => ({
-        projects:[{
-            "id": "e592e1c0-f77b-457d-86e8-19f85ab83722",
-            "name": "Stocks Study",
-            "reference": "MAC001",
-            "userId": "09b90eb4-7cd4-4a2c-b587-9629305c7002",
-            "lastUpdate": "0001-01-01T00:00:00",
-            "startDate": "2022-02-22T00:00:00",
-            "fieldingPeriod": 50,
+        basicSettingDesc:'',
+        totalCost: 0,
+        project: {
+            "id": "",
+            "name": "",
+            "reference": "",
+            "userId": "",
+            "lastUpdate": "",
+            "startDate": "",
+            "fieldingPeriod": 0,
             "status": "Draft",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
+            "linkToSurvey": "",
+            "user": {
+                "id": "",
+                "name": "",
+                "email": ""
+            },
             "projectTargetAudiences": [],
             "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Product Survey",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Created",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Study on Mobile Networks",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Active",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Study on Drinks",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Paused",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Test Survey Run",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Complete",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Bank Statistics",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Closed",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Coin Survey",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Closed",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Test Product Survey",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Closed",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Study on Maps",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Closed",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Study on Drinks",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Closed",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Test Run",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Closed",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Deployment Study",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Closed",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Modified Stats Response",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Active",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "British gas Survey",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Closed",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Severn Trent Survey",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Live",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "Study on Education",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Closed",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
-            "name": "System Test",
-            "reference": "MAC001",
-            "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
-            "lastUpdate": "2022-06-13T23:31:08.8553758",
-            "startDate": "2011-01-11T00:00:00",
-            "fieldingPeriod": 50,
-            "status": "Created",
-            "linkToSurvey": "https://sim.cintworks.net/[ID]",
-            "user": null,
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "NA",
-            "cintCurrentCostLink": "NA",
-            "cintTestingLink": "NA"
-        }],
-        currentProjects: [],
-        searchByName: '',
-        searchByStartDate: '',
-        currentStatus: 'All'
+            "cintSelfLink": "",
+            "cintCurrentCostLink": "",
+            "cintTestingLink": ""
+        }
     }),
     getters: {
-        getDraftProjects: (state) => {
-            return state.projects.filter(project => project.status === 0);
-        }
     },
     actions: {
-        setDefaultProjectList() {
-            console.log("came into this function");
-            this.searchByName = ''
-            this.searchByStartDate = ''
-            this.currentProjects = this.projects
-            this.currentStatus = 'All'
+        AddTargetAudienceElement() {
+            var id = this.project.projectTargetAudiences.length;
+            var ta = {
+                "id": id+1,
+                "name": "",
+                "audienceNumber":0,
+                "estimatedIR": 0,
+                "estimatedLOI": 0,
+                "costPerInterview": 0,
+                "cptg": 0,
+                "wantedCompletes": 0,
+                "qualifications": [],
+                "quotas": [],
+                "subtotal": 0
+            };
+            this.project.projectTargetAudiences.push(ta)
         },
-        getProjectsBySearchNameAndStartDate (status) {
-            console.log("came in.. " + status);
-            if(status !== undefined || status !== '')
-                this.currentStatus = status
-
-            var curr = [];
-            if(this.currentStatus !== 'All') {
-                curr = this.projects.filter(project => project.status === this.currentStatus)
+        AddQualificationElement(quals) {
+            console.log("Came to add qualifications")
+            var qual = {
+                "id": "",
+                "name": "",
+                "condition":"",
+                "order": 0,
+                "isActive": true
+            };
+            quals.push(qual)
+        },
+        AddQuotaElement(quots) {
+            var quot = {
+                "id": "",
+                "name": "",
+                "condition": "",
+                "limit": 0,
+                "limitType": "",
+                "isActive": true
+            };
+            quots.push(quot);
+        },
+        CalculateCharges() {
+            if(this.project.projectTargetAudiences !== undefined)
+            {
+                console.log("came in running CPI cost");
+                this.totalCost = 0;
+                for(var i =0; i < this.project.projectTargetAudiences.length; i++) {
+                if(this.project.projectTargetAudiences[i].wantedCompletes > 0 && this.project.projectTargetAudiences[i].estimatedIR > 0 && this.project.projectTargetAudiences[i].estimatedLOI > 0) {
+                    var ir = this.project.projectTargetAudiences[i].estimatedIR; var loi = this.project.projectTargetAudiences[i].estimatedLOI
+                    if(ir>= 75 && ir <=100 && loi >0 && loi <=5)
+                        this.project.projectTargetAudiences[i].costPerInterview = 2;
+                    else if(ir>= 50 && ir <=74 && loi >0 && loi <=5)
+                        this.project.projectTargetAudiences[i].costPerInterview = 2.5;
+                    else if(ir>= 35 && ir <=49 && loi >0 && loi <=5)
+                        this.project.projectTargetAudiences[i].costPerInterview = 3;
+                    else if(ir>= 11 && ir <=34 && loi >0 && loi <=5)
+                        this.project.projectTargetAudiences[i].costPerInterview = 4;
+                    else if(ir>= 1 && ir <=10 && loi >0 && loi <=5)
+                        this.project.projectTargetAudiences[i].costPerInterview = 7;
+                    else if(ir>= 75 && ir <=100 && loi >5 && loi <=10)
+                        this.project.projectTargetAudiences[i].costPerInterview = 2.5;
+                    else if(ir>= 50 && ir <=74 && loi >5 && loi <=10)
+                        this.project.projectTargetAudiences[i].costPerInterview = 3;
+                    else if(ir>= 35 && ir <=49 && loi >5 && loi <=10)
+                        this.project.projectTargetAudiences[i].costPerInterview = 4;
+                    else if(ir>= 11 && ir <=34 && loi >5 && loi <=10)
+                        this.project.projectTargetAudiences[i].costPerInterview = 7;
+                    else if(ir>= 1 && ir <=10 && loi >5 && loi <=10)
+                        this.project.projectTargetAudiences[i].costPerInterview = 8;
+                    else if(ir>= 75 && ir <=100 && loi >10 && loi <=15)
+                        this.project.projectTargetAudiences[i].costPerInterview = 3;
+                    else if(ir>= 50 && ir <=74 && loi >10 && loi <=15)
+                        this.project.projectTargetAudiences[i].costPerInterview = 3.5;
+                    else if(ir>= 35 && ir <=49 && loi >10 && loi <=15)
+                        this.project.projectTargetAudiences[i].costPerInterview = 4.5;
+                    else if(ir>= 11 && ir <=34 && loi >10  && loi <=15)
+                        this.project.projectTargetAudiences[i].costPerInterview = 7.5;
+                    else if(ir>= 1 && ir <=10 && loi >10 && loi <=15)
+                        this.project.projectTargetAudiences[i].costPerInterview = 8.5;
+                    else 
+                        this.project.projectTargetAudiences[i].costPerInterview = 10;
+                    var subT = this.project.projectTargetAudiences[i].costPerInterview * this.project.projectTargetAudiences[i].wantedCompletes;
+                    this.project.projectTargetAudiences[i].cptg = subT;
+                    this.project.projectTargetAudiences[i].subtotal = subT;
+                    this.totalCost = this.totalCost + subT;
+                }
             }
-            else {
-                curr = this.projects
             }
-            if(this.searchByName !== '')
-                curr = curr.filter(project => (project.name.toLowerCase()).includes(this.searchByName.toLowerCase()))
-            if(this.searchByStartDate !== '')
-                curr = curr.filter(project => (project.startDate.includes(this.searchByStartDate)))
-            
-            this.currentProjects = curr;
         }
-        /*getProjectByStatus(status) {
-            if(status === 'All') {
-                return this.projects;
-            } else {
-                return this.projects.filter(project => project.status === status);
-            }
-            
-            // promise not required at this point of time
-            var result = new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    var currProj = [];
-                    if(status === -1) {
-                        currProj = this.projects;
-                    } else {
-                        currProj = this.projects.filter(project => project.status === status);
-                    } 
-                    resolve(currProj)
-                }, 1);
-            });
-            return result;
-        },*/
     }
 })
