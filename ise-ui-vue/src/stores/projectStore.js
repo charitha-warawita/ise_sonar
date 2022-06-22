@@ -29,6 +29,10 @@ export const useProjectStore = defineStore('project', {
     getters: {
     },
     actions: {
+        CreateProject(project) {
+            console.log('parameter: ' + JSON.stringify(project));
+            console.log('store object: ' + JSON.stringify(this.project));
+        },
         AddTargetAudienceElement() {  
             var id = this.project.projectTargetAudiences.length;
             var ta = {
@@ -40,7 +44,7 @@ export const useProjectStore = defineStore('project', {
                 "costPerInterview": 0,
                 "cptg": 0,
                 "wantedCompletes": 0,
-                "qualifications": [],
+                "qualifications": this.LoadQualification(),
                 "quotas": [],
                 "subtotal": 0
             };
@@ -49,6 +53,173 @@ export const useProjectStore = defineStore('project', {
         CancelTargetAudience(ta) {
             var removeIndex = this.project.projectTargetAudiences.map(item => item.id).indexOf(ta.id);
             ~removeIndex && this.project.projectTargetAudiences.splice(removeIndex, 1);
+        },
+        LoadQualification() {
+            return [
+                {
+                    "id": 1,
+                    "name": "Country",
+                    "text": "Which country do you live in?",
+                    "categoryName": "Household",
+                    "variables": [
+                        {
+                            "id": 1,
+                            "name": "United Kingdowm"
+                        },
+                        {
+                            "id": 2,
+                            "name": "Sweden"
+                        },
+                        {
+                            "id": 22,
+                            "name": "United states of America"
+                        }
+                    ]
+                },
+                {
+                    "id": 46,
+                    "name": "Marital Status",
+                    "text": "What is your marital status?",
+                    "categoryName": "Household",
+                    "variables": [
+                        {
+                            "id": 373,
+                            "name": "Single"
+                        },
+                        {
+                            "id": 374,
+                            "name": "Domestic partnership"
+                        },
+                        {
+                            "id": 375,
+                            "name": "Married"
+                        },
+                        {
+                            "id": 376,
+                            "name": "Separated"
+                        },
+                        {
+                            "id": 384,
+                            "name": "Divorced"
+                        },
+                        {
+                            "id": 385,
+                            "name": "Widowed"
+                        },
+                        {
+                            "id": 6654,
+                            "name": "Prefer not to say"
+                        },
+                        {
+                            "id": 10122,
+                            "name": "Soon to be engaged"
+                        },
+                        {
+                            "id": 10123,
+                            "name": "Engaged"
+                        }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "name": "Number of children",
+                    "text": "How many children under the age of 18 live in your household?",
+                    "categoryName": "Household",
+                    "variables": [
+                        {
+                            "id": 4,
+                            "name": "None"
+                        },
+                        {
+                            "id": 5,
+                            "name": "One"
+                        },
+                        {
+                            "id": 6,
+                            "name": "Two"
+                        },
+                        {
+                            "id": 7,
+                            "name": "Three"
+                        },
+                        {
+                            "id": 8,
+                            "name": "Four or more"
+                        },
+                        {
+                            "id": 6628,
+                            "name": "Prefer not to say"
+                        }
+                    ]
+                },
+                {
+                    "id": 15,
+                    "name": "Accommodation",
+                    "text": "What is your accommodation situation?",
+                    "categoryName": "Household",
+                    "variables": [
+                        {
+                            "id": 3647,
+                            "name": "Farm"
+                        },
+                        {
+                            "id": 3648,
+                            "name": "Living with my parents"
+                        },
+                        {
+                            "id": 60,
+                            "name": "Rented apartment"
+                        },
+                        {
+                            "id": 61,
+                            "name": "Owned apartment"
+                        },
+                        {
+                            "id": 62,
+                            "name": "Rented house"
+                        },
+                        {
+                            "id": 63,
+                            "name": "Owned house"
+                        },
+                        {
+                            "id": 64,
+                            "name": "Other"
+                        },
+                        {
+                            "id": 6691,
+                            "name": "Prefer not to say"
+                        }
+                    ]
+                },
+                {
+                    "id": 16,
+                    "name": "Access to car",
+                    "text": "Do you have access to a car?",
+                    "categoryName": "Automotive",
+                    "variables": [
+                        {
+                            "id": 6599,
+                            "name": "Prefer not to say"
+                        },
+                        {
+                            "id": 65,
+                            "name": "I own a car/cars"
+                        },
+                        {
+                            "id": 66,
+                            "name": "I have access to a car/cars"
+                        },
+                        {
+                            "id": 67,
+                            "name": "I lease/ have a company car"
+                        },
+                        {
+                            "id": 68,
+                            "name": "No, I don’t have access to a car/cars"
+                        }
+                    ]
+                }];
         },
         AddQualificationElement(quals) {
             console.log("Came to add qualifications")
