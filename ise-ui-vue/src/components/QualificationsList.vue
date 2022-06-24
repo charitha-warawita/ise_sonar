@@ -1,7 +1,7 @@
 <template >
     <div v-if="itemType === 'age'" class="container">
         <div class="row">
-            <div class="col-md-12"><h5>Current Age range is set to {{ currAgeRange}}. Enter new age range</h5></div>
+            <div class="col-md-12"><h5>{{ qualificationId}}{{itemType}}Current Age range is set to {{ currAgeRange}}. Enter new age range</h5></div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Min Age</label>
                 <input type="text" class="form-control" id="inputEmail4" v-model=minAge >
@@ -11,7 +11,39 @@
                 <input type="text" class="form-control" id="inputEmail4" v-model=maxAge>
             </div>
             <div class="col-md-12">
-                <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="useQualStore.SaveQualification(itemType, taId, qualificationId)">Save qualification</button>
+                <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="useQualStore.SaveAgeQualification(itemType, taId, qualificationId)">Save qualification</button>
+            </div>
+        </div>
+    </div>
+    <div v-if="itemType === 'country'" class="container">
+        <div class="row">
+            <div class="col-md-12"><h5>Select countries</h5></div>
+            <div class="col-md-12">
+                <div style="display: inline-block" v-for="item in useQualStore.countries" :key="item.id">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" v-model=item.selected :checked=item.selected id="inlineCheckbox1" :value=item.id>
+                            <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="useQualStore.SaveCountryQualification(itemType, taId, qualificationId)">Save qualification</button>
+            </div>
+        </div>
+    </div>
+    <div v-if="itemType === 'gender'" class="container">
+        <div class="row">
+            <div class="col-md-12"><h5>Select genders</h5></div>
+            <div class="col-md-12">
+                <div style="display: inline-block" v-for="item in useQualStore.genders" :key="item.id">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" v-model=item.selected :checked=item.selected id="inlineCheckbox1" :value=item.id>
+                            <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="useQualStore.SaveGenderQualification(itemType, taId, qualificationId)">Save qualification</button>
             </div>
         </div>
     </div>

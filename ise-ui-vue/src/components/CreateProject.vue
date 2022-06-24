@@ -94,13 +94,13 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12">
-                                                        <a @click="toggleModal(qual.id); useQualStore.GetQualification('age', ta.id, qual.id)" class="link-primary">Edit</a> |
+                                                        <a @click="toggleModal(qual.id); useQualStore.GetQualification(qual.question.name.toLowerCase(), ta.id, qual.id)" class="link-primary">Edit</a> |
                                                         <a @click="toggleModal(qual.id)" class="link-danger">Delete</a>
                                                             <CustomModal @close="toggleModal(qual.id)" :modalId=qual.id>
                                                                 <div class="card modal-content">
                                                                 <h3 class="card-header">Qualifications</h3>
                                                                     <div class="card-body">
-                                                                    <QualificationsList itemType="age" :taId=ta.id :qualificationId=qual.id />
+                                                                    <QualificationsList :itemType=qual.question.name.toLowerCase() :taId=ta.id :qualificationId=qual.id />
                                                                     </div>
                                                                 </div>
                                                             </CustomModal>
@@ -253,7 +253,7 @@ onMounted(() => {
 .subDivQ {
     margin: 10px auto;
     background-color: white;
-    padding-bottom: 20px;
+    /*padding-bottom: 20px;*/
 }
 
 .customItem {
