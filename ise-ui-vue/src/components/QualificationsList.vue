@@ -1,7 +1,7 @@
 <template >
     <div v-if="itemType === 'age'" class="container">
         <div class="row">
-            <div class="col-md-12"><h5>{{ qualificationId}}{{itemType}}Current Age range is set to {{ currAgeRange}}. Enter new age range</h5></div>
+            <div class="col-md-12"><h5>Current Age range is set to {{ currAgeRange}}. Enter new age range</h5></div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Min Age</label>
                 <input type="text" class="form-control" id="inputEmail4" v-model=minAge >

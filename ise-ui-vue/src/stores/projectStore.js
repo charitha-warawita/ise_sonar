@@ -30,8 +30,7 @@ export const useProjectStore = defineStore('project', {
     },
     actions: {
         CreateProject(project) {
-            console.log('parameter: ' + JSON.stringify(project));
-            console.log('store object: ' + JSON.stringify(this.project));
+            console.log('project: ' + JSON.stringify(project));
         },
         AddTargetAudienceElement() {  
             var id = this.project.projectTargetAudiences.length;

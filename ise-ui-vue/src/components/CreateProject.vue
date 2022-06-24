@@ -188,8 +188,8 @@
                             <label for="inputEmail4" class="form-label"><h4>{{totalCost}} USD</h4></label>
                         </div>--><div class="breakDiv"></div><hr>
                         <div class="col-md-12">
-                            <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="useProjStore.CreateProject(project)">Create Project</button>
-                            <button class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" v-on:click="useProjStore.SaveProjectAsDraft(project)">Save as Draft</button>
+                            <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="useProjStore.CreateProject(project); this.$router.push('/confirm')">Create Project</button>
+                            <button class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" v-on:click="useProjStore.CreateProject(project); this.$router.push('/confirm')">Save as Draft</button>
                             <button class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" v-on:click="this.$router.push('/')">Cancel</button>
                         </div>
                     </div>
