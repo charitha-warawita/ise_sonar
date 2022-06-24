@@ -72,20 +72,42 @@
                                             <label for="inputEmail4" class="form-label">Wanted Completes Count</label>
                                             <input type="number" class="form-control" id="inputEmail4" v-model="ta.wantedCompletes">
                                         </div>
-                                        <div class="row g-3 subDiv" v-if="ta.qualifications.length > 0">
-                                        <h5>Qualifications</h5>
-                                            <div class="row g-3 subDivQ" v-for="qual in ta.qualifications" :key="qual.id">
-                                                <div class="col-md-12"><b>{{qual.name}}</b>
-                                                </div>
-                                                <div class="col-md-12">{{qual.text}}
-                                                </div>
-                                                <div class="col-md-12">
-                                                <div style="display: inline-block" v-for="item in qual.variables" :key="item.id">
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" :value=item.id>
-                                                            <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
+                                        <div class="accordion-item-custom" v-if="ta.qualifications.length > 0">
+                                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseThree-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                                    <b>Qualification</b>
+                                                </button>
+                                            </h2>
+                                            <div :id="'panelsStayOpen-collapseThree-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                                                <div class="accordion-body">
+                                                    <div class="subDivQ"  v-for="qual in ta.qualifications" :key="qual.id">
+                                                        <div class="col-md-12"><b>{{qual.question.name}}</b>
                                                         </div>
-                                                </div></div>
+                                                        <div class="col-md-12">{{qual.question.text}}
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div style="display: inline-block" v-for="item in qual.question.variables" :key="item.id">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <!--<input class="form-check-input" type="checkbox" id="inlineCheckbox1" :value=item.id>-->
+                                                                        <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
+                                                                    </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                        <a @click="toggleModal(qual.id); useQualStore.GetQualification('age', ta.id, qual.id)" class="link-primary">Edit</a> |
+                                                        <a @click="toggleModal(qual.id)" class="link-danger">Delete</a>
+                                                            <CustomModal @close="toggleModal(qual.id)" :modalId=qual.id>
+                                                                <div class="card modal-content">
+                                                                <h3 class="card-header">Qualifications</h3>
+                                                                    <div class="card-body">
+                                                                    <QualificationsList itemType="age" :taId=ta.id :qualificationId=qual.id />
+                                                                    </div>
+                                                                </div>
+                                                            </CustomModal>
+                                                        </div>
+                                                        <hr/>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row g-3 subDiv" v-if="ta.quotas.length > 0">
@@ -130,6 +152,7 @@
 
                 </div>
             </div>
+            
             <div class="col-4">
                 <div style="box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; padding: 15px;">
                     <div class="row">
@@ -177,12 +200,37 @@
 </template>
 <script setup>
 import PageTitle from '@/components/PageTitle.vue'
+import CustomModal from '@/components/CustomModal.vue'
+import QualificationsList from '@/components/QualificationsList.vue'
 import {useProjectStore} from '@/stores/projectStore'
+import {useQualificationStore} from '@/stores/qualificationStore'
 import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
+import {ref} from "vue"
+
+defineProps(['open'])
 
 var useProjStore = useProjectStore()
+var useQualStore = useQualificationStore()
 const { project, basicSettingDesc, totalCost } = storeToRefs(useProjStore)
+
+const modalActive = ref(false);
+const modalId = ref(0);
+
+const toggleModal = (id) => {
+    var classname = 'customModal-' + id
+    var element = document.getElementsByClassName(classname)
+    if(element[0].style.display === 'none') {
+        element[0].style.removeProperty("display")
+        element[1].style.removeProperty("display")
+    }
+    else { 
+        element[0].style.display = 'none'
+        element[1].style.display = 'none'
+    }
+    // modalActive.value = !modalActive.value;
+    };
+
 
 
 onMounted(() => {
@@ -220,5 +268,34 @@ input[type=checkbox] {
 .breakDiv {
     margin:10px 0;
 }
+
+.accordion-item-custom {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding:0;
+}
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-content h1, p {
+      margin-bottom: 16px;
+    }
+  .modal-content h1 {
+      font-size: 32px;
+    }
+  .modal-content p {
+      font-size: 18px;
+    }
+
+/*.modal1 {
+  position: fixed;
+  z-index: 999;
+  top: 20%;
+  left: 50%;
+  width: 300px;
+  margin-left: -150px;
+}*/
     
 </style>
