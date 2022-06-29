@@ -194,8 +194,8 @@
 
                             <!--<div class="col-md-12"><RouterLink class="btn btn-outline-success searchButton me-2" style="width:100%; margin-bottom: 10px;" to="/confirm">Create Project</RouterLink></div>
                             <div class="col-md-12"><RouterLink class="btn btn-outline-success btn-light me-2" style="width:100%; margin-bottom: 10px;" to="/confirm">Save as Draft</RouterLink></div>
-                            <div class="col-md-12"><RouterLink class="btn btn-outline-success btn-light me-2" style="width:100%; margin-bottom: 10px;" to="/confirm">Cancel Project</RouterLink>-->
-                        </div>
+                            <div class="col-md-12"><RouterLink class="btn btn-outline-success btn-light me-2" style="width:100%; margin-bottom: 10px;" to="/confirm">Cancel Project</RouterLink>
+                        </div>-->
                     </div>
                 </div>
             </div>
