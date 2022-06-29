@@ -20,11 +20,11 @@
             
           </ul>
           
-        <div>
+        <!-- <div>
             <ul class="navbar-nav">
                <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle "  href="" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-               Version 
+               {{this.versiontext}}
              </a>
               <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
                <li class="nav-item">
@@ -36,8 +36,17 @@
               </ul>
              </li>
             </ul>
-        </div>
-
+        </div>  -->
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle btn-outline-success searchButton" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              {{this.versiontext}}
+              </button>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                      <li><RouterLink @click="activate(4)" :class="{ active : active_el == 4 }" class="dropdown-item" to="/">Proof of concept</RouterLink></li>
+                      <li><RouterLink @click="activate(5)" :class="{ active : active_el == 5 }" class="dropdown-item" to="/about">V1</RouterLink></li>
+                  </ul>
+          </div>
+          
         </div>
       </div>
     </nav>
@@ -47,7 +56,8 @@ export default {
   data() {
     return {
       active_el: 1,
-      activecontent : true
+      activecontent : true,
+      versiontext:'POC  '
     }
   },
   methods:{
@@ -55,8 +65,10 @@ export default {
         this.active_el = el;
         if (this.active_el ===5){
           this.activecontent = false
-        }else{
+          this.versiontext='Version 1  '
+        }else{(this.active_el ===4)
           this.activecontent = true
+            this.versiontext='POC  '
         }
     }
   }   
