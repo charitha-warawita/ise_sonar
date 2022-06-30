@@ -7,7 +7,8 @@ export const useQualificationStore = defineStore('qualification', {
         minAge: 0,
         maxAge: 0,
         countries: [],
-        genders: []
+        genders: [],
+        error: null
     }),
     getters: {
 
@@ -98,7 +99,7 @@ export const useQualificationStore = defineStore('qualification', {
         /*SaveCountries(itemtype, taId, qid) {
             return countriesList; 
         },*/
-        GetQualification(itemtype, taId, qid) {
+      async  GetQualification(itemtype, taId, qid) {
             if(itemtype === 'age')
             {
                 var project = useProjectStore().project;
@@ -130,8 +131,20 @@ export const useQualificationStore = defineStore('qualification', {
             {
                 if(this.genders.length === 0)
                 {
+                    console.log('Call made to Gender API');
                     var gendersList = [{"id":1,"name":"Male","selected":true},{"id":2,"name":"Female","selected":true}];
                     this.genders = gendersList;
+                    // var gendersList=[]
+                    
+                    /*try {
+                         this.gendersList = await fetch('https://api.cintworks.net/ordering/Reference/Genders')   
+                         .then((response) => response.json())
+                         console.log('genders: ' + JSON.stringify(gendersList));
+                         this.genders = gendersList;
+                    }
+                    catch(error) {
+                        this.error= error
+                    }*/
                 }
             }
         }
