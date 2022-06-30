@@ -132,18 +132,19 @@ export const useQualificationStore = defineStore('qualification', {
                 if(this.genders.length === 0)
                 {
                     console.log('Call made to Gender API');
-                    // var gendersList = [{"id":1,"name":"Male","selected":true},{"id":2,"name":"Female","selected":true}];
-                    var gendersList=[]
+                    var gendersList = [{"id":1,"name":"Male","selected":true},{"id":2,"name":"Female","selected":true}];
+                    this.genders = gendersList;
+                    // var gendersList=[]
                     
-                    try{
+                    /*try {
                          this.gendersList = await fetch('https://api.cintworks.net/ordering/Reference/Genders')   
                          .then((response) => response.json())
                          console.log('genders: ' + JSON.stringify(gendersList));
                          this.genders = gendersList;
                     }
-                    catch(error){
+                    catch(error) {
                         this.error= error
-                    }
+                    }*/
                 }
             }
         }
