@@ -43,7 +43,7 @@
               </button>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                       <li><RouterLink @click="activate(4)" :class="{ active : active_el == 4 }" class="dropdown-item" to="/">Proof of concept</RouterLink></li>
-                      <li><RouterLink @click="activate(5)" :class="{ active : active_el == 5 }" class="dropdown-item" to="/about">V1</RouterLink></li>
+                      <li><RouterLink @click="activate(5)" :class="{ active : active_el == 5 }" class="dropdown-item" to="/about">Version 1</RouterLink></li>
                   </ul>
           </div>
           
@@ -57,7 +57,7 @@ export default {
     return {
       active_el: 1,
       activecontent : true,
-      versiontext:'POC  '
+      versiontext:'Proof of concept'
     }
   },
   methods:{
@@ -65,10 +65,10 @@ export default {
         this.active_el = el;
         if (this.active_el ===5){
           this.activecontent = false
-          this.versiontext='Version 1  '
+          this.versiontext='Version 1'
         }else{(this.active_el ===4)
           this.activecontent = true
-            this.versiontext='POC  '
+            this.versiontext='Proof of concept'
         }
     }
   }   
@@ -76,12 +76,7 @@ export default {
 </script>
 <style>
     .searchButton {
-        background-color: rgb(25, 9, 250);
+        background-color: #34495E;
         color: white;
     }
-
-.navbar-dark .navbar-nav .nav-link {
-    color: white;
-}
-
 </style>

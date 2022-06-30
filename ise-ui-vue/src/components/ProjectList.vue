@@ -52,9 +52,4 @@ input[type="date"]:not(.has-value):before{
 .projListTable {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
-
-.searchButton {
-    background-color:#0d6efd;
-    color: white;
-}
 </style>
