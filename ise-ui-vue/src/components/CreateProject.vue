@@ -110,6 +110,50 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="accordion-item-custom">
+                                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseFour-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                                    <b>Quota</b>
+                                                </button>
+                                            </h2>
+                                            <div :id="'panelsStayOpen-collapseFour-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                                                <div class="accordion-body">
+                                                       
+                                                    <div class="subDivQ" v-for="qta in ta.quota" :key="qta.id">
+                                                        <div class="col-md-12"><b>{{qta.condition.name}}</b>
+                                                        </div>
+                                                        <div class="col-md-12">{{qta.condition.text}}
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div style="display: inline-block" v-for="item in qta.condition.variables" :key="item.id">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <!--<input class="form-check-input" type="checkbox" id="inlineCheckbox1" :value=item.id>-->
+                                                                        <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
+                                                                    </div>
+                                                            </div>
+                                                        </div>
+                                                          <div class="col-md-12">
+                                                            <a @click="toggleModal(qual.id)" class="link-primary">Edit</a> |
+                                                             <a @click="toggleModal(qual.id)" class="link-danger">Delete</a>
+                                                        </div>
+                                                            <hr/>
+                                                         </div>
+                                                        <hr/>
+                                                     
+                                                       <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal()">Add Quota</button>  
+                                                       <div class="subDivQ" v-for="quo in ta.quota" :key="quo.id">
+                                                        <CustomModal @close="toggleModal()">
+                                                       <div class="card modal-content">
+                                                       <h3 class="card-header">Quota</h3>
+                                                       <div class="card-body">
+                                                       <QuotaList :itemType= quo.condition.name.toLowerCase() :taId= ta.id :quotaid= quo.id />
+                                                            </div>               
+                                                        </div> 
+                                                    </CustomModal>                                                  
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row g-3 subDiv" v-if="ta.quotas.length > 0">
                                         <h5>Quotas</h5>
                                             <div class="row g-3 subDivQ" v-for="quota in ta.quotas" :key="quota.id">
@@ -206,8 +250,10 @@
 import PageTitle from '@/components/PageTitle.vue'
 import CustomModal from '@/components/CustomModal.vue'
 import QualificationsList from '@/components/QualificationsList.vue'
+import QuotaList from '@/components/QuotaList.vue'
 import {useProjectStore} from '@/stores/projectStore'
 import {useQualificationStore} from '@/stores/qualificationStore'
+import {useQuotaStore} from '@/stores/quotaStore'
 import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
 import {ref} from "vue"
@@ -216,6 +262,7 @@ defineProps(['open'])
 
 var useProjStore = useProjectStore()
 var useQualStore = useQualificationStore()
+var useQuotaDataStore = useQuotaStore()
 const { project, basicSettingDesc, totalCost } = storeToRefs(useProjStore)
 
 const modalActive = ref(false);
@@ -301,5 +348,8 @@ input[type=checkbox] {
   width: 300px;
   margin-left: -150px;
 }*/
+#addQutobutton{
+    float: right;
+}
     
 </style>
