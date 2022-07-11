@@ -15,7 +15,8 @@ export const useQuotaStore = defineStore('quota', {
         quotaCountries:[],
         quotaGenders:[],
         countriesVariables: [],
-        genderVariables:[]
+        genderVariables:[],
+        quotaFields:[]
 
 
     }),
@@ -82,7 +83,7 @@ export const useQuotaStore = defineStore('quota', {
                             project.projectTargetAudiences[i].quota[j].fieldTarget = this.fieldTarget;
                             project.projectTargetAudiences[i].quota[j].completes = this.completes;
                             project.projectTargetAudiences[i].quota[j].prescreence = this.prescreence;
-
+                            this.quotaFields.push({ "name": project.projectTargetAudiences[i].quota[j].name, "fieldTarget": project.projectTargetAudiences[i].quota[j].fieldTarget, "completes": project.projectTargetAudiences[i].quota[j].completes,"prescreence": project.projectTargetAudiences[i].quota[j].prescreence})
                            break;
                         }
                     }
@@ -100,8 +101,6 @@ export const useQuotaStore = defineStore('quota', {
                             if(project.projectTargetAudiences[i].quota[j].id === quotaid)
                             {
                                 project.projectTargetAudiences[i].quota[j].condition.variables[0].name = this.quotaMinAge + ' - ' + this.quotaMaxAge;
-                                project.projectTargetAudiences[i].quota[j].name = this.name;
-                                project.projectTargetAudiences[i].quota[j].fieldTarget = this.fieldTarget;
                                 
                                 console.log(this.quotaMinAge)
                                 break;
@@ -144,10 +143,10 @@ export const useQuotaStore = defineStore('quota', {
                     {
                         for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
                         {
-                            if(project.projectTargetAudiences[i].quota[j].id === qid)
+                            if(project.projectTargetAudiences[i].quota[j].id === quotaid)
                             {
                                 
-                                var newGendersList = this.genders.filter(x => x.selected);
+                                var newGendersList = this.quotaGenders.filter(x => x.selected);
                                 for(var k = 0; k < newGendersList.length; k++)
                                 {
                                     this.genderVariables.push({ "id": newGendersList[k].id, "name": newGendersList[k].name })

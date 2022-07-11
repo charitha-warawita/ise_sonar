@@ -118,28 +118,59 @@
                                             </h2>
                                             <div :id="'panelsStayOpen-collapseFour-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                                                 <div class="accordion-body">
-                                                       
-                                                    <div class="subDivQ" v-for="qta in ta.quota" :key="qta.id">
-                                                        <div class="col-md-12"><b>{{qta.condition.name}}</b>
-                                                        </div>
-                                                        <div class="col-md-12">{{qta.condition.text}}
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div style="display: inline-block" v-for="item in qta.condition.variables" :key="item.id">
-                                                                    <div class="form-check form-check-inline">
-                                                                        <!--<input class="form-check-input" type="checkbox" id="inlineCheckbox1" :value=item.id>-->
-                                                                        <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
-                                                                    </div>
+                                                 <div class="subDivQ" v-if="useQuotaDataStore.quotaFields.length > 0" >
+                                                        <div v-for ="item in useQuotaDataStore.quotaFields" >
+                                                        <div class="row">
+                                                            <div class="col-md-2"><h6>Name</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            <label for="inputEmail4" class="form-label">{{item.name}}</label>
                                                             </div>
                                                         </div>
-                                                          <div class="col-md-12">
-                                                            <a @click="toggleModal(qual.id)" class="link-primary">Edit</a> |
-                                                             <a @click="toggleModal(qual.id)" class="link-danger">Delete</a>
+                                                        <div class="row">
+                                                            <div class="col-md-2"><h6>FieldTarget</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            <label for="inputEmail4" class="form-label">{{item.fieldTarget}}</label>
+                                                            </div>
                                                         </div>
-                                                            <hr/>
-                                                         </div>
-                                                        <hr/>
-                                                     
+                                                        <div class="row">
+                                                            <div class="col-md-2"><h6>Completes</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            <label for="inputEmail4" class="form-label">{{item.completes}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-2"><h6>Prescreence</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            <label for="inputEmail4" class="form-label">{{item.prescreence}}</label>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                     <div class="subDivQ1">
+                                                     <div class="col-md-12"><b>Selected Condition :</b>
+                                                     <div v-if="useQuotaDataStore.countriesVariables.length > 0"><h6>countries</h6>
+                                                        <div style="display: inline-block" v-for ="item in useQuotaDataStore.countriesVariables" :key="item.id">
+                                                            <div class="form-check form-check-inline">
+                                                                <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                     </div>
+                                                      <div v-if="useQuotaDataStore.genderVariables.length > 0"><h6>Gender</h6>
+                                                        <div style="display: inline-block" v-for ="item in useQuotaDataStore.genderVariables" :key="item.id">
+                                                                <div class="form-check form-check-inline">
+                                                                    <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
+                                                                </div>
+                                                        </div>
+                                                     </div>
+                                                     </div>
+                                                       <a @click="toggleModal();" class="link-primary">Edit</a> |
+                                                     <a @click="toggleModal()" class="link-danger">Delete</a>
+                                                    <hr/>
+                                                      </div>
+                                                     </div>
                                                        <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal()">Add Quota</button>  
                                                        <div class="subDivQ" v-for="quo in ta.quota" :key="quo.id">
                                                         <CustomModal @close="toggleModal()">
