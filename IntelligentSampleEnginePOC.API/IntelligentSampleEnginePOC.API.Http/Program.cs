@@ -1,5 +1,8 @@
 using IntelligentSampleEnginePOC.API;
+using IntelligentSampleEnginePOC.API.Core.Data;
 using IntelligentSampleEnginePOC.API.Core.DB;
+using IntelligentSampleEnginePOC.API.Core.Interfaces;
+using IntelligentSampleEnginePOC.API.Core.Model;
 using IntelligentSampleEnginePOC.API.Core.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
@@ -7,12 +10,14 @@ using System.Net.Http.Headers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddTransient<IProjectService, ProjectService>();
+builder.Services.AddTransient<IReferenceContext, ReferenceContext>();
+builder.Services.AddTransient<IProjectReferenceService, ProjectReferenceService>();
 builder.Services.AddDbContext<ISEdbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("iseDb")));
+builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("ConnectionStrings"));
 
 var cintApiSettings = builder.Configuration.GetSection("CintApiSettings");
 builder.Services.Configure<CintApiSettings>(cintApiSettings);
@@ -32,9 +37,13 @@ builder.Services.AddHttpClient<ICintService, CintService>(client =>
     return handler;
 })
 .SetHandlerLifetime(TimeSpan.FromMinutes(5));
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(c => c.SwaggerDoc ("v1", 
     new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Intelligent Sample Engine API - Proof of Concept version" }));
+
+builder.Services.AddLogging();
 
 var app = builder.Build();
 
@@ -47,9 +56,6 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

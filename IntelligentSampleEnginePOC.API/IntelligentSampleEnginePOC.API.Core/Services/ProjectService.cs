@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using IntelligentSampleEnginePOC.API.Core.DB;
+using IntelligentSampleEnginePOC.API.Core.Interfaces;
 
 namespace IntelligentSampleEnginePOC.API.Core.Services
 {
