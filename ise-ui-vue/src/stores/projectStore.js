@@ -24,11 +24,26 @@ export const useProjectStore = defineStore('project', {
             "cintSelfLink": "",
             "cintCurrentCostLink": "",
             "cintTestingLink": ""
-        }
+        },
+        categories:[],
+        loading: false,
+        error: null
     }),
     getters: {
     },
     actions: {
+        async FetchCategories() {
+            this.categories = []
+            this.loading = true
+            try {
+                this.categories = await fetch('http://localhost:5197/api/Reference/project/categories')
+                .then((response) => response.json())
+            } catch (error) {
+                this.error = error
+            } finally {
+                this.loading = false
+            }
+        },
         CreateProject(project) {
             console.log('project: ' + JSON.stringify(project));
         },

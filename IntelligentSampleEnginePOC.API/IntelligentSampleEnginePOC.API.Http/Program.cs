@@ -45,6 +45,13 @@ builder.Services.AddSwaggerGen(c => c.SwaggerDoc ("v1",
 
 builder.Services.AddLogging();
 
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -56,6 +63,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseCors("MyPolicy");
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

@@ -4,6 +4,30 @@
             <div class="col-8">
                 <div class="accordion" id="accordionPanelsStayOpenExample">
                     <div class="accordion-item customItem">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingZero">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseZero" aria-expanded="true" aria-controls="panelsStayOpen-collapseZero">
+                            <b>Project Settings</b>
+                        </button>
+                        </h2>
+                        <div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingZero">
+                            <div class="accordion-body">
+                                <p v-if="loading">Loading categories.. </p>
+                                <p v-if="error"> {{ error.message }} </p>
+                                <div v-if="categories">
+                                <!--<button> {{ category.name }} </button>-->
+                                <button 
+                                    v-for="category in categories" 
+                                    :key="category.id" 
+                                    @click="toggleCategory(category.id)" 
+                                    type="button" 
+                                    :id="'cat'+category.id" 
+                                    class="btn btn-outline-success btn-light me-2"
+                                    style="margin:2px 0 2px 0; font-size:0.85em">{{ category.name }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item customItem">
                         <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
                             <b>Basic Settings</b>
@@ -216,11 +240,22 @@ defineProps(['open'])
 
 var useProjStore = useProjectStore()
 var useQualStore = useQualificationStore()
-const { project, basicSettingDesc, totalCost } = storeToRefs(useProjStore)
+const { project, basicSettingDesc, totalCost, categories, loading, error } = storeToRefs(useProjStore)
 
 const modalActive = ref(false);
 const modalId = ref(0);
 
+const toggleCategory = (id) => {
+    var catId = 'cat'+ id;
+    var element = document.getElementById(catId);
+    var tempClass = element.className;
+    if(tempClass.includes('btn-light')) {
+        element.className = tempClass.replace('btn-light', 'searchButton');
+    }
+    else {
+        element.className = tempClass.replace('searchButton', 'btn-light');;
+    }
+};
 const toggleModal = (id) => {
     var classname = 'customModal-' + id
     var element = document.getElementsByClassName(classname)
@@ -233,7 +268,7 @@ const toggleModal = (id) => {
         element[1].style.display = 'none'
     }
     // modalActive.value = !modalActive.value;
-    };
+};
 
 
 
@@ -241,6 +276,7 @@ onMounted(() => {
     // console.log('on mounted call');
     useProjStore.$reset()
     useProjStore.AddTargetAudienceElement()
+    useProjStore.FetchCategories()
 })
 </script>
 <style>
@@ -292,6 +328,8 @@ input[type=checkbox] {
   .modal-content p {
       font-size: 18px;
     }
+
+
 
 /*.modal1 {
   position: fixed;
