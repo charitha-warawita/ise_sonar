@@ -118,6 +118,7 @@
                                             </h2>
                                             <div :id="'panelsStayOpen-collapseFour-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                                                 <div class="accordion-body">
+                                                 <div class="container">
                                                  <div class="subDivQ" v-if="useQuotaDataStore.quotaFields.length > 0" >
                                                         <div v-for ="item in useQuotaDataStore.quotaFields" >
                                                         <div class="row">
@@ -148,8 +149,7 @@
                                                             <label for="inputEmail4" class="form-label">{{item.prescreence}}</label>
                                                             </div>
                                                         </div>
-                                                        </div>
-                                                     <div class="subDivQ1">
+                                                    <div class="subDivQ1">
                                                      <div class="col-md-12"><b>Selected Condition :</b>
                                                      <div v-if="useQuotaDataStore.countriesVariables.length > 0"><h6>countries</h6>
                                                         <div style="display: inline-block" v-for ="item in useQuotaDataStore.countriesVariables" :key="item.id">
@@ -167,10 +167,13 @@
                                                      </div>
                                                      </div>
                                                        <a @click="toggleModal();" class="link-primary">Edit</a> |
-                                                     <a @click="toggleModal()" class="link-danger">Delete</a>
+                                                        <a @click="" class="link-danger">Delete</a>
                                                     <hr/>
                                                       </div>
+                                                        </div>
                                                      </div>
+                                                 </div>
+                                                 
                                                        <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal()">Add Quota</button>  
                                                        <div class="subDivQ" v-for="quo in ta.quota" :key="quo.id">
                                                         <CustomModal @close="toggleModal()">

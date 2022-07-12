@@ -5,11 +5,7 @@ export const useQuotaStore = defineStore('quota', {
         currAgeRange: '',
         error: null,
         showQuotaCondition:'',
-        name:'',
-        fieldTarget:'',
         status:true,
-        completes:'',
-        prescreence:'',
         quotaMinAge:0,
         quotaMaxAge:0,
         quotaCountries:[],
@@ -84,7 +80,7 @@ export const useQuotaStore = defineStore('quota', {
                             project.projectTargetAudiences[i].quota[j].completes = this.completes;
                             project.projectTargetAudiences[i].quota[j].prescreence = this.prescreence;
                             this.quotaFields.push({ "name": project.projectTargetAudiences[i].quota[j].name, "fieldTarget": project.projectTargetAudiences[i].quota[j].fieldTarget, "completes": project.projectTargetAudiences[i].quota[j].completes,"prescreence": project.projectTargetAudiences[i].quota[j].prescreence})
-                           break;
+                            break;                           
                         }
                     }
                 }
@@ -152,15 +148,15 @@ export const useQuotaStore = defineStore('quota', {
                                     this.genderVariables.push({ "id": newGendersList[k].id, "name": newGendersList[k].name })
                                 }
                                 
-                                project.projectTargetAudiences[i].quota[j].condition.variables = this.genderVariables;
+                                project.projectTargetAudiences[i].quota[j].condition.variables = this.genderVariables;      
                                 break;
                             }
                         }
                     }
                 }
-            }
-            
-
+            } 
+        
+        
         }
 
     }
