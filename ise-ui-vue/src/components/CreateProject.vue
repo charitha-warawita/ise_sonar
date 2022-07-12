@@ -11,19 +11,7 @@
                         </h2>
                         <div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingZero">
                             <div class="accordion-body">
-                                <p v-if="loading">Loading categories.. </p>
-                                <p v-if="error"> {{ error.message }} </p>
-                                <div v-if="categories">
-                                <!--<button> {{ category.name }} </button>-->
-                                <button 
-                                    v-for="category in categories" 
-                                    :key="category.id" 
-                                    @click="toggleCategory(category.id)" 
-                                    type="button" 
-                                    :id="'cat'+category.id" 
-                                    class="btn btn-outline-success btn-light me-2"
-                                    style="margin:2px 0 2px 0; font-size:0.85em">{{ category.name }}</button>
-                                </div>
+                                <ProjectSetting />
                             </div>
                         </div>
                     </div>
@@ -230,6 +218,7 @@
 import PageTitle from '@/components/PageTitle.vue'
 import CustomModal from '@/components/CustomModal.vue'
 import QualificationsList from '@/components/QualificationsList.vue'
+import ProjectSetting from '@/components/ProjectSetting.vue'
 import {useProjectStore} from '@/stores/projectStore'
 import {useQualificationStore} from '@/stores/qualificationStore'
 import {storeToRefs} from 'pinia'
@@ -240,22 +229,11 @@ defineProps(['open'])
 
 var useProjStore = useProjectStore()
 var useQualStore = useQualificationStore()
-const { project, basicSettingDesc, totalCost, categories, loading, error } = storeToRefs(useProjStore)
+const { project, basicSettingDesc, totalCost } = storeToRefs(useProjStore)
 
 const modalActive = ref(false);
 const modalId = ref(0);
 
-const toggleCategory = (id) => {
-    var catId = 'cat'+ id;
-    var element = document.getElementById(catId);
-    var tempClass = element.className;
-    if(tempClass.includes('btn-light')) {
-        element.className = tempClass.replace('btn-light', 'searchButton');
-    }
-    else {
-        element.className = tempClass.replace('searchButton', 'btn-light');;
-    }
-};
 const toggleModal = (id) => {
     var classname = 'customModal-' + id
     var element = document.getElementsByClassName(classname)
@@ -276,7 +254,6 @@ onMounted(() => {
     // console.log('on mounted call');
     useProjStore.$reset()
     useProjStore.AddTargetAudienceElement()
-    useProjStore.FetchCategories()
 })
 </script>
 <style>
