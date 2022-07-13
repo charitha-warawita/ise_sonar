@@ -10,5 +10,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
     public interface IReferenceContext
     {
         List<Category> GetCategoriesFromDB();
+        List<Country> GetCountriesFromDB();
+        List<string> GetProfileCategoriesFromDB();
+        List<Question> GetAllQuestionsFromDB();
+        List<Question> GetQuestionsByCategoryFromDB(string categoryName);
     }
 }

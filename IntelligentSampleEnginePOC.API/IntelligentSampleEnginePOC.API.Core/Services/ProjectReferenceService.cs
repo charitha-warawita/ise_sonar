@@ -23,5 +23,23 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             return _referenceContext.GetCategoriesFromDB();
         }
+
+        public List<Country> GetCountries()
+        {
+            return _referenceContext.GetCountriesFromDB();
+        }
+
+        public List<string> GetProfileCategories()
+        {
+            return _referenceContext.GetProfileCategoriesFromDB();
+        }
+
+        public List<Question> GetQuestions(string categoryName)
+        {
+            if (string.IsNullOrEmpty(categoryName))
+                return _referenceContext.GetAllQuestionsFromDB();
+            else
+                return _referenceContext.GetQuestionsByCategoryFromDB(categoryName);
+        }
     }
 }
