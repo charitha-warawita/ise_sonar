@@ -152,7 +152,7 @@ export const useProjectStore = defineStore('project', {
                         "id": 42,
                         "name": "Age",
                         "text": "Enter age range for the project",
-                        "categoryName": "Household",
+                        "categoryName": "Core",
                         "variables": [
                             {
                                 "id": 1,
@@ -171,12 +171,11 @@ export const useProjectStore = defineStore('project', {
                         "id": 1,
                         "name": "Country",
                         "text": "Enter the Countries",
-                        "categoryName": "Household",
+                        "categoryName": "Core",
                         "variables": [
                             {
                                 "id": 1,
-                                "name": "UK",
-                                "selected":false
+                                "name": "UK"
 
                             }
                         ]
@@ -192,7 +191,7 @@ export const useProjectStore = defineStore('project', {
                         "id": 43,
                         "name": "Gender",
                         "text": "Enter the genders of panelists",
-                        "categoryName": "Household",
+                        "categoryName": "Core",
                         "variables": [
                             {
                                 "id": 1,
@@ -281,8 +280,6 @@ export const useProjectStore = defineStore('project', {
                 }
             }
             }
-        },
-        
-
+        }
     }
 })
