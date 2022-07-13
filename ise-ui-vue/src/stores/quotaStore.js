@@ -97,8 +97,7 @@ export const useQuotaStore = defineStore('quota', {
                             if(project.projectTargetAudiences[i].quota[j].id === quotaid)
                             {
                                 project.projectTargetAudiences[i].quota[j].condition.variables[0].name = this.quotaMinAge + ' - ' + this.quotaMaxAge;
-                                
-                                console.log(this.quotaMinAge)
+                                                                
                                 break;
                             }
                         }
@@ -123,7 +122,7 @@ export const useQuotaStore = defineStore('quota', {
                                 }
                                 
                                 project.projectTargetAudiences[i].quota[j].condition.variables = this.countriesVariables;
-                                console.log(this.countriesVariables)
+                                
                                 break;
                             }
                         }

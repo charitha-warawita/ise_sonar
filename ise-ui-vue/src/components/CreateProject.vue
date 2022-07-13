@@ -165,6 +165,14 @@
                                                                 </div>
                                                         </div>
                                                      </div>
+                                                      <div v-if="useQuotaDataStore.quotaMinAge, useQuotaDataStore.quotaMaxAge > 0"><h6>Age</h6>
+                                                        <div style="display: inline-block">
+                                                                <div class="form-check form-check-inline">
+                                                                    <label class="form-check-label" for="inlineCheckbox1">MinAge :{{useQuotaDataStore.quotaMinAge}} </label>
+                                                                    <label class="form-check-label" for="inlineCheckbox1"> MaxAge :{{useQuotaDataStore.quotaMaxAge}} </label>
+                                                                </div>
+                                                        </div>
+                                                     </div>
                                                      </div>
                                                        <a @click="toggleModal();" class="link-primary">Edit</a> |
                                                         <a @click="" class="link-danger">Delete</a>
