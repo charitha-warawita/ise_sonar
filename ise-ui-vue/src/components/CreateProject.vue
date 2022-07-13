@@ -123,7 +123,7 @@
 
                                                 <!-- When adding the new qualification via Add Qualification button the below Div Class subDivQ1 will be use to add the Qualification from Popup to Qualification Div-->
                                                     <!--  Start --- subDivQ1 -->
-                                                    <div class="subDivQ1" v-if="useQualStore.selectedQualification" >
+                                                    <div class="subDivQ1"  v-if="useQualStore.selectedQualificationfordisplay" >
                                                         <div class="col-md-12"><b>{{useQualStore.selectedQualification.name}}</b></div>
                                                         <div class="col-md-12">{{useQualStore.selectedQualification.text}}</div>
                                                         <div class="col-md-12">
@@ -169,15 +169,15 @@
                                                                                         </div>
                                                                                         <div>
                                                                                             <div class="card modal-content" v-bind="useQualStore.selectedQualification" v-if="useQualStore.EditQualificationflag===false">
-                                                                                            <div class="card w-80" >
-                                                                                                <div class="card-body">
+                                                                                             <div class="card w-80" >
+                                                                                                 <div class="card-body">
                                                                                                     <h5 class="card-title">{{useQualStore.selectedQualification.question.name}}</h5>
                                                                                                     <p class="card-text">{{useQualStore.selectedQualification.question.text}}</p>
                                                                                                     <div class="card-body">
                                                                                                     <QualificationsList :itemType=useQualStore.selectedQualification.question.name.toLowerCase() :taId=ta.id :qualificationId=useQualStore.selectedQualification.id />
                                                                                                     </div>
-                                                                                                </div>
-                                                                                            </div>
+                                                                                                </div> 
+                                                                                            </div> 
                                                                                                     <button href="#"  style="float: right" class="btn btn-outline-success searchButton me-2 " @click="useQualStore.EditQualificationback()">Back</button>
                                                                                             </div>
                                                                                         </div>

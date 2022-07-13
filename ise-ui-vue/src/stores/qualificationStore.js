@@ -11,7 +11,7 @@ export const useQualificationStore = defineStore('qualification', {
         onlinebanking:[],
         fieldofexperties:[],
         error: null,
-        EditQualificationflag:true,
+        EditQualificationflag : true,
         selectedQuestionID:'',
         selectedQualification:[],
         countriesforvariable:[],
@@ -19,7 +19,8 @@ export const useQualificationStore = defineStore('qualification', {
         variable:'',
         arrayvariableforcountry:[],
         arrayvariableforgender:[],
-        genderslistforvariable:[]
+        genderslistforvariable:[],
+        selectedQualificationfordisplay : false
     }),
     getters: {
 
@@ -121,6 +122,8 @@ export const useQualificationStore = defineStore('qualification', {
                                     variables.push({ "id": newGendersList[k].id, "name": newGendersList[k].name })
                                 } project[i].question.variables = variables;
                                 this.selectedQualification = project[i].question;
+
+                                this.selectedQualificationfordisplay = true
                                  break;
                             }
                 }
@@ -142,6 +145,8 @@ export const useQualificationStore = defineStore('qualification', {
                                     variables.push({ "id": newGendersList[k].id, "name": newGendersList[k].name })
                                 } project[i].question.variables = variables;
                                 this.selectedQualification = project[i].question;
+
+                                this.selectedQualificationfordisplay = true 
                                  break;
                             }
                 }
@@ -316,12 +321,14 @@ export const useQualificationStore = defineStore('qualification', {
         EditQualification(qid,taid,itemtype){
 
             this.EditQualificationflag = false
+            console.log("EditQualification---> "+this.EditQualificationflag)
             this.selectedQuestionID=qid
-           this.selectedQualification= this.GetQualificationwithID(qid,taid,itemtype);
+        this.selectedQualification= this.GetQualificationwithID(qid,taid,itemtype);
             
         },
         EditQualificationback(){
             this.EditQualificationflag = true
+            console.log("EditQualificationback--->"+this.EditQualificationflag)
             
         },
         GetQualificationwithID(itemtype,qid,taid)
@@ -357,10 +364,10 @@ export const useQualificationStore = defineStore('qualification', {
             //             }
             //         }
             //     }
+            
             var project = useProjectStore().Qualificationlist;
             for (var i = 0; i < project.length; i++){
                 if(project[i].question.id===qid){
-                   // this.GetQualification(itemtype,taid,qid)
                     var variable = project[i];
                     this.selectedQualification = variable;
                     if(this.selectedQualification.question.name.toLowerCase()==="online banking"){
@@ -371,8 +378,10 @@ export const useQualificationStore = defineStore('qualification', {
                         this.GetAllfieldofexpertieslist()
                         this.selectedQualification.question.variables= this.fieldofexperties
                         }
+                        
                     this.selectedQualification.push(variable)
-                    
+                     console.log("selectedQualification--->"+this.variable);
+                     
                     break;
                 }
             }
