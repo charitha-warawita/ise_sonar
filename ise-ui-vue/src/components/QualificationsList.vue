@@ -160,7 +160,7 @@ profCategories, profCategoriesLoading, profCategoriesError, categoryQAs, selecte
 }
 
 .profileSection2 {
-    max-height: 800px; 
+    max-height: 600px; 
     min-height:350px;
     overflow-y:auto; 
     margin-top:25px;
