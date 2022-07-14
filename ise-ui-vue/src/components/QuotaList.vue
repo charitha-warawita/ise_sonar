@@ -1,25 +1,26 @@
 <template>
   <div class="container">
+  <!--<p>ItemType: {{itemType}} ; TAId: {{ taId }} ; QID: {{ quotaid }} ; showQuotaCondition: {{ showQuotaCondition }}</p>-->
     <div class="row">
       <div class="col-md-6">
         <label for="input" class="form-label">Name</label>
-        <input type="text" class="form-control" v-model="useQuotaDataStore.name" />
+        <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.name" />
       </div>
       <div class="col-md-6">
         <label for="input" class="form-label">Field Target(in percentage)</label>
-        <input type="text" class="form-control" v-model="useQuotaDataStore.fieldTarget" />
+        <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.fieldTarget" />
       </div>
       <div class="col-md-6">
         <label for="input" class="form-label">Status</label>
-        <input type="text" class="form-control" v-model="useQuotaDataStore.status" />
+        <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.status" />
       </div>
       <div class="col-md-6">
         <label for="input" class="form-label">Completes</label>
-        <input type="text" class="form-control" v-model="useQuotaDataStore.completes" />
+        <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.completes" />
       </div>
       <div class="col-md-6">
         <label for="input" class="form-label">Prescreence</label>
-        <input type="text" class="form-control" v-model="useQuotaDataStore.prescreence" />
+        <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.prescreence" />
       </div>
       <div class="col-md-6">
         <label for="sel1" class="form-label">Select Condition</label>
@@ -28,15 +29,16 @@
           id="sel1"
           name="sellist1"
           v-model="key"
-          @change="useQuotaDataStore.selectQuotaCondition($event)"
-        >
-          <option value="age">Age</option>
-          <option value="gender">Gender</option>
-          <option value="country">country</option>
-          <!-- <option v-bind:value="qta.condition.name"  v-for="qta in ta.quota" :key="qta.id">{{qta.condition.name}}</option> -->
+          @change="useQuotaDataStore.selectQuotaCondition($event)">
+          <option value="none">Select </option>
+          <option v-bind:value=condition selected="[condition === 'None' ? 'selected' : '']"  v-for="condition in useQuotaDataStore.currentQuota.conditions" :key="condition">{{condition}}</option>
         </select>
       </div>
     </div>
+  </div>
+  <div v-if="useQuotaDataStore.showSubPopup">
+  <div class="container" v-if="useQuotaDataStore.showQuotaCondition === 'none'">
+    This is nothing
   </div>
   <div class="container" v-if="useQuotaDataStore.showQuotaCondition === 'country'">
     <div class="row">
@@ -134,6 +136,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
   <div class="col-md-12">
     <button

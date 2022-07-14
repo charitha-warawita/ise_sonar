@@ -12,7 +12,18 @@ export const useQuotaStore = defineStore('quota', {
         quotaGenders:[],
         countriesVariables: [],
         genderVariables:[],
-        quotaFields:[]
+        quotaFields:[],
+        showSubPopup: false,
+
+        currentQuota: {
+            name: '',
+            fieldTarget: 0,
+            status: 0,
+            completes: 0,
+            prescreence: 0,
+            conditions: ["None", "Age", "Gender", "Country"],
+        }
+        
 
 
     }),
@@ -20,6 +31,18 @@ export const useQuotaStore = defineStore('quota', {
         
     },
     actions: {
+        LoadDefaultCurrentQuota() {
+            this.currentQuota = {
+                name: '',
+                fieldTarget: 0,
+                status: 0,
+                completes: 0,
+                prescreence: 0,
+                conditions: ["None", "Age", "Gender", "Country"],
+                showQuotaCondition:'age'
+            };
+            this.showSubPopup = false;
+        },
       async  GetQuota(itemtype, taId, qid) {
             if(itemtype === 'age')
             {
@@ -63,98 +86,150 @@ export const useQuotaStore = defineStore('quota', {
             console.log(event.target.value.toLowerCase());
             this.GetQuota(event.target.value.toLowerCase())
             this.showQuotaCondition = event.target.value.toLowerCase();
+            this.showSubPopup = true;
             
         },
         SaveQuota(itemtype, taId, quotaid){
+            console.log(itemtype + '---' + taId + '---' + quotaid);
             var project = useProjectStore().project;
             for (var i = 0; i < project.projectTargetAudiences.length; i++)
             {
+                var quota = {};
                 if(project.projectTargetAudiences[i].id === taId)
                 {
-                    for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
+                    quota = {
+                        "id": quotaid,
+                        "name": this.currentQuota.name,
+                        "fieldTarget": this.currentQuota.fieldTarget,
+                        "status": this.currentQuota.status,
+                        "completes": this.currentQuota.completes,
+                        "prescreence":this.currentQuota.prescreence ,
+                        "order": quotaid,
+                        "logicalDecision": "OR",
+                        "NumberOfRequiredConditions": 0,
+                        "IsActive": true,
+                        "conditions":[]
+                        };
+                        
+                    /*for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
                     {
                         if(project.projectTargetAudiences[i].quota[j].id === quotaid)
                         {
-                            project.projectTargetAudiences[i].quota[j].name = this.name;
-                            project.projectTargetAudiences[i].quota[j].fieldTarget = this.fieldTarget;
-                            project.projectTargetAudiences[i].quota[j].completes = this.completes;
-                            project.projectTargetAudiences[i].quota[j].prescreence = this.prescreence;
+                            project.projectTargetAudiences[i].quota[j].name = this.currentQuota.name;
+                            project.projectTargetAudiences[i].quota[j].fieldTarget = this.currentQuota.fieldTarget;
+                            project.projectTargetAudiences[i].quota[j].completes = this.currentQuota.completes;
+                            project.projectTargetAudiences[i].quota[j].prescreence = this.currentQuota.prescreence;
                             this.quotaFields.push({ "name": project.projectTargetAudiences[i].quota[j].name, "fieldTarget": project.projectTargetAudiences[i].quota[j].fieldTarget, "completes": project.projectTargetAudiences[i].quota[j].completes,"prescreence": project.projectTargetAudiences[i].quota[j].prescreence})
+                        
                             break;                           
                         }
-                    }
+                    }*/
                 }
-            }
-            if(itemtype === 'age')
-            {
-                var project = useProjectStore().project;
-                for (var i = 0; i < project.projectTargetAudiences.length; i++)
+
+                if(itemtype === 'age')
                 {
-                    if(project.projectTargetAudiences[i].id === taId)
-                    {
-                        for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
-                        {
-                            if(project.projectTargetAudiences[i].quota[j].id === quotaid)
+                    
+                    var condition = {
+                        "id": 42,
+                        "name": "Age",
+                        "text": "Enter age range for the project",
+                        "categoryName": "Household",
+                        "variables": [
                             {
-                                project.projectTargetAudiences[i].quota[j].condition.variables[0].name = this.quotaMinAge + ' - ' + this.quotaMaxAge;
-                                                                
-                                break;
+                                "id": this.quotaMinAge,
+                                "name": this.quotaMaxAge
                             }
-                        }
+                        ]
                     }
-                }
-            }
-            if(itemtype === 'country')
-            {
-                var project = useProjectStore().project;
-                for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                {
-                    if(project.projectTargetAudiences[i].id === taId)
+                    quota.conditions.push(condition);
+                    /*var project = useProjectStore().project;
+                    for (var i = 0; i < project.projectTargetAudiences.length; i++)
                     {
-                        for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
+                        if(project.projectTargetAudiences[i].id === taId)
                         {
-                            if(project.projectTargetAudiences[i].quota[j].id === quotaid)
-                            { 
-                                var newCountriesList = this.quotaCountries.filter(x => x.selected);
-                                for(var k = 0; k < newCountriesList.length; k++)
-                                {
-                                    this.countriesVariables.push({ "id": newCountriesList[k].id, "name": newCountriesList[k].name })
-                                }
-                                
-                                project.projectTargetAudiences[i].quota[j].condition.variables = this.countriesVariables;
-                                
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            if(itemtype === 'gender')
-            {
-                var project = useProjectStore().project;
-                for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                {
-                    if(project.projectTargetAudiences[i].id === taId)
-                    {
-                        for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
-                        {
-                            if(project.projectTargetAudiences[i].quota[j].id === quotaid)
+                            for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
                             {
-                                
-                                var newGendersList = this.quotaGenders.filter(x => x.selected);
-                                for(var k = 0; k < newGendersList.length; k++)
+                                if(project.projectTargetAudiences[i].quota[j].id === quotaid)
                                 {
-                                    this.genderVariables.push({ "id": newGendersList[k].id, "name": newGendersList[k].name })
+                                    project.projectTargetAudiences[i].quota[j].condition.variables[0].name = this.quotaMinAge + ' - ' + this.quotaMaxAge;
+                                                                    
+                                    break;
                                 }
-                                
-                                project.projectTargetAudiences[i].quota[j].condition.variables = this.genderVariables;      
-                                break;
                             }
                         }
-                    }
+                    }*/
                 }
-            } 
-        
+                if(itemtype === 'country')
+                {
+                    /*var project = useProjectStore().project;
+                    for (var i = 0; i < project.projectTargetAudiences.length; i++)
+                    {
+                        if(project.projectTargetAudiences[i].id === taId)
+                        {
+                            for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
+                            {
+                                if(project.projectTargetAudiences[i].quota[j].id === quotaid)
+                                { 
+                                    var newCountriesList = this.quotaCountries.filter(x => x.selected);
+                                    for(var k = 0; k < newCountriesList.length; k++)
+                                    {
+                                        this.countriesVariables.push({ "id": newCountriesList[k].id, "name": newCountriesList[k].name })
+                                    }
+                                    
+                                    project.projectTargetAudiences[i].quota[j].condition.variables = this.countriesVariables;
+                                    
+                                    break;
+                                }
+                            }
+                        }
+                    }*/
+                    quota.conditions = [];
+                    var condition = {
+                        "id": 1,
+                        "name": "Country",
+                        "text": "Enter the countries",
+                        "categoryName": "Household",
+                        "variables": [
+                            {
+                                "id": 1,
+                                "name": "UK"
+                            }
+                        ]
+                    }
+                    quota.conditions.push(condition);
+                }
+                if(itemtype === 'gender')
+                {
+                    /*var project = useProjectStore().project;
+                    for (var i = 0; i < project.projectTargetAudiences.length; i++)
+                    {
+                        if(project.projectTargetAudiences[i].id === taId)
+                        {
+                            for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
+                            {
+                                if(project.projectTargetAudiences[i].quota[j].id === quotaid)
+                                {
+                                    
+                                    var newGendersList = this.quotaGenders.filter(x => x.selected);
+                                    for(var k = 0; k < newGendersList.length; k++)
+                                    {
+                                        this.genderVariables.push({ "id": newGendersList[k].id, "name": newGendersList[k].name })
+                                    }
+                                    
+                                    project.projectTargetAudiences[i].quota[j].condition.variables = this.genderVariables;      
+                                    break;
+                                }
+                            }
+                        }
+                    }*/
+                } 
+
+                project.projectTargetAudiences[i].quotas.push(quota);
+                project.projectTargetAudiences[i].quota.push(quota);
+                this.LoadDefaultCurrentQuota();
+                break;
+            }
+            
         
         }
 

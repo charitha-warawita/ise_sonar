@@ -119,8 +119,10 @@
                                             <div :id="'panelsStayOpen-collapseFour-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                                                 <div class="accordion-body">
                                                  <div class="container">
-                                                 <div class="subDivQ" v-if="useQuotaDataStore.quotaFields.length > 0" >
-                                                        <div v-for ="item in useQuotaDataStore.quotaFields" >
+                                                 <!--<div class="subDivQ" v-if="useQuotaDataStore.quotaFields.length > 0" >-->
+                                                 <div class="subDivQ" v-if="ta.quotas.length > 0" >
+                                                        <!--<div v-for="item in useQuotaDataStore.quotaFields" >-->
+                                                        <div v-for="item in ta.quotas" >
                                                         <div class="row">
                                                             <div class="col-md-2"><h6>Name</h6>
                                                             </div>
@@ -149,31 +151,39 @@
                                                             <label for="inputEmail4" class="form-label">{{item.prescreence}}</label>
                                                             </div>
                                                         </div>
-                                                    <div class="subDivQ1">
-                                                     <div class="col-md-12"><b>Selected Condition :</b>
-                                                     <div v-if="useQuotaDataStore.countriesVariables.length > 0"><h6>countries</h6>
-                                                        <div style="display: inline-block" v-for ="item in useQuotaDataStore.countriesVariables" :key="item.id">
-                                                            <div class="form-check form-check-inline">
-                                                                <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
+                                                        <div class="subDivQ1" v-if="item.conditions.length > 0">
+                                                            <div v-for="subItem in item.conditions">
+                                                                <div class="col-md-12" v-if="subItem.name === 'Country'"><b>Selected Condition :</b>
+                                                                    <div><h6>countries</h6>
+                                                                        <div style="display: inline-block" v-for="variable in subItem.variables" :key="variable.id">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <label class="form-check-label" for="inlineCheckbox1">{{variable.name}}</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                <div>
+                                                                <div class="col-md-12" v-if="subItem.name === 'Age'">
+                                                                    <div><h6>Gender</h6>
+                                                                        <div style="display: inline-block" v-for="varible in subItem.variables" :key="variable.id">
+                                                                                <div class="form-check form-check-inline">
+                                                                                    <label class="form-check-label" for="inlineCheckbox1">{{variable.name}}</label>
+                                                                                </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                     </div>
-                                                      <div v-if="useQuotaDataStore.genderVariables.length > 0"><h6>Gender</h6>
-                                                        <div style="display: inline-block" v-for ="item in useQuotaDataStore.genderVariables" :key="item.id">
-                                                                <div class="form-check form-check-inline">
-                                                                    <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
+                                                            </div>
+                                                            
+                                                            
+                                                            <!-- <div v-if="useQuotaDataStore.quotaMinAge, useQuotaDataStore.quotaMaxAge > 0"><h6>Age</h6>
+                                                                <div style="display: inline-block">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <label class="form-check-label" for="inlineCheckbox1">MinAge :{{useQuotaDataStore.quotaMinAge}} </label>
+                                                                            <label class="form-check-label" for="inlineCheckbox1"> MaxAge :{{useQuotaDataStore.quotaMaxAge}} </label>
+                                                                        </div>
                                                                 </div>
+                                                            </div> -->
                                                         </div>
-                                                     </div>
-                                                      <div v-if="useQuotaDataStore.quotaMinAge, useQuotaDataStore.quotaMaxAge > 0"><h6>Age</h6>
-                                                        <div style="display: inline-block">
-                                                                <div class="form-check form-check-inline">
-                                                                    <label class="form-check-label" for="inlineCheckbox1">MinAge :{{useQuotaDataStore.quotaMinAge}} </label>
-                                                                    <label class="form-check-label" for="inlineCheckbox1"> MaxAge :{{useQuotaDataStore.quotaMaxAge}} </label>
-                                                                </div>
-                                                        </div>
-                                                     </div>
-                                                     </div>
                                                        <a @click="toggleModal();" class="link-primary">Edit</a> |
                                                         <a @click="" class="link-danger">Delete</a>
                                                     <hr/>
@@ -182,17 +192,17 @@
                                                      </div>
                                                  </div>
                                                  
-                                                       <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal()">Add Quota</button>  
-                                                       <div class="subDivQ" v-for="quo in ta.quota" :key="quo.id">
-                                                        <CustomModal @close="toggleModal()">
-                                                       <div class="card modal-content">
-                                                       <h3 class="card-header">Quota</h3>
-                                                       <div class="card-body">
-                                                       <QuotaList :itemType= quo.condition.name.toLowerCase() :taId= ta.id :quotaid= quo.id />
-                                                            </div>               
-                                                        </div> 
-                                                    </CustomModal>                                                  
-                                                    </div>
+                                                       <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ (ta.quota.length+1))">Add Quota</button>  
+                                                       <!--<div class="subDivQ" v-for="quo in ta.quota" :key="quo.id">-->
+                                                            <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
+                                                                <div class="card modal-content">
+                                                                    <h3 class="card-header">Quota</h3>
+                                                                    <div class="card-body">
+                                                                        <QuotaList :itemType="quotaPopup" :taId= ta.id :quotaid=ta.quota.length+1 />
+                                                                    </div>               
+                                                                </div> 
+                                                            </CustomModal>                                                  
+                                                        <!--</div>-->
                                                 </div>
                                             </div>
                                         </div>

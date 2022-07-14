@@ -44,7 +44,7 @@ export const useProjectStore = defineStore('project', {
                 "cptg": 0,
                 "wantedCompletes": 0,
                 "qualifications": this.LoadProjectQualification(),
-                "quota": this.LoadProjectQuota(),
+                "quota": [],
                 "quotas": [],
                 "subtotal": 0
             };
@@ -119,9 +119,9 @@ export const useProjectStore = defineStore('project', {
                 }];
         },
         LoadProjectQuota() {
-            return [
+            return [];
                 
-                {
+                /*{
                 "id": 1,
                 "name": "Quota",
                 "fieldTarget": "100",
@@ -186,7 +186,7 @@ export const useProjectStore = defineStore('project', {
                             }
                         ]
                     }
-                }];
+                }];*/
         },
         AddQualificationElement(quals) {
             console.log("Came to add qualifications")
