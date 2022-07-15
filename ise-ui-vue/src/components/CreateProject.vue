@@ -148,22 +148,33 @@
                                                         </div>
                                                         <hr/>
                                                     </div>
+                                                    <div class="col-md-12">
+                                                        <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999); useQualStore.GetProfileCategories(ta.id)">Add/Remove Profiling Variables</button>
+                                                        <CustomModal @close="toggleModal(999)" modalId='999'>
+                                                            <div class="card modal-content">
+                                                                <h3 class="card-header">Qualifications</h3>
+                                                                <div class="card-body">
+                                                                    <QualificationsList itemType='profileVars' taId=ta.id qualificationId='999' />
+                                                                </div>
+                                                            </div>
+                                                        </CustomModal>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="accordion-item-custom">
-                                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                            <h2 class="accordion-header" id="panelsStayOpen-headingFour">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseFour-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
                                                     <b>Quota</b>
                                                 </button>
                                             </h2>
-                                            <div :id="'panelsStayOpen-collapseFour-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                                            <div :id="'panelsStayOpen-collapseFour-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
                                                 <div class="accordion-body">
                                                  <div class="container">
                                                  <!--<div class="subDivQ" v-if="useQuotaDataStore.quotaFields.length > 0" >-->
                                                  <div class="subDivQ" v-if="ta.quotas.length > 0" >
-                                                        <!--<div v-for="item in useQuotaDataStore.quotaFields" >-->
-                                                        <div v-for="item in ta.quotas" >
+                                                    <!--<div v-for="item in useQuotaDataStore.quotaFields" >-->
+                                                    <div v-for="item in ta.quotas" >
                                                         <div class="row">
                                                             <div class="col-md-2"><h6>Name</h6>
                                                             </div>
@@ -225,44 +236,32 @@
                                                                 </div>
                                                             </div> -->
                                                         </div>
-                                                       <a @click="toggleModal();" class="link-primary">Edit</a> |
+                                                        <a @click="toggleModal();" class="link-primary">Edit</a> |
                                                         <a @click="" class="link-danger">Delete</a>
-                                                    <hr/>
-                                                      </div>
-                                                        </div>
-                                                     </div>
-                                                 </div>
-                                                 
-                                                       <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ (ta.quota.length+1))">Add Quota</button>  
-                                                       <!--<div class="subDivQ" v-for="quo in ta.quota" :key="quo.id">-->
-                                                            <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
-                                                                <div class="card modal-content">
-                                                                    <h3 class="card-header">Quota</h3>
-                                                                    <div class="card-body">
-                                                                        <QuotaList :itemType="quotaPopup" :taId= ta.id :quotaid=ta.quota.length+1 />
-                                                                    </div>               
-                                                                </div> 
-                                                            </CustomModal>                                                  
-                                                        <!--</div>-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                                    <div class="col-md-12">
-                                                        <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999); useQualStore.GetProfileCategories(ta.id)">Add/Remove Profiling Variables</button>
-                                                        <CustomModal @close="toggleModal(999)" modalId='999'>
-                                                            <div class="card modal-content">
-                                                                <h3 class="card-header">Qualifications</h3>
-                                                                <div class="card-body">
-                                                                    <QualificationsList itemType='profileVars' taId=ta.id qualificationId='999' />
-                                                                </div>
-                                                            </div>
-                                                        </CustomModal>
+                                                        <hr/>
                                                     </div>
                                                 </div>
+                                                </div>
+                                                    <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ (ta.quota.length+1))">Add Quota</button>  
+                                                    <!--<div class="subDivQ" v-for="quo in ta.quota" :key="quo.id">-->
+                                                        <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
+                                                            <div class="card modal-content">
+                                                                <h3 class="card-header">Quota</h3>
+                                                                <div class="card-body">
+                                                                    <QuotaList :itemType="quotaPopup" :taId= ta.id :quotaid=ta.quota.length+1 />
+                                                                </div>               
+                                                            </div> 
+                                                        </CustomModal>                                                  
+                                                    <!--</div>-->
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="row g-3 subDiv" v-if="ta.quotas.length > 0">
-                                        <h5>Quotas</h5>
+                                                    
+                                                <!-- </div>
+                                            </div>
+                                        </div> -->
+                                        <!-- <div class="row g-3 subDiv" v-if="ta.quotas.length > 0">
+                                            <h5>Quotas</h5>
                                             <div class="row g-3 subDivQ" v-for="quota in ta.quotas" :key="quota.id">
                                                 <div class="col-md-12"><b>Quota details</b>
                                                 </div>
@@ -288,10 +287,10 @@
                                                     <div class="form-control" style="border: none"><input type="checkbox" id="inputEmail4" v-model="quota.isActive"></div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="col-md-12">
                                             <!--<button class="btn btn-outline-success searchButton me-2 " v-on:click="useProjStore.AddQualificationElement(ta.qualifications)">Add Qualification</button>-->
-                                            <button class="btn btn-outline-success searchButton me-2 " v-on:click="useProjStore.AddQuotaElement(ta.quotas)">Add Quota</button>
+                                            <!--<button class="btn btn-outline-success searchButton me-2 " v-on:click="useProjStore.AddQuotaElement(ta.quotas)">Add Quota</button>-->
                                             <button :class="{ hidden: ta.id === 1 }" style="float: right" class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.CancelTargetAudience(ta)">Cancel Target Audience</button>
                                         </div>
                                     </div>
@@ -300,8 +299,8 @@
                         </div>
                     </div>
                     <button class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.AddTargetAudienceElement()">Add another Target Audience</button>
-
                 </div>
+            </div>
             </div>
             
             <div class="col-4">
@@ -348,9 +347,6 @@
                 </div>
             </div>
         </div>
-            
-
-        
     </div>
 </template>
 <script setup>
