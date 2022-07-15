@@ -257,8 +257,9 @@ export const useQualificationStore = defineStore('qualification', {
                 }
             }
         },
-        async GetQandAForCategory(category)
+        async GetQandAForCategory(profCategory)
         {
+            var category = profCategory.name
             this.selectedCategory = category;
             this.profCategoriesLoading = true;
 

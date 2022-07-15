@@ -64,7 +64,7 @@
                     <button 
                         v-for="profCategory in profCategories" 
                         :key="profCategory" 
-                        @click="useQualStore.GetQandAForCategory(profCategory.name)" 
+                        @click="useQualStore.GetQandAForCategory(profCategory)" 
                         type="button" 
                         :id="'profcat'+profCategory.name" 
                         class="btn btn-outline-success me-2 projSettingTogButton"
