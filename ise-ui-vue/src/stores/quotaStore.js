@@ -5,14 +5,8 @@ export const useQuotaStore = defineStore('quota', {
         currAgeRange: '',
         error: null,
         showQuotaCondition:'',
-        status:true,
-        quotaMinAge:0,
-        quotaMaxAge:0,
         quotaCountries:[],
         quotaGenders:[],
-        countriesVariables: [],
-        genderVariables:[],
-        quotaFields:[],
         showSubPopup: false,
 
         currentQuota: {
@@ -22,6 +16,8 @@ export const useQuotaStore = defineStore('quota', {
             completes: 0,
             prescreence: 0,
             conditions: ["None", "Age", "Gender", "Country"],
+            quotaMinAge:0,
+            quotaMaxAge:0,
         }
         
 
@@ -39,7 +35,9 @@ export const useQuotaStore = defineStore('quota', {
                 completes: 0,
                 prescreence: 0,
                 conditions: ["None", "Age", "Gender", "Country"],
-                showQuotaCondition:'age'
+                showQuotaCondition:'',
+                quotaMinAge:0,
+                quotaMaxAge:0,
             };
             this.showSubPopup = false;
         },
@@ -90,7 +88,6 @@ export const useQuotaStore = defineStore('quota', {
             
         },
         SaveQuota(itemtype, taId, quotaid){
-            console.log(itemtype + '---' + taId + '---' + quotaid);
             var project = useProjectStore().project;
             for (var i = 0; i < project.projectTargetAudiences.length; i++)
             {
@@ -110,20 +107,6 @@ export const useQuotaStore = defineStore('quota', {
                         "IsActive": true,
                         "conditions":[]
                         };
-                        
-                    /*for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
-                    {
-                        if(project.projectTargetAudiences[i].quota[j].id === quotaid)
-                        {
-                            project.projectTargetAudiences[i].quota[j].name = this.currentQuota.name;
-                            project.projectTargetAudiences[i].quota[j].fieldTarget = this.currentQuota.fieldTarget;
-                            project.projectTargetAudiences[i].quota[j].completes = this.currentQuota.completes;
-                            project.projectTargetAudiences[i].quota[j].prescreence = this.currentQuota.prescreence;
-                            this.quotaFields.push({ "name": project.projectTargetAudiences[i].quota[j].name, "fieldTarget": project.projectTargetAudiences[i].quota[j].fieldTarget, "completes": project.projectTargetAudiences[i].quota[j].completes,"prescreence": project.projectTargetAudiences[i].quota[j].prescreence})
-                        
-                            break;                           
-                        }
-                    }*/
                 }
 
                 if(itemtype === 'age')
@@ -136,53 +119,19 @@ export const useQuotaStore = defineStore('quota', {
                         "categoryName": "Household",
                         "variables": [
                             {
-                                "id": this.quotaMinAge,
-                                "name": this.quotaMaxAge
+                                "id": 1,
+                                "name": this.currentQuota.quotaMinAge
+                            },
+                            {
+                                "id": 1,
+                                "name": this.currentQuota.quotaMaxAge
                             }
                         ]
                     }
                     quota.conditions.push(condition);
-                    /*var project = useProjectStore().project;
-                    for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                    {
-                        if(project.projectTargetAudiences[i].id === taId)
-                        {
-                            for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
-                            {
-                                if(project.projectTargetAudiences[i].quota[j].id === quotaid)
-                                {
-                                    project.projectTargetAudiences[i].quota[j].condition.variables[0].name = this.quotaMinAge + ' - ' + this.quotaMaxAge;
-                                                                    
-                                    break;
-                                }
-                            }
-                        }
-                    }*/
                 }
                 if(itemtype === 'country')
                 {
-                    /*var project = useProjectStore().project;
-                    for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                    {
-                        if(project.projectTargetAudiences[i].id === taId)
-                        {
-                            for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
-                            {
-                                if(project.projectTargetAudiences[i].quota[j].id === quotaid)
-                                { 
-                                    var newCountriesList = this.quotaCountries.filter(x => x.selected);
-                                    for(var k = 0; k < newCountriesList.length; k++)
-                                    {
-                                        this.countriesVariables.push({ "id": newCountriesList[k].id, "name": newCountriesList[k].name })
-                                    }
-                                    
-                                    project.projectTargetAudiences[i].quota[j].condition.variables = this.countriesVariables;
-                                    
-                                    break;
-                                }
-                            }
-                        }
-                    }*/
                     quota.conditions = [];
                     var condition = {
                         "id": 1,
@@ -200,28 +149,24 @@ export const useQuotaStore = defineStore('quota', {
                 }
                 if(itemtype === 'gender')
                 {
-                    /*var project = useProjectStore().project;
-                    for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                    {
-                        if(project.projectTargetAudiences[i].id === taId)
-                        {
-                            for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
+                    quota.conditions = [];
+                    var condition = {
+                        "id": 43,
+                        "name": "Gender",
+                        "text": "Enter the genders of panelists",
+                        "categoryName": "Household",
+                        "variables": [
                             {
-                                if(project.projectTargetAudiences[i].quota[j].id === quotaid)
-                                {
-                                    
-                                    var newGendersList = this.quotaGenders.filter(x => x.selected);
-                                    for(var k = 0; k < newGendersList.length; k++)
-                                    {
-                                        this.genderVariables.push({ "id": newGendersList[k].id, "name": newGendersList[k].name })
-                                    }
-                                    
-                                    project.projectTargetAudiences[i].quota[j].condition.variables = this.genderVariables;      
-                                    break;
-                                }
+                                "id": 1,
+                                "name": "Male"
+                            },
+                            {
+                                "id": 2,
+                                "name": "Female"
                             }
-                        }
-                    }*/
+                        ]
+                    }
+                    quota.conditions.push(condition);
                 } 
 
                 project.projectTargetAudiences[i].quotas.push(quota);

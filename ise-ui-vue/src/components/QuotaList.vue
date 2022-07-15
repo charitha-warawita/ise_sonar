@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-  <!--<p>ItemType: {{itemType}} ; TAId: {{ taId }} ; QID: {{ quotaid }} ; showQuotaCondition: {{ showQuotaCondition }}</p>-->
     <div class="row">
       <div class="col-md-6">
         <label for="input" class="form-label">Name</label>
@@ -30,7 +29,6 @@
           name="sellist1"
           v-model="key"
           @change="useQuotaDataStore.selectQuotaCondition($event)">
-          <option value="none">Select </option>
           <option v-bind:value=condition selected="[condition === 'None' ? 'selected' : '']"  v-for="condition in useQuotaDataStore.currentQuota.conditions" :key="condition">{{condition}}</option>
         </select>
       </div>
@@ -38,7 +36,6 @@
   </div>
   <div v-if="useQuotaDataStore.showSubPopup">
   <div class="container" v-if="useQuotaDataStore.showQuotaCondition === 'none'">
-    This is nothing
   </div>
   <div class="container" v-if="useQuotaDataStore.showQuotaCondition === 'country'">
     <div class="row">
@@ -85,7 +82,7 @@
                   type="text"
                   class="form-control"
                   id="inputEmail4"
-                  v-model="useQuotaDataStore.quotaMinAge"
+                  v-model="useQuotaDataStore.currentQuota.quotaMinAge"
                 />
               </div>
               <div class="col-md-6">
@@ -94,7 +91,7 @@
                   type="text"
                   class="form-control"
                   id="inputEmail4"
-                  v-model="useQuotaDataStore.quotaMaxAge"
+                  v-model="useQuotaDataStore.currentQuota.quotaMaxAge"
                 />
               </div>
             </div>
