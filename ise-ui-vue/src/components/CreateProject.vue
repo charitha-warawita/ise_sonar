@@ -25,6 +25,9 @@
                             <div class="accordion-body">
                                 <div class='basicSetting'>
                                     <div class="row g-3">
+                                        <div class="col-md-12">
+                                            Complete this information to provide suppiers with basic information of your survey
+                                        </div>
                                         <div class="col-md-6">
                                             <label for="inputEmail4" class="form-label">Name</label>
                                             <input type="text" class="form-control" id="inputEmail4" v-model="project.name">
@@ -49,6 +52,14 @@
                                             <label for="inputEmail4" class="form-label">Fielding Period</label>
                                             <input type="number" class="form-control" id="inputEmail4" v-model="project.fieldingPeriod">
                                         </div>
+                                        <div class="col-md-12">
+                                            <label for="inputEmail4" class="form-label">Testing URL</label>
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="project.testingUrl">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="inputEmail4" class="form-label">Live URL</label>
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="project.liveUrl">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -64,6 +75,9 @@
                             <div :id="'panelsStayOpen-collapseTwo-' + ta.id" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
                                 <div class="accordion-body">
                                     <div class="row g-3">
+                                        <div class="col-md-12">
+                                            Complete this information to provide target audience details of your survey
+                                        </div>
                                         <div class="col-md-12">
                                             <label for="inputEmail4" class="form-label">Name</label>
                                             <input type="text" class="form-control" id="inputEmail4" v-model="ta.name">
@@ -117,7 +131,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3" v-if="qual.question.variables.length > 1 && qual.id > 3">
-                                                            <label>Question countains more than one response.</label>
+                                                            <label>Question contains more than one response.</label>
                                                             <label>Select logical operation:</label>
                                                             <button 
                                                                 type="button" 

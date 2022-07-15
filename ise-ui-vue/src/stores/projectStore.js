@@ -84,7 +84,8 @@ export const useProjectStore = defineStore('project', {
             "startDate": "",
             "fieldingPeriod": 0,
             "status": "Draft",
-            "linkToSurvey": "",
+            "testingUrl": "",
+            "liveUrl": "",
             "categories": [],
             "user": {
                 "id": "",
