@@ -92,40 +92,58 @@
                                             </h2>
                                             <div :id="'panelsStayOpen-collapseThree-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                                                 <div class="accordion-body">
-                                                    <div class="subDivQ" v-if="ta.qualifications" v-for="qual in ta.qualifications" :key="qual.id">
-                                                        <div class="col-md-12"><b>{{qual.question.categoryName}} - {{qual.question.name}}</b></div>
-                                                        <div class="col-md-12">{{qual.question.text}}</div>
-                                                        <div class="col-md-12">
-                                                            <div style="display: inline-block"  v-for="(item) in qual.question.variables" :key="item.id">
-                                                                <div class="form-check form-check-inline">
-                                                                <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
+                                                    <div class="subDivQ row g-3" v-if="ta.qualifications" v-for="qual in ta.qualifications" :key="qual.id">
+                                                        <div class="col-md-9">
+                                                            <div class="col-md-12"><b>{{qual.question.categoryName}} - {{qual.question.name}}</b></div>
+                                                            <div class="col-md-12">{{qual.question.text}}</div>
+                                                            <div class="col-md-12">
+                                                                <div style="display: inline-block"  v-for="(item) in qual.question.variables" :key="item.id">
+                                                                    <div class="form-check">
+                                                                    <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px"><i>{{item.name}}</i></label>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <a @click="toggleModal(ta.id+'-'+qual.id); useQualStore.GetQualification(qual.question.name.toLowerCase(), ta.id, qual.id)" class="link-primary">Edit</a>
-                                                            <!--| <a @click="toggleModal(qual.id)" class="link-danger">Delete</a>-->
-                                                            <CustomModal @close="toggleModal(ta.id+'-'+qual.id)" :modalId="ta.id+'-'+qual.id">
-                                                                <div class="card modal-content">
-                                                                    <h3 class="card-header">Qualifications</h3>
-                                                                    <div class="card-body">
-                                                                        <QualificationsList :itemType=qual.question.name.toLowerCase() :taId=ta.id :qualificationId=qual.id />
+                                                            <div class="col-md-12">
+                                                                <a v-if="qual.question.categoryName === 'Main'" @click="toggleModal(ta.id+'-'+qual.id); useQualStore.GetQualification(qual.question.name.toLowerCase(), ta.id, qual.id)" class="link-primary">Edit</a>
+                                                                <!--| <a @click="toggleModal(qual.id)" class="link-danger">Delete</a>-->
+                                                                <CustomModal @close="toggleModal(ta.id+'-'+qual.id)" :modalId="ta.id+'-'+qual.id">
+                                                                    <div class="card modal-content">
+                                                                        <h3 class="card-header">Qualifications</h3>
+                                                                        <div class="card-body">
+                                                                            <QualificationsList :itemType=qual.question.name.toLowerCase() :taId=ta.id :qualificationId=qual.id />
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </CustomModal>
+                                                                </CustomModal>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3" v-if="qual.question.variables.length > 1 && qual.id > 3">
+                                                            <label>Question countains more than one response.</label>
+                                                            <label>Select logical operation:</label>
+                                                            <button 
+                                                                type="button" 
+                                                                @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'OR')"
+                                                                class="btn btn-outline-success me-2 projSettingTogButton"
+                                                                :class="[qual.logicalDecision === 'OR' ? 'searchButton' : 'btn-light']"
+                                                                >OR</button>
+                                                            <button 
+                                                                type="button" 
+                                                                @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'AND')"
+                                                                class="btn btn-outline-success me-2 projSettingTogButton"
+                                                                :class="[qual.logicalDecision !== 'OR' ? 'searchButton' : 'btn-light']"
+                                                                >AND</button>
                                                         </div>
                                                         <hr/>
-                                                        <div class="col-md-12">
-                                                            <button class="btn btn-outline-success searchButton mb-4 " style="float: right" @click="toggleModal(999); useQualStore.GetProfileCategories(ta.id, qual.id)">Add Qualification</button>
-                                                            <CustomModal @close="toggleModal(999)" modalId='999'>
-                                                                <div class="card modal-content">
-                                                                    <h3 class="card-header">Qualifications</h3>
-                                                                    <div class="card-body">
-                                                                        <QualificationsList itemType='profileVars' taId='999' qualificationId='999' />
-                                                                    </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999); useQualStore.GetProfileCategories(ta.id)">Add/Remove Profiling Variables</button>
+                                                        <CustomModal @close="toggleModal(999)" modalId='999'>
+                                                            <div class="card modal-content">
+                                                                <h3 class="card-header">Qualifications</h3>
+                                                                <div class="card-body">
+                                                                    <QualificationsList itemType='profileVars' taId=ta.id qualificationId='999' />
                                                                 </div>
-                                                            </CustomModal>
-                                                        </div>
+                                                            </div>
+                                                        </CustomModal>
                                                     </div>
                                                 </div>
                                             </div>

@@ -73,6 +73,23 @@ export const useQualificationStore = defineStore('qualification', {
                 }
             }
         },
+        UpdateQualLogOperation(taId, qid, ld)
+        {
+            var project = useProjectStore().project;
+            for (var i = 0; i < project.projectTargetAudiences.length; i++)
+            {
+                if(project.projectTargetAudiences[i].id === taId)
+                {
+                    for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
+                    {
+                        if(project.projectTargetAudiences[i].qualifications[j].id === qid)
+                        {
+                            project.projectTargetAudiences[i].qualifications[j].logicalDecision = ld;
+                        }
+                    }
+                }
+            }
+        },
         SaveCountryQualification(itemtype, taId, qid) {
             console.log("Save called and values passed: " + itemtype + '=' + taId + '-' + qid);
             if(itemtype === 'country')
@@ -230,9 +247,9 @@ export const useQualificationStore = defineStore('qualification', {
                 }
             }
         },
-        async GetProfileCategories(taId, qId)
+        async GetProfileCategories(taId)
         {
-            this.currentQAId = qId; this.currentTAId = taId;
+            this.currentTAId = taId;
             if(this.profCategories.length === 0)
             {
                 this.profCategoriesLoading = true;

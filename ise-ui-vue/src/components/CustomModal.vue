@@ -28,11 +28,11 @@ export default {
 .modal-animation-enter-active,
 .modal-animation-leave-active {
   transition: opacity 0.3s cubic-bezier(0.52, 0.02, 0.19, 1.02);
-}
+},
 .modal-animation-enter-from,
 .modal-animation-leave-to {
   opacity: 0;
-}
+},
 .modal-animation-inner-enter-active {
   transition: all 0.3s cubic-bezier(0.52, 0.02, 0.19, 1.02) 0.15s;
 }

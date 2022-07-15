@@ -203,11 +203,6 @@ export const useProjectStore = defineStore('project', {
                         ]
                     }
                 }
-                
-                
-                
-                
-            
             ];
         },
         AddQualificationElement(quals) {
