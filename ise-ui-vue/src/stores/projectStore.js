@@ -132,6 +132,7 @@ export const useProjectStore = defineStore('project', {
                 "cptg": 0,
                 "wantedCompletes": 0,
                 "qualifications": this.LoadProjectQualification(),
+                "quota": [],
                 "quotas": [],
                 "subtotal": 0
             };
@@ -205,6 +206,76 @@ export const useProjectStore = defineStore('project', {
                     }
                 }
             ];
+        },
+        LoadProjectQuota() {
+            return [];
+                
+                /*{
+                "id": 1,
+                "name": "Quota",
+                "fieldTarget": "100",
+                "status": true,
+                "completes": "",
+                "prescreence":"" ,
+                    "order": 1,
+                    "logicalDecision": "OR",
+                    "NumberOfRequiredConditions": 0,
+                    "IsActive": true,
+                    "condition": {
+                        "id": 42,
+                        "name": "Age",
+                        "text": "Enter age range for the project",
+                        "categoryName": "Household",
+                        "variables": [
+                            {
+                                "id": 1,
+                                "name": "18 - 60"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 2,
+                    "order": 2,
+                    "logicalDecision": "OR",
+                    "NumberOfRequiredConditions": 0,
+                    "IsActive": true,
+                    "condition": {
+                        "id": 1,
+                        "name": "Country",
+                        "text": "Enter the Countries",
+                        "categoryName": "Household",
+                        "variables": [
+                            {
+                                "id": 1,
+                                "name": "UK"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 3,
+                    "order": 3,
+                    "logicalDecision": "OR",
+                    "NumberOfRequiredConditions": 0,
+                    "IsActive": true,
+                    "condition": {
+                        "id": 43,
+                        "name": "Gender",
+                        "text": "Enter the genders of panelists",
+                        "categoryName": "Household",
+                        "variables": [
+                            {
+                                "id": 1,
+                                "name": "Male"
+                            },
+                            {
+                                "id": 2,
+                                "name": "Female"
+                            }
+                        ]
+                    }
+                }];*/
         },
         AddQualificationElement(quals) {
             console.log("Came to add qualifications")
