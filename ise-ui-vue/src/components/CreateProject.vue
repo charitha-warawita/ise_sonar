@@ -205,24 +205,6 @@
                                                         </div>
                                                         <div class="subDivQ1" v-if="item.conditions.length > 0">
                                                             <div v-for="subItem in item.conditions">
-                                                                <div class="col-md-12" v-if="subItem.name === 'Age'">
-                                                                    <div><h6>Age</h6>
-                                                                        <div style="display: inline-block" v-for="varible in subItem.variables">
-                                                                                <div class="form-check form-check-inline">
-                                                                                   <label class="form-check-label" for="inlineCheckbox1">{{varible.name}}</label>
-                                                                                </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                 <div class="col-md-12" v-if="subItem.name === 'Gender'">
-                                                                    <div><h6>Gender</h6>
-                                                                        <div style="display: inline-block" v-for="varible in subItem.variables">
-                                                                                <div class="form-check form-check-inline">
-                                                                                    <label class="form-check-label" for="inlineCheckbox1">{{varible.name}}</label>
-                                                                                </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
                                                                 <div class="col-md-12" v-if="subItem.name === 'Country'"><b>Selected Condition :</b>
                                                                     <div><h6>countries</h6>
                                                                         <div style="display: inline-block" v-for="variable in subItem.variables" :key="variable.id">
@@ -232,7 +214,27 @@
                                                                         </div>
                                                                     </div>
                                                                 <div>
+                                                                <div class="col-md-12" v-if="subItem.name === 'Age'">
+                                                                    <div><h6>Gender</h6>
+                                                                        <div style="display: inline-block" v-for="varible in subItem.variables" :key="variable.id">
+                                                                                <div class="form-check form-check-inline">
+                                                                                    <label class="form-check-label" for="inlineCheckbox1">{{variable.name}}</label>
+                                                                                </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
+                                                            </div>
+                                                            
+                                                            
+                                                            <!-- <div v-if="useQuotaDataStore.quotaMinAge, useQuotaDataStore.quotaMaxAge > 0"><h6>Age</h6>
+                                                                <div style="display: inline-block">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <label class="form-check-label" for="inlineCheckbox1">MinAge :{{useQuotaDataStore.quotaMinAge}} </label>
+                                                                            <label class="form-check-label" for="inlineCheckbox1"> MaxAge :{{useQuotaDataStore.quotaMaxAge}} </label>
+                                                                        </div>
+                                                                </div>
+                                                            </div> -->
                                                         </div>
                                                         <a @click="toggleModal();" class="link-primary">Edit</a> |
                                                         <a @click="" class="link-danger">Delete</a>
@@ -251,9 +253,6 @@
                                                             </div> 
                                                         </CustomModal>                                                  
                                                     <!--</div>-->
-                                                        <!--</div>-->
-                                                        <!--</div>-->
-                                                        <!--</div>-->
                                                 </div>
                                             </div>
                                         </div>
