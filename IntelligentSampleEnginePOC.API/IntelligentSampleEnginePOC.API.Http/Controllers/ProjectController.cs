@@ -1,5 +1,5 @@
-﻿using IntelligentSampleEnginePOC.API.Core.Model;
-using IntelligentSampleEnginePOC.API.Core.Services;
+﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
+using IntelligentSampleEnginePOC.API.Core.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
