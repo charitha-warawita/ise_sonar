@@ -7,7 +7,7 @@
           <!-- Modal Content -->
           <!--<label>TTT{{modalId}}</label>-->
           <slot />
-          <button class="btn btn-outline-success btn-light me-2" @click="close" type="button">Cancel</button>
+          <button class="btn btn-outline-success btn-light me-2 modalCloseBt" @click="close" type="button">Cancel</button>
         </div>
       </transition>
     </div>
@@ -28,11 +28,11 @@ export default {
 .modal-animation-enter-active,
 .modal-animation-leave-active {
   transition: opacity 0.3s cubic-bezier(0.52, 0.02, 0.19, 1.02);
-}
+},
 .modal-animation-enter-from,
 .modal-animation-leave-to {
   opacity: 0;
-}
+},
 .modal-animation-inner-enter-active {
   transition: all 0.3s cubic-bezier(0.52, 0.02, 0.19, 1.02) 0.15s;
 }
@@ -60,8 +60,8 @@ export default {
 
 .modal-inner {
     position: relative;
-    max-width: 640px;
-    width: 80%;
+    max-width: 840px;
+    width: 90%;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     background-color: #fff;
     padding: 10px 10px;
@@ -74,7 +74,7 @@ export default {
       font-size: 20px;
       cursor: pointer;
     }
-    .modal-inner button {
+    .modal-inner .modalCloseBt {
       margin-top: 10px;
       float: right;
     }

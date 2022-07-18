@@ -3,6 +3,77 @@ import { defineStore } from "pinia";
 export const useProjectStore = defineStore('project', {
     state: () => ({
         basicSettingDesc:'',
+        Qualificationlist : [
+            {
+                "id": 4,
+                "order": 4,
+                "logicalDecision": "OR",
+                "NumberOfRequiredConditions": 0,
+                "IsActive": true,
+                "question": {
+                    "id": 1970,
+                    "name": "Online banking",
+                    "text": "Are you a user of an internet bank?",
+                    "categoryName": "Online/Electronics",
+                    "variables": [
+                        {
+                            "id": 16508,
+                            "name": "Yes"
+                        },
+                        {
+                            "id": 16509,
+                            "name": "No"
+                        }
+                    ]
+                }
+            },
+            {
+                "id": 5,
+                "order": 5,
+                "logicalDecision": "OR",
+                "NumberOfRequiredConditions": 0,
+                "IsActive": true,
+                "question": {
+                    "id": 1963,
+                    "name": "Field of expertise",
+                    "text": "Which is your field of expertise?",
+                    "categoryName": "Occupation",
+                    "variables": [
+                        {
+                            "id": 16446,
+                            "name": "Administration"
+                        },
+                        {
+                            "id": 16447,
+                            "name": "Personnel/HR"
+                        },
+                        {
+                            "id": 16449,
+                            "name": "IT/Development"
+                        },
+                        {
+                            "id": 16451,
+                            "name": "Production"
+                        },
+                        {
+                            "id": 16452,
+                            "name": "Management"
+                        },
+                        {
+                            "id": 16453,
+                            "name": "Other"
+                        },
+                        {
+                            "id": 22092,
+                            "name": "Not Applicable"
+                        }
+                    ]
+                }
+            },           
+        ],
+        
+       
+        
         totalCost: 0,
         project: {
             "id": "",
@@ -13,7 +84,9 @@ export const useProjectStore = defineStore('project', {
             "startDate": "",
             "fieldingPeriod": 0,
             "status": "Draft",
-            "linkToSurvey": "",
+            "testingUrl": "",
+            "liveUrl": "",
+            "categories": [],
             "user": {
                 "id": "",
                 "name": "",
@@ -24,11 +97,26 @@ export const useProjectStore = defineStore('project', {
             "cintSelfLink": "",
             "cintCurrentCostLink": "",
             "cintTestingLink": ""
-        }
+        },
+        categories:[],
+        loading: false,
+        error: null
     }),
     getters: {
     },
     actions: {
+        async FetchCategories() {
+            this.categories = []
+            this.loading = true
+            try {
+                this.categories = await fetch('http://localhost:5197/api/Reference/project/categories')
+                .then((response) => response.json())
+            } catch (error) {
+                this.error = error
+            } finally {
+                this.loading = false
+            }
+        },
         CreateProject(project) {
             console.log('project: ' + JSON.stringify(project));
         },
@@ -66,7 +154,7 @@ export const useProjectStore = defineStore('project', {
                         "id": 42,
                         "name": "Age",
                         "text": "Enter age range for the project",
-                        "categoryName": "Household",
+                        "categoryName": "Main",
                         "variables": [
                             {
                                 "id": 1,
@@ -85,7 +173,7 @@ export const useProjectStore = defineStore('project', {
                         "id": 1,
                         "name": "Country",
                         "text": "Enter the Countries",
-                        "categoryName": "Household",
+                        "categoryName": "Main",
                         "variables": [
                             {
                                 "id": 1,
@@ -104,7 +192,7 @@ export const useProjectStore = defineStore('project', {
                         "id": 43,
                         "name": "Gender",
                         "text": "Enter the genders of panelists",
-                        "categoryName": "Household",
+                        "categoryName": "Main",
                         "variables": [
                             {
                                 "id": 1,
@@ -116,7 +204,8 @@ export const useProjectStore = defineStore('project', {
                             }
                         ]
                     }
-                }];
+                }
+            ];
         },
         LoadProjectQuota() {
             return [];
