@@ -248,7 +248,7 @@ export const useQualificationStore = defineStore('qualification', {
                         if(currProfCategoryCount > 0)
                             currSelected = true;
                         
-                        this.profCategories.push({ name: currName, count: currProfCategoryCount, selected: currSelected });
+                        this.profCategories.push({ name: currName, count: currProfCategoryCount, selected: currSelected, qas: [] });
                     }
                 } catch (error) {
                     this.profCategoriesError = error;
@@ -264,17 +264,25 @@ export const useQualificationStore = defineStore('qualification', {
             this.profCategoriesLoading = true;
 
             try {
-                var qas = await fetch('http://localhost:5197/api/Reference/project/questions?category=' + encodeURIComponent(category))
-                .then((response) => response.json())
-
-                for(var i =0; i < qas.length; i++)
+                var currIndex = this.profCategories.findIndex(x => x.name === category)
+                if(this.profCategories[currIndex].qas.length < 1)
                 {
-                    for(var j = 0; j< qas[i].variables.length; j++)
+                    var qas = await fetch('http://localhost:5197/api/Reference/project/questions?category=' + encodeURIComponent(category))
+                    .then((response) => response.json())
+
+                    for(var i =0; i < qas.length; i++)
                     {
-                        qas[i].variables[j].selected = false;
+                        for(var j = 0; j< qas[i].variables.length; j++)
+                        {
+                            qas[i].variables[j].selected = false;
+                        }
                     }
+                    
+                    this.profCategories[currIndex].qas = qas;
                 }
-                this.categoryQAs = qas;
+
+                this.categoryQAs = this.profCategories[currIndex].qas;
+
             } catch (error) {
                 this.profCategoriesError = error;
             } finally {
@@ -283,37 +291,40 @@ export const useQualificationStore = defineStore('qualification', {
         },
         async SaveQAToProject(question, answerId, answerName) {
             var isAddingNewElement = true;
+
             //Updating UI
-            if(this.categoryQAs.length > 0)
-            {
-                var currIndex = this.categoryQAs.findIndex(x => x.id === question.id);
-                if(currIndex > -1)
-                {
-                    var currVarIndex = this.categoryQAs[currIndex].variables.findIndex(x => x.id === answerId);
-                    if(currVarIndex > -1)
-                    {
-                        if(this.categoryQAs[currIndex].variables[currVarIndex].selected)
-                            isAddingNewElement = false;
-                        this.categoryQAs[currIndex].variables[currVarIndex].selected = !this.categoryQAs[currIndex].variables[currVarIndex].selected
-                    }
-                }
-            }
             if(this.profCategories.length > 0)
             {
-                var currIndex = this.profCategories.findIndex(x => x.name === question.categoryName);
+                var index = this.profCategories.findIndex(x => x.name === question.categoryName);
                 
+                if(this.profCategories[index].qas.length > 0)
+                {
+                    var currIndex = this.profCategories[index].qas.findIndex(x => x.id === question.id);
+                    if(currIndex > -1)
+                    {
+                        var currVarIndex = this.profCategories[index].qas[currIndex].variables.findIndex(x => x.id === answerId);
+                        if(currVarIndex > -1)
+                        {
+                            if(this.profCategories[index].qas[currIndex].variables[currVarIndex].selected)
+                                isAddingNewElement = false;
+                                this.profCategories[index].qas[currIndex].variables[currVarIndex].selected = !this.categoryQAs[currIndex].variables[currVarIndex].selected
+                        }
+                    }
+                    this.categoryQAs = this.profCategories[index].qas[currIndex];
+                } 
+
                 if(isAddingNewElement) {
-                    this.profCategories[currIndex].selected = true;
-                    this.profCategories[currIndex].count = this.profCategories[currIndex].count+1;
+                    this.profCategories[index].selected = true;
+                    this.profCategories[index].count = this.profCategories[currIndex].count+1;
                 }
                 else
                 {
-                    this.profCategories[currIndex].count = this.profCategories[currIndex].count-1;
-                    if(this.profCategories[currIndex].count < 1)
-                    this.profCategories[currIndex].selected = false;
+                    this.profCategories[index].count = this.profCategories[currIndex].count-1;
+                    if(this.profCategories[index].count < 1)
+                    this.profCategories[index].selected = false;
                 }
             }
-            
+
             //Updating project Model
             var project = useProjectStore().project;
             for (var i = 0; i < project.projectTargetAudiences.length; i++)
