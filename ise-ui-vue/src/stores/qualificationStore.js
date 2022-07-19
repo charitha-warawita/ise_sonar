@@ -106,7 +106,7 @@ export const useQualificationStore = defineStore('qualification', {
                     // this.countries = countriesList;
                     this.countriesLoading = true
                     try {
-                        this.countries = await fetch('http://localhost:5197/api/Reference/project/countries')
+                        this.countries = await fetch('https://eo2intbiweb01.corp.gmi.lcl/iseapi/api/Reference/project/countries')
                         .then((response) => response.json())
                     } catch (error) {
                         this.countriesError = error
@@ -224,7 +224,7 @@ export const useQualificationStore = defineStore('qualification', {
             {
                 this.profCategoriesLoading = true;
                 try {
-                     var currProfCategories = await fetch('http://localhost:5197/api/Reference/project/profilecategories')
+                     var currProfCategories = await fetch('https://eo2intbiweb01.corp.gmi.lcl/iseapi/api/Reference/project/profilecategories')
                     .then((response) => response.json());
 
                     var projectsCurrProfCategories = [];
@@ -267,7 +267,7 @@ export const useQualificationStore = defineStore('qualification', {
                 var currIndex = this.profCategories.findIndex(x => x.name === category)
                 if(this.profCategories[currIndex].qas.length < 1)
                 {
-                    var qas = await fetch('http://localhost:5197/api/Reference/project/questions?category=' + encodeURIComponent(category))
+                    var qas = await fetch('https://eo2intbiweb01.corp.gmi.lcl/iseapi/api/Reference/project/questions?category=' + encodeURIComponent(category))
                     .then((response) => response.json())
 
                     for(var i =0; i < qas.length; i++)
