@@ -1,4 +1,5 @@
-﻿using IntelligentSampleEnginePOC.API.Core.Model;
+﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
+using IntelligentSampleEnginePOC.API.Core.Model;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;

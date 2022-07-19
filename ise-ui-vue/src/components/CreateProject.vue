@@ -4,6 +4,18 @@
             <div class="col-8">
                 <div class="accordion" id="accordionPanelsStayOpenExample">
                     <div class="accordion-item customItem">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingZero">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseZero" aria-expanded="true" aria-controls="panelsStayOpen-collapseZero">
+                            <b>Project Settings</b>
+                        </button>
+                        </h2>
+                        <div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingZero">
+                            <div class="accordion-body">
+                                <ProjectSetting />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item customItem">
                         <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
                             <b>Basic Settings</b>
@@ -13,6 +25,9 @@
                             <div class="accordion-body">
                                 <div class='basicSetting'>
                                     <div class="row g-3">
+                                        <div class="col-md-12">
+                                            Complete this information to provide suppiers with basic information of your survey
+                                        </div>
                                         <div class="col-md-6">
                                             <label for="inputEmail4" class="form-label">Name</label>
                                             <input type="text" class="form-control" id="inputEmail4" v-model="project.name">
@@ -37,6 +52,14 @@
                                             <label for="inputEmail4" class="form-label">Fielding Period</label>
                                             <input type="number" class="form-control" id="inputEmail4" v-model="project.fieldingPeriod">
                                         </div>
+                                        <div class="col-md-12">
+                                            <label for="inputEmail4" class="form-label">Testing URL</label>
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="project.testingUrl">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="inputEmail4" class="form-label">Live URL</label>
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="project.liveUrl">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -52,6 +75,9 @@
                             <div :id="'panelsStayOpen-collapseTwo-' + ta.id" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
                                 <div class="accordion-body">
                                     <div class="row g-3">
+                                        <div class="col-md-12">
+                                            Complete this information to provide target audience details of your survey
+                                        </div>
                                         <div class="col-md-12">
                                             <label for="inputEmail4" class="form-label">Name</label>
                                             <input type="text" class="form-control" id="inputEmail4" v-model="ta.name">
@@ -80,118 +106,162 @@
                                             </h2>
                                             <div :id="'panelsStayOpen-collapseThree-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                                                 <div class="accordion-body">
-                                                    <div class="subDivQ" v-if="ta.qualifications" v-for="qual in ta.qualifications" :key="qual.id">
-                                                                <div class="col-md-12"><b>{{qual.question.name}}</b>
-                                                                </div>
-                                                            <div class="col-md-12">{{qual.question.text}}
-                                                            </div>
-                                                                            <div class="col-md-12">
-                                                                                <div style="display: inline-block"  v-for="(item) in qual.question.variables" :key="item.id">
-                                                                                        <div class="form-check form-check-inline">
-                                                                                        <!-- <input class="form-check-input" type="checkbox" id="inlineCheckbox1" :value=item.id> -->
-                                                                                        <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
-                                                                                        </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <!-- Alternative Approach for baseloading Qualification on Pageload 
-                                                                                
-                                                                                <div class="col-md-12">
-                                                                                <div style="display: inline-block" v-if="useQualStore.variable,qual.question.name.toLowerCase()=== 'age'">
-                                                                                    <label class="form-check-label" for="inlineCheckbox1">{{useQualStore.variable}}</label>
-                                                                                </div>
-                                                                                <div style="display: inline-block" v-if="qual.question.name.toLowerCase()=== 'country'" v-for="item in useQualStore.arrayvariableforcountry">
-                                                                                    <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
-                                                                                </div>
-                                                                                <div style="display: inline-block" v-if="qual.question.name.toLowerCase()=== 'gender'" v-for="item in useQualStore.arrayvariableforgender">
-                                                                                    <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
-                                                                                </div>
-                                                                            </div> -->
-                                                                            <div class="col-md-12">
-                                                                                    <a @click="toggleModal(qual.id); useQualStore.GetQualification(qual.question.name.toLowerCase(), ta.id, qual.id)" class="link-primary">Edit</a> |
-                                                                                    <a @click="toggleModal(qual.id)" class="link-danger">Delete</a>
-                                                                                        <CustomModal @close="toggleModal(qual.id)" :modalId=qual.id>
-                                                                                            <div class="card modal-content">
-                                                                                                    <h3 class="card-header">Qualifications</h3>
-                                                                                                <div class="card-body">
-                                                                                                    <QualificationsList :itemType=qual.question.name.toLowerCase() :taId=ta.id :qualificationId=qual.id />
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </CustomModal>
-                                                                            </div>
-                                                                        <hr/>
-                                                    </div>
-
-                                                <!-- When adding the new qualification via Add Qualification button the below Div Class subDivQ1 will be use to add the Qualification from Popup to Qualification Div-->
-                                                    <!--  Start --- subDivQ1 -->
-                                                    <div class="subDivQ1"  v-if="useQualStore.selectedQualificationfordisplay" >
-                                                        <div class="col-md-12"><b>{{useQualStore.selectedQualification.name}}</b></div>
-                                                        <div class="col-md-12">{{useQualStore.selectedQualification.text}}</div>
-                                                        <div class="col-md-12">
-                                                            <div style="display: inline-block"  v-for="item in useQualStore.selectedQualification.variables" :key="item.id">
-                                                                <div class="form-check form-check-inline">
-                                                                    <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
+                                                    <div class="subDivQ row g-3" v-if="ta.qualifications" v-for="qual in ta.qualifications" :key="qual.id">
+                                                        <div class="col-md-9">
+                                                            <div class="col-md-12"><b>{{qual.question.categoryName}} - {{qual.question.name}}</b></div>
+                                                            <div class="col-md-12">{{qual.question.text}}</div>
+                                                            <div class="col-md-12">
+                                                                <div style="display: inline-block"  v-for="(item) in qual.question.variables" :key="item.id">
+                                                                    <div class="form-check">
+                                                                    <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px"><i>{{item.name}}</i></label>
+                                                                    </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="col-md-12">
+                                                                <a v-if="qual.question.categoryName === 'Main'" @click="toggleModal(ta.id+'-'+qual.id); useQualStore.GetQualification(qual.question.name.toLowerCase(), ta.id, qual.id)" class="link-primary">Edit</a>
+                                                                <!--| <a @click="toggleModal(qual.id)" class="link-danger">Delete</a>-->
+                                                                <CustomModal @close="toggleModal(ta.id+'-'+qual.id)" :modalId="ta.id+'-'+qual.id">
+                                                                    <div class="card modal-content">
+                                                                        <h3 class="card-header">Qualifications</h3>
+                                                                        <div class="card-body">
+                                                                            <QualificationsList :itemType=qual.question.name.toLowerCase() :taId=ta.id :qualificationId=qual.id />
+                                                                        </div>
+                                                                    </div>
+                                                                </CustomModal>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-12" v-if="useQualStore.selectedQualification.variables">
-                                                            <a @click="toggleModal(useQualStore.selectedQualification.id); useQualStore.GetQualification(useQualStore.selectedQualification.name.toLowerCase(), ta.id, useQualStore.selectedQualification.id)" class="link-primary">Edit</a>  |
-                                                            <a @click="toggleModal(useQualStore.selectedQualification.id)" class="link-danger">Delete</a>
-                                                             <CustomModal @close="toggleModal(useQualStore.selectedQualification.id)" :modalId=useQualStore.selectedQualification.id>
-                                                                                            <div class="card modal-content">
-                                                                                                    <h3 class="card-header">Qualifications</h3>
-                                                                                                <div class="card-body">
-                                                                                                    <QualificationsList :itemType=useQualStore.selectedQualification.name.toLowerCase() :taId=ta.id :qualificationId=useQualStore.selectedQualification.id />
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </CustomModal>
-                                                            <hr/>
+                                                        <div class="col-md-3" v-if="qual.question.variables.length > 1 && qual.id > 3">
+                                                            <label>Question contains more than one response.</label>
+                                                            <label>Select logical operation:</label>
+                                                            <button 
+                                                                type="button" 
+                                                                @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'OR')"
+                                                                class="btn btn-outline-success me-2 projSettingTogButton"
+                                                                :class="[qual.logicalDecision === 'OR' ? 'searchButton' : 'btn-light']"
+                                                                >OR</button>
+                                                            <button 
+                                                                type="button" 
+                                                                @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'AND')"
+                                                                class="btn btn-outline-success me-2 projSettingTogButton"
+                                                                :class="[qual.logicalDecision !== 'OR' ? 'searchButton' : 'btn-light']"
+                                                                >AND</button>
                                                         </div>
-                                                        
+                                                        <hr/>
                                                     </div>
-                                                  <!--  End --- subDivQ1 -->
-                                                  <!-- ADD Qualification button Perform all action under below B-Container -->
-                                                  <!--  Start ---  B-Container -->
-                                                                <b-container>
-                                                                    <button class="btn btn-outline-success searchButton mb-4 " style="float: right" @click="toggleModal()">Add Qualification</button>
-                                                                        <CustomModal @close="toggleModal" >
-                                                                            <div class="card modal-content">
-                                                                                <h3 class="card-header">Edit  Qualifications</h3>
-                                                                                <div class="card-body">
-                                                                                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                                                                                        <div class="container px-4" v-for="qual in useProjStore.Qualificationlist " :key="qual.id">
-                                                                                                    <div class="row gx-2" v-if="useQualStore.EditQualificationflag"   >
-                                                                                                        <div class="col">
-                                                                                                            <div class="p-3 border bg-light" >
-                                                                                                            <a v-on:click="useQualStore.EditQualification(qual.question.name.toLowerCase(),qual.question.id, ta.id)">{{qual.question.text}} </a>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                        </div>
-                                                                                        <div>
-                                                                                            <div class="card modal-content" v-bind="useQualStore.selectedQualification" v-if="useQualStore.EditQualificationflag===false">
-                                                                                             <div class="card w-80" >
-                                                                                                 <div class="card-body">
-                                                                                                    <h5 class="card-title">{{useQualStore.selectedQualification.question.name}}</h5>
-                                                                                                    <p class="card-text">{{useQualStore.selectedQualification.question.text}}</p>
-                                                                                                    <div class="card-body">
-                                                                                                    <QualificationsList :itemType=useQualStore.selectedQualification.question.name.toLowerCase() :taId=ta.id :qualificationId=useQualStore.selectedQualification.id />
-                                                                                                    </div>
-                                                                                                </div> 
-                                                                                            </div> 
-                                                                                                    <button href="#"  style="float: right" class="btn btn-outline-success searchButton me-2 " @click="useQualStore.EditQualificationback()">Back</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </CustomModal> 
-                                                                </b-container>
-                                                        <!--  End ---  B-Container -->
+                                                    <div class="col-md-12">
+                                                        <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999); useQualStore.GetProfileCategories(ta.id)">Add/Remove Profiling Variables</button>
+                                                        <CustomModal @close="toggleModal(999)" modalId='999'>
+                                                            <div class="card modal-content">
+                                                                <h3 class="card-header">Qualifications</h3>
+                                                                <div class="card-body">
+                                                                    <QualificationsList itemType='profileVars' taId=ta.id qualificationId='999' />
+                                                                </div>
+                                                            </div>
+                                                        </CustomModal>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row g-3 subDiv" v-if="ta.quotas.length > 0">
-                                        <h5>Quotas</h5>
+                                        <div class="accordion-item-custom">
+                                            <h2 class="accordion-header" id="panelsStayOpen-headingFour">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseFour-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                                    <b>Quota</b>
+                                                </button>
+                                            </h2>
+                                            <div :id="'panelsStayOpen-collapseFour-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
+                                                <div class="accordion-body">
+                                                 <div class="container">
+                                                 <!--<div class="subDivQ" v-if="useQuotaDataStore.quotaFields.length > 0" >-->
+                                                 <div class="subDivQ" v-if="ta.quotas.length > 0" >
+                                                    <!--<div v-for="item in useQuotaDataStore.quotaFields" >-->
+                                                    <div v-for="item in ta.quotas" >
+                                                        <div class="row">
+                                                            <div class="col-md-2"><h6>Name</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            <label for="inputEmail4" class="form-label">{{item.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-2"><h6>FieldTarget</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            <label for="inputEmail4" class="form-label">{{item.fieldTarget}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-2"><h6>Completes</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            <label for="inputEmail4" class="form-label">{{item.completes}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-2"><h6>Prescreence</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            <label for="inputEmail4" class="form-label">{{item.prescreence}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="subDivQ1" v-if="item.conditions.length > 0">
+                                                            <div v-for="subItem in item.conditions">
+                                                                <div class="col-md-12" v-if="subItem.name === 'Country'"><b>Selected Condition :</b>
+                                                                    <div><h6>countries</h6>
+                                                                        <div style="display: inline-block" v-for="variable in subItem.variables" :key="variable.id">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <label class="form-check-label" for="inlineCheckbox1">{{variable.name}}</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                <div>
+                                                                <div class="col-md-12" v-if="subItem.name === 'Age'">
+                                                                    <div><h6>Gender</h6>
+                                                                        <div style="display: inline-block" v-for="varible in subItem.variables" :key="variable.id">
+                                                                                <div class="form-check form-check-inline">
+                                                                                    <label class="form-check-label" for="inlineCheckbox1">{{variable.name}}</label>
+                                                                                </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            </div>
+                                                            
+                                                            
+                                                            <!-- <div v-if="useQuotaDataStore.quotaMinAge, useQuotaDataStore.quotaMaxAge > 0"><h6>Age</h6>
+                                                                <div style="display: inline-block">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <label class="form-check-label" for="inlineCheckbox1">MinAge :{{useQuotaDataStore.quotaMinAge}} </label>
+                                                                            <label class="form-check-label" for="inlineCheckbox1"> MaxAge :{{useQuotaDataStore.quotaMaxAge}} </label>
+                                                                        </div>
+                                                                </div>
+                                                            </div> -->
+                                                        </div>
+                                                        <a @click="toggleModal();" class="link-primary">Edit</a> |
+                                                        <a @click="" class="link-danger">Delete</a>
+                                                        <hr/>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                                    <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ (ta.quota.length+1))">Add Quota</button>  
+                                                    <!--<div class="subDivQ" v-for="quo in ta.quota" :key="quo.id">-->
+                                                        <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
+                                                            <div class="card modal-content">
+                                                                <h3 class="card-header">Quota</h3>
+                                                                <div class="card-body">
+                                                                    <QuotaList :itemType="quotaPopup" :taId= ta.id :quotaid=ta.quota.length+1 />
+                                                                </div>               
+                                                            </div> 
+                                                        </CustomModal>                                                  
+                                                    <!--</div>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                                    
+                                                <!-- </div>
+                                            </div>
+                                        </div> -->
+                                        <!-- <div class="row g-3 subDiv" v-if="ta.quotas.length > 0">
+                                            <h5>Quotas</h5>
                                             <div class="row g-3 subDivQ" v-for="quota in ta.quotas" :key="quota.id">
                                                 <div class="col-md-12"><b>Quota details</b>
                                                 </div>
@@ -217,10 +287,10 @@
                                                     <div class="form-control" style="border: none"><input type="checkbox" id="inputEmail4" v-model="quota.isActive"></div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="col-md-12">
                                             <!--<button class="btn btn-outline-success searchButton me-2 " v-on:click="useProjStore.AddQualificationElement(ta.qualifications)">Add Qualification</button>-->
-                                            <button class="btn btn-outline-success searchButton me-2 " v-on:click="useProjStore.AddQuotaElement(ta.quotas)">Add Quota</button>
+                                            <!--<button class="btn btn-outline-success searchButton me-2 " v-on:click="useProjStore.AddQuotaElement(ta.quotas)">Add Quota</button>-->
                                             <button :class="{ hidden: ta.id === 1 }" style="float: right" class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.CancelTargetAudience(ta)">Cancel Target Audience</button>
                                         </div>
                                     </div>
@@ -229,9 +299,8 @@
                         </div>
                     </div>
                     <button class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.AddTargetAudienceElement()">Add another Target Audience</button>
-                    
-
                 </div>
+            </div>
             </div>
             
             <div class="col-4">
@@ -278,17 +347,17 @@
                 </div>
             </div>
         </div>
-            
-
-        
     </div>
 </template>
 <script setup>
 import PageTitle from '@/components/PageTitle.vue'
 import CustomModal from '@/components/CustomModal.vue'
 import QualificationsList from '@/components/QualificationsList.vue'
+import QuotaList from '@/components/QuotaList.vue'
+import ProjectSetting from '@/components/ProjectSetting.vue'
 import {useProjectStore} from '@/stores/projectStore'
 import {useQualificationStore} from '@/stores/qualificationStore'
+import {useQuotaStore} from '@/stores/quotaStore'
 import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
 import {ref} from "vue"
@@ -297,12 +366,13 @@ defineProps(['open'])
 
 var useProjStore = useProjectStore()
 var useQualStore = useQualificationStore()
+var useQuotaDataStore = useQuotaStore()
 const { project, basicSettingDesc, totalCost } = storeToRefs(useProjStore)
-const EditQualificationflag = true
 const modalActive = ref(false);
 const modalId = ref(0);
 var showmodal=false;
 const toggleModal = (id) => {
+    console.log('customModal id or qId is:' + id);
     var classname = 'customModal-' + id
     var element = document.getElementsByClassName(classname)
     if(element[0].style.display === 'none') {
@@ -314,28 +384,14 @@ const toggleModal = (id) => {
         element[1].style.display = 'none'
     }
     // modalActive.value = !modalActive.value;
-    };
-
-
+};
 
 onMounted(() => {
     // console.log('on mounted call');
     useProjStore.$reset()
     useProjStore.AddTargetAudienceElement()
 })
-
-function EditQualification(){
-    this.EditQualificationflag= false
-}
-
-
 </script>
-
-
-
-
-
-
 <style>
 .hidden {
     display: none;
@@ -407,5 +463,8 @@ td a {
   width: 300px;
   margin-left: -150px;
 }*/
+#addQutobutton{
+    float: right;
+}
     
 </style>

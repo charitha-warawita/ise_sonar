@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntelligentSampleEnginePOC.API.Core.Services
+namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 {
     public interface IProjectService
     {
