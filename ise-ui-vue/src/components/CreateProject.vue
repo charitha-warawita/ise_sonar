@@ -389,6 +389,7 @@ const toggleModal = (id) => {
 onMounted(() => {
     // console.log('on mounted call');
     useProjStore.$reset()
+    useQualStore.$reset()
     useProjStore.AddTargetAudienceElement()
 })
 </script>
