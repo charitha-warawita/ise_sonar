@@ -310,16 +310,16 @@ export const useQualificationStore = defineStore('qualification', {
                                 this.profCategories[index].qas[currIndex].variables[currVarIndex].selected = !this.categoryQAs[currIndex].variables[currVarIndex].selected
                         }
                     }
-                    this.categoryQAs = this.profCategories[index].qas[currIndex];
+                    this.categoryQAs = this.profCategories[index].qas;
                 } 
 
                 if(isAddingNewElement) {
                     this.profCategories[index].selected = true;
-                    this.profCategories[index].count = this.profCategories[currIndex].count+1;
+                    this.profCategories[index].count = this.profCategories[index].count+1;
                 }
                 else
                 {
-                    this.profCategories[index].count = this.profCategories[currIndex].count-1;
+                    this.profCategories[index].count = this.profCategories[index].count-1;
                     if(this.profCategories[index].count < 1)
                     this.profCategories[index].selected = false;
                 }
