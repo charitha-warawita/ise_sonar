@@ -4,8 +4,8 @@
     <pre>{{project}}</pre>
     </div>
 
-    <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="this.$router.push('/')">Submit</button>
-    <button class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" v-on:click="this.$router.push('/')">Cancel</button>
+    <RouterLink class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" to="/">Submit</RouterLink>
+    <RouterLink class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" to="/">Cancel</RouterLink>
 
     <!--<div class="col-md-12"><RouterLink class="btn btn-outline-success searchButton me-2" style="width:100%; margin-bottom: 10px;" to="/">Submit</RouterLink></div>
     <div class="col-md-12"><RouterLink class="btn btn-outline-success btn-light me-2" style="width:100%; margin-bottom: 10px;" to="/">Cancel</RouterLink></div>-->
