@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#"><img src="@/assets/logo.svg" alt="" width="30" height="24"> ISE</a>
+        <a class="navbar-brand" href="#"><img src="@/assets/logo.svg" alt="" width="30" height="24"> {{ apptitle }}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -54,10 +54,13 @@
 <script>
 export default {
   data() {
+    console.log('Test: ' + JSON.stringify(import.meta.env))
     return {
       active_el: 1,
       activecontent : true,
-      versiontext:'Proof of concept'
+      versiontext:'Proof of concept',
+      apptitle: import.meta.env.VITE_APP_TITLE,
+      mode: import.meta.env.VITE_ENV
     }
   },
   methods:{
