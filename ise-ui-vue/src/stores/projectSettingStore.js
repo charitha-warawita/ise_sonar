@@ -14,7 +14,9 @@ export const useProjectSettingStore = defineStore('projectSetting', {
             this.categories = []
             this.loading = true
             try {
-                this.categories = await fetch('https://eo2intbiweb01.corp.gmi.lcl/iseapi/api/Reference/project/categories')
+                var url = import.meta.env.VITE_ISE_API_URL;
+                var path = import.meta.env.VITE_ISE_API_CATEGORIES;
+                this.categories = await fetch(url+path)
                 .then((response) => response.json())
             } catch (error) {
                 this.error = error
