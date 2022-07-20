@@ -34,7 +34,15 @@ export const useQualificationStore = defineStore('qualification', {
         arrayvariableforcountry:[],
         arrayvariableforgender:[],
         genderslistforvariable:[],
+<<<<<<< HEAD
         selectedQualificationfordisplay : false
+=======
+
+        iseUrl: import.meta.env.VITE_ISE_API_URL,
+        iseCountryPath: import.meta.env.VITE_ISE_API_COUNTRIES,
+        iseProfCatPath: import.meta.env.VITE_ISE_API_PROFILECATEGORIES,
+        iseQAByCategoryPath: import.meta.env.VITE_ISE_API_QABYCATEGORY
+>>>>>>> origin/develop
     }),
     getters: {
 
@@ -107,7 +115,7 @@ export const useQualificationStore = defineStore('qualification', {
                     // this.countries = countriesList;
                     this.countriesLoading = true
                     try {
-                        this.countries = await fetch('https://eo2intbiweb01.corp.gmi.lcl/iseapi/api/Reference/project/countries')
+                        this.countries = await fetch(this.iseUrl + this.iseCountryPath)
                         .then((response) => response.json())
                     } catch (error) {
                         this.countriesError = error
@@ -225,7 +233,7 @@ export const useQualificationStore = defineStore('qualification', {
             {
                 this.profCategoriesLoading = true;
                 try {
-                     var currProfCategories = await fetch('https://eo2intbiweb01.corp.gmi.lcl/iseapi/api/Reference/project/profilecategories')
+                     var currProfCategories = await fetch(this.iseUrl + this.iseProfCatPath)
                     .then((response) => response.json());
 
                     var projectsCurrProfCategories = [];
@@ -268,7 +276,7 @@ export const useQualificationStore = defineStore('qualification', {
                 var currIndex = this.profCategories.findIndex(x => x.name === category)
                 if(this.profCategories[currIndex].qas.length < 1)
                 {
-                    var qas = await fetch('https://eo2intbiweb01.corp.gmi.lcl/iseapi/api/Reference/project/questions?category=' + encodeURIComponent(category))
+                    var qas = await fetch(this.iseUrl + this.iseQAByCategoryPath + encodeURIComponent(category))
                     .then((response) => response.json())
 
                     for(var i =0; i < qas.length; i++)

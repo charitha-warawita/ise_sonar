@@ -105,18 +105,6 @@ export const useProjectStore = defineStore('project', {
     getters: {
     },
     actions: {
-        /*async FetchCategories() {
-            this.categories = []
-            this.loading = true
-            try {
-                this.categories = await fetch('https://eo2intbiweb01.corp.gmi.lcl/iseapi/api/Reference/project/categories')
-                .then((response) => response.json())
-            } catch (error) {
-                this.error = error
-            } finally {
-                this.loading = false
-            }
-        },*/
         CreateProject(project) {
             console.log('project: ' + JSON.stringify(project));
         },
