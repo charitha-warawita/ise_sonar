@@ -104,10 +104,13 @@
                                                     <b>Qualification</b>
                                                 </button>
                                             </h2>
+                                           
                                             <div :id="'panelsStayOpen-collapseThree-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                                                 <div class="accordion-body">
+                                                <draggable >
                                                     <div class="subDivQ row g-3" v-if="ta.qualifications" v-for="qual in ta.qualifications" :key="qual.id">
-                                                        <div class="col-md-9">
+                                                        <div class="col-md-1">{{qual.order}}</div>
+                                                        <div class="col-md-8">
                                                             <div class="col-md-12"><b>{{qual.question.categoryName}} - {{qual.question.name}}</b></div>
                                                             <div class="col-md-12">{{qual.question.text}}</div>
                                                             <div class="col-md-12">
@@ -159,8 +162,40 @@
                                                             </div>
                                                         </CustomModal>
                                                     </div>
+                                                    <!-- <div>
+                                                        <draggable><div v-for="qual in ta.qualifications">
+                                                                  <div class="col-md-1">{{qual.order}}</div>
+                                                                 <draggable v-model="ta.qualifications">
+                                                                    <transition-group>
+                                                                        <div v-for="qual in useProjStore.Qualificationlist" :key="ta.id" class="col-md-1" style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px">
+                                                                        {{qual.order}}
+                                                                        </div>
+                                                                    </transition-group>
+                                                                    </draggable>
+                                                         </div></draggable>
+                                                        <div class="flex m-10">
+                                                            <draggable class="dragArea list-group w-full" :list="useProjStore.Qualificationlist" @change="useProjStore.log">
+                                                            <div
+                                                                class="list-group-item bg-gray-300 m-1 p-3 rounded-md text-center"
+                                                                v-for="element in useProjStore.Qualificationlist"
+                                                                :key="element.order"
+                                                                handle=".handle"
+                                                                
+                                                                ghost-class="ghost"
+                                                                :sort="false"
+                                                                 @start="dragging = true"
+                                                                @end="dragging = false"
+                                                            >
+                                                                {{ element.order }}
+                                                            </div>
+                                                            </draggable>
+                                                        </div>
+                                                       
+                                                    </div> -->
+                                                </draggable>
                                                 </div>
                                             </div>
+                                         
                                         </div>
                                         <div class="accordion-item-custom">
                                             <h2 class="accordion-header" id="panelsStayOpen-headingFour">
@@ -361,9 +396,10 @@ import {useQuotaStore} from '@/stores/quotaStore'
 import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
 import {ref} from "vue"
+import { VueDraggableNext } from "vue-draggable-next";
 
 defineProps(['open'])
-
+var draggable = VueDraggableNext
 var useProjStore = useProjectStore()
 var useQualStore = useQualificationStore()
 var useQuotaDataStore = useQuotaStore()
@@ -391,6 +427,7 @@ onMounted(() => {
     useProjStore.$reset()
     useProjStore.AddTargetAudienceElement()
 })
+
 </script>
 <style>
 .hidden {
