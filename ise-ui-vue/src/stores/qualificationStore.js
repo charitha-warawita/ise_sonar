@@ -34,15 +34,12 @@ export const useQualificationStore = defineStore('qualification', {
         arrayvariableforcountry:[],
         arrayvariableforgender:[],
         genderslistforvariable:[],
-<<<<<<< HEAD
-        selectedQualificationfordisplay : false
-=======
+        selectedQualificationfordisplay : false,
 
         iseUrl: import.meta.env.VITE_ISE_API_URL,
         iseCountryPath: import.meta.env.VITE_ISE_API_COUNTRIES,
         iseProfCatPath: import.meta.env.VITE_ISE_API_PROFILECATEGORIES,
         iseQAByCategoryPath: import.meta.env.VITE_ISE_API_QABYCATEGORY
->>>>>>> origin/develop
     }),
     getters: {
 
