@@ -107,8 +107,8 @@
                                            
                                             <div :id="'panelsStayOpen-collapseThree-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                                                 <div class="accordion-body">
-                                                <draggable >
-                                                    <div class="subDivQ row g-3" v-if="ta.qualifications" v-for="qual in ta.qualifications" :key="qual.id">
+                                                <draggable  v-on:update="useProjStore.sortOrderforQual" >
+                                                    <div class="subDivQ row g-3" v-if="ta.qualifications" v-for="(qual, index) in ta.qualifications" :key="qual.id">
                                                         <div class="col-md-1">{{qual.order}}</div>
                                                         <div class="col-md-8">
                                                             <div class="col-md-12"><b>{{qual.question.categoryName}} - {{qual.question.name}}</b></div>
@@ -151,6 +151,7 @@
                                                         </div>
                                                         <hr/>
                                                     </div>
+                                                </draggable>    
                                                     <div class="col-md-12">
                                                         <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999); useQualStore.GetProfileCategories(ta.id)">Add/Remove Profiling Variables</button>
                                                         <CustomModal @close="toggleModal(999)" modalId='999'>
@@ -192,7 +193,7 @@
                                                         </div>
                                                        
                                                     </div> -->
-                                                </draggable>
+                                                
                                                 </div>
                                             </div>
                                          
