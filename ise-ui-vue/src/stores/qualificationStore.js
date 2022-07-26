@@ -392,6 +392,32 @@ export const useQualificationStore = defineStore('qualification', {
                     }
                 }
             }
+        },
+        sortOrderforQual(added, taId) 
+        {
+            if (added.item) {
+                var project = useProjectStore().project;
+                for (var i = 0; i < project.projectTargetAudiences.length; i++)
+                {
+                    if(project.projectTargetAudiences[i].id === taId)
+                    {
+                        var currQual = project.projectTargetAudiences[i].qualifications;
+                        var currIndex = added.oldIndex; var newIndex = added.newIndex;
+
+                        var tmp = currQual[currIndex];
+                        currQual.splice(currIndex, 1);
+                        currQual.splice(newIndex, 0, tmp);
+
+                        for(var j = 0; j < currQual.length; j++)
+                        {
+                            currQual[j].order = j+1;
+                        }
+
+                        project.projectTargetAudiences[i].qualifications = currQual;
+                        break;
+                    }
+                }
+            }
         }
     }
 })

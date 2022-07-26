@@ -107,7 +107,7 @@
                                            
                                             <div :id="'panelsStayOpen-collapseThree-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                                                 <div class="accordion-body">
-                                                <draggable  v-on:update="useProjStore.sortOrderforQual" >
+                                                <draggable  v-on:update="useQualStore.sortOrderforQual($event, ta.id)" >
                                                     <div class="subDivQ row g-3" v-if="ta.qualifications" v-for="(qual, index) in ta.qualifications" :key="qual.id">
                                                         <div class="col-md-1">{{qual.order}}</div>
                                                         <div class="col-md-8">

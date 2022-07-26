@@ -3,7 +3,6 @@ import { defineStore } from "pinia";
 export const useProjectStore = defineStore('project', {
     state: () => ({
         basicSettingDesc:'',
-        globaltaid:'',
         Qualificationlist : [
             {
                 "id": 4,
@@ -125,8 +124,6 @@ export const useProjectStore = defineStore('project', {
                 "quotas": [],
                 "subtotal": 0
             };
-            this.globaltaid = ta.id;
-            console.log("Gloabal TAID" +this.globaltaid);
             this.project.projectTargetAudiences.push(ta)
         },
         CancelTargetAudience(ta) {
@@ -337,81 +334,6 @@ export const useProjectStore = defineStore('project', {
                 }
             }
             }
-        },
-        sortOrderforQual(added) {
-            if (added.item) {
-           // console.log(this.project.projectTargetAudiences[this.globaltaid]);
-           var localOldIndex = (added.oldIndex);
-           var localNewIndex = (added.newIndex);
-           var localOldIndexArray =[];
-           var localNewIndexArray =[];
-           var project = this.project;
-           for (var i = 0; i < project.projectTargetAudiences.length; i++)
-           {
-                if(project.projectTargetAudiences[i].id === this.globaltaid)
-                {
-                    for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                    {
-                        if(project.projectTargetAudiences[i].qualifications[j].id === localOldIndex +1)
-                        {
-                            //project.projectTargetAudiences[i].qualifications[j].order = localNewIndex+1
-                            localOldIndexArray=  project.projectTargetAudiences[i].qualifications[j]
-                            // if (project.projectTargetAudiences[i].qualifications[j].question.name === localOldIndexArray.question.name)
-                            // {
-                            //     project.projectTargetAudiences[i].qualifications[j].order = localNewIndex+1
-                            // }
-                           
-                        }
-                        if(project.projectTargetAudiences[i].qualifications[j].id === localNewIndex +1)
-                        {
-                            //project.projectTargetAudiences[i].qualifications[j].order = localOldIndex+1
-                            localNewIndexArray = project.projectTargetAudiences[i].qualifications[j]
-                            // if (project.projectTargetAudiences[i].qualifications[j].question.name === localNewIndexArray.question.name)
-                            // {
-                            //     project.projectTargetAudiences[i].qualifications[j].order = localOldIndex+1
-                            // }
-                           
-                        }
-                    }
-                }
-           }
-
-           if (localOldIndexArray)
-           {
-            var project = this.project;
-            for (var i = 0; i < project.projectTargetAudiences.length; i++)
-            {
-                for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                {
-                    if(project.projectTargetAudiences[i].qualifications[j].question.name === localOldIndexArray.question.name)
-                    {
-                        project.projectTargetAudiences[i].qualifications[j].order = localNewIndex+1
-                    }
-                }
-            }
-           }
-           if (localNewIndexArray)
-           {
-            var project = this.project;
-            for (var i = 0; i < project.projectTargetAudiences.length; i++)
-            {
-                for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                {
-                    if(project.projectTargetAudiences[i].qualifications[j].question.name === localNewIndexArray.question.name)
-                    {
-                        project.projectTargetAudiences[i].qualifications[j].order = localOldIndex+1
-                    }
-                }
-            }
-           }
-           localOldIndex='';
-           localNewIndex='';
-
-
-            
-            
-            }
-          },
-          
+        }
     }
 })
