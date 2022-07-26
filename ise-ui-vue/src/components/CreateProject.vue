@@ -54,11 +54,11 @@
                                         </div>
                                         <div class="col-md-12">
                                             <label for="inputEmail4" class="form-label">Testing URL</label>
-                                            <input type="number" class="form-control" id="inputEmail4" v-model="project.testingUrl">
+                                            <input type="text" class="form-control" id="inputEmail4" v-model="project.testingUrl">
                                         </div>
                                         <div class="col-md-12">
                                             <label for="inputEmail4" class="form-label">Live URL</label>
-                                            <input type="number" class="form-control" id="inputEmail4" v-model="project.liveUrl">
+                                            <input type="text" class="form-control" id="inputEmail4" v-model="project.liveUrl">
                                         </div>
                                     </div>
                                 </div>
