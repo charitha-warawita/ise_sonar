@@ -8,12 +8,13 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
 {
     public class Qualification
     {
-        public Guid Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
+        public int Order { get; set; }
         public string LogicalOperator {  get; set; }
         public int NumberOfRequiredConditions { get; set; }
         public bool IsActive {  get; set; }
-        public string PreCodes {  get; set; }
-        public int Order {  get; set; }
+        public Question Question { get; set; }
+        
     }
 }

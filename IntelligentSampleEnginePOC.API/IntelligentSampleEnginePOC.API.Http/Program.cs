@@ -1,6 +1,5 @@
 using IntelligentSampleEnginePOC.API;
 using IntelligentSampleEnginePOC.API.Core.Data;
-using IntelligentSampleEnginePOC.API.Core.DB;
 using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
 using IntelligentSampleEnginePOC.API.Core.Services;
@@ -16,7 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddTransient<IProjectService, ProjectService>();
 builder.Services.AddTransient<IReferenceContext, ReferenceContext>();
 builder.Services.AddTransient<IProjectReferenceService, ProjectReferenceService>();
-builder.Services.AddDbContext<ISEdbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("iseDb")));
+// builder.Services.AddDbContext<ISEdbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("iseDb")));
 builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("ConnectionStrings"));
 
 var cintApiSettings = builder.Configuration.GetSection("CintApiSettings");

@@ -8,12 +8,14 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
 {
     public class Quota
     {
-        public Guid Id { get; set; }
+        public long Id { get; set; }
         public string QuotaName { get; set; }
+        public string QuotaType { get; set; }
+        public int FieldTarget { get; set; }
         public int Limit { get; set; }
-        public string Precode { get; set; }
-        public int MinAge { get; set; }
-        public int MaxAge { get; set; }
-        public int Gender { get; set; }
+        public int Prescreens { get; set; }
+        public int Completes { get; set; }
+        public bool IsActive { get; set; }
+        public List<Question> Conditions { get; set; }
     }
 }

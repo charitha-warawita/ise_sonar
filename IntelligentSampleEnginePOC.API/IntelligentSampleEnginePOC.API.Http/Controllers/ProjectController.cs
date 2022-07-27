@@ -20,7 +20,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] Project project)
         {
-            try
+            /*try
             {
                 var resultProject = _projectService.CreateProject(project);
                 if (resultProject != null)
@@ -33,13 +33,14 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Exception occured - " + ex.Message);
-            }
+            }*/
+            return Ok();
         }
 
         [HttpPost("launch")]
         public async Task<ActionResult> Launch([FromBody] Project project)
         {
-            try
+            /*try
             {
                 var result = await _projectService.LaunchProject(project);
                 if (result != null)
@@ -52,13 +53,15 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             catch(Exception ex)
             {
                 return StatusCode(500, "Exception occured - " + ex.Message);
-            }
+            }*/
+
+            return Ok();
         }
 
         [HttpPost("update")]
         public ActionResult UpdateProject([FromBody] Project project)
         {
-            try
+            /*try
             {
                 var resultProject = _projectService.UpdateProject(project);
                 if (resultProject != null)
@@ -71,7 +74,8 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Exception occured - " + ex.Message);
-            }
+            }*/
+            return Ok();
 
         }
 
@@ -90,8 +94,8 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         [HttpGet("id/{id}")]
         public ActionResult GetById(string id)
         {
-            var project = _projectService.GetProjects(id);
-            return Ok(project);
+            /*var project = _projectService.GetProjects(id);
+            return Ok(project);*/
 
             //if (!string.IsNullOrEmpty(id))
             //{
@@ -99,13 +103,17 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             //}
             //else
             //    return StatusCode(500, "Id not found");
+
+            return Ok();
         }
 
         [HttpGet]
         public ActionResult GetAll(int? status, string? searchString, int? recentCount)
         {
-            var projectLists = _projectService.GetProjects(status, searchString, recentCount);
-            return Ok(projectLists);
+            /*var projectLists = _projectService.GetProjects(status, searchString, recentCount);
+            return Ok(projectLists);*/
+
+            return Ok();
         }
 
         /*[HttpPost]
