@@ -245,7 +245,7 @@
                                                     <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ (ta.quota.length+1))">Add Quota</button>  
                                                     <!--<div class="subDivQ" v-for="quo in ta.quota" :key="quo.id">-->
                                                         <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
-                                                            <div class="card modal-content">
+                                                            <div class="card modal-content quotaModel">
                                                                 <h3 class="card-header">Quota</h3>
                                                                 <div class="card-body">
                                                                     <QuotaList :itemType="quotaPopup" :taId= ta.id :quotaid=ta.quota.length+1 />
@@ -372,6 +372,7 @@ const modalActive = ref(false);
 const modalId = ref(0);
 var showmodal=false;
 const toggleModal = (id) => {
+    useQuotaDataStore.conditiongrid = false;
     console.log('customModal id or qId is:' + id);
     var classname = 'customModal-' + id
     var element = document.getElementsByClassName(classname)

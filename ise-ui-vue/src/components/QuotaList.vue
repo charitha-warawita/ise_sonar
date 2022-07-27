@@ -1,6 +1,6 @@
 <template>
- <p>ItemType: {{itemType}} ; TAId: {{ taId }} ; QID: {{ quotaid }} ; showQuotaCondition: {{ showQuotaCondition }}</p>
-  <div class="container">
+ <!-- <p>ItemType: {{itemType}} ; TAId: {{ taId }} ; QID: {{ quotaid }} ; showQuotaCondition: {{ showQuotaCondition }}</p> -->
+  <div class="container conditionscroll">
     <div class="row">
       <div class="col-md-6">
         <label for="input" class="form-label">Name</label>
@@ -107,15 +107,11 @@
               </div>
               <div class="col-md-6">
                   <select class="form-select" id="sel1" name="sellist1" v-model="key" @change="useQuotaDataStore.selectQuotaCondition($event)">
-                  <option v-bind:value=condition selected="[condition === 'None' ? 'selected' : '']"  v-for="condition in useQuotaDataStore.currentQuota.conditions" :key="condition">{{condition}}</option>
-                  
-                  <!-- <option v-bind:value=condition selected="[condition === 'None' ? 'selected' : '']"  v-for="condition in useQuotaDataStore.currentQuota.conditions" :key="condition">{{condition}}</option> -->
+                  <option v-bind:value=condition.name v-for="condition in useQuotaDataStore.conditionlist" :key="condition.id">{{condition.categoryName}}-{{condition.name}}</option>
               </select>
               </div>
           </div>
-           <div v-if="useQuotaDataStore.showSubPopup">
-  <div class="container conditionbox" v-if="useQuotaDataStore.showQuotaCondition === 'none'">
-  </div>
+<div v-if="useQuotaDataStore.showSubPopup">
   <div class="container conditionbox" v-if="useQuotaDataStore.showQuotaCondition === 'country'">
     <div class="row">
       <div class="col-md-12">
@@ -232,13 +228,10 @@
 </template>
 <script setup>
 import { useQuotaStore } from "@/stores/quotaStore";
-import {useProjectStore} from '@/stores/projectStore';
 import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
-const props = defineProps(["itemType", "taId", "quotaid"])
-const { project} = storeToRefs(useProjStore)
+const props = defineProps(["itemType", "taId", "quotaid"]);
 
-var useProjStore = useProjectStore();
 var useQuotaDataStore = useQuotaStore();
 
 const {
@@ -255,5 +248,11 @@ const {
 <style>
 .fieldsetstyle {
   border: 1px solid #8f959b!important;
+
   }
+.quotaModel{
+ max-height: 600px; 
+    min-height:350px;
+    overflow-y:auto; 
+}
 </style>

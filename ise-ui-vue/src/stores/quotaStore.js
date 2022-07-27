@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { useProjectStore } from "./projectStore"; 
 export const useQuotaStore = defineStore('quota', {
     state: () => ({
+        conditionlist:[],
         currAgeRange: '',
         quotaMinAge: 0,
         quotaMaxAge:0,
@@ -60,7 +61,7 @@ export const useQuotaStore = defineStore('quota', {
             };
             this.showSubPopup = false;
         },
-        GetQuota(itemtype, taId = 1, qid = 2 ) {
+        GetQuota(itemtype, taId, qid) {
             if(itemtype === 'age')
             {
                 this.GetQuotanAge(itemtype,taId, qid);
@@ -84,7 +85,7 @@ export const useQuotaStore = defineStore('quota', {
             }
             if(itemtype === "country")
             {
-                this.GetQuotaCountry(itemtype, taId = 1, qid = 2);
+                this.GetQuotaCountry(itemtype, taId, qid);
                 // if(this.quotaCountries.length === 0)
                 // {
                 //     var countriesList = [{"id":1,"name":"UK","selected":true},{"id":2,"name":"Sweden","selected":false},{"id":3,"name":"Germany","selected":false},{"id":4,"name":"Denmark","selected":false},{"id":5,"name":"Finland","selected":false},{"id":6,"name":"Norway","selected":false},{"id":9,"name":"Spain","selected":false},{"id":10,"name":"Italy","selected":false},{"id":11,"name":"Hungary","selected":false},{"id":12,"name":"Greece","selected":false},{"id":22,"name":"USA","selected":false}];
@@ -93,7 +94,7 @@ export const useQuotaStore = defineStore('quota', {
             }
             if(itemtype === "gender")
             {
-                this.GetQuotaGender(itemtype, taId =1, qid);
+                this.GetQuotaGender(itemtype, taId, qid);
                 // if(this.quotaGenders.length === 0)
                 // {
                 //     console.log('Call made to Gender API');
@@ -102,8 +103,8 @@ export const useQuotaStore = defineStore('quota', {
                 // }
             }
         },
-        async GetQuotaCountry(itemtype, taId =1, qid =2)
-        {  console.log(itemtype,taId,qid,"Hymacountrues")
+        async GetQuotaCountry(itemtype, taId, qid)
+        { 
             if(this.quotaCountries.length === 0)
                 {
                     console.log(itemtype + '--' + taId + '--' + qid);
@@ -120,23 +121,23 @@ export const useQuotaStore = defineStore('quota', {
                         this.countriesLoading = false
                     }
                 }
-                var currProjCountryIdList = [];
-                var project = useProjectStore().project;
-                for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                {
-                    if(project.projectTargetAudiences[i].id === taId)
-                    {
-                        for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                        {
-                            if(project.projectTargetAudiences[i].qualifications[j].id === qid)
-                            {
-                                var currVar = project.projectTargetAudiences[i].qualifications[j].question.variables;
-                                for(var k = 0; k < currVar.length; k++)
-                                    currProjCountryIdList.push(currVar[k].id);
-                            }
-                        }
-                    }
-                }
+                // var currProjCountryIdList = [];
+                // var project = useProjectStore().project;
+                // for (var i = 0; i < project.projectTargetAudiences.length; i++)
+                // {
+                //     if(project.projectTargetAudiences[i].id === taId)
+                //     {
+                //         for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
+                //         {
+                //             if(project.projectTargetAudiences[i].qualifications[j].id === qid)
+                //             {
+                //                 var currVar = project.projectTargetAudiences[i].qualifications[j].question.variables;
+                //                 for(var k = 0; k < currVar.length; k++)
+                //                     currProjCountryIdList.push(currVar[k].id);
+                //             }
+                //         }
+                //     }
+                // }
                 for (var i = 0; i < this.quotaCountries.length; i++)
                 {
                     if(currProjCountryIdList.includes(this.quotaCountries[i].id))
@@ -145,7 +146,7 @@ export const useQuotaStore = defineStore('quota', {
                         this.quotaCountries[i].selected = false;
                 }
         },
-        async GetQuotanAge(itemtype, taId =1, qid =2)
+        async GetQuotanAge(itemtype, taId, qid)
         {
             console.log(itemtype + '--' + taId + '--' + qid);
             var project = useProjectStore().project;
@@ -214,7 +215,18 @@ export const useQuotaStore = defineStore('quota', {
         },
         addCondition(){
             this.conditiongrid = true;
-            
+            this.conditionlist =[];
+            var project = useProjectStore().project;
+            for (var i = 0; i < project.projectTargetAudiences.length; i++)
+            {
+                for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
+                    {
+                        this.conditionlist.push(project.projectTargetAudiences[i].qualifications[j].question)
+
+                    }
+
+
+            }
 
         },
         selectQuotaCondition(event){
