@@ -98,7 +98,7 @@
                                             <label for="inputEmail4" class="form-label">Wanted Completes Count</label>
                                             <input type="number" class="form-control" id="inputEmail4" v-model="ta.wantedCompletes">
                                         </div>
-                                        <div class="accordion-item-custom" v-if="ta.qualifications.length > 0">
+                                        <div class="accordion-item-custom">
                                             <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseThree-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
                                                     <b>Qualification</b>
@@ -149,7 +149,7 @@
                                                         <hr/>
                                                     </div>
                                                     <div class="col-md-12">
-                                                        <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999); useQualStore.GetProfileCategories(ta.id)">Add/Remove Profiling Variables</button>
+                                                        <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999); useQualStore.GetProfileCategories(ta.id)">Add Qualification</button>
                                                         <CustomModal @close="toggleModal(999)" modalId='999'>
                                                             <div class="card modal-content">
                                                                 <h3 class="card-header">Qualifications</h3>

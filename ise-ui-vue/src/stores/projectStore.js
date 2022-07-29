@@ -5,27 +5,22 @@ export const useProjectStore = defineStore('project', {
         basicSettingDesc:'',
         totalCost: 0,
         project: {
-            "id": "",
+            "id": 0,
             "name": "",
             "reference": "",
-            "userId": "",
             "lastUpdate": "",
             "startDate": "",
             "fieldingPeriod": 0,
-            "status": "Draft",
+            "status": 0,
             "testingUrl": "",
             "liveUrl": "",
             "categories": [],
             "user": {
-                "id": "",
+                "id": 0,
                 "name": "",
                 "email": ""
             },
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "",
-            "cintCurrentCostLink": "",
-            "cintTestingLink": ""
+            "projectTargetAudiences": []
         },
         categories:[],
         loading: false,
@@ -35,7 +30,21 @@ export const useProjectStore = defineStore('project', {
     },
     actions: {
         CreateProject(project) {
-            console.log('project: ' + JSON.stringify(project));
+            this.project.tempId = this.project.id;
+            this.project.lastUpdate = new Date();
+            delete this.project.id;
+
+            for(var i = 0; i < this.project.projectTargetAudiences.length; i++) {
+                this.project.projectTargetAudiences[i].tempId = this.project.projectTargetAudiences[i].id ;
+                delete this.project.projectTargetAudiences[i].id;
+                for(var j = 0; this.project.projectTargetAudiences[i].qualifications.length; j++) {
+                    this.project.projectTargetAudiences[i].qualifications[j].tempId = this.project.projectTargetAudiences[i].qualifications[j].id;
+                    delete this.project.projectTargetAudiences[i].qualifications[j].id;
+                }
+            }
+
+            this.project.targetAudiences = this.project.projectTargetAudiences 
+            delete this.project.projectTargetAudiences;
         },
         AddTargetAudienceElement() {  
             var id = this.project.projectTargetAudiences.length;
@@ -48,7 +57,7 @@ export const useProjectStore = defineStore('project', {
                 "costPerInterview": 0,
                 "cptg": 0,
                 "wantedCompletes": 0,
-                "qualifications": this.LoadProjectQualification(),
+                "qualifications": [],
                 "quota": [],
                 "quotas": [],
                 "subtotal": 0
