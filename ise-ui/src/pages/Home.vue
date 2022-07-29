@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import Panel from 'primevue/panel';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
-import ProjectsGrid from "../components/ProjectsGrid.vue";    
 import { subDays, format } from 'date-fns';
 import { ref, type Ref } from 'vue';
+
+import Panel from 'primevue/panel';
+import InputText from 'primevue/inputtext';
+
+import ProjectsGrid from "../components/ProjectsGrid.vue";
 import PrimaryButton from '../components/buttons/PrimaryButton.vue';
+import CreateProjectModal from "@/components/modals/CreateProjectModal.vue";
 
 const projectFilter: Ref<string|null> = ref(null);
 const projects = ref([
@@ -35,6 +37,11 @@ const filter = (e: Event) => {
     // API call to filter projects array.
 }
 
+const visible: Ref<boolean> = ref(false);
+const showModal = () => {
+    visible.value = true;
+}
+
 </script>
 
 <template>
@@ -48,7 +55,7 @@ const filter = (e: Event) => {
                 
             </div>
             <div style="flex-grow: 0.2; max-width: 250px;">
-                <PrimaryButton square label="Create Project" />
+                <PrimaryButton square label="Create Project" @click="showModal" />
             </div>
         </div>
         <div>
@@ -64,6 +71,7 @@ const filter = (e: Event) => {
             </Panel>            
         </div>
     </div>
+    <CreateProjectModal v-model:visible="visible"/>
 </template>
 
 <style scoped>
