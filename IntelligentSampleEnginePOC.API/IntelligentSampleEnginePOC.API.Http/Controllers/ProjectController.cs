@@ -20,7 +20,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] Project project)
         {
-            /*try
+            try
             {
                 var resultProject = _projectService.CreateProject(project);
                 if (resultProject != null)
@@ -33,7 +33,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Exception occured - " + ex.Message);
-            }*/
+            }
             return Ok();
         }
 

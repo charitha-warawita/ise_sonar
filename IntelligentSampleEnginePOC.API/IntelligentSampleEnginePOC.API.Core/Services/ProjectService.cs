@@ -1,42 +1,36 @@
-﻿using IntelligentSampleEnginePOC.API.Core.Data;
-using Model = IntelligentSampleEnginePOC.API.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.Json;
-using IntelligentSampleEnginePOC.API.Core.Interfaces;
+﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
+using IntelligentSampleEnginePOC.API.Core.Model;
 
 namespace IntelligentSampleEnginePOC.API.Core.Services
 {
     public class ProjectService : IProjectService
     {
-        // private readonly ISEdbContext _dataContext;
+        private readonly IProjectContext _projectContext;
         
 
         private ICintService cintService { get; set; }
 
-        /*public ProjectService(ISEdbContext context, ICintService cintService)
+        public ProjectService(IProjectContext context, ICintService cintService)
         {
-            _dataContext = context;
+            _projectContext = context;
             this.cintService = cintService;
-        }*/
-        /*public Model.Project CreateProject(Model.Project project)
+        }
+
+        public Project CreateProject(Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("Project model not found", nameof(project));
 
+            if(ProjectValidated(project))
+                return _projectContext.CreateProject(project);
 
-            project = SetupGuids(project);
-            project.LastUpdate = DateTime.UtcNow;
-            project.Status = Model.Status.Draft;
-            // project.CintResponseId = 0;
-            ModelMapping(project, true);
-            // _dataContext.SaveChanges();
+            throw new ArgumentException("Project Validation failed", nameof(project));
+        }
 
-            return project;
-        }*/
+        private bool ProjectValidated(Project project)
+        {
+            return true;
+        }
 
         /*private Model.Project SetupGuids(Model.Project project)
         {
