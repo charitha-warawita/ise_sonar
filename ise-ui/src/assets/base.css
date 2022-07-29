@@ -33,7 +33,9 @@
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
 
-  --section-gap: 160px;
+  --section-gap: 160px;  
+
+  --shadow-color: #e8e8e8;
 }
 
 /* @media (prefers-color-scheme: dark) {

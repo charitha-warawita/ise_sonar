@@ -34,14 +34,21 @@ const items: Ref<MenuItem[]> = ref([
     border-radius: 0;
     height: 10vh;
     background: var(--color-background) !important;
-    box-shadow: 0px 0px 12px lightgrey; /* Colour needs fine tuning */
+    box-shadow: 0px 0px 12px var(--shadow-color);
     border: none !important;
 }
 
 /* Experiment with screen sizes. */
-@media (min-width: 1048px) {
+
+@media screen and (max-height: 748px) {
     .p-menubar {
-        height: 8vh;
+        height: 55px;
+    }
+}
+
+@media (min-height: 1048px) {
+    .p-menubar {
+        min-height: 10vh;
     }
 }
 

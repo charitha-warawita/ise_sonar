@@ -1,14 +1,16 @@
 <script setup lang="ts">
 
-import DataTable from 'primevue/datatable'
+import DataTable, { type DataTableRowSelectEvent } from 'primevue/datatable'
 import Column from 'primevue/column'
 
-
+const rowSelect = (e: DataTableRowSelectEvent) => {
+    console.log(e)
+}
 
 </script>
 
 <template>
-    <DataTable class="project-table">
+    <DataTable class="project-table" selection-mode="single" @row-select="rowSelect">
         <Column field="Id" header="Project Id"></Column>
         <Column field="Name" header="Project Name"></Column>
         <Column field="CreationDate" header="Creation Date"></Column>
@@ -17,8 +19,9 @@ import Column from 'primevue/column'
 </template>
 
 <style scoped>
-    .project-table :deep(.p-datatable-thead) {
-        background-color: var(--color-background);
+       
+    .project-table :deep(.p-datatable-thead > tr > th) {
+        background-color: var(--color-background) !important;
     }
 
 </style>
