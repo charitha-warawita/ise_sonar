@@ -134,8 +134,8 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3" v-if="qual.question.variables.length > 1 && qual.id > 3">
-                                                            <label>Question contains more than one response.</label>
-                                                            <label>Select logical operation:</label>
+                                                            <!-- <label>Question contains more than one response.</label> -->
+                                                            <label>Select logical operation Qualification : </label>
                                                             <button 
                                                                 type="button" 
                                                                 @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'OR')"
@@ -153,7 +153,7 @@
                                                     </div>
                                                 </draggable>    
                                                     <div class="col-md-12">
-                                                        <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999); useQualStore.GetProfileCategories(ta.id)">Add/Remove Profiling Variables</button>
+                                                        <button class="btn btn-outline-success searchButton mb-4 "  style="float: right" @click="toggleModal(999);useQualStore.refreshQualPopup();useQualStore.GetProfileCategories(ta.id)">Add Qualification</button>
                                                         <CustomModal @close="toggleModal(999)" modalId='999'>
                                                             <div class="card modal-content">
                                                                 <h3 class="card-header">Qualifications</h3>

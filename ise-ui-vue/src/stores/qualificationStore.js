@@ -22,6 +22,8 @@ export const useQualificationStore = defineStore('qualification', {
         categoryQAs: [],
         selectedCategory: '',
 
+        arrayToAddQualModel:[],
+
         onlinebanking:[],
         fieldofexperties:[],
         error: null,
@@ -311,9 +313,22 @@ export const useQualificationStore = defineStore('qualification', {
                         var currVarIndex = this.profCategories[index].qas[currIndex].variables.findIndex(x => x.id === answerId);
                         if(currVarIndex > -1)
                         {
-                            if(this.profCategories[index].qas[currIndex].variables[currVarIndex].selected)
+                            // if(this.profCategories[index].qas[currIndex].variables[currVarIndex].selected)
+                            //     isAddingNewElement = false;
+                            //     this.profCategories[index].qas[currIndex].variables[currVarIndex].selected = !this.categoryQAs[currIndex].variables[currVarIndex].selected
+                            //     this.arrayToAddQualModel.push(this.profCategories[index].qas[currIndex]);
+                            if(this.profCategories[index].qas[currIndex]===this.arrayToAddQualModel[currIndex])
+                            {
+                                if (this.profCategories[index].qas[currIndex].id===this.arrayToAddQualModel[currIndex].id)
+                                this.profCategories[index].qas[currIndex].variables[currVarIndex].selected = !this.profCategories[index].qas[currIndex].variables[currVarIndex].selected
+                                this.arrayToAddQualModel[currIndex].variables[currVarIndex]===(this.profCategories[index].qas[currIndex].variables[currVarIndex])
+                            }
+                            else{
+                                if(this.profCategories[index].qas[currIndex].variables[currVarIndex].selected)
                                 isAddingNewElement = false;
                                 this.profCategories[index].qas[currIndex].variables[currVarIndex].selected = !this.categoryQAs[currIndex].variables[currVarIndex].selected
+                                this.arrayToAddQualModel.push(this.profCategories[index].qas[currIndex]);
+                            }
                         }
                     }
                     this.categoryQAs = this.profCategories[index].qas;
@@ -332,49 +347,147 @@ export const useQualificationStore = defineStore('qualification', {
             }
 
             //Updating project Model
+            // var project = useProjectStore().project;
+            // for (var i = 0; i < project.projectTargetAudiences.length; i++)
+            // {
+            //     if(project.projectTargetAudiences[i].id === this.currentTAId)
+            //     {
+            //         var currentLength = project.projectTargetAudiences[i].qualifications.length;
+            //         var qualQuestionIndex = project.projectTargetAudiences[i].qualifications.findIndex(x => x.question.id === question.id)
+            //         if(qualQuestionIndex < 0)
+            //         {
+            //             var qualification = {
+            //                 "id": currentLength + 1, "order": currentLength + 1, 
+            //                 "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
+            //                 "IsActive": true,
+            //                 "question": {
+            //                     "id": question.id, "name": question.name, "text": question.text, "categoryName": question.categoryName,
+            //                     "variables": [{ "id": answerId, "name": answerName }]
+            //                 } 
+            //             }
+            //             project.projectTargetAudiences[i].qualifications.push(qualification)
+            //         }
+            //         else {
+            //             var qualVarIndex = project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.findIndex(x => x.id === answerId)
+            //             if(qualVarIndex < 0)
+            //             {
+            //                 project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.push({ "id": answerId, "name": answerName })
+            //             }
+            //             else {
+            //                 // We need to remove the item
+            //                 if(!isAddingNewElement)
+            //                 {
+            //                     if(project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.length === 1)
+            //                     {
+            //                         project.projectTargetAudiences[i].qualifications.splice(qualQuestionIndex, 1);
+            //                     }
+            //                     else
+            //                     {
+            //                         project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.splice(qualVarIndex, 1);
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+        },
+        saveQualificationDetailstoProject()
+        {
+            // Updating project Model
+            var LocalarrayToAddQualModel = this.arrayToAddQualModel
             var project = useProjectStore().project;
-            for (var i = 0; i < project.projectTargetAudiences.length; i++)
+            var flagvar = 0;
+            for (var j = 0; j < LocalarrayToAddQualModel.length; j++)
             {
-                if(project.projectTargetAudiences[i].id === this.currentTAId)
+                for (var i = 0; i < project.projectTargetAudiences.length; i++)
                 {
-                    var currentLength = project.projectTargetAudiences[i].qualifications.length;
-                    var qualQuestionIndex = project.projectTargetAudiences[i].qualifications.findIndex(x => x.question.id === question.id)
-                    if(qualQuestionIndex < 0)
+                    if(project.projectTargetAudiences[i].id === this.currentTAId)
                     {
-                        var qualification = {
-                            "id": currentLength + 1, "order": currentLength + 1, 
-                            "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
-                            "IsActive": true,
-                            "question": {
-                                "id": question.id, "name": question.name, "text": question.text, "categoryName": question.categoryName,
-                                "variables": [{ "id": answerId, "name": answerName }]
-                            } 
-                        }
-                        project.projectTargetAudiences[i].qualifications.push(qualification)
-                    }
-                    else {
-                        var qualVarIndex = project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.findIndex(x => x.id === answerId)
-                        if(qualVarIndex < 0)
+                        var currentLength = project.projectTargetAudiences[i].qualifications.length;
+                        var qualQuestionIndex = project.projectTargetAudiences[i].qualifications.findIndex(x => x.question.id === LocalarrayToAddQualModel[j].id)
+                        
+                        for (var k = 0; k < LocalarrayToAddQualModel[j].variables.length; k++)
                         {
-                            project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.push({ "id": answerId, "name": answerName })
-                        }
-                        else {
-                            // We need to remove the item
-                            if(!isAddingNewElement)
-                            {
-                                if(project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.length === 1)
+                            if(qualQuestionIndex < 0)
                                 {
-                                    project.projectTargetAudiences[i].qualifications.splice(qualQuestionIndex, 1);
+                                    if (LocalarrayToAddQualModel[j].variables[k].selected === true)
+                                        {
+                                            if (flagvar===1)
+                                            {
+                                                var qualQuestionIndex = project.projectTargetAudiences[i].qualifications.findIndex(x => x.question.id === LocalarrayToAddQualModel[j].id)
+                                                project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.push(this.arrayToAddQualModel[j].variables[k])
+                                             }
+                                            else
+                                            {
+                                                var qualification = {
+                                                    "id": currentLength + 1, "order": currentLength + 1, 
+                                                    "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
+                                                    "IsActive": true,
+                                                    "question": {
+                                                        "id":  LocalarrayToAddQualModel[j].id, "name": LocalarrayToAddQualModel[j].name, "text": LocalarrayToAddQualModel[j].text, "categoryName": LocalarrayToAddQualModel[j].categoryName,
+                                                        "variables": [{ "id": LocalarrayToAddQualModel[j].variables[k].id, "name": LocalarrayToAddQualModel[j].variables[k].name }]
+                                                    } 
+                                                }
+                                                flagvar = 1;
+                                                project.projectTargetAudiences[i].qualifications.push(qualification)
+                                            }
+                                        }
                                 }
-                                else
+                            else 
                                 {
-                                    project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.splice(qualVarIndex, 1);
+                                    var qualVarIndex = project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.findIndex(x => x.id === LocalarrayToAddQualModel[j].variables[k].id)
+                                    if(qualVarIndex <= 0)
+                                    {
+                                        // if (LocalarrayToAddQualModel[j].variables[k].selected === true)
+                                        // {
+                                        //     project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.push({ "id": LocalarrayToAddQualModel[j].variables[k].id, "name": LocalarrayToAddQualModel[j].variables[k].name })
+     
+
+                                        if (LocalarrayToAddQualModel[j].variables[k].selected === true)
+                                        {
+                                            if (flagvar===1)
+                                            {
+                                                 var qualQuestionIndex = project.projectTargetAudiences[i].qualifications.findIndex(x => x.qualifications.id === LocalarrayToAddQualModel[j].id)
+                                                project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.push(this.arrayToAddQualModel[j].variables[k])
+                                             }
+                                            else
+                                            {
+                                                var qualification = {
+                                                    "id": currentLength + 1, "order": currentLength + 1, 
+                                                    "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
+                                                    "IsActive": true,
+                                                    "question": {
+                                                        "id":  LocalarrayToAddQualModel[j].id, "name": LocalarrayToAddQualModel[j].name, "text": LocalarrayToAddQualModel[j].text, "categoryName": LocalarrayToAddQualModel[j].categoryName,
+                                                        "variables": [{ "id": LocalarrayToAddQualModel[j].variables[k].id, "name": LocalarrayToAddQualModel[j].variables[k].name }]
+                                                    } 
+                                                }
+                                                flagvar = 1;
+                                                project.projectTargetAudiences[i].qualifications.push(qualification)
+                                            }
+                                        }
+                                    }
+                                    else
+                                        {
+                                            // We need to remove the item
+                                            // if(!isAddingNewElement)
+                                            // {
+                                            //     if(project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.length === 1)
+                                            //     {
+                                            //         project.projectTargetAudiences[i].qualifications.splice(qualQuestionIndex, 1);
+                                            //     }
+                                            //     else
+                                            //     {
+                                            //         project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.splice(qualVarIndex, 1);
+                                            //     }
+                                            // }
+                                        }
                                 }
-                            }
                         }
                     }
                 }
+                flagvar = 0    
             }
+            this.arrayToAddQualModel=[];
         },
         UpdateQualLogOperation(taId, qid, ld)
         {
@@ -418,6 +531,12 @@ export const useQualificationStore = defineStore('qualification', {
                     }
                 }
             }
+        },
+        refreshQualPopup()
+        {
+            this.profCategories=[];
+            this.selectedCategory='';
+            this.categoryQAs=[];
         }
     }
 })

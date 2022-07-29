@@ -91,6 +91,9 @@
                 </div>
             </div>
         </div>
+        <br>
+        <button v-if="categoryQAs.length > 0" class="btn btn-outline-success me-2 projSettingTogButton" style="float: right" 
+                @click="useQualStore.saveQualificationDetailstoProject()">Save</button>
     </div>
 </template>
 <script setup>
