@@ -12,7 +12,7 @@
         @click="toggleCategory(category.id)" 
         type="button" 
         :id="'cat'+category.id" 
-        class="btn btn-outline-success btn-light me-2 projSettingTogButton col-md-2"
+        class="btn btn-outline-success btn-light me-2 projSettingTogButton"
         >{{ category.name }}</button>
     </div><br/>
     <div class='basicSetting'>
