@@ -2,15 +2,17 @@ import { defineStore } from "pinia";
 import { useProjectStore } from "./projectStore"; 
 export const useQuotaStore = defineStore('quota', {
     state: () => ({
+        selecteDiv:false,
         conditionlist:[],
+        selectedConditionName:"",
+        selectedConditionText:"",
+        selectedConditioncategoryName:"",
+        Selectedvariables:"",
+        selecttedconditions:[],
         currAgeRange: '',
         quotaMinAge: 0,
         quotaMaxAge:0,
         error: null,
-        showQuotaCondition:'',
-        quotaCountries:[],
-        quotaGenders:[],
-        showSubPopup: false,
         conditiongrid:false,
         iseUrl: import.meta.env.VITE_ISE_API_URL,
         iseCountryPath: import.meta.env.VITE_ISE_API_COUNTRIES,
@@ -53,167 +55,20 @@ export const useQuotaStore = defineStore('quota', {
                 quotaPercentage: 0,
                 quotaNominal: 0,
                 conditions: ["None", "Age", "Gender", "Country"],
-                showQuotaCondition:'',
-                quotaCountries:[],
                 quotaMinAge:0,
                 quotaMaxAge:0,
                 ServeyQuotaType:["Client","Control","Supplier"],
             };
-            this.showSubPopup = false;
         },
-        GetQuota(itemtype, taId, qid) {
-            if(itemtype === 'age')
-            {
-                this.GetQuotanAge(itemtype,taId, qid);
-                // var project = useProjectStore().project;
-                // for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                // {
-                //     var projectQuotas=project.projectTargetAudiences
-                //     if(project.projectTargetAudiences[i].id === taId)
-                //     {
-                //         for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
-                //         {
-                //             if(project.projectTargetAudiences[i].quota[j].id === qid)
-                //             {
-                //                 var variable = project.projectTargetAudiences[i].quota[j].condition.variables[0];
-                //                 this.currAgeRange = variable.name;
-                //                 break;
-                //             }
-                //         }
-                //     }
-               // }
-            }
-            if(itemtype === "country")
-            {
-                this.GetQuotaCountry(itemtype, taId, qid);
-                // if(this.quotaCountries.length === 0)
-                // {
-                //     var countriesList = [{"id":1,"name":"UK","selected":true},{"id":2,"name":"Sweden","selected":false},{"id":3,"name":"Germany","selected":false},{"id":4,"name":"Denmark","selected":false},{"id":5,"name":"Finland","selected":false},{"id":6,"name":"Norway","selected":false},{"id":9,"name":"Spain","selected":false},{"id":10,"name":"Italy","selected":false},{"id":11,"name":"Hungary","selected":false},{"id":12,"name":"Greece","selected":false},{"id":22,"name":"USA","selected":false}];
-                //     this.quotaCountries = countriesList;
-                // }
-            }
-            if(itemtype === "gender")
-            {
-                this.GetQuotaGender(itemtype, taId, qid);
-                // if(this.quotaGenders.length === 0)
-                // {
-                //     console.log('Call made to Gender API');
-                //     var gendersList = [{"id":1,"name":"Male","selected":true},{"id":2,"name":"Female","selected":true}];
-                //     this.quotaGenders = gendersList;
-                // }
-            }
-        },
-        async GetQuotaCountry(itemtype, taId, qid)
-        { 
-            if(this.quotaCountries.length === 0)
-                {
-                    console.log(itemtype + '--' + taId + '--' + qid);
-                    // var countriesList = [{"id":1,"name":"UK","selected":true},{"id":2,"name":"Sweden","selected":false},{"id":3,"name":"Germany","selected":false},{"id":4,"name":"Denmark","selected":false},{"id":5,"name":"Finland","selected":false},{"id":6,"name":"Norway","selected":false},{"id":9,"name":"Spain","selected":false},{"id":10,"name":"Italy","selected":false},{"id":11,"name":"Hungary","selected":false},{"id":12,"name":"Greece","selected":false},{"id":22,"name":"USA","selected":false}];
-                    // this.countries = countriesList;
-                    //this.countriesLoading = true
-                    try {
-                        this.quotaCountries = await fetch(this.iseUrl + this.iseCountryPath)
-                        .then((response) => response.json())
-                    } catch (error) {
-                        //this.countriesError = error
-                        return;
-                    } finally {
-                        this.countriesLoading = false
-                    }
-                }
-                // var currProjCountryIdList = [];
-                // var project = useProjectStore().project;
-                // for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                // {
-                //     if(project.projectTargetAudiences[i].id === taId)
-                //     {
-                //         for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                //         {
-                //             if(project.projectTargetAudiences[i].qualifications[j].id === qid)
-                //             {
-                //                 var currVar = project.projectTargetAudiences[i].qualifications[j].question.variables;
-                //                 for(var k = 0; k < currVar.length; k++)
-                //                     currProjCountryIdList.push(currVar[k].id);
-                //             }
-                //         }
-                //     }
-                // }
-                for (var i = 0; i < this.quotaCountries.length; i++)
-                {
-                    if(currProjCountryIdList.includes(this.quotaCountries[i].id))
-                        this.quotaCountries[i].selected = true;
-                    else 
-                        this.quotaCountries[i].selected = false;
-                }
-        },
-        async GetQuotanAge(itemtype, taId, qid)
-        {
-            console.log(itemtype + '--' + taId + '--' + qid);
-            var project = useProjectStore().project;
-            for (var i = 0; i < project.projectTargetAudiences.length; i++)
-            {
-                if(project.projectTargetAudiences[i].id === taId)
-                {
-                    for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                    {
-                        if(project.projectTargetAudiences[i].qualifications[j].id === qid)
-                        {
-                            var variable = project.projectTargetAudiences[i].qualifications[j].question.variables[0];
-                            this.currAgeRange = variable.name;
-                            var numberIndex = variable.name.indexOf(' - ');
-                            this.quotaMinAge = variable.name.substring(0, numberIndex);
-                            this.quotaMaxAge = variable.name.substring(numberIndex+3, variable.name.length);
-                            break;
-                        }
-                    }
-                }
-            }
-        },
-        async GetQuotaGender(itemtype, taId, qid)
-        {
-            if(this.quotaGenders.length === 0)
-            {
-                console.log('Call made to Gender API');
-                var gendersList = [{"id":1,"name":"Male","selected":false},{"id":2,"name":"Female","selected":false}];
-                this.quotaGenders = gendersList;
-            }
-        },
-        // async GetQandAForCategory(profCategory)
-        // {
-        //     var category = profCategory.name
-        //     this.selectedCategory = category;
-        //     this.profCategoriesLoading = true;
-
-        //     try {
-        //         var currIndex = this.profCategories.findIndex(x => x.name === category)
-        //         if(this.profCategories[currIndex].qas.length < 1)
-        //         {
-        //             var qas = await fetch(this.iseUrl + this.iseQAByCategoryPath + encodeURIComponent(category))
-        //             .then((response) => response.json())
-
-        //             for(var i =0; i < qas.length; i++)
-        //             {
-        //                 for(var j = 0; j< qas[i].variables.length; j++)
-        //                 {
-        //                     qas[i].variables[j].selected = false;
-        //                 }
-        //             }
-                    
-        //             this.profCategories[currIndex].qas = qas;
-        //         }
-
-        //         this.categoryQAs = this.profCategories[currIndex].qas;
-
-        //     } catch (error) {
-        //         this.profCategoriesError = error;
-        //     } finally {
-        //         this.profCategoriesLoading = false;
-        //     }
-        // },
-        serveyQuotaTyp(event){
+           serveyQuotaTyp(event){
             this.currentQuota.serveyQuotaTypeSelected = event.target.value;    
         },
         addCondition(){
+            this.selectedConditionName = "";
+            this.selectedConditionText ="";
+            this.selectedConditioncategoryName ="";
+            this.Selectedvariables = "";
+            this.selecteDiv =false;
             this.conditiongrid = true;
             this.conditionlist =[];
             var project = useProjectStore().project;
@@ -224,19 +79,38 @@ export const useQuotaStore = defineStore('quota', {
                         this.conditionlist.push(project.projectTargetAudiences[i].qualifications[j].question)
 
                     }
-
-
             }
 
         },
         selectQuotaCondition(event){
             console.log(event.target.value.toLowerCase());
-            this.GetQuota(event.target.value.toLowerCase())
-            this.showQuotaCondition = event.target.value.toLowerCase();
-            this.showSubPopup = true;
+            var  selectedConditionId = parseInt(event.target.value);
+            
+            var project = useProjectStore().project;
+            for (var i = 0; i < project.projectTargetAudiences.length; i++)
+            {
+                for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
+              
+                    {
+                        if( project.projectTargetAudiences[i].qualifications[j].question.id === selectedConditionId)
+                        {
+     
+                            this.selecttedQuestionid = project.projectTargetAudiences[i].qualifications[j].id
+                            this.selectedConditionName = project.projectTargetAudiences[i].qualifications[j].question.name
+                            this.selectedConditionText = project.projectTargetAudiences[i].qualifications[j].question.text
+                            this.selectedConditioncategoryName = project.projectTargetAudiences[i].qualifications[j].question.categoryName
+                            this.Selectedvariables = project.projectTargetAudiences[i].qualifications[j].question.variables;
+                            this.selecteDiv =true
+                            console.log(this.selecttedconditions)
+                        }
+                    }
+            }
             
         },
-        SaveQuota(itemtype, taId, quotaid){
+        async SaveQuotaToProject( selecttedQuestionid, selectedConditioncategoryName, selectedConditionName, selectedConditionText, id, name) {
+                console.log(selecttedQuestionid, selectedConditioncategoryName, selectedConditionName, selectedConditionText, id, name)
+        },
+        SaveQuota(taId, quotaid ,selecttedQuestionid, selectedConditioncategoryName, selectedConditionName, selectedConditionText, id, name){
             var project = useProjectStore().project;
             for (var i = 0; i < project.projectTargetAudiences.length; i++)
             {
@@ -262,10 +136,8 @@ export const useQuotaStore = defineStore('quota', {
                         "conditions":[]
                         };
                 }
-
                 if(itemtype === 'age')
-                {
-                    
+                {    
                     var condition = {
                         "id": 42,
                         "name": "Age",

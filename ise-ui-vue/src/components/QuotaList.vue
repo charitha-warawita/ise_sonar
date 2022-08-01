@@ -1,5 +1,4 @@
 <template>
- <!-- <p>ItemType: {{itemType}} ; TAId: {{ taId }} ; QID: {{ quotaid }} ; showQuotaCondition: {{ showQuotaCondition }}</p> -->
   <div class="container conditionscroll">
     <div class="row">
       <div class="col-md-6">
@@ -11,9 +10,6 @@
         <select v-model="key" @change="useQuotaDataStore.serveyQuotaTyp($event)" class="form-select" id="sel2" name="sellist1">
          <option v-bind:value=ServeyQuotaTypes v-for="ServeyQuotaTypes in useQuotaDataStore.currentQuota.ServeyQuotaType" :key="ServeyQuotaTypes">{{ServeyQuotaTypes}}</option>
          <label for="sel1" class="form-label">Select list (select one):</label>
-          <!-- <option>Client</option>
-          <option>Control</option>
-          <option>Supplier</option> -->
         </select>
       </div>
       <div class="col-md-6">
@@ -63,41 +59,14 @@
           <div class="col col-lg-3">
              <label for="input" class="form-label">Percentage(%)</label>
              <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.quotaPercentage" />
-          </div>
-          
+          </div>  
       </div>
       </div>
-   
-    
-      
-       <!-- <div class="col-md-6">
-        <label for="sel1" class="form-label">Select Condition</label>
-        <select
-          class="form-select"
-          id="sel1"
-          name="sellist1"
-          v-model="key"
-          @change="useQuotaDataStore.selectQuotaCondition($event)">
-          <option></option>
-        </select>
-      </div> -->
-      <!-- <div class="col-md-6">
-        <label for="sel1" class="form-label">Select Condition</label>
-        <select
-          class="form-select"
-          id="sel1"
-          name="sellist1"
-          v-model="key"
-          @change="useQuotaDataStore.selectQuotaCondition($event)">
-          <option v-bind:value=condition selected="[condition === 'None' ? 'selected' : '']"  v-for="condition in useQuotaDataStore.currentQuota.conditions" :key="condition">{{condition}}</option>
-        </select>
-      </div> -->
     </div>
   </div> 
     <div class="col-md-12 p-4">
       <button class="btn btn-outline-success searchButton" id="addQutobutton" v-on:click="useQuotaDataStore.addCondition">Add condition</button>  
     </div>
- 
   <fieldset class="col-md-12 border p-2 fieldsetstyle" v-show ="useQuotaDataStore.conditiongrid">
       <legend  class="float-none w-auto" style="font-size: 18px;">Condition</legend>
       <div class="container">
@@ -107,113 +76,38 @@
               </div>
               <div class="col-md-6">
                   <select class="form-select" id="sel1" name="sellist1" v-model="key" @change="useQuotaDataStore.selectQuotaCondition($event)">
-                  <option v-bind:value=condition.name v-for="condition in useQuotaDataStore.conditionlist" :key="condition.id">{{condition.categoryName}}-{{condition.name}}</option>
+                  <option v-bind:value=condition.id v-for="condition in useQuotaDataStore.conditionlist" :key="condition.id">{{condition.categoryName}}-{{condition.name}}</option>
               </select>
               </div>
           </div>
-<div v-if="useQuotaDataStore.showSubPopup">
-  <div class="container conditionbox" v-if="useQuotaDataStore.showQuotaCondition === 'country'">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card" style="margin-top: 5%">
-          <div div class="card-body">
-            <div class="col-md-12"><h5>Select countries</h5></div>
-            <div
-              style="display: inline-block"
-              v-for="item in useQuotaDataStore.quotaCountries"
-              :key="item.id"
-            >
-              <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="item.selected"
-                  :checked="item.selected"
-                  id="inlineCheckbox1"
-                  :value="item.id"
-                />
-                <label class="form-check-label" for="inlineCheckbox1">{{
-                  item.name
-                }}</label>
-              </div>
-            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container conditionbox" v-if="useQuotaDataStore.showQuotaCondition === 'age'">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card" style="margin-top: 5%">
-          <div div class="card-body">
-            <div class="col-md-12">
-              <h5>Current Age range is set to {{ currAgeRange }}. Enter new age range</h5>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">Min Age</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="inputEmail4"
-                  v-model="useQuotaDataStore.currentQuota.quotaMinAge"
-                />
+           <div class="card" style="margin-top: 5%;border: 1px solid #8f959b!important;" v-show="useQuotaDataStore.selecteDiv">
+              <div div class="card-body">
+                <div class="subDivQ row g-3">
+                  <div class="col-md-9">
+                  <label style="display:none">{{useQuotaDataStore.selecttedQuestionid}}</label>
+                      <div class="col-md-12"><b>{{useQuotaDataStore.selectedConditioncategoryName}}  {{useQuotaDataStore.selectedConditionName}}</b></div>
+                          <div class="col-md-12">{{useQuotaDataStore.selectedConditionText}}</div>
+                            <div class="col-md-12">
+                                <div style="display: inline-block">
+                                    <div class="form-check">
+                                      <button 
+                                        v-for="answer in useQuotaDataStore.Selectedvariables" 
+                                        :key="answer.id" 
+                                        type="button" 
+                                        :id="'answer'+answer.id" 
+                                        @click="useQuotaDataStore.SaveQuota(useQuotaDataStore.selecttedQuestionid,useQuotaDataStore.selectedConditioncategoryName,useQuotaDataStore.selectedConditionName,useQuotaDataStore.selectedConditionText, answer.id, answer.name)" 
+                                        class="btn btn-outline-success me-2 projSettingTogButton"
+                                        :class="[answer.selected ? 'searchButton' : 'btn-light']">
+                                        {{ answer.name }}</button>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                 </div>
               </div>
-              <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">Max Age</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="inputEmail4"
-                  v-model="useQuotaDataStore.currentQuota.quotaMaxAge"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container conditionbox" v-if="useQuotaDataStore.showQuotaCondition === 'gender'">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card" style="margin-top: 5%">
-          <div class="row">
-            <div div class="card-body">
-              <div class="col-md-12"><h5>Select genders</h5></div>
-              <div class="col-md-12">
-                <div
-                  style="display: inline-block"
-                  v-for="item in useQuotaDataStore.quotaGenders"
-                  :key="item.id"
-                >
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      v-model="item.selected"
-                      :checked="item.selected"
-                      id="inlineCheckbox1"
-                      :value="item.id"
-                    />
-                    <label class="form-check-label" for="inlineCheckbox1">{{
-                      item.name
-                    }}</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
-      </div>
-            
-  </fieldset>
-  
+           </div>
+  </fieldset> 
   <div class="col-md-12 p-4">
     <button
       class="btn btn-outline-success searchButton me-2"
