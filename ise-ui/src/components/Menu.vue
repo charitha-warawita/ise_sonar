@@ -6,7 +6,8 @@ import { ref, type Ref } from 'vue';
 const items: Ref<MenuItem[]> = ref([
     {
         label: 'Projects',
-        icon: 'pi pi-circle-fill'
+        icon: 'pi pi-circle-fill',
+        to: '/'
     },
     {
         label: 'Settings',
