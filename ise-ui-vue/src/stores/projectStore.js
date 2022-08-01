@@ -37,7 +37,7 @@ export const useProjectStore = defineStore('project', {
             for(var i = 0; i < this.project.projectTargetAudiences.length; i++) {
                 this.project.projectTargetAudiences[i].tempId = this.project.projectTargetAudiences[i].id ;
                 delete this.project.projectTargetAudiences[i].id;
-                for(var j = 0; this.project.projectTargetAudiences[i].qualifications.length; j++) {
+                for(var j = 0; j < this.project.projectTargetAudiences[i].qualifications.length; j++) {
                     this.project.projectTargetAudiences[i].qualifications[j].tempId = this.project.projectTargetAudiences[i].qualifications[j].id;
                     delete this.project.projectTargetAudiences[i].qualifications[j].id;
                 }
