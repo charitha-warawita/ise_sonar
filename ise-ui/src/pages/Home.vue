@@ -1,6 +1,5 @@
-<script setup lang="ts">
-import { subDays, format } from 'date-fns';
-import { ref, type Ref } from 'vue';
+<script async setup lang="ts">
+import { onMounted, ref, type Ref } from 'vue';
 
 import Panel from 'primevue/panel';
 import InputText from 'primevue/inputtext';
@@ -9,37 +8,25 @@ import ProjectsGrid from "../components/ProjectsGrid.vue";
 import PrimaryButton from '../components/buttons/PrimaryButton.vue';
 import CreateProjectModal from "@/components/modals/CreateProjectModal.vue";
 
+import type { Project } from '@/types/Project';
+import ProjectService from '@/services/ProjectService';
+
 const projectFilter: Ref<string|null> = ref(null);
-const projects = ref([
-    {
-        Id: "12345",
-        Name: "Something",
-        CreationDate: format(subDays(new Date(), 25), "dd/MM/yyyy"),
-        LastActivity: format(subDays(new Date(), 5), "dd/MM/yyyy - hh:mm aa"),    
-    },
-    {
-        Id: "12345",
-        Name: "Something",
-        CreationDate: format(subDays(new Date(), 25), "dd/MM/yyyy"),
-        LastActivity: format(subDays(new Date(), 5), "dd/MM/yyyy - hh:mm aa"),    
-    },
-    {
-        Id: "12345",
-        Name: "Something",
-        CreationDate: format(subDays(new Date(), 25), "dd/MM/yyyy"),
-        LastActivity: format(subDays(new Date(), 5), "dd/MM/yyyy - hh:mm aa"),    
-    }
-])
+const projects : Ref<Project[]> = ref([]);
 
-const filter = (e: Event) => {
-    console.log(projectFilter.value);
-
-    // API call to filter projects array.
-}
+onMounted(async () => {
+    projects.value = await ProjectService.GetProjectsAsync();
+})
 
 const visible: Ref<boolean> = ref(false);
 const showModal = () => {
     visible.value = true;
+}
+
+const ProjectCreated = (project: Project) => {
+    // TODO: Refresh grid.
+
+    projects.value.push(project);
 }
 
 </script>
@@ -49,7 +36,7 @@ const showModal = () => {
         <div class="home-top-row">
             <div style="flex-grow: 1;">
                 <span class="p-float-label">
-                    <InputText class="project-filter-input" id="search" type="text" v-model="projectFilter" @change="filter" />
+                    <InputText class="project-filter-input" id="search" type="text" v-model="projectFilter" />
                     <label class="project-filter-input-label" for="search">Search</label>
                 </span>
                 
@@ -71,7 +58,7 @@ const showModal = () => {
             </Panel>            
         </div>
     </div>
-    <CreateProjectModal v-model:visible="visible"/>
+    <CreateProjectModal v-model:visible="visible" @created="ProjectCreated" />
 </template>
 
 <style scoped>
