@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <!--<div>
         <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999);">Create Project</button>
         <CustomModal @close="toggleModal(999)" modalId='999'>
             <div class="card modal-content">
@@ -9,7 +9,7 @@
                 </div>
             </div>
         </CustomModal>
-    </div><hr/>
+    </div><hr/>-->
     <div>
         <ul class="nav nav-pills nav-fill border-bottom">
             <li class="nav-item">

@@ -10,9 +10,9 @@
             <li class="nav-item" v-show="activecontent">
               <RouterLink @click="activate(1)" :class="{ active : active_el == 1 }" class="nav-link" to="/" >Projects</RouterLink>
             </li>
-            <!--<li class="nav-item" v-show="activecontent">
+            <li class="nav-item" v-show="activecontent">
               <RouterLink @click="activate(2)" :class="{ active : active_el == 2 }" class="nav-link" to="/create">Create Projects</RouterLink>
-            </li>-->
+            </li>
             <li class="nav-item" v-show="activecontent">
               <RouterLink @click="activate(3)" :class="{ active : active_el == 3 }" class="nav-link" to="/about">About</RouterLink>
             </li>

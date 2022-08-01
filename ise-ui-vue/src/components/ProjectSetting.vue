@@ -4,7 +4,7 @@
     </div>
     <p v-if="loading">Loading categories.. </p>
     <p v-if="error"> {{ error.message }} </p>
-    <div v-if="categories" style="text-align: center">
+    <div v-if="categories">
     <!--<button> {{ category.name }} </button>-->
     <button 
         v-for="category in categories" 
@@ -54,9 +54,9 @@
             </div>
         </div>
     </div>
-    <RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" to="/confirm">Create Project</RouterLink>
+    <!--<RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" to="/confirm">Create Project</RouterLink>
     <RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" to="/confirm">Save as Draft</RouterLink>
-    <RouterLink class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" to="/">Cancel</RouterLink>
+    <RouterLink class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" to="/">Cancel</RouterLink>-->
                             
 </template>
 <script setup>
@@ -100,7 +100,6 @@ onMounted(() => {
 .projSettingTogButton {
     margin:2px 0 2px 0; 
     font-size:0.80em;
-    min-height: 50px;
 }
     
 </style>
