@@ -2,6 +2,8 @@
 import { reactive, computed } from 'vue';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
+import { useToast } from 'primevue/usetoast';
+
 import PrimaryButton from '../buttons/PrimaryButton.vue';
 
 // https://vuejs.org/guide/components/events.html#usage-with-v-model
@@ -28,8 +30,18 @@ const details : ProjectDetails = reactive({
     owner: null
 });
 
+const toast = useToast();
 const CreateProject = () => {
-    visible.value = false;
+    // API call to create modal.
+    
+    toast.add({
+        severity: "success",
+        summary: "New Project Created",
+        detail: "Successfully created a new project.",
+        life: 3000    
+    });
+
+    visible.value = false; 
 }
 
 </script>
@@ -58,11 +70,6 @@ const CreateProject = () => {
 </template>
 
 <style scoped>
-    /* .project-form {
-        display: flex;
-        flex-direction: column;
-    } */
-
     .project-form-inputs > * {
         margin: 25px 0;
     }

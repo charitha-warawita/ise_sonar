@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import Menu from '@/components/Menu.vue'
+import Toast from 'primevue/toast'
 
 </script>
 
@@ -11,6 +12,7 @@ import Menu from '@/components/Menu.vue'
 
   <main>
     <RouterView />
+    <Toast position="bottom-right" />
   </main>
 </template>
 
