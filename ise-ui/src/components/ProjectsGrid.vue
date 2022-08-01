@@ -3,14 +3,10 @@ import { format } from 'date-fns';
 import DataTable, { type DataTableRowSelectEvent } from 'primevue/datatable'
 import Column from 'primevue/column'
 
-const rowSelect = (e: DataTableRowSelectEvent) => {
-    console.log(e)
-}
-
 </script>
 
 <template>
-    <DataTable class="project-table" selection-mode="single" @row-select="rowSelect">
+    <DataTable class="project-table" selection-mode="single">
         <Column field="Id" header="Project Id"></Column>
         <Column field="Name" header="Project Name"></Column>
         <Column field="CreationDate" header="Creation Date">

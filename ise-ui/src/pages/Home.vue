@@ -1,8 +1,10 @@
 <script async setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import Panel from 'primevue/panel';
 import InputText from 'primevue/inputtext';
+import type { DataTableRowSelectEvent } from 'primevue/datatable';
 
 import ProjectsGrid from "../components/ProjectsGrid.vue";
 import PrimaryButton from '../components/buttons/PrimaryButton.vue';
@@ -10,6 +12,8 @@ import CreateProjectModal from "@/components/modals/CreateProjectModal.vue";
 
 import type { Project } from '@/types/Project';
 import ProjectService from '@/services/ProjectService';
+
+const router = useRouter();
 
 const projectFilter: Ref<string|null> = ref(null);
 const projects : Ref<Project[]> = ref([]);
@@ -25,8 +29,16 @@ const showModal = () => {
 
 const ProjectCreated = (project: Project) => {
     // TODO: Refresh grid.
-
     projects.value.push(project);
+}
+
+const ProjectSelected = (e: DataTableRowSelectEvent) => {
+    router.push({
+        name: 'project',
+        params: {
+            id: e.data.Id
+        }
+    });
 }
 
 </script>
@@ -54,7 +66,7 @@ const ProjectCreated = (project: Project) => {
                     </span>
                 </template>
 
-                <ProjectsGrid :value="projects" />
+                <ProjectsGrid :value="projects" @row-select="ProjectSelected" />
             </Panel>            
         </div>
     </div>
