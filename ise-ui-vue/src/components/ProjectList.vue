@@ -1,15 +1,15 @@
 <template>
-    <!--<div>
+    <div>
         <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999);">Create Project</button>
         <CustomModal @close="toggleModal(999)" modalId='999'>
             <div class="card modal-content">
                 <h3 class="card-header">Create Project</h3>
                 <div class="card-body">
-                    <ProjectSetting/>
+                    <ProjectSetting />
                 </div>
             </div>
         </CustomModal>
-    </div><hr/>-->
+    </div><hr/>
     <div>
         <ul class="nav nav-pills nav-fill border-bottom">
             <li class="nav-item">

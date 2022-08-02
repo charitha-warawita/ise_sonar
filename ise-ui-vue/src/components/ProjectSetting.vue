@@ -54,8 +54,9 @@
             </div>
         </div>
     </div>
-    <!--<RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" to="/confirm">Create Project</RouterLink>
-    <RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" to="/confirm">Save as Draft</RouterLink>
+    
+    <RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" to="/create">Create Project</RouterLink>
+    <!--<RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" to="/confirm">Save as Draft</RouterLink>
     <RouterLink class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" to="/">Cancel</RouterLink>-->
                             
 </template>
@@ -89,6 +90,7 @@ const toggleCategory = (id) => {
 onMounted(() => {
     // console.log('on mounted call');
     useProjSettingStore.$reset()
+    // useProjStore.$reset()
     useProjSettingStore.FetchCategories()
 })
 </script>

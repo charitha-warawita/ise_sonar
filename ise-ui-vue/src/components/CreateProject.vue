@@ -2,14 +2,17 @@
     <div class="container">
         <div class="row">
             <div class="col-8">
+                <p v-if="saveProjectLoading">Saving project settings.. </p>
+                <p v-if="!saveProjectLoading">The current project Id is {{project.id}} </p>
+                <p v-if="saveProjectError"> {{ saveProjectError.message }} </p>
                 <div class="accordion" id="accordionPanelsStayOpenExample">
                     <div class="accordion-item customItem">
                         <h2 class="accordion-header" id="panelsStayOpen-headingZero">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseZero" aria-expanded="true" aria-controls="panelsStayOpen-collapseZero">
+                        <button class="accordion-button" @click="useProjStore.GetProjectSetting(project.id)" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseZero" aria-expanded="true" aria-controls="panelsStayOpen-collapseZero">
                             <b>Project Settings</b>
                         </button>
                         </h2>
-                        <div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingZero">
+                        <div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingZero">
                             <div class="accordion-body">
                                 <ProjectSetting />
                             </div>
@@ -65,6 +68,7 @@
                             </div>
                         </div>
                     </div>-->
+                    <button class="btn btn-outline-success me-2 searchButton" v-on:click="useProjStore.AddTargetAudienceElement()">Add Target Audience</button><div><br/></div>
                     <div v-if="project.projectTargetAudiences" v-for="ta in project.projectTargetAudiences" :key="ta.id">
                         <div class="accordion-item customItem">
                             <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
@@ -298,7 +302,7 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.AddTargetAudienceElement()">Add another Target Audience</button>
+                    <!--<button class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.AddTargetAudienceElement()">Add another Target Audience</button>-->
                 </div>
             </div>
             </div>
@@ -367,7 +371,7 @@ defineProps(['open'])
 var useProjStore = useProjectStore()
 var useQualStore = useQualificationStore()
 var useQuotaDataStore = useQuotaStore()
-const { project, basicSettingDesc, totalCost } = storeToRefs(useProjStore)
+const { project, basicSettingDesc, totalCost, saveProjectLoading, saveProjectError } = storeToRefs(useProjStore)
 const modalActive = ref(false);
 const modalId = ref(0);
 var showmodal=false;
@@ -388,9 +392,9 @@ const toggleModal = (id) => {
 
 onMounted(() => {
     // console.log('on mounted call');
-    useProjStore.$reset()
+    // useProjStore.$reset()
     useQualStore.$reset()
-    useProjStore.AddTargetAudienceElement()
+    // useProjStore.AddTargetAudienceElement()
 })
 </script>
 <style>

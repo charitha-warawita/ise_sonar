@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-
 export const useProjectStore = defineStore('project', {
     state: () => ({
         basicSettingDesc:'',
@@ -22,29 +21,46 @@ export const useProjectStore = defineStore('project', {
             },
             "projectTargetAudiences": []
         },
+        saveProjectLoading: false,
+        saveProjectError: null,
         categories:[],
         loading: false,
-        error: null
+        error: null,
+
     }),
     getters: {
     },
     actions: {
-        CreateProject(project) {
-            this.project.tempId = this.project.id;
-            this.project.lastUpdate = new Date();
-            delete this.project.id;
+        async CreateProject(project) {
+            var currProject = this.project;
+            currProject.tempId = this.project.id;
+            currProject.lastUpdate = new Date();
+            delete currProject.id;
 
-            for(var i = 0; i < this.project.projectTargetAudiences.length; i++) {
-                this.project.projectTargetAudiences[i].tempId = this.project.projectTargetAudiences[i].id ;
-                delete this.project.projectTargetAudiences[i].id;
-                for(var j = 0; j < this.project.projectTargetAudiences[i].qualifications.length; j++) {
-                    this.project.projectTargetAudiences[i].qualifications[j].tempId = this.project.projectTargetAudiences[i].qualifications[j].id;
-                    delete this.project.projectTargetAudiences[i].qualifications[j].id;
-                }
+            this.saveProjectLoading = true;
+            var iseUrl = import.meta.env.VITE_ISE_API_URL;
+            var saveProjectPath = import.meta.env.VITE_ISE_API_SAVEPROJECT;
+            const settings = { 
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(currProject)
             }
-
-            this.project.targetAudiences = this.project.projectTargetAudiences 
-            delete this.project.projectTargetAudiences;
+            try {
+                var savedProject = await fetch((iseUrl + saveProjectPath), settings)
+                .then((response) => response.json());
+                project.id = savedProject.id;
+                project.lastUpdate = savedProject.lastUpdate;
+            } catch (error) {
+                this.saveProjectError = error;
+            } finally {
+                this.saveProjectLoading = false;
+            }
+        },
+        async GetProjectSetting(id) {
+            // alert('this is test');
         },
         AddTargetAudienceElement() {  
             var id = this.project.projectTargetAudiences.length;
