@@ -21,8 +21,10 @@ export const useQualificationStore = defineStore('qualification', {
         profCategoriesError: null,
         categoryQAs: [],
         selectedCategory: '',
+        saveQualificationError:'',
 
         arrayToAddQualModel:[],
+        popupFlagVar:true,
 
         onlinebanking:[],
         fieldofexperties:[],
@@ -394,100 +396,122 @@ export const useQualificationStore = defineStore('qualification', {
         saveQualificationDetailstoProject()
         {
             // Updating project Model
+           
             var LocalarrayToAddQualModel = this.arrayToAddQualModel
             var project = useProjectStore().project;
             var flagvar = 0;
-            for (var j = 0; j < LocalarrayToAddQualModel.length; j++)
-            {
-                for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                {
-                    if(project.projectTargetAudiences[i].id === this.currentTAId)
+            var currentQualQuesIndex=[];
+            try{
+                    for (var j = 0; j < LocalarrayToAddQualModel.length; j++)
                     {
-                        var currentLength = project.projectTargetAudiences[i].qualifications.length;
-                        var qualQuestionIndex = project.projectTargetAudiences[i].qualifications.findIndex(x => x.question.id === LocalarrayToAddQualModel[j].id)
-                        
-                        for (var k = 0; k < LocalarrayToAddQualModel[j].variables.length; k++)
+                        for (var i = 0; i < project.projectTargetAudiences.length; i++)
                         {
-                            if(qualQuestionIndex < 0)
+                            if(project.projectTargetAudiences[i].id === this.currentTAId)
+                            {
+                                var currentLength = project.projectTargetAudiences[i].qualifications.length;
+                                var qualQuestionIndex = project.projectTargetAudiences[i].qualifications.findIndex(x => x.question.id === LocalarrayToAddQualModel[j].id)
+                                
+                                for (var k = 0; k < LocalarrayToAddQualModel[j].variables.length; k++)
                                 {
-                                    if (LocalarrayToAddQualModel[j].variables[k].selected === true)
+                                    if(qualQuestionIndex < 0)
                                         {
-                                            if (flagvar===1)
-                                            {
-                                                var qualQuestionIndex = project.projectTargetAudiences[i].qualifications.findIndex(x => x.question.id === LocalarrayToAddQualModel[j].id)
-                                                project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.push(this.arrayToAddQualModel[j].variables[k])
-                                             }
-                                            else
-                                            {
-                                                var qualification = {
-                                                    "id": currentLength + 1, "order": currentLength + 1, 
-                                                    "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
-                                                    "IsActive": true,
-                                                    "question": {
-                                                        "id":  LocalarrayToAddQualModel[j].id, "name": LocalarrayToAddQualModel[j].name, "text": LocalarrayToAddQualModel[j].text, "categoryName": LocalarrayToAddQualModel[j].categoryName,
-                                                        "variables": [{ "id": LocalarrayToAddQualModel[j].variables[k].id, "name": LocalarrayToAddQualModel[j].variables[k].name }]
-                                                    } 
+                                            // freshly adding the questions
+                                            if (LocalarrayToAddQualModel[j].variables[k].selected === true)
+                                                {
+                                                    if (flagvar===1)
+                                                    {
+                                                        //if questions has more that one options/variables
+                                                        var qualQuestionIndex2 = project.projectTargetAudiences[i].qualifications.findIndex(x => x.question.id === LocalarrayToAddQualModel[j].id)
+                                                        project.projectTargetAudiences[i].qualifications[qualQuestionIndex2].question.variables.push(this.arrayToAddQualModel[j].variables[k])
+                                                    }
+                                                    else
+                                                    {
+                                                        //freshly adding question with first option/variable
+                                                        var qualification = {
+                                                            "id": currentLength + 1, "order": currentLength + 1, 
+                                                            "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
+                                                            "IsActive": true,
+                                                            "question": {
+                                                                "id":  LocalarrayToAddQualModel[j].id, "name": LocalarrayToAddQualModel[j].name, "text": LocalarrayToAddQualModel[j].text, "categoryName": LocalarrayToAddQualModel[j].categoryName,
+                                                                "variables": [{ "id": LocalarrayToAddQualModel[j].variables[k].id, "name": LocalarrayToAddQualModel[j].variables[k].name }]
+                                                            } 
+                                                        }
+                                                        flagvar = 1;// if flagvar = 1 then if question have more options it should be loaded in same question id
+                                                        project.projectTargetAudiences[i].qualifications.push(qualification)
+                                                    }
                                                 }
-                                                flagvar = 1;
-                                                project.projectTargetAudiences[i].qualifications.push(qualification)
+                                        }
+                                    else 
+                                        {
+                                           // var qualVarIndex = project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.findIndex(x => x.id === LocalarrayToAddQualModel[j].variables[k].id)
+                                        // for Adding the Questions which is already added as qualification before.
+                                           if(LocalarrayToAddQualModel[j].variables[k].selected === true)
+                                            {
+                                                if (LocalarrayToAddQualModel[j].variables[k].selected === true)
+                                                {
+                                                    if (flagvar===1)
+                                                    {
+                                                        // var qualQuestionIndex3 = project.projectTargetAudiences[i].qualifications.findIndex(x => x.qualifications.id === currentQualQuesIndex.id)
+                                                        // project.projectTargetAudiences[i].qualifications[qualQuestionIndex3].question.variables.push(this.arrayToAddQualModel[j].variables[k])
+                                                        // currentQualQuesIndex.push(this.arrayToAddQualModel[j].variables[k])
+                                                    }
+                                                    else
+                                                    {
+                                                        //freshly adding already present Qualification
+                                                        var qualification = {
+                                                            "id": currentLength + 1, "order": currentLength + 1, 
+                                                            "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
+                                                            "IsActive": true,
+                                                            "question": {
+                                                                "id":  LocalarrayToAddQualModel[j].id, "name": LocalarrayToAddQualModel[j].name, "text": LocalarrayToAddQualModel[j].text, "categoryName": LocalarrayToAddQualModel[j].categoryName,
+                                                                "variables": [{ "id": LocalarrayToAddQualModel[j].variables[k].id, "name": LocalarrayToAddQualModel[j].variables[k].name }]
+                                                            } 
+                                                        }
+                                                        flagvar = 1;
+                                                        //checking if newly added question (which is already present) has more options if yes adding options/variables to "id": currentLength + 1 
+                                                        if (LocalarrayToAddQualModel[j].variables.length >0)
+                                                        {
+                                                            for (var k = qualification.question.variables.length; k < LocalarrayToAddQualModel[j].variables.length; k++)
+                                                            {
+                                                                if (LocalarrayToAddQualModel[j].variables[k].selected === true)
+                                                                qualification.question.variables.push(this.arrayToAddQualModel[j].variables[k]);
+                                                            } 
+                                                        }
+                                                        //final push of newly added question
+                                                        project.projectTargetAudiences[i].qualifications.push(qualification)
+                                                    }
+                                                }
                                             }
+                                            else
+                                                {
+                                                    // We need to remove the item
+                                                    // if(!isAddingNewElement)
+                                                    // {
+                                                    //     if(project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.length === 1)
+                                                    //     {
+                                                    //         project.projectTargetAudiences[i].qualifications.splice(qualQuestionIndex, 1);
+                                                    //     }
+                                                    //     else
+                                                    //     {
+                                                    //         project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.splice(qualVarIndex, 1);
+                                                    //     }
+                                                    // }
+                                                }
                                         }
                                 }
-                            else 
-                                {
-                                    var qualVarIndex = project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.findIndex(x => x.id === LocalarrayToAddQualModel[j].variables[k].id)
-                                    if(qualVarIndex <= 0)
-                                    {
-                                        // if (LocalarrayToAddQualModel[j].variables[k].selected === true)
-                                        // {
-                                        //     project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.push({ "id": LocalarrayToAddQualModel[j].variables[k].id, "name": LocalarrayToAddQualModel[j].variables[k].name })
-     
-
-                                        if (LocalarrayToAddQualModel[j].variables[k].selected === true)
-                                        {
-                                            if (flagvar===1)
-                                            {
-                                                 var qualQuestionIndex = project.projectTargetAudiences[i].qualifications.findIndex(x => x.qualifications.id === LocalarrayToAddQualModel[j].id)
-                                                project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.push(this.arrayToAddQualModel[j].variables[k])
-                                             }
-                                            else
-                                            {
-                                                var qualification = {
-                                                    "id": currentLength + 1, "order": currentLength + 1, 
-                                                    "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
-                                                    "IsActive": true,
-                                                    "question": {
-                                                        "id":  LocalarrayToAddQualModel[j].id, "name": LocalarrayToAddQualModel[j].name, "text": LocalarrayToAddQualModel[j].text, "categoryName": LocalarrayToAddQualModel[j].categoryName,
-                                                        "variables": [{ "id": LocalarrayToAddQualModel[j].variables[k].id, "name": LocalarrayToAddQualModel[j].variables[k].name }]
-                                                    } 
-                                                }
-                                                flagvar = 1;
-                                                project.projectTargetAudiences[i].qualifications.push(qualification)
-                                            }
-                                        }
-                                    }
-                                    else
-                                        {
-                                            // We need to remove the item
-                                            // if(!isAddingNewElement)
-                                            // {
-                                            //     if(project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.length === 1)
-                                            //     {
-                                            //         project.projectTargetAudiences[i].qualifications.splice(qualQuestionIndex, 1);
-                                            //     }
-                                            //     else
-                                            //     {
-                                            //         project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.splice(qualVarIndex, 1);
-                                            //     }
-                                            // }
-                                        }
-                                }
+                            }
                         }
+                        flagvar = 0    
                     }
+                    this.arrayToAddQualModel=[];
                 }
-                flagvar = 0    
-            }
-            this.arrayToAddQualModel=[];
+                catch (error) 
+                {
+                    this.saveQualificationError = error
+                }finally {
+                    this.popupFlagVar = false;
+                   this.arrayToAddQualModel=[];
+                }
         },
         UpdateQualLogOperation(taId, qid, ld)
         {
@@ -534,9 +558,9 @@ export const useQualificationStore = defineStore('qualification', {
         },
         refreshQualPopup()
         {
-            this.profCategories=[];
             this.selectedCategory='';
             this.categoryQAs=[];
+            this.profCategories=[];
         }
     }
 })
