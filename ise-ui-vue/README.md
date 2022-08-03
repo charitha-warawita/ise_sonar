@@ -22,6 +22,18 @@ npm install
 npm run dev
 ```
 
+### Compile and Minify for QAT/Test
+
+```sh
+npm run build:test
+```
+
+### Compile and Minify for UAT/Staging
+
+```sh
+npm run build:staging
+```
+
 ### Compile and Minify for Production
 
 ```sh
