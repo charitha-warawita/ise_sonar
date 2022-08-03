@@ -1,26 +1,44 @@
 <script setup lang="ts">
 import type TargetAudience from '@/model/TargetAudience.js';
 import DataView from 'primevue/dataview';
+import { computed, ref } from 'vue';
 import PrimaryButton from '../../buttons/PrimaryButton.vue';
+import CreateTargetAudienceModal from '@/components/modals/CreateTargetAudienceModal.vue';
 
 const props = defineProps({
-	targetAudience: {
+	targetAudiences: {
 		type: Array<TargetAudience>,
 		required: true,
 	},
 });
 
 const emits = defineEmits<{
-	(event: 'add'): void;
-	(event: 'edit', target: TargetAudience): void;
+	(event: 'update:targetAudience', data: Array<TargetAudience>): void;
 }>();
+
+const audiences = computed({
+	get: () => props.targetAudiences,
+	set: (value) => emits('update:targetAudience', value),
+});
+
+const isModalVisible = ref(false);
+const OpenTargetAudienceModal = () => {
+	isModalVisible.value = true;
+};
+
+const AddTargetAudience = (ta: TargetAudience) => {
+	audiences.value.push(ta);
+};
+
+const EditTargetAudience = (ta: TargetAudience) => {
+	console.log(ta.Name);
+};
 </script>
 
 <template>
-	<!-- This Data View needs styling, consistent with figma UI.  -->
 	<DataView
 		layout="list"
-		:value="props.targetAudience"
+		:value="audiences"
 		data-key="Id"
 		paginator
 		:always-show-paginator="false"
@@ -30,8 +48,8 @@ const emits = defineEmits<{
 		<template #header>
 			<div class="target-audience-list-header">
 				<div class="target-audience-list-title">Target Audiences</div>
-				<div v-if="props.targetAudience?.length">
-					<PrimaryButton icon="pi pi-plus" @click="emits('add')" />
+				<div v-if="audiences.length">
+					<PrimaryButton icon="pi pi-plus" @click="OpenTargetAudienceModal" />
 				</div>
 			</div>
 		</template>
@@ -51,7 +69,7 @@ const emits = defineEmits<{
 				</div>
 
 				<div class="target-audience-buttons">
-					<i class="pi pi-pencil" @click="emits('edit', slot.data)"></i>
+					<i class="pi pi-pencil" @click="EditTargetAudience(slot.data)"></i>
 				</div>
 			</div>
 		</template>
@@ -62,12 +80,13 @@ const emits = defineEmits<{
 					<p>Please create at least on target group to create the project</p>
 
 					<div style="max-width: 250px; margin: 20px auto">
-						<PrimaryButton square label="Create Target Audience" @click="emits('add')" />
+						<PrimaryButton square label="Create Target Audience" @click="OpenTargetAudienceModal" />
 					</div>
 				</div>
 			</div>
 		</template>
 	</DataView>
+	<CreateTargetAudienceModal v-model:visible="isModalVisible" @created="AddTargetAudience" />
 </template>
 
 <style scoped>

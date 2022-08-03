@@ -4,8 +4,6 @@ import { useRoute } from 'vue-router';
 import Pricing from '../components/pages/project/Pricing.vue';
 import ProjectOverview from '../components/pages/project/ProjectOverview.vue';
 import Project from '@/model/Project';
-import CreateTargetAudienceModal from '../components/modals/CreateTargetAudienceModal.vue';
-import type TargetAudience from '@/model/TargetAudience';
 import TargetAudienceList from '../components/pages/project/TargetAudienceList.vue';
 
 const route = useRoute();
@@ -21,24 +19,8 @@ onMounted(async () => {
 
 	project.value = p;
 });
-
-const visible = ref(false);
-const CreateTargetAudience = () => {
-	visible.value = true;
-};
-
-const AddTargetAudience = (ta: TargetAudience) => {
-	if (project.value == null) return;
-
-	project.value.TargetAudiences.push(ta);
-};
-
-const EditTargetAudience = (ta: TargetAudience) => {
-	console.log(ta.Name);
-};
 </script>
 
-<!-- TODO: Extract Target Audience elements, logic and Modal into sepearte component -->
 <template>
 	<div class="project-container">
 		<div class="overview">
@@ -48,12 +30,7 @@ const EditTargetAudience = (ta: TargetAudience) => {
 		<div class="project-details">
 			<div class="configuration-container">
 				<div>
-					<TargetAudienceList
-						v-if="project"
-						:target-audience="project?.TargetAudiences"
-						@add="CreateTargetAudience"
-						@edit="EditTargetAudience"
-					/>
+					<TargetAudienceList v-if="project" v-model:target-audiences="project.TargetAudiences" />
 				</div>
 			</div>
 
@@ -62,7 +39,6 @@ const EditTargetAudience = (ta: TargetAudience) => {
 			</div>
 		</div>
 	</div>
-	<CreateTargetAudienceModal v-model:visible="visible" @created="AddTargetAudience" />
 </template>
 
 <style scoped>
