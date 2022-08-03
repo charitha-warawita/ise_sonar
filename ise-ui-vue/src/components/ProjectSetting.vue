@@ -14,7 +14,46 @@
         :id="'cat'+category.id" 
         class="btn btn-outline-success btn-light me-2 projSettingTogButton"
         >{{ category.name }}</button>
+    </div><br/>
+    <div class='basicSetting'>
+        <div class="row g-3">
+            <div class="col-md-12">
+                Complete this information to provide suppiers with basic information of your survey
+            </div>
+            <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">Name</label>
+                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.name">
+            </div>
+            <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">Maconomy Reference</label>
+                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.reference">
+            </div>
+            <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">User</label>
+                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.user.name">
+            </div>
+            <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">User Email</label>
+                <input type="email" class="form-control" id="inputEmail4" v-model="useProjStore.project.user.email">
+            </div>
+            <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="inputEmail4" v-model="useProjStore.project.startDate">
+            </div>
+            <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">Fielding Period</label>
+                <input type="number" class="form-control" id="inputEmail4" v-model="useProjStore.project.fieldingPeriod">
+            </div>
+            <div class="col-md-12">
+                <label for="inputEmail4" class="form-label">Testing URL</label>
+                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.testingUrl">
+            </div>
+            <div class="col-md-12">
+                <label for="inputEmail4" class="form-label">Live URL</label>
+                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.liveUrl">
+            </div>
         </div>
+    </div>                  
 </template>
 <script setup>
 import {useProjectSettingStore} from '@/stores/projectSettingStore'
@@ -23,27 +62,25 @@ import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
 
 var useProjSettingStore = useProjectSettingStore()
-
+var useProjStore = useProjectStore();
 const { categories, loading, error } = storeToRefs(useProjSettingStore)
 
 const toggleCategory = (id) => {
-    var project = useProjectStore().project;
     var catId = 'cat'+ id;
     var element = document.getElementById(catId);
     var tempClass = element.className;
     if(tempClass.includes('btn-light')) {
-        project.categories.push(id);
+        useProjStore.project.categories.push(id);
         element.className = tempClass.replace('btn-light', 'searchButton');
     }
     else {
         var currIndex = project.categories.indexOf(id);
-        if(currIndex !== -1) project.categories.splice(currIndex, 1);
+        if(currIndex !== -1) useProjStore.project.categories.splice(currIndex, 1);
         element.className = tempClass.replace('searchButton', 'btn-light');;
     }
 };
 
 onMounted(() => {
-    // console.log('on mounted call');
     useProjSettingStore.$reset()
     useProjSettingStore.FetchCategories()
 })

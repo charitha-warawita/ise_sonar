@@ -1,6 +1,5 @@
 using IntelligentSampleEnginePOC.API;
 using IntelligentSampleEnginePOC.API.Core.Data;
-using IntelligentSampleEnginePOC.API.Core.DB;
 using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
 using IntelligentSampleEnginePOC.API.Core.Services;
@@ -13,10 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddControllers();
-builder.Services.AddTransient<IProjectService, ProjectService>();
-builder.Services.AddTransient<IReferenceContext, ReferenceContext>();
+
 builder.Services.AddTransient<IProjectReferenceService, ProjectReferenceService>();
-builder.Services.AddDbContext<ISEdbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("iseDb")));
+builder.Services.AddTransient<IReferenceContext, ReferenceContext>();
+
+builder.Services.AddTransient<IProjectService, ProjectService>();
+builder.Services.AddTransient<IProjectContext, ProjectContext>();
+
+builder.Services.AddTransient<ITargetAudienceService, TargetAudienceService>();
+builder.Services.AddTransient<ITargetAudienceContext, TargetAudienceContext>();
+
 builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("ConnectionStrings"));
 
 var cintApiSettings = builder.Configuration.GetSection("CintApiSettings");

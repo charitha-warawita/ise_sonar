@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
 {
     public class User
     {
-        public Guid Id { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public long Id { get; set; }
+        [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
+        [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
 
     }

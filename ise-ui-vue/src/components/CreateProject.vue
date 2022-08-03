@@ -15,56 +15,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item customItem">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                            <b>Basic Settings</b>
-                        </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                            <div class="accordion-body">
-                                <div class='basicSetting'>
-                                    <div class="row g-3">
-                                        <div class="col-md-12">
-                                            Complete this information to provide suppiers with basic information of your survey
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="inputEmail4" class="form-label">Name</label>
-                                            <input type="text" class="form-control" id="inputEmail4" v-model="project.name">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="inputEmail4" class="form-label">Maconomy Reference</label>
-                                            <input type="text" class="form-control" id="inputEmail4" v-model="project.reference">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="inputEmail4" class="form-label">User</label>
-                                            <input type="text" class="form-control" id="inputEmail4" v-model="project.user.name">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="inputEmail4" class="form-label">User Email</label>
-                                            <input type="email" class="form-control" id="inputEmail4" v-model="project.user.email">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="inputEmail4" class="form-label">Start Date</label>
-                                            <input type="date" class="form-control" id="inputEmail4" v-model="project.startDate">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="inputEmail4" class="form-label">Fielding Period</label>
-                                            <input type="number" class="form-control" id="inputEmail4" v-model="project.fieldingPeriod">
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label for="inputEmail4" class="form-label">Testing URL</label>
-                                            <input type="number" class="form-control" id="inputEmail4" v-model="project.testingUrl">
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label for="inputEmail4" class="form-label">Live URL</label>
-                                            <input type="number" class="form-control" id="inputEmail4" v-model="project.liveUrl">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div v-if="project.projectTargetAudiences" v-for="ta in project.projectTargetAudiences" :key="ta.id">
                         <div class="accordion-item customItem">
                             <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
@@ -98,7 +48,7 @@
                                             <label for="inputEmail4" class="form-label">Wanted Completes Count</label>
                                             <input type="number" class="form-control" id="inputEmail4" v-model="ta.wantedCompletes">
                                         </div>
-                                        <div class="accordion-item-custom" v-if="ta.qualifications.length > 0">
+                                        <div class="accordion-item-custom">
                                             <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseThree-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
                                                     <b>Qualification</b>
@@ -149,7 +99,7 @@
                                                         <hr/>
                                                     </div>
                                                     <div class="col-md-12">
-                                                        <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999); useQualStore.GetProfileCategories(ta.id)">Add/Remove Profiling Variables</button>
+                                                        <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999); useQualStore.GetProfileCategories(ta.id)">Add Qualification</button>
                                                         <CustomModal @close="toggleModal(999)" modalId='999'>
                                                             <div class="card modal-content">
                                                                 <h3 class="card-header">Qualifications</h3>
@@ -171,20 +121,63 @@
                                             <div :id="'panelsStayOpen-collapseFour-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
                                                 <div class="accordion-body">
                                                  <div class="container">
-                                                 <div class="subDivQ row g-3" v-if="ta.quota" v-for="quota in ta.quota" :key="quota.id">
-                                                    <div class="col-md-9">
-                                                         <div class="col-md-12"><b>{{quota.conditions.categoryName}} - {{quota.conditions.name}}</b></div>
-                                                            <div class="col-md-12">{{quota.conditions.text}}</div>
-                                                            <div class="col-md-12">
-                                                                <div style="display: inline-block"  v-for="(item) in quota.conditions.variables" :key="item.id">
-                                                                    <div class="form-check">
-                                                                    <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px"><i>{{item.name}}</i></label>
+                                                 <div class="subDivQ" v-if="ta.quotas.length > 0" >
+                                                    <div v-for="item in ta.quotas" >
+                                                        <div class="row">
+                                                            <div class="col-md-2"><h6>Name</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            <label for="inputEmail4" class="form-label">{{item.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-2"><h6>FieldTarget</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            <label for="inputEmail4" class="form-label">{{item.fieldTarget}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-2"><h6>Completes</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            <label for="inputEmail4" class="form-label">{{item.completes}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-2"><h6>Prescreence</h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            <label for="inputEmail4" class="form-label">{{item.prescreence}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="subDivQ1" v-if="item.conditions.length > 0">
+                                                            <div v-for="subItem in item.conditions">
+                                                                <div class="col-md-12" v-if="subItem.name === 'Country'"><b>Selected Condition :</b>
+                                                                    <div><h6>countries</h6>
+                                                                        <div style="display: inline-block" v-for="variable in subItem.variables" :key="variable.id">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <label class="form-check-label" for="inlineCheckbox1">{{variable.name}}</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                <div>
+                                                                <div class="col-md-12" v-if="subItem.name === 'Age'">
+                                                                    <div><h6>Gender</h6>
+                                                                        <div style="display: inline-block" v-for="varible in subItem.variables" :key="variable.id">
+                                                                                <div class="form-check form-check-inline">
+                                                                                    <label class="form-check-label" for="inlineCheckbox1">{{variable.name}}</label>
+                                                                                </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            </div>
+                                                        </div>
+                                                        <a @click="toggleModal();" class="link-primary">Edit</a> |
+                                                        <a @click="" class="link-danger">Delete</a>
+                                                        <hr/>
                                                     </div>
-                                                 <hr/>
-                                                 </div>
                                                 </div>
                                                     <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ (ta.quota.length+1))">Add Quota</button>  
                                                         <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
@@ -276,9 +269,7 @@
                         <div class="col-md-12">
                             <label for="inputEmail4" class="form-label" style="margin: auto"><h4>Total: {{totalCost}} USD</h4></label>
                         </div>
-                        <!--<div class="col-md-6">
-                            <label for="inputEmail4" class="form-label"><h4>{{totalCost}} USD</h4></label>
-                        </div>--><div class="breakDiv"></div><hr>
+                       <div class="breakDiv"></div><hr>
                         <div class="col-md-12">
                             <RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" to="/confirm">Create Project</RouterLink>
                             <RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" to="/confirm">Save as Draft</RouterLink>
@@ -304,15 +295,13 @@ import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
 import {ref} from "vue"
 
-defineProps(['open'])
-
 var useProjStore = useProjectStore()
 var useQualStore = useQualificationStore()
 var useQuotaDataStore = useQuotaStore()
-const { project, basicSettingDesc, totalCost } = storeToRefs(useProjStore)
-const modalActive = ref(false);
-const modalId = ref(0);
-var showmodal=false;
+const { project, basicSettingDesc, totalCost, saveProjectLoading, saveProjectError } = storeToRefs(useProjStore)
+// const modalActive = ref(false);
+// const modalId = ref(0);
+// var showmodal=false;
 const toggleModal = (id) => {
     useQuotaDataStore.conditiongrid = false;
     console.log('customModal id or qId is:' + id);

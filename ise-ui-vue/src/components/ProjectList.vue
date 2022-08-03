@@ -32,6 +32,9 @@ import ProjectModel from '@/models/projectModel.js'
 import {ref} from "vue"
 import { onMounted } from 'vue'
 
+import CustomModal from '@/components/CustomModal.vue'
+import ProjectSetting from '@/components/ProjectSetting.vue'
+
 // console.log(storeToRefs(useProjectStore()).projects);
 var useProjStore = useProjectsStore()
 const { projects, searchByName, searchByStartDate, currentProjects, currentStatus, getDraftProjects } = storeToRefs(useProjStore)

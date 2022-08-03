@@ -6,7 +6,7 @@ export const useQualificationStore = defineStore('qualification', {
         currentTAId: 0,
         currentQAId: 0,
         
-        currAgeRange: '',
+        /*currAgeRange: '',
         minAge: 0,
         maxAge: 0,
 
@@ -14,7 +14,7 @@ export const useQualificationStore = defineStore('qualification', {
         countriesLoading: false,
         countriesError: null,
 
-        genders: [],
+        genders: [],*/
 
         profCategories: [],
         profCategoriesLoading: false,
@@ -44,7 +44,7 @@ export const useQualificationStore = defineStore('qualification', {
 
     },
     actions: {
-        async GetQualification(itemtype, taId, qid) {
+        /*async GetQualification(itemtype, taId, qid) {
             if(itemtype === 'age' )
             {
                 this.GetQualificationAge(itemtype,taId, qid);
@@ -221,7 +221,7 @@ export const useQualificationStore = defineStore('qualification', {
                     }
                 }
             }
-        },
+        },*/
         async GetProfileCategories(taId)
         {
             this.currentTAId = taId;

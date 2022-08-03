@@ -312,26 +312,5 @@ export const useProjectsStore = defineStore('projects', {
             
             this.currentProjects = curr;
         }
-        /*getProjectByStatus(status) {
-            if(status === 'All') {
-                return this.projects;
-            } else {
-                return this.projects.filter(project => project.status === status);
-            }
-            
-            // promise not required at this point of time
-            var result = new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    var currProj = [];
-                    if(status === -1) {
-                        currProj = this.projects;
-                    } else {
-                        currProj = this.projects.filter(project => project.status === status);
-                    } 
-                    resolve(currProj)
-                }, 1);
-            });
-            return result;
-        },*/
     }
 })
