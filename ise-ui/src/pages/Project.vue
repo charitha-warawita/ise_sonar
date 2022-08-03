@@ -8,13 +8,12 @@ import TargetAudienceList from '../components/pages/project/TargetAudienceList.v
 
 const route = useRoute();
 const project: Ref<Project | null> = ref(null);
+const id = Number.parseInt(route.params.id as string);
 
 onMounted(async () => {
-	const id = route.params.id as string;
-
 	// TODO: Move to project service.
 	const p = new Project();
-	p.Id = Number.parseInt(id);
+	p.Id = id;
 	p.Name = 'My Project';
 
 	project.value = p;
@@ -30,7 +29,11 @@ onMounted(async () => {
 		<div class="project-details">
 			<div class="configuration-container">
 				<div>
-					<TargetAudienceList v-if="project" v-model:target-audiences="project.TargetAudiences" />
+					<TargetAudienceList
+						v-if="project"
+						v-model:target-audiences="project.TargetAudiences"
+						:project-id="id"
+					/>
 				</div>
 			</div>
 

@@ -4,10 +4,16 @@ import DataView from 'primevue/dataview';
 import { computed, ref } from 'vue';
 import PrimaryButton from '../../buttons/PrimaryButton.vue';
 import CreateTargetAudienceModal from '@/components/modals/CreateTargetAudienceModal.vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const props = defineProps({
 	targetAudiences: {
 		type: Array<TargetAudience>,
+		required: true,
+	},
+	projectId: {
+		type: Number,
 		required: true,
 	},
 });
@@ -27,11 +33,19 @@ const OpenTargetAudienceModal = () => {
 };
 
 const AddTargetAudience = (ta: TargetAudience) => {
+	// TODO: Make API call to persist the Target Audience.
+
 	audiences.value.push(ta);
 };
 
 const EditTargetAudience = (ta: TargetAudience) => {
-	console.log(ta.Name);
+	router.push({
+		name: 'target-audience',
+		params: {
+			project: props.projectId,
+			ta: ta.Id,
+		},
+	});
 };
 </script>
 
