@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import Menubar from 'primevue/menubar';
 import type { MenuItem } from 'primevue/menuitem';
+import Breadcrumb from 'primevue/breadcrumb';
 import { ref, type Ref } from 'vue';
+import { useBreadcrumbStore } from '@/stores/BreadcrumbStore.js';
 
+const breadcrumbs = useBreadcrumbStore();
 const items: Ref<MenuItem[]> = ref([
 	{
 		label: 'Projects',
@@ -21,11 +24,17 @@ const items: Ref<MenuItem[]> = ref([
 </script>
 
 <template>
-	<Menubar :model="items">
-		<template #start>
-			<h2>ISE</h2>
-		</template>
-	</Menubar>
+	<div class="top-nav-container shadowed">
+		<Menubar :model="items">
+			<template #start>
+				<h2>ISE</h2>
+			</template>
+		</Menubar>
+
+		<div v-if="breadcrumbs.items.length > 0">
+			<Breadcrumb :model="breadcrumbs.items" :home="breadcrumbs.home" />
+		</div>
+	</div>
 </template>
 
 <style scoped>
@@ -33,8 +42,19 @@ const items: Ref<MenuItem[]> = ref([
 	border-radius: 0;
 	height: 8vh;
 	background: var(--color-background) !important;
-	box-shadow: 0px 0px 12px var(--shadow-color);
+	/* box-shadow: 0px 0px 12px var(--shadow-color); */
 	border: none !important;
+}
+
+.p-breadcrumb {
+	border: none;
+	font-size: small;
+	padding: 0.5rem;
+	padding-top: 0;
+}
+
+.p-breadcrumb :deep(.pi) {
+	font-size: small;
 }
 
 /* Experiment with screen sizes. */

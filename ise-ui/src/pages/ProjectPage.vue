@@ -5,8 +5,11 @@ import Pricing from '../components/pages/project/Pricing.vue';
 import ProjectOverview from '../components/pages/project/ProjectOverview.vue';
 import Project from '@/model/Project';
 import TargetAudienceList from '../components/pages/project/TargetAudienceList.vue';
+import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
+import type { MenuItem } from 'primevue/menuitem';
 
 const route = useRoute();
+const breadcrumb = useBreadcrumbStore();
 const project: Ref<Project | null> = ref(null);
 const id = Number.parseInt(route.params.id as string);
 
@@ -15,8 +18,18 @@ onMounted(async () => {
 	const p = new Project();
 	p.Id = id;
 	p.Name = 'My Project';
-
 	project.value = p;
+
+	breadcrumb.$patch((state) => {
+		const crumbs: MenuItem[] = [
+			{
+				label: p.Name,
+				to: route.path,
+			},
+		];
+
+		state.items = crumbs;
+	});
 });
 </script>
 

@@ -12,8 +12,11 @@ import CreateProjectModal from '@/components/modals/CreateProjectModal.vue';
 
 import type { Project } from '@/types/Project';
 import ProjectService from '@/services/ProjectService';
+import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
 
 const router = useRouter();
+const breadcrumbs = useBreadcrumbStore();
+breadcrumbs.$reset();
 
 const projectFilter: Ref<string | null> = ref(null);
 const projects: Ref<Project[]> = ref([]);
