@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '@/pages/Home.vue';
-import Project from '@/pages/Project.vue';
-import TargetAudience from '@/pages/TargetAudience.vue';
+import HomePage from '@/pages/HomePage.vue';
+import ProjectPage from '@/pages/ProjectPage.vue';
+import TargetAudiencePage from '@/pages/TargetAudiencePage.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,17 +9,17 @@ const router = createRouter({
 		{
 			path: '/',
 			name: 'home',
-			component: Home,
+			component: HomePage,
 		},
 		{
 			path: '/project/:id',
 			name: 'project',
-			component: Project,
+			component: ProjectPage,
 		},
 		{
 			path: '/project/:project/target-audience/:ta',
 			name: 'target-audience',
-			component: TargetAudience,
+			component: TargetAudiencePage,
 		},
 	],
 });

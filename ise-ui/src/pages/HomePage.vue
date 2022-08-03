@@ -47,12 +47,7 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 		<div class="home-top-row">
 			<div style="flex-grow: 1">
 				<span class="p-float-label">
-					<InputText
-						class="project-filter-input"
-						id="search"
-						type="text"
-						v-model="projectFilter"
-					/>
+					<InputText class="project-filter-input" id="search" type="text" v-model="projectFilter" />
 					<label class="project-filter-input-label" for="search">Search</label>
 				</span>
 			</div>
@@ -65,10 +60,9 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 				<template #header>
 					<span>
 						<!-- Needs to be bold -->
-						<b
-							>Projects
-							<span style="color: lightskyblue">{{ projects.length }}</span></b
-						>
+						<b style="font-weight: 600">
+							Projects <span style="color: lightskyblue">{{ projects.length }}</span>
+						</b>
 					</span>
 				</template>
 
