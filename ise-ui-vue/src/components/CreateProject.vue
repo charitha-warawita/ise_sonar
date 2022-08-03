@@ -179,6 +179,7 @@
                                                         <hr/>
                                                     </div>
                                                 </div>
+                                                </div>
                                                     <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ (ta.quota.length+1))">Add Quota</button>  
                                                         <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
                                                             <div class="card modal-content quotaModel">
@@ -188,9 +189,10 @@
                                                                 </div>               
                                                             </div> 
                                                         </CustomModal>                                                  
+                                                    <!--</div>-->
                                                 </div>
                                             </div>
-                                        <!-- </div> -->
+                                        </div>
                                                     
                                                 <!-- </div>
                                             </div>
