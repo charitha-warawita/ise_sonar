@@ -69,18 +69,9 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!--<div class="col-md-12">
-                                                                <a v-if="qual.question.categoryName === 'Main'" @click="toggleModal(ta.id+'-'+qual.id); useQualStore.GetQualification(qual.question.name.toLowerCase(), ta.id, qual.id)" class="link-primary">Edit</a>
+                                                            
                                                                 
-                                                                <CustomModal @close="toggleModal(ta.id+'-'+qual.id)" :modalId="ta.id+'-'+qual.id">
-                                                                    <div class="card modal-content">
-                                                                        <h3 class="card-header">Qualifications</h3>
-                                                                        <div class="card-body">
-                                                                            <QualificationsList :itemType=qual.question.name.toLowerCase() :taId=ta.id :qualificationId=qual.id />
-                                                                        </div>
-                                                                    </div>
-                                                                </CustomModal>
-                                                            </div>-->
+                                                            
                                                         </div>
                                                         <div class="col-md-3">
                                                             <button 
@@ -95,6 +86,8 @@
                                                                 class="btn btn-outline-success QualLogicalButton"
                                                                 :class="[qual.logicalDecision === 'OR' ? 'searchButton' : 'btn-light']"
                                                                 >Optional</button>
+                                                                <a @click="useQualStore.RemoveQualification(ta.id, qual.id)" class="link-danger" style="float:right; margin-top:10%">
+                                                        Remove</a>
                                                         </div>
                                                         <hr/>
                                                     </div>

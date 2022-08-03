@@ -183,6 +183,20 @@ export const useQualificationStore = defineStore('qualification', {
                     }
                 }
             }
+        },
+        RemoveQualification(taId, qualId) {
+            var project = useProjectStore().project;
+            var taIndex = project.projectTargetAudiences.findIndex(x => x.id === taId);
+            if(taIndex > -1) {
+                var qualIndex = project.projectTargetAudiences[taIndex].qualifications.findIndex(x => x.id === qualId)
+                if(qualIndex > -1)
+                project.projectTargetAudiences[taIndex].qualifications.splice(qualIndex,1);
+
+                for(var j = 0; j < project.projectTargetAudiences[taIndex].qualifications.length; j++)
+                {
+                    project.projectTargetAudiences[taIndex].qualifications[j].order = j+1;
+                }
+            }
         }
     }
 })
