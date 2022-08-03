@@ -6,13 +6,13 @@ import Panel from 'primevue/panel';
 import InputText from 'primevue/inputtext';
 import type { DataTableRowSelectEvent } from 'primevue/datatable';
 
-import ProjectsGrid from '../components/ProjectsGrid.vue';
+import ProjectsGrid from '../components/pages/home/ProjectsGrid.vue';
 import PrimaryButton from '../components/buttons/PrimaryButton.vue';
 import CreateProjectModal from '@/components/modals/CreateProjectModal.vue';
 
-import type { Project } from '@/types/Project';
 import ProjectService from '@/services/ProjectService';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
+import type Project from '@/model/Project';
 
 const router = useRouter();
 const breadcrumbs = useBreadcrumbStore();
@@ -47,18 +47,16 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 
 <template>
 	<div class="home-container">
-		<div class="home-top-row">
-			<div style="flex-grow: 1">
-				<span class="p-float-label">
-					<InputText class="project-filter-input" id="search" type="text" v-model="projectFilter" />
-					<label class="project-filter-input-label" for="search">Search</label>
-				</span>
-			</div>
-			<div style="flex-grow: 0.2; max-width: 250px">
-				<PrimaryButton square label="Create Project" @click="showModal" />
-			</div>
-		</div>
 		<div>
+			<span class="p-float-label">
+				<InputText class="project-filter-input" id="search" type="text" v-model="projectFilter" />
+				<label class="project-filter-input-label" for="search">Search</label>
+			</span>
+		</div>
+		<div class="button-cell">
+			<PrimaryButton square label="Create Project" @click="showModal" />
+		</div>
+		<div class="project-row">
 			<Panel :value="projects">
 				<template #header>
 					<span>
@@ -76,56 +74,62 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 	<CreateProjectModal v-model:visible="visible" @created="ProjectCreated" />
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use '@/assets/variables.scss' as *;
+@use '@/assets/mixins.scss';
+
 .home-container {
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-template-columns: 4fr 1fr;
+	grid-row-gap: 30px;
 }
 
-.home-top-row {
-	display: flex;
-	flex-direction: row;
-	margin-bottom: 30px;
+.project-row {
+	grid-column: span 2;
+}
+
+.button-cell {
+	justify-self: end;
+	min-width: 150px;
+	max-width: 250px;
+	width: 100%;
 }
 
 /* Panel */
 .p-panel :deep(.p-panel-header) {
-	--border-radius: 10px;
+	@include mixins.shadowed();
 
 	border: none;
-	box-shadow: 0px 2px 10px var(--shadow-color);
 	z-index: 1;
 	background-color: var(--color-background);
-	border-top-left-radius: var(--border-radius);
-	border-top-right-radius: var(--border-radius);
+	border-top-left-radius: $border-radius;
+	border-top-right-radius: $border-radius;
 }
 
 .p-panel :deep(.p-panel-content) {
-	--border-radius: 10px;
+	@include mixins.shadowed();
 
 	border: none;
-	box-shadow: 0px 5px 12px var(--shadow-color);
-	border-bottom-left-radius: var(--border-radius);
-	border-bottom-right-radius: var(--border-radius);
-}
-
-/* Filter Input */
-@media screen and (max-width: 750px) {
-	.project-filter-input {
-		width: 90%;
-	}
-}
-
-@media screen and (min-width: 750px) {
-	.project-filter-input {
-		max-width: 535px;
-		width: 65%;
-	}
+	border-bottom-left-radius: $border-radius;
+	border-bottom-right-radius: $border-radius;
 }
 
 .project-filter-input {
 	background: var(--blue-100);
 	border: none;
+
+	@media screen and (max-width: $md) {
+		.project-filter-input {
+			width: 90%;
+		}
+	}
+
+	@media screen and (min-width: $md) {
+		.project-filter-input {
+			max-width: 535px;
+			width: 65%;
+		}
+	}
 }
 
 .project-filter-input-label {

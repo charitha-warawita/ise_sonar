@@ -25,12 +25,7 @@ const fields = reactive<{
 const toast = useToast();
 const Create = () => {
 	// TODO: Use validator instead.
-	if (
-		fields.Name == null ||
-		fields.EstimatedIR == null ||
-		fields.EstimatedLOI == null
-	)
-		return;
+	if (fields.Name == null || fields.EstimatedIR == null || fields.EstimatedLOI == null) return;
 
 	const ta = new TargetAudience();
 	ta.Name = fields.Name;
@@ -61,27 +56,15 @@ const ResetFields = () => {
 		<form>
 			<div class="target-audience-form-inputs">
 				<span class="p-float-label">
-					<InputText
-						id="target-audience-name"
-						type="text"
-						v-model="fields.Name"
-					/>
+					<InputText id="target-audience-name" type="text" v-model="fields.Name" />
 					<label for="target-audience-name">Target Audience Name</label>
 				</span>
 				<span class="p-float-label">
-					<InputText
-						id="target-audience-IR"
-						type="number"
-						v-model="fields.EstimatedIR"
-					/>
+					<InputText id="target-audience-IR" type="number" v-model="fields.EstimatedIR" />
 					<label for="target-audience-IR">Estimated IR</label>
 				</span>
 				<span class="p-float-label">
-					<InputText
-						id="target-audience-LOI"
-						type="number"
-						v-model="fields.EstimatedLOI"
-					/>
+					<InputText id="target-audience-LOI" type="number" v-model="fields.EstimatedLOI" />
 					<label for="target-audience-LOI">Estimated LOI</label>
 				</span>
 			</div>

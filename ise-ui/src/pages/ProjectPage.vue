@@ -57,7 +57,9 @@ onMounted(async () => {
 	</div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use '@/assets/variables.scss' as *;
+
 .project-container {
 	flex-direction: column;
 }
@@ -78,29 +80,25 @@ onMounted(async () => {
 	display: flex;
 	flex-direction: column;
 	margin-right: 10px;
+
+	@media screen and (min-width: $lg) {
+		flex-grow: 0.65;
+	}
+
+	@media screen and (min-width: $xl) {
+		flex-grow: 0.85;
+	}
 }
 
 .pricing-container {
 	margin-left: 10px;
-}
 
-@media screen and (min-width: 992px) {
-	.configuration-container {
-		flex-grow: 0.65;
-	}
-
-	.pricing-container {
+	@media screen and (min-width: $lg) {
 		flex-grow: 0.35;
 		height: 20vh;
 	}
-}
 
-@media screen and (min-width: 1200px) {
-	.configuration-container {
-		flex-grow: 0.85;
-	}
-
-	.pricing-container {
+	@media screen and (min-width: $xl) {
 		flex-grow: 0.15;
 		height: 25vh;
 	}

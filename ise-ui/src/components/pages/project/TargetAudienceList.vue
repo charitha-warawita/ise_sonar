@@ -103,7 +103,7 @@ const EditTargetAudience = (ta: TargetAudience) => {
 	<CreateTargetAudienceModal v-model:visible="isModalVisible" @created="AddTargetAudience" />
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .target-audience-empty-container {
 	padding: 20px;
 	text-align: center;
@@ -142,10 +142,10 @@ const EditTargetAudience = (ta: TargetAudience) => {
 .target-audience-buttons {
 	align-self: center;
 	padding-right: 10px;
-}
 
-.target-audience-buttons :hover {
-	cursor: pointer;
-	color: grey;
+	:hover {
+		cursor: pointer;
+		color: grey;
+	}
 }
 </style>

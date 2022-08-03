@@ -37,12 +37,13 @@ const items: Ref<MenuItem[]> = ref([
 	</div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use '@/assets/variables.scss' as *;
+
 .p-menubar {
 	border-radius: 0;
 	height: 8vh;
 	background: var(--color-background) !important;
-	/* box-shadow: 0px 0px 12px var(--shadow-color); */
 	border: none !important;
 }
 
@@ -51,15 +52,14 @@ const items: Ref<MenuItem[]> = ref([
 	font-size: small;
 	padding: 0.5rem;
 	padding-top: 0;
-}
 
-.p-breadcrumb :deep(.pi) {
-	font-size: small;
+	:v-deep(.pi) {
+		font-size: small;
+	}
 }
-
 /* Experiment with screen sizes. */
 
-@media screen and (max-height: 748px) {
+@media screen and (max-height: $md) {
 	.p-menubar {
 		height: 55px;
 	}
