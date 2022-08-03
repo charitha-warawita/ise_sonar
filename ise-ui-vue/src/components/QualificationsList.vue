@@ -37,8 +37,8 @@
             </div>
         </div>
         <br>
-        <button v-if="categoryQAs.length > 0" class="btn btn-outline-success me-2 projSettingTogButton" style="float: right" 
-                @click="SaveQualification()">Save</button>
+        <button v-if="categoryQAs.length > 0" class="btn btn-outline-success me-2 searchButton" style="width:100%" 
+                @click="SaveQualification()">Save Qualifications</button>
     </div>
 </template>
 <script setup>
