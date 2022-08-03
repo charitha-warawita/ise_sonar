@@ -6,13 +6,15 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
     public class ProjectService : IProjectService
     {
         private readonly IProjectContext _projectContext;
-        
+        private readonly ITargetAudienceContext _taContext;
+
 
         private ICintService cintService { get; set; }
 
-        public ProjectService(IProjectContext context, ICintService cintService)
+        public ProjectService(IProjectContext context, ITargetAudienceContext taContext, ICintService cintService)
         {
             _projectContext = context;
+            _taContext = taContext;
             this.cintService = cintService;
         }
 
@@ -21,8 +23,19 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             if (project == null)
                 throw new ArgumentNullException("Project model not found", nameof(project));
 
-            if(ProjectValidated(project))
-                return _projectContext.CreateProject(project);
+            if (ProjectValidated(project))
+            {
+                project = _projectContext.CreateProject(project);
+                if(project.TargetAudiences.Any())
+                {
+                    for(int i = 0; i < project.TargetAudiences.Count; i++)
+                    {
+                        project.TargetAudiences[i] = _taContext.CreateTargetAudience(project.Id, project.TargetAudiences[i]);
+                    }
+                }
+
+                return project;
+            }
 
             throw new ArgumentException("Project Validation failed", nameof(project));
         }

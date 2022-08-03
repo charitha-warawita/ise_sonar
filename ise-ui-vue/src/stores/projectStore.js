@@ -32,10 +32,21 @@ export const useProjectStore = defineStore('project', {
     },
     actions: {
         async CreateProject(project) {
-            var currProject = this.project;
-            currProject.tempId = this.project.id;
-            currProject.lastUpdate = new Date();
-            delete currProject.id;
+            project.tempId = project.id;
+            project.lastUpdate = new Date();
+            delete project.id;
+
+            for(var i = 0; i < project.projectTargetAudiences.length; i++) {
+                project.projectTargetAudiences[i].tempId = project.projectTargetAudiences[i].id ;
+                delete project.projectTargetAudiences[i].id;
+                for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++) {
+                    project.projectTargetAudiences[i].qualifications[j].tempId = project.projectTargetAudiences[i].qualifications[j].id;
+                    delete project.projectTargetAudiences[i].qualifications[j].id;
+                }
+            }
+
+            project.targetAudiences = project.projectTargetAudiences 
+            delete project.projectTargetAudiences;
 
             this.saveProjectLoading = true;
             var iseUrl = import.meta.env.VITE_ISE_API_URL;
@@ -46,21 +57,18 @@ export const useProjectStore = defineStore('project', {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(currProject)
+                body: JSON.stringify(project)
             }
             try {
                 var savedProject = await fetch((iseUrl + saveProjectPath), settings)
                 .then((response) => response.json());
                 project.id = savedProject.id;
-                project.lastUpdate = savedProject.lastUpdate;
+                //project.lastUpdate = savedProject.lastUpdate;
             } catch (error) {
                 this.saveProjectError = error;
             } finally {
                 this.saveProjectLoading = false;
             }
-        },
-        async GetProjectSetting(id) {
-            // alert('this is test');
         },
         AddTargetAudienceElement() {  
             var id = this.project.projectTargetAudiences.length;
@@ -84,96 +92,6 @@ export const useProjectStore = defineStore('project', {
             var removeIndex = this.project.projectTargetAudiences.map(item => item.id).indexOf(ta.id);
             ~removeIndex && this.project.projectTargetAudiences.splice(removeIndex, 1);
         },
-        LoadProjectQualification() {
-            return [
-                {
-                    "id": 1,
-                    "order": 1,
-                    "logicalDecision": "OR",
-                    "NumberOfRequiredConditions": 0,
-                    "IsActive": true,
-                    "question": {
-                        "id": 42,
-                        "name": "Age",
-                        "text": "Enter age range for the project",
-                        "categoryName": "Main",
-                        "variables": [
-                            {
-                                "id": 1,
-                                "name": "18 - 60"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "id": 2,
-                    "order": 2,
-                    "logicalDecision": "OR",
-                    "NumberOfRequiredConditions": 0,
-                    "IsActive": true,
-                    "question": {
-                        "id": 1,
-                        "name": "Country",
-                        "text": "Enter the Countries",
-                        "categoryName": "Main",
-                        "variables": [
-                            {
-                                "id": 1,
-                                "name": "UK"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "id": 3,
-                    "order": 3,
-                    "logicalDecision": "OR",
-                    "NumberOfRequiredConditions": 0,
-                    "IsActive": true,
-                    "question": {
-                        "id": 43,
-                        "name": "Gender",
-                        "text": "Enter the genders of panelists",
-                        "categoryName": "Main",
-                        "variables": [
-                            {
-                                "id": 1,
-                                "name": "Male"
-                            },
-                            {
-                                "id": 2,
-                                "name": "Female"
-                            }
-                        ]
-                    }
-                }
-            ];
-        },
-        /*LoadProjectQuota() {
-            return [];
-        },
-        AddQualificationElement(quals) {
-            console.log("Came to add qualifications")
-            var qual = {
-                "id": "",
-                "name": "",
-                "condition":"",
-                "order": 0,
-                "isActive": true
-            };
-            quals.push(qual)
-        },
-        AddQuotaElement(quots) {
-            var quot = {
-                "id": "",
-                "name": "",
-                "condition": "",
-                "limit": 0,
-                "limitType": "",
-                "isActive": true
-            };
-            quots.push(quot);
-        },*/
         CalculateCharges() {
             if(this.project.projectTargetAudiences !== undefined)
             {

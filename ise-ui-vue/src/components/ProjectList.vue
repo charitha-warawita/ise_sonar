@@ -1,16 +1,5 @@
 <template>
     <div>
-        <button class="btn btn-outline-success searchButton mb-4 " @click="toggleModal(999);">Create Project</button>
-        <CustomModal @close="toggleModal(999)" modalId='999'>
-            <div class="card modal-content">
-                <h3 class="card-header">Create Project</h3>
-                <div class="card-body">
-                    <ProjectSetting />
-                </div>
-            </div>
-        </CustomModal>
-    </div><hr/>
-    <div>
         <ul class="nav nav-pills nav-fill border-bottom">
             <li class="nav-item">
             <a v-on:click="useProjStore.getProjectsBySearchNameAndStartDate('All')" :class="[currentStatus === 'All' ? 'active' : '']" class="nav-link" aria-current="page" href="#">All</a>
@@ -51,19 +40,6 @@ var useProjStore = useProjectsStore()
 const { projects, searchByName, searchByStartDate, currentProjects, currentStatus, getDraftProjects } = storeToRefs(useProjStore)
 const displayfields = ProjectModel.displayfields
 const displayFieldFormatted = ProjectModel.displayFieldFormatted
-
-const toggleModal = (id) => {
-    var classname = 'customModal-' + id
-    var element = document.getElementsByClassName(classname)
-    if(element[0].style.display === 'none') {
-        element[0].style.removeProperty("display")
-        element[1].style.removeProperty("display")
-    }
-    else { 
-        element[0].style.display = 'none'
-        element[1].style.display = 'none'
-    }
-};
 
 onMounted(() => {
     // console.log('on mounted call');
