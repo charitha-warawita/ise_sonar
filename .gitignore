@@ -1,7 +1,7 @@
 ﻿################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
-
+**/.idea/
 /.vs
 /IntelligentSampleEnginePOC.UI/.vs/IntelligentSampleEnginePOC.UI
 /IntelligentSampleEnginePOC.UI/IntelligentSampleEnginePOC.UI/bin/Debug/net6.0
@@ -26,7 +26,4 @@
 /IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API.Http.Tests/obj
 /IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API.Core.Tests/bin/Debug/net6.0
 /IntelligentSampleEnginePOC.API/IntelligentSampleEnginePOC.API.Http.Tests/bin/Debug/net6.0
-
-
-
-**/.idea/
+/IntelligentSampleEnginePOC.API/.editorconfig

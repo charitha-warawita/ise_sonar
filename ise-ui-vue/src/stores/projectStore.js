@@ -3,100 +3,24 @@ import { defineStore } from "pinia";
 export const useProjectStore = defineStore('project', {
     state: () => ({
         basicSettingDesc:'',
-        Qualificationlist : [
-            {
-                "id": 4,
-                "order": 4,
-                "logicalDecision": "OR",
-                "NumberOfRequiredConditions": 0,
-                "IsActive": true,
-                "question": {
-                    "id": 1970,
-                    "name": "Online banking",
-                    "text": "Are you a user of an internet bank?",
-                    "categoryName": "Online/Electronics",
-                    "variables": [
-                        {
-                            "id": 16508,
-                            "name": "Yes"
-                        },
-                        {
-                            "id": 16509,
-                            "name": "No"
-                        }
-                    ]
-                }
-            },
-            {
-                "id": 5,
-                "order": 5,
-                "logicalDecision": "OR",
-                "NumberOfRequiredConditions": 0,
-                "IsActive": true,
-                "question": {
-                    "id": 1963,
-                    "name": "Field of expertise",
-                    "text": "Which is your field of expertise?",
-                    "categoryName": "Occupation",
-                    "variables": [
-                        {
-                            "id": 16446,
-                            "name": "Administration"
-                        },
-                        {
-                            "id": 16447,
-                            "name": "Personnel/HR"
-                        },
-                        {
-                            "id": 16449,
-                            "name": "IT/Development"
-                        },
-                        {
-                            "id": 16451,
-                            "name": "Production"
-                        },
-                        {
-                            "id": 16452,
-                            "name": "Management"
-                        },
-                        {
-                            "id": 16453,
-                            "name": "Other"
-                        },
-                        {
-                            "id": 22092,
-                            "name": "Not Applicable"
-                        }
-                    ]
-                }
-            },           
-        ],
-        
-       
-        
         totalCost: 0,
         project: {
-            "id": "",
+            "id": 0,
             "name": "",
             "reference": "",
-            "userId": "",
             "lastUpdate": "",
             "startDate": "",
             "fieldingPeriod": 0,
-            "status": "Draft",
+            "status": 0,
             "testingUrl": "",
             "liveUrl": "",
             "categories": [],
             "user": {
-                "id": "",
+                "id": 0,
                 "name": "",
                 "email": ""
             },
-            "projectTargetAudiences": [],
-            "cintResponseId": 0,
-            "cintSelfLink": "",
-            "cintCurrentCostLink": "",
-            "cintTestingLink": ""
+            "projectTargetAudiences": []
         },
         categories:[],
         loading: false,
@@ -106,7 +30,21 @@ export const useProjectStore = defineStore('project', {
     },
     actions: {
         CreateProject(project) {
-            console.log('project: ' + JSON.stringify(project));
+            this.project.tempId = this.project.id;
+            this.project.lastUpdate = new Date();
+            delete this.project.id;
+
+            for(var i = 0; i < this.project.projectTargetAudiences.length; i++) {
+                this.project.projectTargetAudiences[i].tempId = this.project.projectTargetAudiences[i].id ;
+                delete this.project.projectTargetAudiences[i].id;
+                for(var j = 0; j < this.project.projectTargetAudiences[i].qualifications.length; j++) {
+                    this.project.projectTargetAudiences[i].qualifications[j].tempId = this.project.projectTargetAudiences[i].qualifications[j].id;
+                    delete this.project.projectTargetAudiences[i].qualifications[j].id;
+                }
+            }
+
+            this.project.targetAudiences = this.project.projectTargetAudiences 
+            delete this.project.projectTargetAudiences;
         },
         AddTargetAudienceElement() {  
             var id = this.project.projectTargetAudiences.length;
@@ -119,7 +57,7 @@ export const useProjectStore = defineStore('project', {
                 "costPerInterview": 0,
                 "cptg": 0,
                 "wantedCompletes": 0,
-                "qualifications": this.LoadProjectQualification(),
+                "qualifications": [],
                 "quota": [],
                 "quotas": [],
                 "subtotal": 0
@@ -195,75 +133,8 @@ export const useProjectStore = defineStore('project', {
                 }
             ];
         },
-        LoadProjectQuota() {
+        /*LoadProjectQuota() {
             return [];
-                
-                /*{
-                "id": 1,
-                "name": "Quota",
-                "fieldTarget": "100",
-                "status": true,
-                "completes": "",
-                "prescreence":"" ,
-                    "order": 1,
-                    "logicalDecision": "OR",
-                    "NumberOfRequiredConditions": 0,
-                    "IsActive": true,
-                    "condition": {
-                        "id": 42,
-                        "name": "Age",
-                        "text": "Enter age range for the project",
-                        "categoryName": "Household",
-                        "variables": [
-                            {
-                                "id": 1,
-                                "name": "18 - 60"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "id": 2,
-                    "order": 2,
-                    "logicalDecision": "OR",
-                    "NumberOfRequiredConditions": 0,
-                    "IsActive": true,
-                    "condition": {
-                        "id": 1,
-                        "name": "Country",
-                        "text": "Enter the Countries",
-                        "categoryName": "Household",
-                        "variables": [
-                            {
-                                "id": 1,
-                                "name": "UK"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "id": 3,
-                    "order": 3,
-                    "logicalDecision": "OR",
-                    "NumberOfRequiredConditions": 0,
-                    "IsActive": true,
-                    "condition": {
-                        "id": 43,
-                        "name": "Gender",
-                        "text": "Enter the genders of panelists",
-                        "categoryName": "Household",
-                        "variables": [
-                            {
-                                "id": 1,
-                                "name": "Male"
-                            },
-                            {
-                                "id": 2,
-                                "name": "Female"
-                            }
-                        ]
-                    }
-                }];*/
         },
         AddQualificationElement(quals) {
             console.log("Came to add qualifications")
@@ -286,7 +157,7 @@ export const useProjectStore = defineStore('project', {
                 "isActive": true
             };
             quots.push(quot);
-        },
+        },*/
         CalculateCharges() {
             if(this.project.projectTargetAudiences !== undefined)
             {

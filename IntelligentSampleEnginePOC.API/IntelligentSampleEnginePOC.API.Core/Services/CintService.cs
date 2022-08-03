@@ -33,7 +33,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             if(response != null)
             {
-                project.CintResponseId = response.id;
+                /*project.CintResponseId = response.id;
                 if(response.links.Any())
                 {
                     foreach(var item in response.links)
@@ -45,7 +45,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                         else if (item.rel == "testing")
                             project.CintTestingLink = item.href;
                     }
-                }
+                }*/
             }
             return project;
         }
@@ -64,14 +64,14 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             cintRequest.limitType = 0;
             cintRequest.incidenceRate = 80;
             cintRequest.lengthOfInterview = 5;
-            cintRequest.linkTemplate = project.LinkToSurvey;
-            cintRequest.testLinkTemplate = project.LinkToSurvey;
+            /*cintRequest.linkTemplate = project.LinkToSurvey;
+            cintRequest.testLinkTemplate = project.LinkToSurvey;*/
             cintRequest.countryId = 22;
             cintRequest.deviceTypes = new List<int>() { 1, 2, 3 };
             cintRequest.deviceCapabilities = new List<string>();
             cintRequest.categories = new List<int>() { 8 };
             cintRequest.quotaGroups = new List<quotaGroup>();
-            foreach(var item in project.TargetAudiences[0].QuotaGroups)
+            /*foreach(var item in project.TargetAudiences[0].QuotaGroups)
             {
                 var quotaGroup = new quotaGroup()
                 {
@@ -94,7 +94,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 }
                 cintRequest.quotaGroups.Add(quotaGroup);
                 break;
-            }
+            }*/
 
             return cintRequest;
         }

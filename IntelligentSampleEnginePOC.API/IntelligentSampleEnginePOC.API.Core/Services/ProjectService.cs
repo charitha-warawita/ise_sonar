@@ -1,49 +1,41 @@
-﻿using IntelligentSampleEnginePOC.API.Core.Data;
-using Model = IntelligentSampleEnginePOC.API.Core.Model;
-using DBModel = IntelligentSampleEnginePOC.API.Core.DB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.Json;
-using IntelligentSampleEnginePOC.API.Core.DB;
-using IntelligentSampleEnginePOC.API.Core.Interfaces;
+﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
+using IntelligentSampleEnginePOC.API.Core.Model;
 
 namespace IntelligentSampleEnginePOC.API.Core.Services
 {
     public class ProjectService : IProjectService
     {
-        private readonly ISEdbContext _dataContext;
+        private readonly IProjectContext _projectContext;
         
 
         private ICintService cintService { get; set; }
 
-        public ProjectService(ISEdbContext context, ICintService cintService)
+        public ProjectService(IProjectContext context, ICintService cintService)
         {
-            _dataContext = context;
+            _projectContext = context;
             this.cintService = cintService;
         }
-        public Model.Project CreateProject(Model.Project project)
+
+        public Project CreateProject(Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("Project model not found", nameof(project));
 
+            if(ProjectValidated(project))
+                return _projectContext.CreateProject(project);
 
-            project = SetupGuids(project);
-            project.LastUpdate = DateTime.UtcNow;
-            project.Status = Model.Status.Draft;
-            project.CintResponseId = 0;
-            ModelMapping(project, true);
-            _dataContext.SaveChanges();
-
-            return project;
+            throw new ArgumentException("Project Validation failed", nameof(project));
         }
 
-        private Model.Project SetupGuids(Model.Project project)
+        private bool ProjectValidated(Project project)
+        {
+            return true;
+        }
+
+        /*private Model.Project SetupGuids(Model.Project project)
         {
             //Setting up IDs
-            if (project?.Id == Guid.Empty)
+            /*if (project?.Id == Guid.Empty)
                 project.Id = Guid.NewGuid();
 
             if (project?.User != null && project?.User?.Id == Guid.Empty)
@@ -67,9 +59,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 }
             }
             return project;
-        }
+        }*/
 
-        public async Task<Model.Project> LaunchProject(Model.Project project)
+        /*public async Task<Model.Project> LaunchProject(Model.Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("project model not found", nameof(project));
@@ -85,9 +77,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             ModelMapping(project, true);
             _dataContext.SaveChanges();
             return project;
-        }
+        }*/
 
-        public List<Project> GetProjects(int? status, string? searchString, int? recentCount)
+        /*public List<Project> GetProjects(int? status, string? searchString, int? recentCount)
         {
             IEnumerable<Project> currProjects = _dataContext.Projects;
 
@@ -165,9 +157,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             }
 
             return projectModel;
-        }
+        }*/
 
-        public Model.Project UpdateProject(Model.Project project)
+        /*public Model.Project UpdateProject(Model.Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("Project model not found", nameof(project));
@@ -178,7 +170,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             _dataContext.SaveChanges();
 
             return project;
-        }
+        }*/
         /// <summary>
         /// Gopal to Gopal-
         /// This is dirty way of mapping model object to DB object using JSONSerializer (very smart but not wise). 
@@ -187,23 +179,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         /// </summary>
         /// <param name="project"></param>
 
-        private void ModelMapping(Model.Project project, bool isCreateCall)
+        /*private void ModelMapping(Model.Project project, bool isCreateCall)
         {
             var tempProject = JsonSerializer.Deserialize<Project>(JsonSerializer.Serialize(project));
-
-            //Manually map Quotas
-            /*if(project.TargetAudiences.Any())
-            {
-                for(int i= 0; i<project.TargetAudiences.Count; i++)
-                {
-                    if (project.TargetAudiences[i].QuotaGroups.Any())
-                    {
-                        for (int j =0; j < project.TargetAudiences[i].QuotaGroups.Count; j++)
-                        { 
-                        }
-                    }
-                }
-            }*/
 
             if (tempProject != null)
             {
@@ -212,7 +190,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 else
                     _dataContext.Update(tempProject);
             }
-        }
+        }*/
 
     }
 }
