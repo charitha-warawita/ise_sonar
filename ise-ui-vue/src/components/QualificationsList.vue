@@ -93,7 +93,7 @@
         </div>
         <br>
         <button v-if="categoryQAs.length > 0" class="btn btn-outline-success me-2 projSettingTogButton" style="float: right" 
-                @click="useQualStore.saveQualificationDetailstoProject()">Save</button>
+                @click="SaveQualification()">Save</button>
     </div>
 </template>
 <script setup>
@@ -101,11 +101,16 @@ import {useQualificationStore} from '@/stores/qualificationStore'
 import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
 const props = defineProps([ 'itemType' , 'taId', 'qualificationId' ])
-
+const emit = defineEmits(["close"])
 var useQualStore = useQualificationStore()
 
 const { currAgeRange, minAge, maxAge, countries, countriesLoading, countriesError,
 profCategories, profCategoriesLoading, profCategoriesError, categoryQAs, selectedCategory } = storeToRefs(useQualStore)
+
+function SaveQualification() {
+    useQualStore.saveQualificationDetailstoProject();
+    emit("close");
+}
 </script>
 <style>
 .projectSetting {

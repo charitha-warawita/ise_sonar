@@ -107,7 +107,7 @@
                                                             <div class="card modal-content">
                                                                 <h3 class="card-header">Qualifications</h3>
                                                                 <div class="card-body">
-                                                                    <QualificationsList itemType='profileVars' taId=ta.id qualificationId='999' />
+                                                                    <QualificationsList @close="toggleModal(999)" itemType='profileVars' taId=ta.id qualificationId='999' />
                                                                 </div>
                                                             </div>
                                                         </CustomModal>
