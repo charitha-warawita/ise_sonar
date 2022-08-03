@@ -1,18 +1,18 @@
-@import "./base.css";
+@import './base.css';
 
 #app {
-  /* max-width: 1280px;
+	/* max-width: 1280px;
   margin: 0 auto;
   padding: 2rem; */
 
-  display: flex;
-  flex-direction: column;
-  font-weight: normal;
-  min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	font-weight: normal;
+	min-height: 100vh;
 }
 
 @media (min-width: 1024px) {
-  /* body {
+	/* body {
     display: flex;
     place-items: center;
   }
@@ -24,13 +24,16 @@
   } */
 }
 
-
-.shadowed { 
-  box-shadow: 0px 2px 10px var(--shadow-color);
+.shadowed {
+	box-shadow: 0px 2px 10px var(--shadow-color);
 }
 
-.centered-v { 
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+.centered-v {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.bold {
+	font-weight: bold;
 }

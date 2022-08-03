@@ -1,30 +1,44 @@
 <script setup lang="ts">
-import type { Project } from '@/types/Project';
 import { type Ref, ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Pricing from '../components/pages/project/Pricing.vue';
-import NoTargetAudience from '../components/pages/project/NoTargetAudience.vue';
 import ProjectOverview from '../components/pages/project/ProjectOverview.vue';
+import Project from '@/model/Project';
+import CreateTargetAudienceModal from '../components/modals/CreateTargetAudienceModal.vue';
+import type TargetAudience from '@/model/TargetAudience';
+import TargetAudienceList from '../components/pages/project/TargetAudienceList.vue';
 
 const route = useRoute();
-
 const project: Ref<Project | null> = ref(null);
 
 onMounted(async () => {
 	const id = route.params.id as string;
 
 	// TODO: Move to project service.
-	project.value = {
-		Id: Number.parseInt(id),
-		Name: 'Random Project',
-		MaconomyNumber: '123',
-		Owner: 'Me',
-		CreationDate: new Date(),
-		LastActivity: new Date(),
-	};
+	const p = new Project();
+	p.Id = Number.parseInt(id);
+	p.Name = 'My Project';
+
+	project.value = p;
 });
+
+const visible = ref(false);
+const CreateTargetAudience = () => {
+	visible.value = true;
+};
+
+const AddTargetAudience = (ta: TargetAudience) => {
+	if (project.value == null) return;
+
+	project.value.TargetAudiences.push(ta);
+};
+
+const EditTargetAudience = (ta: TargetAudience) => {
+	console.log(ta.Name);
+};
 </script>
 
+<!-- TODO: Extract Target Audience elements, logic and Modal into sepearte component -->
 <template>
 	<div class="project-container">
 		<div class="overview">
@@ -33,7 +47,14 @@ onMounted(async () => {
 
 		<div class="project-details">
 			<div class="configuration-container">
-				<NoTargetAudience />
+				<div>
+					<TargetAudienceList
+						v-if="project"
+						:target-audience="project?.TargetAudiences"
+						@add="CreateTargetAudience"
+						@edit="EditTargetAudience"
+					/>
+				</div>
 			</div>
 
 			<div class="pricing-container">
@@ -41,6 +62,7 @@ onMounted(async () => {
 			</div>
 		</div>
 	</div>
+	<CreateTargetAudienceModal v-model:visible="visible" @created="AddTargetAudience" />
 </template>
 
 <style scoped>
@@ -50,14 +72,13 @@ onMounted(async () => {
 
 .overview {
 	flex-grow: 1;
-	/* padding: 20px; */
 	margin-bottom: 50px;
 }
 
 .project-details {
 	flex-grow: 1;
-	display: flex;
-	flex-direction: row;
+	display: grid;
+	grid-template-columns: 3.5fr 1fr;
 }
 
 .configuration-container {

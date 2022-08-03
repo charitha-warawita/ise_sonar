@@ -5,7 +5,7 @@ import InputText from 'primevue/inputtext';
 import { useToast } from 'primevue/usetoast';
 
 import PrimaryButton from '../buttons/PrimaryButton.vue';
-import { Project } from '@/model/Project';
+import Project from '@/model/Project';
 
 // https://vuejs.org/guide/components/events.html#usage-with-v-model
 // Configure two-way data binding. We recieve a prop, 'visible'.
@@ -33,12 +33,7 @@ const fields = reactive<{
 // TODO: Project probably needs to be a class for easier instantiation.
 const toast = useToast();
 const CreateProject = () => {
-	if (
-		fields.Name == null ||
-		fields.MaconomyNumber == null ||
-		fields.Owner == null
-	)
-		return;
+	if (fields.Name == null || fields.MaconomyNumber == null || fields.Owner == null) return;
 
 	const now = new Date();
 	const project = new Project();
@@ -70,36 +65,19 @@ const ResetFields = () => {
 </script>
 
 <template>
-	<Dialog
-		modal
-		ref="dialog"
-		v-model:visible="visible"
-		@after-hide="ResetFields"
-	>
+	<Dialog modal v-model:visible="visible" @after-hide="ResetFields">
 		<form class="project-form">
 			<div class="project-form-inputs">
 				<span class="p-float-label">
-					<InputText
-						id="project-name"
-						type="text"
-						v-model="fields.Name"
-					></InputText>
+					<InputText id="project-name" type="text" v-model="fields.Name" />
 					<label for="project-name">Project Name</label>
 				</span>
 				<span class="p-float-label">
-					<InputText
-						id="maconomy-number"
-						type="number"
-						v-model="fields.MaconomyNumber"
-					></InputText>
+					<InputText id="maconomy-number" type="number" v-model="fields.MaconomyNumber" />
 					<label for="maconomy-number">Maconomy Number</label>
 				</span>
 				<span class="p-float-label">
-					<InputText
-						id="project-owner"
-						type="text"
-						v-model="fields.Owner"
-					></InputText>
+					<InputText id="project-owner" type="text" v-model="fields.Owner" />
 					<label for="project-owner">Owner</label>
 				</span>
 			</div>
