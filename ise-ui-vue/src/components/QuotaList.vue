@@ -14,9 +14,9 @@
       </div>
       <div class="col-md-6">
         <label for="sel2" class="form-label">Adjustment Type</label>
-        <select class="form-select" id="sel2" name="sellist2">
-          <option>Nominal</option>
-          <option>percentage</option>
+        <select v-model="key" @change="useQuotaDataStore.adjustmentType($event)" class="form-select" id="sel2" name="sellist2">
+        <option v-bind:value=adjustmentType v-for="adjustmentType in useQuotaDataStore.currentQuota.adjustmentType" :key="adjustmentType">{{adjustmentType}}</option>
+
         </select>
       </div>
       <div class="col-md-6">
@@ -96,7 +96,7 @@
                                         :key="answer.id" 
                                         type="button" 
                                         :id="'answer'+answer.id" 
-                                        @click="useQuotaDataStore.SaveQuota(useQuotaDataStore.selecttedQuestionid,useQuotaDataStore.selectedConditioncategoryName,useQuotaDataStore.selectedConditionName,useQuotaDataStore.selectedConditionText, answer.id, answer.name)" 
+                                        @click="useQuotaDataStore.SaveQuotaConditions(useQuotaDataStore.selecttedQuestionid,useQuotaDataStore.selectedConditioncategoryName,useQuotaDataStore.selectedConditionName,useQuotaDataStore.selectedConditionText, answer.id, answer.name)" 
                                         class="btn btn-outline-success me-2 projSettingTogButton"
                                         :class="[answer.selected ? 'searchButton' : 'btn-light']">
                                         {{ answer.name }}</button>

@@ -4,11 +4,14 @@ export const useQuotaStore = defineStore('quota', {
     state: () => ({
         selecteDiv:false,
         conditionlist:[],
-        selectedConditionName:"",
-        selectedConditionText:"",
-        selectedConditioncategoryName:"",
-        Selectedvariables:"",
+        projectid: useProjectStore.globalTaId,
+        selectedConditionId:'',
+        selectedConditionName:'',
+        selectedConditionText:'',
+        selectedConditioncategoryName:'',
+        Selectedvariables:'',
         selecttedconditions:[],
+        selecttedAnswer:[],
         currAgeRange: '',
         quotaMinAge: 0,
         quotaMaxAge:0,
@@ -19,8 +22,8 @@ export const useQuotaStore = defineStore('quota', {
 
         currentQuota: {
             name: '',
-            serveyQuotaTypeSelected:'',
-            adjustmentType:'',
+            selectedServeyQuotaType:'',
+            selectedAdjustmentType:'',
             fieldTargetPercentage: 0,
             fieldTargetNominal:0,
             status: 0,
@@ -28,8 +31,15 @@ export const useQuotaStore = defineStore('quota', {
             prescreens: 0,
             quotaPercentage: 0,
             quotaNominal: 0,
-            conditions: ["None", "Age", "Gender", "Country"],
+            // conditions: [],
+            conditionId:'',
+            conditionName:'',
+            conditiontext:'',
+            conditionCategoryName:'',
+            variableId:'',
+            variableName:'',
             ServeyQuotaType:["Client","Control","Supplier"],
+            adjustmentType:["Nominal","percentage"],
             quotaMinAge:0,
             quotaMaxAge:0,
             currAgeRange: '',
@@ -45,8 +55,8 @@ export const useQuotaStore = defineStore('quota', {
         LoadDefaultCurrentQuota() {
             this.currentQuota = {
                 name: '',
-                serveyQuotaTypeSelected:'',
-                adjustmentType:'',
+                selectedServeyQuotaType:'',
+                selectedAdjustmentType:'',
                 fieldTargetPercentage: 0,
                 fieldTargetNominal: 0,
                 status: 0,
@@ -54,23 +64,32 @@ export const useQuotaStore = defineStore('quota', {
                 prescreens: 0,
                 quotaPercentage: 0,
                 quotaNominal: 0,
-                conditions: ["None", "Age", "Gender", "Country"],
+                conditionId:'',
+                conditionName:'',
+                conditiontext:'',
+                conditionCategoryName:'',
+                variableId:'',
+                variableName:'',
                 quotaMinAge:0,
                 quotaMaxAge:0,
                 ServeyQuotaType:["Client","Control","Supplier"],
+                adjustmentType:["Nominal","percentage"],
             };
         },
            serveyQuotaTyp(event){
-            this.currentQuota.serveyQuotaTypeSelected = event.target.value;    
+            this.currentQuota.selectedServeyQuotaType = event.target.value;    
+        },
+        adjustmentType(event){
+            this.currentQuota.selectedAdjustmentType = event.target.value;    
         },
         addCondition(){
+            this.conditionlist = [];
             this.selectedConditionName = "";
             this.selectedConditionText ="";
             this.selectedConditioncategoryName ="";
             this.Selectedvariables = "";
             this.selecteDiv =false;
             this.conditiongrid = true;
-            this.conditionlist =[];
             var project = useProjectStore().project;
             for (var i = 0; i < project.projectTargetAudiences.length; i++)
             {
@@ -89,6 +108,7 @@ export const useQuotaStore = defineStore('quota', {
             var project = useProjectStore().project;
             for (var i = 0; i < project.projectTargetAudiences.length; i++)
             {
+                this.projectId = project.id;
                 for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
               
                     {
@@ -101,22 +121,27 @@ export const useQuotaStore = defineStore('quota', {
                             this.selectedConditioncategoryName = project.projectTargetAudiences[i].qualifications[j].question.categoryName
                             this.Selectedvariables = project.projectTargetAudiences[i].qualifications[j].question.variables;
                             this.selecteDiv =true
-                            console.log(this.selecttedconditions)
                         }
                     }
             }
             
         },
-        async SaveQuotaToProject( selecttedQuestionid, selectedConditioncategoryName, selectedConditionName, selectedConditionText, id, name) {
-                console.log(selecttedQuestionid, selectedConditioncategoryName, selectedConditionName, selectedConditionText, id, name)
+        SaveQuotaConditions( selecttedQuestionid, selectedConditioncategoryName, selectedConditionName, selectedConditionText, id, name) {
+            this.currentQuota.conditionId = selecttedQuestionid; 
+            this.currentQuota.conditionName = selectedConditionName;
+            this.currentQuota.conditiontext = selectedConditionText;
+            this.currentQuota.conditionCategoryName = selectedConditioncategoryName;
+            this.currentQuota.variableId = id;
+            this.currentQuota.variableName = name;
+                // this.currentQuota.conditions.push({"id":selecttedQuestionid, "categoryName":selectedConditioncategoryName, "name":selectedConditionName, "text":selectedConditionText, "qId":id, "qName":name})
         },
-        SaveQuota(taId, quotaid ,selecttedQuestionid, selectedConditioncategoryName, selectedConditionName, selectedConditionText, id, name){
+        SaveQuota(itemtype, taid, quotaid,){
+           
             var project = useProjectStore().project;
             for (var i = 0; i < project.projectTargetAudiences.length; i++)
             {
                 var quota = {};
-                if(project.projectTargetAudiences[i].id === taId)
-                {
+
                     quota = {
                         "id": quotaid,
                         "name": this.currentQuota.name,
@@ -125,77 +150,19 @@ export const useQuotaStore = defineStore('quota', {
                         "status": this.currentQuota.status,
                         "completes": this.currentQuota.completes,
                         "prescreence":this.currentQuota.prescreens,
-                        "serveyQuotaTypeSelected": this.currentQuota.serveyQuotaTypeSelected,
-                        "adjustmentType": this.currentQuota.adjustmentType,
+                        "serveyQuotaTypeSelected": this.currentQuota.selectedServeyQuotaType,
+                        "adjustmentType": this.currentQuota.selectedAdjustmentType,
                         "quotaPercentage": this.currentQuota.quotaPercentage,
                         "quotaNominal": this.currentQuota.quotaNominal,
                         "order": quotaid,
                         "logicalDecision": "OR",
                         "NumberOfRequiredConditions": 0,
                         "IsActive": true,
-                        "conditions":[]
+                        "conditions": {
+                            "id":  this.currentQuota.conditionId, "name":  this.currentQuota.conditionName, "text":  this.currentQuota.conditiontext, "categoryName":  this.currentQuota.conditionCategoryName,
+                            "variables": [{ "id":  this.currentQuota.variableId, "name":  this.currentQuota.variableName }]
+                        } 
                         };
-                }
-                if(itemtype === 'age')
-                {    
-                    var condition = {
-                        "id": 42,
-                        "name": "Age",
-                        "text": "Enter age range for the project",
-                        "categoryName": "Household",
-                        "variables": [
-                            {
-                                "id": 1,
-                                "name": this.currentQuota.quotaMinAge
-                            },
-                            {
-                                "id": 1,
-                                "name": this.currentQuota.quotaMaxAge
-                            }
-                        ]
-                    }
-                    quota.conditions.push(condition);
-                }
-                if(itemtype === 'country')
-                {
-                    quota.conditions = [];
-                    var condition = {
-                        "id": 1,
-                        "name": "Country",
-                        "text": "Enter the countries",
-                        "categoryName": "Household",
-                        "variables": [
-                            {
-                                "id": 1,
-                                "name": "UK"
-                            }
-                        ]
-                    }
-                    quota.conditions.push(condition);
-                }
-                if(itemtype === 'gender')
-                {
-                    quota.conditions = [];
-                    var condition = {
-                        "id": 43,
-                        "name": "Gender",
-                        "text": "Enter the genders of panelists",
-                        "categoryName": "Household",
-                        "variables": [
-                            {
-                                "id": 1,
-                                "name": "Male"
-                            },
-                            {
-                                "id": 2,
-                                "name": "Female"
-                            }
-                        ]
-                    }
-                    quota.conditions.push(condition);
-                } 
-
-                project.projectTargetAudiences[i].quotas.push(quota);
                 project.projectTargetAudiences[i].quota.push(quota);
                 this.LoadDefaultCurrentQuota();
                 break;
