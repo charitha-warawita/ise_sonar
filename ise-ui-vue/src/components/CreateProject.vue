@@ -82,20 +82,19 @@
                                                                 </CustomModal>
                                                             </div>-->
                                                         </div>
-                                                        <div class="col-md-3" v-if="qual.question.variables.length > 1 && qual.id > 3">
-                                                            <label>Select logical operation Qualification : </label>
-                                                            <button 
-                                                                type="button" 
-                                                                @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'OR')"
-                                                                class="btn btn-outline-success me-2 projSettingTogButton"
-                                                                :class="[qual.logicalDecision === 'OR' ? 'searchButton' : 'btn-light']"
-                                                                >OR</button>
+                                                        <div class="col-md-3">
                                                             <button 
                                                                 type="button" 
                                                                 @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'AND')"
-                                                                class="btn btn-outline-success me-2 projSettingTogButton"
+                                                                class="btn btn-outline-success QualLogicalButton"
                                                                 :class="[qual.logicalDecision !== 'OR' ? 'searchButton' : 'btn-light']"
-                                                                >AND</button>
+                                                                >Mandatory</button>
+                                                            <button 
+                                                                type="button" 
+                                                                @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'OR')"
+                                                                class="btn btn-outline-success QualLogicalButton"
+                                                                :class="[qual.logicalDecision === 'OR' ? 'searchButton' : 'btn-light']"
+                                                                >Optional</button>
                                                         </div>
                                                         <hr/>
                                                     </div>
@@ -336,6 +335,9 @@ onMounted(() => {
 <style>
 .hidden {
     display: none;
+}
+.QualLogicalButton {
+    font-size:0.80em;
 }
 .subDiv {
     margin: 20px auto;

@@ -122,7 +122,7 @@ export const useQualificationStore = defineStore('qualification', {
                                         project.projectTargetAudiences[taIndex].qualifications.push(
                                             {
                                                 "id": currentLength + 1, "order": currentLength + 1, 
-                                                "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
+                                                "logicalDecision": "AND", "NumberOfRequiredConditions": 0,
                                                 "IsActive": true,
                                                 "question": {
                                                     "id":  currentqas.id, "name": currentqas.name, "text": currentqas.text, "categoryName": currentqas.categoryName,
