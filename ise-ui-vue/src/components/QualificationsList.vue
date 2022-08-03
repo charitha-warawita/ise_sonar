@@ -1,6 +1,6 @@
 <template >
     <!--<p>Item type: {{itemType}} ; TAID: {{taId }} ; QID : {{ qualificationId }}</p>-->
-    <div v-if="itemType === 'age'" class="container">
+    <!--<div v-if="itemType === 'age'" class="container">
         <div class="row">
             <div class="col-md-12"><h5>Current Age range is set to {{ currAgeRange}}. Enter new age range</h5></div>
             <div class="col-md-6">
@@ -54,7 +54,7 @@
                 <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="useQualStore.SaveGenderQualification(itemType, taId, qualificationId)">Save qualification</button>
             </div>
         </div>
-    </div>
+    </div>-->
     <div v-if="itemType === 'profileVars'" class="container">
         <div class="row">
             <p><b>Choose a global profile category</b></p>
@@ -111,6 +111,10 @@ function SaveQualification() {
     useQualStore.saveQualificationDetailstoProject();
     emit("close");
 }
+
+onMounted(() => {
+    useQualStore.$reset()
+})
 </script>
 <style>
 .projectSetting {

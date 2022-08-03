@@ -5,267 +5,40 @@ export const useQualificationStore = defineStore('qualification', {
     state: () => ({
         currentTAId: 0,
         currentQAId: 0,
-        
-        /*currAgeRange: '',
-        minAge: 0,
-        maxAge: 0,
-
-        countries: [],
-        countriesLoading: false,
-        countriesError: null,
-
-        genders: [],*/
 
         profCategories: [],
         profCategoriesLoading: false,
         profCategoriesError: null,
         categoryQAs: [],
         selectedCategory: '',
-        saveQualificationError:'',
-
-        arrayToAddQualModel:[],
-        popupFlagVar:true,
-
-        onlinebanking:[],
-        fieldofexperties:[],
         error: null,
-        EditQualificationflag : true,
-        selectedQuestionID:'',
-        selectedQualification:[],
-        countriesforvariable:[],
-        bindname:'',
-        variable:'',
-        arrayvariableforcountry:[],
-        arrayvariableforgender:[],
-        genderslistforvariable:[],
-        selectedQualificationfordisplay : false,
 
         iseUrl: import.meta.env.VITE_ISE_API_URL,
         iseCountryPath: import.meta.env.VITE_ISE_API_COUNTRIES,
         iseProfCatPath: import.meta.env.VITE_ISE_API_PROFILECATEGORIES,
         iseQAByCategoryPath: import.meta.env.VITE_ISE_API_QABYCATEGORY
     }),
-    getters: {
-
-    },
     actions: {
-        /*async GetQualification(itemtype, taId, qid) {
-            if(itemtype === 'age' )
-            {
-                this.GetQualificationAge(itemtype,taId, qid);
-            }
-            if(itemtype === "country")
-            {
-                this.GetQualificationCountry(itemtype, taId, qid);
-            }
-            if(itemtype === "gender")
-            {
-                this.GetQualificationGender(itemtype, taId, qid);
-            }  
-        },
-        async GetQualificationAge(itemtype, taId, qid)
-        {
-            console.log(itemtype + '--' + taId + '--' + qid);
-            var project = useProjectStore().project;
-            for (var i = 0; i < project.projectTargetAudiences.length; i++)
-            {
-                if(project.projectTargetAudiences[i].id === taId)
-                {
-                    for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                    {
-                        if(project.projectTargetAudiences[i].qualifications[j].id === qid)
-                        {
-                            var variable = project.projectTargetAudiences[i].qualifications[j].question.variables[0];
-                            this.currAgeRange = variable.name;
-                            var numberIndex = variable.name.indexOf(' - ');
-                            this.minAge = variable.name.substring(0, numberIndex);
-                            this.maxAge = variable.name.substring(numberIndex+3, variable.name.length);
-                            break;
-                        }
-                    }
-                }
-            }
-        },
-        SaveAgeQualification(itemtype, taId, qid) {
-            console.log("Save called and values passed: " + itemtype + '=' + taId + '-' + qid);
-            if(itemtype === 'age')
-            {
-                var project = useProjectStore().project;
-                for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                {
-                    if(project.projectTargetAudiences[i].id === taId)
-                    {
-                        for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                        {
-                            if(project.projectTargetAudiences[i].qualifications[j].id === qid)
-                            {
-                                project.projectTargetAudiences[i].qualifications[j].question.variables[0].name = this.minAge + ' - ' + this.maxAge;
-                                this.variable=this.minAge+ ' - ' + this.maxAge ;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        async GetQualificationCountry(itemtype, taId, qid)
-        {
-            if(this.countries.length === 0)
-                {
-                    // var countriesList = [{"id":1,"name":"UK","selected":true},{"id":2,"name":"Sweden","selected":false},{"id":3,"name":"Germany","selected":false},{"id":4,"name":"Denmark","selected":false},{"id":5,"name":"Finland","selected":false},{"id":6,"name":"Norway","selected":false},{"id":9,"name":"Spain","selected":false},{"id":10,"name":"Italy","selected":false},{"id":11,"name":"Hungary","selected":false},{"id":12,"name":"Greece","selected":false},{"id":22,"name":"USA","selected":false}];
-                    // this.countries = countriesList;
-                    this.countriesLoading = true
-                    try {
-                        this.countries = await fetch(this.iseUrl + this.iseCountryPath)
-                        .then((response) => response.json())
-                    } catch (error) {
-                        this.countriesError = error
-                        return;
-                    } finally {
-                        this.countriesLoading = false
-                    }
-                }
-                var currProjCountryIdList = [];
-                var project = useProjectStore().project;
-                for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                {
-                    if(project.projectTargetAudiences[i].id === taId)
-                    {
-                        for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                        {
-                            if(project.projectTargetAudiences[i].qualifications[j].id === qid)
-                            {
-                                var currVar = project.projectTargetAudiences[i].qualifications[j].question.variables;
-                                for(var k = 0; k < currVar.length; k++)
-                                    currProjCountryIdList.push(currVar[k].id);
-                            }
-                        }
-                    }
-                }
-                for (var i = 0; i < this.countries.length; i++)
-                {
-                    if(currProjCountryIdList.includes(this.countries[i].id))
-                        this.countries[i].selected = true;
-                    else 
-                        this.countries[i].selected = false;
-                }
-        },
-        async UpdateCountrySelection(itemType, taId, qualificationId, country) {
-            if(this.countries.length > 0)
-            {
-                for(var i = 0; i < this.countries.length; i++)
-                {
-                    if(this.countries[i].id === country.id)
-                        this.countries[i].selected = true;
-                    else
-                        this.countries[i].selected = false; 
-                }
-            }
-        },
-        SaveCountryQualification(itemtype, taId, qid) {
-            console.log("Save called and values passed: " + itemtype + '=' + taId + '-' + qid);
-            if(itemtype === 'country')
-            {
-                var project = useProjectStore().project;
-                for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                {
-                    if(project.projectTargetAudiences[i].id === taId)
-                    {
-                        for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                        {
-                            if(project.projectTargetAudiences[i].qualifications[j].id === qid)
-                            {
-                                var variables = [];
-                                var newCountriesList = this.countries.filter(x => x.selected);
-                                for(var k = 0; k < newCountriesList.length; k++)
-                                {
-                                    variables.push({ "id": newCountriesList[k].id, "name": newCountriesList[k].name })
-                                }
-                                
-                                project.projectTargetAudiences[i].qualifications[j].question.variables = variables;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        async GetQualificationGender(itemtype, taId, qid)
-        {
-            if(this.genders.length === 0)
-            {
-                console.log('Call made to Gender API');
-                var gendersList = [{"id":1,"name":"Male","selected":false},{"id":2,"name":"Female","selected":false}];
-                this.genders = gendersList;
-            }
-        },
-        SaveGenderQualification(itemtype, taId, qid) {
-            console.log("Save called and values passed: " + itemtype + '=' + taId + '-' + qid);
-            if(itemtype === 'gender')
-            {
-                var project = useProjectStore().project;
-                for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                {
-                    if(project.projectTargetAudiences[i].id === taId)
-                    {
-                        for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                        {
-                            if(project.projectTargetAudiences[i].qualifications[j].id === qid)
-                            {
-                                var variables = [];
-                                var newGendersList = this.genders.filter(x => x.selected);
-                                for(var k = 0; k < newGendersList.length; k++)
-                                {
-                                    variables.push({ "id": newGendersList[k].id, "name": newGendersList[k].name })
-                                }
-                                
-                                project.projectTargetAudiences[i].qualifications[j].question.variables = variables;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        },*/
         async GetProfileCategories(taId)
         {
+            this.selectedCategory=''; this.categoryQAs=[]; this.profCategories=[];
             this.currentTAId = taId;
-            if(this.profCategories.length === 0)
-            {
+            try {
                 this.profCategoriesLoading = true;
-                try {
-                     var currProfCategories = await fetch(this.iseUrl + this.iseProfCatPath)
+                var currProfCategories = await fetch(this.iseUrl + this.iseProfCatPath)
                     .then((response) => response.json());
 
-                    var projectsCurrProfCategories = [];
-                    var project = useProjectStore().project;
-                    for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                    {
-                        if(project.projectTargetAudiences[i].id === taId)
-                        {
-                            for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                            {
-                                var q = project.projectTargetAudiences[i].qualifications[j];
-                                projectsCurrProfCategories.push(q.question.categoryName);
-                            }
-                        }
-                    }
-                    for(var i = 0; i < currProfCategories.length; i++)
-                    {
-                        var currName = currProfCategories[i];
-                        var currProfCategoryCount = projectsCurrProfCategories.filter(x => x === currProfCategories[i]).length;
-                        var currSelected = false;
-                        if(currProfCategoryCount > 0)
-                            currSelected = true;
-                        
-                        this.profCategories.push({ name: currName, count: currProfCategoryCount, selected: currSelected, qas: [] });
-                    }
-                } catch (error) {
-                    this.profCategoriesError = error;
-                } finally {
-                    this.profCategoriesLoading = false;
+                for(var i = 0; i < currProfCategories.length; i++)
+                {
+                    var currName = currProfCategories[i];
+                    this.profCategories.push({ name: currName, count: 0, selected: false, qas: [] });
                 }
+            } catch (error) {
+                this.profCategoriesError = error;
+            } finally {
+                this.profCategoriesLoading = false;
             }
+            
         },
         async GetQandAForCategory(profCategory)
         {
@@ -301,12 +74,9 @@ export const useQualificationStore = defineStore('qualification', {
         },
         async SaveQAToProject(question, answerId, answerName) {
             var isAddingNewElement = true;
-
-            //Updating UI
             if(this.profCategories.length > 0)
             {
-                var index = this.profCategories.findIndex(x => x.name === question.categoryName);
-                
+                var index = this.profCategories.findIndex(x => x.name === question.categoryName);   
                 if(this.profCategories[index].qas.length > 0)
                 {
                     var currIndex = this.profCategories[index].qas.findIndex(x => x.id === question.id);
@@ -315,27 +85,15 @@ export const useQualificationStore = defineStore('qualification', {
                         var currVarIndex = this.profCategories[index].qas[currIndex].variables.findIndex(x => x.id === answerId);
                         if(currVarIndex > -1)
                         {
-                            // if(this.profCategories[index].qas[currIndex].variables[currVarIndex].selected)
-                            //     isAddingNewElement = false;
-                            //     this.profCategories[index].qas[currIndex].variables[currVarIndex].selected = !this.categoryQAs[currIndex].variables[currVarIndex].selected
-                            //     this.arrayToAddQualModel.push(this.profCategories[index].qas[currIndex]);
-                            if(this.profCategories[index].qas[currIndex]===this.arrayToAddQualModel[currIndex])
-                            {
-                                if (this.profCategories[index].qas[currIndex].id===this.arrayToAddQualModel[currIndex].id)
-                                this.profCategories[index].qas[currIndex].variables[currVarIndex].selected = !this.profCategories[index].qas[currIndex].variables[currVarIndex].selected
-                                this.arrayToAddQualModel[currIndex].variables[currVarIndex]===(this.profCategories[index].qas[currIndex].variables[currVarIndex])
-                            }
-                            else{
-                                if(this.profCategories[index].qas[currIndex].variables[currVarIndex].selected)
+                            if(this.profCategories[index].qas[currIndex].variables[currVarIndex].selected)
                                 isAddingNewElement = false;
-                                this.profCategories[index].qas[currIndex].variables[currVarIndex].selected = !this.categoryQAs[currIndex].variables[currVarIndex].selected
-                                this.arrayToAddQualModel.push(this.profCategories[index].qas[currIndex]);
-                            }
+                            
+                            this.profCategories[index].qas[currIndex].variables[currVarIndex].selected 
+                                            = !this.profCategories[index].qas[currIndex].variables[currVarIndex].selected;
                         }
                     }
                     this.categoryQAs = this.profCategories[index].qas;
                 } 
-
                 if(isAddingNewElement) {
                     this.profCategories[index].selected = true;
                     this.profCategories[index].count = this.profCategories[index].count+1;
@@ -347,170 +105,40 @@ export const useQualificationStore = defineStore('qualification', {
                     this.profCategories[index].selected = false;
                 }
             }
-
-            //Updating project Model
-            // var project = useProjectStore().project;
-            // for (var i = 0; i < project.projectTargetAudiences.length; i++)
-            // {
-            //     if(project.projectTargetAudiences[i].id === this.currentTAId)
-            //     {
-            //         var currentLength = project.projectTargetAudiences[i].qualifications.length;
-            //         var qualQuestionIndex = project.projectTargetAudiences[i].qualifications.findIndex(x => x.question.id === question.id)
-            //         if(qualQuestionIndex < 0)
-            //         {
-            //             var qualification = {
-            //                 "id": currentLength + 1, "order": currentLength + 1, 
-            //                 "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
-            //                 "IsActive": true,
-            //                 "question": {
-            //                     "id": question.id, "name": question.name, "text": question.text, "categoryName": question.categoryName,
-            //                     "variables": [{ "id": answerId, "name": answerName }]
-            //                 } 
-            //             }
-            //             project.projectTargetAudiences[i].qualifications.push(qualification)
-            //         }
-            //         else {
-            //             var qualVarIndex = project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.findIndex(x => x.id === answerId)
-            //             if(qualVarIndex < 0)
-            //             {
-            //                 project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.push({ "id": answerId, "name": answerName })
-            //             }
-            //             else {
-            //                 // We need to remove the item
-            //                 if(!isAddingNewElement)
-            //                 {
-            //                     if(project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.length === 1)
-            //                     {
-            //                         project.projectTargetAudiences[i].qualifications.splice(qualQuestionIndex, 1);
-            //                     }
-            //                     else
-            //                     {
-            //                         project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.splice(qualVarIndex, 1);
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
         },
         saveQualificationDetailstoProject()
         {
-            // Updating project Model
-           
-            var LocalarrayToAddQualModel = this.arrayToAddQualModel
             var project = useProjectStore().project;
-            var flagvar = 0;
-            var currentQualQuesIndex=[];
-            try{
-                    for (var j = 0; j < LocalarrayToAddQualModel.length; j++)
-                    {
-                        for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                        {
-                            if(project.projectTargetAudiences[i].id === this.currentTAId)
-                            {
-                                var currentLength = project.projectTargetAudiences[i].qualifications.length;
-                                var qualQuestionIndex = project.projectTargetAudiences[i].qualifications.findIndex(x => x.question.id === LocalarrayToAddQualModel[j].id)
-                                
-                                for (var k = 0; k < LocalarrayToAddQualModel[j].variables.length; k++)
+            try {
+                    var taIndex = project.projectTargetAudiences.findIndex(x => x.id === this.currentTAId);
+                    if(taIndex > -1) {
+                        for(var i = 0; i < this.profCategories.length; i++) {
+                            if(this.profCategories[i].selected) {
+                                for(var j = 0; j < this.profCategories[i].qas.length; j++)
                                 {
-                                    if(qualQuestionIndex < 0)
-                                        {
-                                            // freshly adding the questions
-                                            if (LocalarrayToAddQualModel[j].variables[k].selected === true)
-                                                {
-                                                    if (flagvar===1)
-                                                    {
-                                                        //if questions has more that one options/variables
-                                                        var qualQuestionIndex2 = project.projectTargetAudiences[i].qualifications.findIndex(x => x.question.id === LocalarrayToAddQualModel[j].id)
-                                                        project.projectTargetAudiences[i].qualifications[qualQuestionIndex2].question.variables.push(this.arrayToAddQualModel[j].variables[k])
-                                                    }
-                                                    else
-                                                    {
-                                                        //freshly adding question with first option/variable
-                                                        var qualification = {
-                                                            "id": currentLength + 1, "order": currentLength + 1, 
-                                                            "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
-                                                            "IsActive": true,
-                                                            "question": {
-                                                                "id":  LocalarrayToAddQualModel[j].id, "name": LocalarrayToAddQualModel[j].name, "text": LocalarrayToAddQualModel[j].text, "categoryName": LocalarrayToAddQualModel[j].categoryName,
-                                                                "variables": [{ "id": LocalarrayToAddQualModel[j].variables[k].id, "name": LocalarrayToAddQualModel[j].variables[k].name }]
-                                                            } 
-                                                        }
-                                                        flagvar = 1;// if flagvar = 1 then if question have more options it should be loaded in same question id
-                                                        project.projectTargetAudiences[i].qualifications.push(qualification)
-                                                    }
-                                                }
-                                        }
-                                    else 
-                                        {
-                                           // var qualVarIndex = project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.findIndex(x => x.id === LocalarrayToAddQualModel[j].variables[k].id)
-                                        // for Adding the Questions which is already added as qualification before.
-                                           if(LocalarrayToAddQualModel[j].variables[k].selected === true)
+                                    if(this.profCategories[i].qas[j].variables.some(e => e.selected === true)) {
+                                        var currentLength = project.projectTargetAudiences[taIndex].qualifications.length;
+                                        var currentqas = this.profCategories[i].qas[j];
+                                        project.projectTargetAudiences[taIndex].qualifications.push(
                                             {
-                                                if (LocalarrayToAddQualModel[j].variables[k].selected === true)
-                                                {
-                                                    if (flagvar===1)
-                                                    {
-                                                        // var qualQuestionIndex3 = project.projectTargetAudiences[i].qualifications.findIndex(x => x.qualifications.id === currentQualQuesIndex.id)
-                                                        // project.projectTargetAudiences[i].qualifications[qualQuestionIndex3].question.variables.push(this.arrayToAddQualModel[j].variables[k])
-                                                        // currentQualQuesIndex.push(this.arrayToAddQualModel[j].variables[k])
-                                                    }
-                                                    else
-                                                    {
-                                                        //freshly adding already present Qualification
-                                                        var qualification = {
-                                                            "id": currentLength + 1, "order": currentLength + 1, 
-                                                            "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
-                                                            "IsActive": true,
-                                                            "question": {
-                                                                "id":  LocalarrayToAddQualModel[j].id, "name": LocalarrayToAddQualModel[j].name, "text": LocalarrayToAddQualModel[j].text, "categoryName": LocalarrayToAddQualModel[j].categoryName,
-                                                                "variables": [{ "id": LocalarrayToAddQualModel[j].variables[k].id, "name": LocalarrayToAddQualModel[j].variables[k].name }]
-                                                            } 
-                                                        }
-                                                        flagvar = 1;
-                                                        //checking if newly added question (which is already present) has more options if yes adding options/variables to "id": currentLength + 1 
-                                                        if (LocalarrayToAddQualModel[j].variables.length >0)
-                                                        {
-                                                            for (var k = qualification.question.variables.length; k < LocalarrayToAddQualModel[j].variables.length; k++)
-                                                            {
-                                                                if (LocalarrayToAddQualModel[j].variables[k].selected === true)
-                                                                qualification.question.variables.push(this.arrayToAddQualModel[j].variables[k]);
-                                                            } 
-                                                        }
-                                                        //final push of newly added question
-                                                        project.projectTargetAudiences[i].qualifications.push(qualification)
-                                                    }
-                                                }
+                                                "id": currentLength + 1, "order": currentLength + 1, 
+                                                "logicalDecision": "OR", "NumberOfRequiredConditions": 0,
+                                                "IsActive": true,
+                                                "question": {
+                                                    "id":  currentqas.id, "name": currentqas.name, "text": currentqas.text, "categoryName": currentqas.categoryName,
+                                                    "variables": currentqas.variables.filter(e => e.selected === true)
+                                                } 
                                             }
-                                            else
-                                                {
-                                                    // We need to remove the item
-                                                    // if(!isAddingNewElement)
-                                                    // {
-                                                    //     if(project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.length === 1)
-                                                    //     {
-                                                    //         project.projectTargetAudiences[i].qualifications.splice(qualQuestionIndex, 1);
-                                                    //     }
-                                                    //     else
-                                                    //     {
-                                                    //         project.projectTargetAudiences[i].qualifications[qualQuestionIndex].question.variables.splice(qualVarIndex, 1);
-                                                    //     }
-                                                    // }
-                                                }
-                                        }
+                                        )
+                                    }
                                 }
                             }
                         }
-                        flagvar = 0    
                     }
-                    this.arrayToAddQualModel=[];
                 }
                 catch (error) 
                 {
-                    this.saveQualificationError = error
-                }finally {
-                    this.popupFlagVar = false;
-                   this.arrayToAddQualModel=[];
+                    this.error = error
                 }
         },
         UpdateQualLogOperation(taId, qid, ld)
@@ -555,12 +183,6 @@ export const useQualificationStore = defineStore('qualification', {
                     }
                 }
             }
-        },
-        refreshQualPopup()
-        {
-            this.selectedCategory='';
-            this.categoryQAs=[];
-            this.profCategories=[];
         }
     }
 })
