@@ -39,67 +39,66 @@ onMounted(async () => {
 			<ProjectOverview :project="project" />
 		</div>
 
-		<div class="project-details">
-			<div class="configuration-container">
-				<div>
-					<TargetAudienceList
-						v-if="project"
-						v-model:target-audiences="project.TargetAudiences"
-						:project-id="id"
-					/>
-				</div>
-			</div>
-
-			<div class="pricing-container">
-				<Pricing />
+		<!-- <div class="project-details"> -->
+		<div class="configuration-container">
+			<div>
+				<TargetAudienceList
+					v-if="project"
+					v-model:target-audiences="project.TargetAudiences"
+					:project-id="id"
+				/>
 			</div>
 		</div>
+
+		<div class="pricing-container">
+			<Pricing />
+		</div>
+		<!-- </div> -->
 	</div>
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/variables.scss' as *;
+@use '@/assets/variables.scss';
 
 .project-container {
-	flex-direction: column;
+	display: grid;
+	grid-gap: 20px 20px;
+	grid-template-columns: 4fr 1fr;
+
+	@media screen and (max-width: variables.$lg) {
+		grid-template-columns: 2fr 1fr;
+	}
+
+	@media screen and (max-width: variables.$md) {
+		grid-template-columns: 1fr;
+	}
+
+	& > div {
+		width: 100%;
+	}
 }
 
 .overview {
-	flex-grow: 1;
-	margin-bottom: 50px;
-}
-
-.project-details {
-	flex-grow: 1;
-	display: grid;
-	grid-template-columns: 3.5fr 1fr;
+	@media screen and (min-width: variables.$md) {
+		grid-column: span 2;
+	}
 }
 
 .configuration-container {
-	flex-grow: 0.85;
 	display: flex;
 	flex-direction: column;
-	margin-right: 10px;
-
-	@media screen and (min-width: $lg) {
-		flex-grow: 0.65;
-	}
-
-	@media screen and (min-width: $xl) {
-		flex-grow: 0.85;
-	}
 }
 
 .pricing-container {
-	margin-left: 10px;
+	min-width: 10rem;
+	min-height: 18rem;
 
-	@media screen and (min-width: $lg) {
-		flex-grow: 0.35;
+	@media screen and (min-width: variables.$lg) {
 		height: 20vh;
+		max-width: 25rem;
 	}
 
-	@media screen and (min-width: $xl) {
-		flex-grow: 0.15;
+	@media screen and (min-width: variables.$xl) {
 		height: 25vh;
 	}
 }

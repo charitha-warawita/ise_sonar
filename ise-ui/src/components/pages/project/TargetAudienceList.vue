@@ -34,6 +34,10 @@ const OpenTargetAudienceModal = () => {
 
 const AddTargetAudience = (ta: TargetAudience) => {
 	// TODO: Make API call to persist the Target Audience.
+	const id = audiences.value.length + 1;
+	ta.Id = id;
+
+	console.log(audiences.value);
 
 	audiences.value.push(ta);
 };
@@ -104,6 +108,8 @@ const EditTargetAudience = (ta: TargetAudience) => {
 </template>
 
 <style scoped lang="scss">
+@use '@/assets/variables.scss' as *;
+
 .target-audience-empty-container {
 	padding: 20px;
 	text-align: center;
@@ -124,7 +130,7 @@ const EditTargetAudience = (ta: TargetAudience) => {
 }
 
 .target-audience-datarow {
-	flex-grow: 1;
+	width: 100%;
 	display: flex;
 	padding: 10px;
 }
@@ -135,8 +141,14 @@ const EditTargetAudience = (ta: TargetAudience) => {
 
 .target-audience-details {
 	flex-grow: 1;
+	margin-top: 10px;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
+
+	@media screen and (max-width: $sm) {
+		grid-template-columns: 1fr;
+		grid-gap: 10px 0;
+	}
 }
 
 .target-audience-buttons {

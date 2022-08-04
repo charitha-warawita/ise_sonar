@@ -45,9 +45,10 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 };
 </script>
 
+<!-- Should we refactor Project filter, Project Grid and Project Modal into a separate comp? -->
 <template>
 	<div class="home-container">
-		<div>
+		<div class="search-box">
 			<span class="p-float-label">
 				<InputText class="project-filter-input" id="search" type="text" v-model="projectFilter" />
 				<label class="project-filter-input-label" for="search">Search</label>
@@ -60,7 +61,6 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 			<Panel :value="projects">
 				<template #header>
 					<span>
-						<!-- Needs to be bold -->
 						<b style="font-weight: 600">
 							Projects <span style="color: lightskyblue">{{ projects.length }}</span>
 						</b>
@@ -82,17 +82,32 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 	display: grid;
 	grid-template-columns: 4fr 1fr;
 	grid-row-gap: 30px;
+
+	@media screen and (max-width: $md) {
+		grid-template-columns: 1fr;
+	}
 }
 
 .project-row {
-	grid-column: span 2;
+	@media screen and (min-width: $sm) {
+		grid-column: span 2;
+	}
 }
 
 .button-cell {
-	justify-self: end;
-	min-width: 150px;
-	max-width: 250px;
 	width: 100%;
+
+	/* When sm, put create button at top of grid. */
+	@media screen and (max-width: $sm) {
+		grid-row-start: 0;
+		grid-row-end: 1;
+	}
+
+	@media screen and (min-width: $sm) {
+		justify-self: end;
+		min-width: 150px;
+		max-width: 250px;
+	}
 }
 
 /* Panel */
@@ -118,17 +133,20 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 	background: var(--blue-100);
 	border: none;
 
-	@media screen and (max-width: $md) {
-		.project-filter-input {
-			width: 90%;
-		}
+	/* Greater than md */
+	@media screen and (min-width: $md) {
+		max-width: 535px;
+		width: 65%;
 	}
 
-	@media screen and (min-width: $md) {
-		.project-filter-input {
-			max-width: 535px;
-			width: 65%;
-		}
+	/* Less than md */
+	@media screen and (max-width: $md) {
+		width: 90%;
+	}
+
+	/* Less than sm */
+	@media screen and (max-width: $sm) {
+		width: 100%;
 	}
 }
 
