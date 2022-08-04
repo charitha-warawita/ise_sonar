@@ -58,18 +58,18 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/variables.scss';
+@use '@/assets/variables.scss' as *;
 
 .project-container {
 	display: grid;
 	grid-gap: 20px 20px;
 	grid-template-columns: 4fr 1fr;
 
-	@media screen and (max-width: variables.$lg) {
+	@media screen and (max-width: $lg) {
 		grid-template-columns: 2fr 1fr;
 	}
 
-	@media screen and (max-width: variables.$md) {
+	@media screen and (max-width: $md) {
 		grid-template-columns: 1fr;
 	}
 
@@ -79,7 +79,7 @@ onMounted(async () => {
 }
 
 .overview {
-	@media screen and (min-width: variables.$md) {
+	@media screen and (min-width: $md) {
 		grid-column: span 2;
 	}
 }
@@ -93,12 +93,11 @@ onMounted(async () => {
 	min-width: 10rem;
 	min-height: 18rem;
 
-	@media screen and (min-width: variables.$lg) {
+	@media screen and (min-width: $lg) {
 		height: 20vh;
-		max-width: 25rem;
 	}
 
-	@media screen and (min-width: variables.$xl) {
+	@media screen and (min-width: $xl) {
 		height: 25vh;
 	}
 }
