@@ -23,6 +23,7 @@
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Name</label>
                 <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.name">
+                <!--<span v-for="error in validations.name.$errors" :key="error.$uid" style="color:red">{{ error.message }}</span>-->
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Maconomy Reference</label>
@@ -60,10 +61,20 @@ import {useProjectSettingStore} from '@/stores/projectSettingStore'
 import { useProjectStore } from "@/stores/projectStore"; 
 import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
+// import useVuelidate from '@vuelidate/core'
+// import { required } from '@vuelidate/validators'
 
 var useProjSettingStore = useProjectSettingStore()
 var useProjStore = useProjectStore();
 const { categories, loading, error } = storeToRefs(useProjSettingStore)
+// const props = defineProps([ 'validations'])
+
+/*const rules = {
+    name: { required },
+    reference: { required }
+};*/
+
+// const v$ = useVuelidate(rules, useProjStore.project);
 
 const toggleCategory = (id) => {
     var catId = 'cat'+ id;

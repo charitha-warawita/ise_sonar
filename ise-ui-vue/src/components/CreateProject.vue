@@ -11,6 +11,11 @@
                         </h2>
                         <div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingZero">
                             <div class="accordion-body">
+                                <div v-if="project.errors.length > 0" style="color:red">
+                                Validation errors:<br/>
+                                <span v-for="error in project.errors" :key="error" style="color:red">
+                                    {{ error }}<br/>
+                                </span></div>
                                 <ProjectSetting />
                             </div>
                         </div>
@@ -24,6 +29,11 @@
                             </h2>
                             <div :id="'panelsStayOpen-collapseTwo-' + ta.id" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
                                 <div class="accordion-body">
+                                    <div v-if="ta.errors.length > 0" style="color:red">
+                                        Validation errors:<br/>
+                                        <span v-for="error in ta.errors" :key="error" style="color:red">
+                                            {{ error }}<br/>
+                                        </span></div>
                                     <div class="row g-3">
                                         <div class="col-md-12">
                                             Complete this information to provide target audience details of your survey
@@ -68,10 +78,7 @@
                                                                     <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px"><i>{{item.name}}</i></label>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            
-                                                                
-                                                            
+                                                            </div>       
                                                         </div>
                                                         <div class="col-md-3">
                                                             <button 
@@ -105,7 +112,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                         
                                     </div>
                                     <div class="accordion-item-custom">
                                             <h2 class="accordion-header" id="panelsStayOpen-headingFour">
@@ -132,54 +138,18 @@
                                                </div>
                                                
                                                 <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ (ta.quota.length+1))">Add Quota</button>  
-
-                                                <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
-                                                    <div class="card modal-content">
-                                                        <h3 class="card-header">Quota</h3>
-                                                         <div class="card-body">
-                                                            <QuotaList :itemType="quotaPopup" :taId= ta.id :quotaid=ta.quota.length+1 />
-                                                         </div>               
-                                                     </div> 
-                                                 </CustomModal>                                                  
-                                               
+                                                    <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
+                                                        <div class="card modal-content">
+                                                            <h3 class="card-header">Quota</h3>
+                                                            <div class="card-body">
+                                                                <QuotaList :itemType="quotaPopup" :taId= ta.id :quotaid=ta.quota.length+1 />
+                                                            </div>               
+                                                        </div> 
+                                                    </CustomModal>                                                  
                                             </div>
                                         </div>
-                                    </div>
-                                                    
-                                                <!-- </div>
-                                            </div>
-                                        </div> -->
-                                        <!-- <div class="row g-3 subDiv" v-if="ta.quotas.length > 0">
-                                            <h5>Quotas</h5>
-                                            <div class="row g-3 subDivQ" v-for="quota in ta.quotas" :key="quota.id">
-                                                <div class="col-md-12"><b>Quota details</b>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="inputEmail4" class="form-label">Name</label>
-                                                    <input type="text" class="form-control" id="inputEmail4" v-model="quota.name">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="inputEmail4" class="form-label">Condition</label>
-                                                    <input type="text" class="form-control" id="inputEmail4" v-model="quota.condition">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="inputEmail4" class="form-label">Limit</label>
-                                                    <input type="number" class="form-control" id="inputEmail4" v-model="quota.limit">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="inputEmail4" class="form-label">Limit Type</label>
-                                                    <input type="text" class="form-control" id="inputEmail4" v-model="quota.limitType">
-                                                </div>
-                                                <div class="col-md-6"/>
-                                                <div class="col-md-6">
-                                                    <label for="inputEmail4" class="form-label">Enabled</label>
-                                                    <div class="form-control" style="border: none"><input type="checkbox" id="inputEmail4" v-model="quota.isActive"></div>
-                                                </div>
-                                            </div>
-                                        </div> -->
+                                    </div>      
                                     <div class="col-md-12">
-                                        <!--<button class="btn btn-outline-success searchButton me-2 " v-on:click="useProjStore.AddQualificationElement(ta.qualifications)">Add Qualification</button>-->
-                                        <!--<button class="btn btn-outline-success searchButton me-2 " v-on:click="useProjStore.AddQuotaElement(ta.quotas)">Add Quota</button>-->
                                         <button :class="{ hidden: ta.id === 1 }" style="float: right" class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.CancelTargetAudience(ta)">Cancel Target Audience</button>
                                     </div>
                                 </div>
@@ -225,10 +195,9 @@
                 </div>
                 <div class="breakDiv"></div><hr>
                 <div class="col-md-12">
-                    <RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" to="/confirm">Create Project</RouterLink>
-                    <RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" to="/confirm">Save as Draft</RouterLink>
-                    <RouterLink class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" to="/">Cancel</RouterLink>
-                    
+                    <button @click="SubmitProject(project)" class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;">Create Project</button>
+                    <button @click="SaveforLater(project)" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;">Save as Draft</button>
+                    <button @click="DiscardProject()" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;">Cancel</button>
                 </div>
             </div>
         </div>
@@ -249,6 +218,10 @@ import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
 import {ref} from "vue"
 import { VueDraggableNext } from "vue-draggable-next";
+import { useRouter } from 'vue-router';
+
+import useVuelidate from '@vuelidate/core'
+import { helpers, required, minLength, email, minValue } from '@vuelidate/validators'
 
 defineProps(['open'])
 var draggable = VueDraggableNext
@@ -256,9 +229,92 @@ var useProjStore = useProjectStore()
 var useQualStore = useQualificationStore()
 var useQuotaDataStore = useQuotaStore()
 const { project, basicSettingDesc, totalCost, saveProjectLoading, saveProjectError } = storeToRefs(useProjStore)
-// const modalActive = ref(false);
-// const modalId = ref(0);
-// var showmodal=false;
+
+const rules = {
+    name: { required },
+    reference: { required },
+    startDate: { required },
+    fieldingPeriod: { required, minValueValue:minValue(1) },
+    testingUrl: { required },
+    liveUrl: { required },
+    categories: { required },
+    user: { "name": { required }, "email": { required, email }  },
+    projectTargetAudiences: {
+        $each: helpers.forEach({
+            "name": { required: helpers.withMessage('TA Name cannot be empty', required) },
+            "audienceNumber":{ required: helpers.withMessage('Audience order cannot be empty', required) },
+            "estimatedIR": { required, minValueValue: helpers.withMessage(() => "Estimated IR minimum value allowed is 1", minValue(1))   },
+            "estimatedLOI": { required, minValueValue: helpers.withMessage(() => 'Estimate LOI minimum value allowed is 1', minValue(1)) },
+            "wantedCompletes": { required, minValueValue:helpers.withMessage(() => 'wanted Completes minimum value allowed is 1', minValue(1)) }
+        })
+    }
+};
+
+const saveForLaterRules = {
+    name: { required },
+    reference: { required },
+    startDate: { required },
+    categories: { required },
+    user: { "name": { required }, "email": { required, email }  }
+};
+const router = useRouter();
+
+async function SubmitProject(project) {
+    if(await ProjectValidated(project, 'create')) {
+        router.push('/confirm');
+    }
+}
+async function SaveforLater(project) {
+    if(await ProjectValidated(project, 'save')) {
+        await useProjStore.CreateProject(project);
+        if(typeof(project.id) === undefined || project.errors.length > 0)
+        alert('Project Save as Draft is unsuccessful. Project ID returned is: ' + this.project.id + '. Error returned is: ' + JSON.stringify(this.project.errors));
+        else {
+            alert('project saved as draft successfully. New project ID is' + project.id);
+            useProjStore.$reset();
+        }
+        router.push('/');
+    }
+}
+function DiscardProject() {
+    if(confirm("Are you sure you want to cancel? All your changes will be discarded?")) {
+        useProjStore.$reset();
+        router.push('/');
+    }
+}
+async function ProjectValidated(project, action) {
+    var v$ = {};
+    if(action === 'create')
+        v$ = useVuelidate(rules, project);
+    else 
+        v$ = useVuelidate(saveForLaterRules, project);
+
+    const result = await v$.value.$validate();
+    project.errors = [];
+    for(var i = 0; i < project.projectTargetAudiences.length; i++)
+        project.projectTargetAudiences[i].errors = [];
+
+    if(!result) {
+        for(var i = 0; i< v$.value.$errors.length; i++) {
+            if(Array.isArray(v$.value.$errors[i].$message)) {
+                for(var j=0; j < v$.value.$errors[i].$message.length; j++)
+                {
+                    for(var k=0; k < v$.value.$errors[i].$message[j].length; k++)
+                    {
+                        if(v$.value.$errors[i].$propertyPath === 'projectTargetAudiences')
+                            project.projectTargetAudiences[j].errors.push(v$.value.$errors[i].$propertyPath + (j+1) + ' - ' +  v$.value.$errors[i].$message[j][k]);
+                    }
+                }
+            }
+            else {
+                project.errors.push(v$.value.$errors[i].$propertyPath + ' - ' + v$.value.$errors[i].$message);
+            }
+        }
+    }
+
+    return result;
+}
+
 const toggleModal = (id) => {
     useQuotaDataStore.conditiongrid = false;
     console.log('customModal id or qId is:' + id);
@@ -272,11 +328,9 @@ const toggleModal = (id) => {
         element[0].style.display = 'none'
         element[1].style.display = 'none'
     }
-    // modalActive.value = !modalActive.value;
 };
 
 onMounted(() => {
-    // console.log('on mounted call');
     useProjStore.$reset()
     useQualStore.$reset()
     useProjStore.AddTargetAudienceElement()
@@ -348,14 +402,6 @@ td a {
     color: black;
 }
 
-/*.modal1 {
-  position: fixed;
-  z-index: 999;
-  top: 20%;
-  left: 50%;
-  width: 300px;
-  margin-left: -150px;
-}*/
 #addQutobutton{
     float: right;
 }
