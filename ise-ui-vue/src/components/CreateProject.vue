@@ -210,7 +210,7 @@
         <div style="box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; padding: 15px;">
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-outline-success searchButton me-2" style="width:100%" v-on:click="useProjStore.CalculateCharges()">Calculate Charges</button>
+                <label class="btn btn-outline-success searchButton me-2" style="width:100%; color: #0c63e4; background-color: #e7f1ff; box-shadow: rgba(100, 100, 111, 0.2)" >Cost Estimation</label>
                 </div><div class="breakDiv"></div>
                 <div class="row" v-if="project.projectTargetAudiences" v-for="ta in project.projectTargetAudiences" :key="ta.id">
                     <h5>Estimation of Target audience - {{ta.id}} </h5><div class="breakDiv"></div>
