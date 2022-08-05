@@ -1,4 +1,6 @@
 import { defineStore } from "pinia";
+import useVuelidate from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 export const useProjectStore = defineStore('project', {
     state: () => ({
         basicSettingDesc:'',
@@ -19,6 +21,7 @@ export const useProjectStore = defineStore('project', {
                 "name": "",
                 "email": ""
             },
+            "errors":[],
             "projectTargetAudiences": []
         },
         saveProjectLoading: false,
@@ -28,7 +31,9 @@ export const useProjectStore = defineStore('project', {
         error: null,
 
     }),
-    getters: {
+    rules: {
+        name: { required },
+        reference: { required }
     },
     actions: {
         async CreateProject(project) {
@@ -63,9 +68,10 @@ export const useProjectStore = defineStore('project', {
                 var savedProject = await fetch((iseUrl + saveProjectPath), settings)
                 .then((response) => response.json());
                 project.id = savedProject.id;
-                //project.lastUpdate = savedProject.lastUpdate;
+                project.lastUpdate = savedProject.lastUpdate;
             } catch (error) {
                 this.saveProjectError = error;
+                project.errors.push(error);
             } finally {
                 this.saveProjectLoading = false;
             }
@@ -84,7 +90,8 @@ export const useProjectStore = defineStore('project', {
                 "qualifications": [],
                 "quota": [],
                 "quotas": [],
-                "subtotal": 0
+                "subtotal": 0,
+                "errors": []
             };
             this.project.projectTargetAudiences.push(ta)
         },
