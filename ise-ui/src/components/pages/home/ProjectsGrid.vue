@@ -2,10 +2,18 @@
 import { format } from 'date-fns';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import type Project from '@/model/Project.js';
+
+const props = defineProps({
+	projects: {
+		type: Array<Project>,
+		required: true,
+	},
+});
 </script>
 
 <template>
-	<DataTable class="project-table" selection-mode="single">
+	<DataTable :value="props.projects" class="project-table" selection-mode="single">
 		<Column field="Id" header="Project Id"></Column>
 		<Column field="Name" header="Project Name"></Column>
 		<Column field="CreationDate" header="Creation Date">

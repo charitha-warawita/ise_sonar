@@ -4,8 +4,11 @@ import type { MenuItem } from 'primevue/menuitem';
 import Breadcrumb from 'primevue/breadcrumb';
 import { ref, type Ref } from 'vue';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore.js';
+import { useMenuStore } from '@/stores/MenuStore.js';
 
 const breadcrumbs = useBreadcrumbStore();
+const menu = useMenuStore();
+
 const items: Ref<MenuItem[]> = ref([
 	{
 		label: 'Projects',
@@ -24,7 +27,7 @@ const items: Ref<MenuItem[]> = ref([
 </script>
 
 <template>
-	<div class="top-nav-container shadowed">
+	<div :class="{ 'top-nav-container': true, shadowed: menu.shadowed }">
 		<Menubar :model="items">
 			<template #start>
 				<h2>ISE</h2>
@@ -42,7 +45,7 @@ const items: Ref<MenuItem[]> = ref([
 
 .p-menubar {
 	border-radius: 0;
-	height: 8vh;
+	height: 4vh;
 	background: var(--color-background) !important;
 	border: none !important;
 }

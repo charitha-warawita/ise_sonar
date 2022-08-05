@@ -1,21 +1,21 @@
 import type TargetAudience from './TargetAudience';
 
 export default class Project {
-	Id: number;
+	Id = -1;
 	Name: string;
 	MaconomyNumber: string;
 	Owner: string;
-	CreationDate: Date;
-	LastActivity: Date;
-	TargetAudiences: TargetAudience[];
+	CreationDate: Date = new Date();
+	LastActivity: Date = new Date();
+	StartDate: Date;
+	EndDate: Date;
+	TargetAudiences: TargetAudience[] = [];
 
-	constructor() {
-		this.Id = -1;
-		this.Name = '';
-		this.MaconomyNumber = '';
-		this.Owner = '';
-		this.CreationDate = new Date();
-		this.LastActivity = new Date();
-		this.TargetAudiences = [];
+	constructor(name: string, maconomyNumber: string, owner: string, start: Date, end: Date) {
+		this.Name = name;
+		this.MaconomyNumber = maconomyNumber;
+		this.Owner = owner;
+		this.StartDate = start;
+		this.EndDate = end;
 	}
 }

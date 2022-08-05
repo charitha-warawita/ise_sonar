@@ -1,28 +1,28 @@
 <script async setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue';
+import { onMounted, reactive, ref, type Ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import Panel from 'primevue/panel';
 import InputText from 'primevue/inputtext';
 import type { DataTableRowSelectEvent } from 'primevue/datatable';
+import { useToast } from 'primevue/usetoast';
 
 import ProjectsGrid from '../components/pages/home/ProjectsGrid.vue';
 import PrimaryButton from '../components/buttons/PrimaryButton.vue';
-import CreateProjectModal from '@/components/modals/CreateProjectModal.vue';
+import ProjectDetailsModal from '@/components/modals/ProjectDetailsModal.vue';
 
 import ProjectService from '@/services/ProjectService';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
 import type Project from '@/model/Project';
 
 const router = useRouter();
+const toast = useToast();
 const breadcrumbs = useBreadcrumbStore();
 breadcrumbs.$reset();
 
 const projectFilter: Ref<string | null> = ref(null);
-const projects: Ref<Project[]> = ref([]);
-
-onMounted(async () => {
-	projects.value = await ProjectService.GetProjectsAsync();
+const projects = reactive({
+	data: [] as Project[],
 });
 
 const visible: Ref<boolean> = ref(false);
@@ -30,9 +30,18 @@ const showModal = () => {
 	visible.value = true;
 };
 
-const ProjectCreated = (project: Project) => {
-	// TODO: Refresh grid.
-	projects.value.push(project);
+const ProjectCreated = async (project: Project) => {
+	visible.value = false;
+
+	project.Id = await ProjectService.CreateAsync(project);
+	await LoadProjects(); // TODO: Can we just push to projects ref or do we need to hit API? Would need to at least update the Total.
+
+	toast.add({
+		severity: 'success',
+		summary: 'New Project Created',
+		detail: 'Successfully created a new project.',
+		life: 3000,
+	});
 };
 
 const ProjectSelected = (e: DataTableRowSelectEvent) => {
@@ -43,6 +52,14 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 		},
 	});
 };
+
+const LoadProjects = async (): Promise<void> => {
+	projects.data = await ProjectService.GetAllAsync();
+};
+
+onMounted(async () => {
+	await LoadProjects();
+});
 </script>
 
 <!-- Should we refactor Project filter, Project Grid and Project Modal into a separate comp? -->
@@ -51,27 +68,31 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 		<div class="search-box">
 			<span class="p-float-label">
 				<InputText class="project-filter-input" id="search" type="text" v-model="projectFilter" />
-				<label class="project-filter-input-label" for="search">Search</label>
+				<label for="search">Search</label>
 			</span>
 		</div>
 		<div class="button-cell">
 			<PrimaryButton square label="Create Project" @click="showModal" />
 		</div>
 		<div class="project-row">
-			<Panel :value="projects">
+			<Panel>
 				<template #header>
 					<span>
 						<b style="font-weight: 600">
-							Projects <span style="color: lightskyblue">{{ projects.length }}</span>
+							Projects <span style="color: lightskyblue">{{ projects.data.length }}</span>
 						</b>
 					</span>
 				</template>
 
-				<ProjectsGrid :value="projects" @row-select="ProjectSelected" />
+				<ProjectsGrid :projects="projects.data" dataKey="Id" @row-select="ProjectSelected" />
 			</Panel>
 		</div>
 	</div>
-	<CreateProjectModal v-model:visible="visible" @created="ProjectCreated" />
+	<ProjectDetailsModal
+		v-model:visible="visible"
+		@submitted="ProjectCreated"
+		header="Create Project"
+	/>
 </template>
 
 <style scoped lang="scss">
@@ -148,9 +169,9 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 	@media screen and (max-width: $sm) {
 		width: 100%;
 	}
-}
 
-.project-filter-input-label {
-	color: var(--blue-500);
+	& + label {
+		color: var(--blue-500);
+	}
 }
 </style>
