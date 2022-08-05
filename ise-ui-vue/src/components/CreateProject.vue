@@ -207,10 +207,10 @@
     </div>
             
     <div class="col-4">
-        <div style="box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; padding: 15px;">
+        <div class="costSection">
             <div class="row">
                 <div class="col-md-12">
-                <label class="btn btn-outline-success searchButton me-2" style="width:100%; color: #0c63e4; background-color: #e7f1ff; box-shadow: rgba(100, 100, 111, 0.2)" >Cost Estimation</label>
+                <label class="btn costLabel"><b>Cost Estimation</b></label>
                 </div><div class="breakDiv"></div>
                 <div class="row" v-if="project.projectTargetAudiences" v-for="ta in project.projectTargetAudiences" :key="ta.id">
                     <h5>Estimation of Target audience - {{ta.id}} </h5><div class="breakDiv"></div>
@@ -380,6 +380,16 @@ onMounted(() => {
 })
 </script>
 <style>
+.costSection {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; 
+    padding: 15px;
+}
+.costLabel {
+    width:100%; 
+    border-color: lightgray; 
+    color: #0c63e4; 
+    background-color: #e7f1ff; 
+}
 .hidden {
     display: none;
 }
