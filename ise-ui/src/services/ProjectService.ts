@@ -26,7 +26,8 @@ export default class ProjectService {
 	static async GetAsync(id: number): Promise<Project | null> {
 		const result = projects.find((p) => p.Id === id) ?? null;
 
-		return Promise.resolve(result);
+		const p: Project = { ...result } as Project; // Avoid returning a reference to projects const.
+		return Promise.resolve(p);
 	}
 
 	static async GetByNameAsync(filter: string): Promise<Project[]> {
@@ -39,5 +40,22 @@ export default class ProjectService {
 		const result = projects.push(p);
 
 		return Promise.resolve(result);
+	}
+
+	static async UpdateAsync(p: Project): Promise<void> {
+		if (p.Id === -1) return Promise.reject('Project does not have a valid Id.');
+
+		const i = projects.findIndex((x) => x.Id == p.Id);
+		if (i === -1) return Promise.reject('Project Not Found');
+
+		const proj = projects[i];
+		proj.Name = p.Name;
+		proj.MaconomyNumber = p.MaconomyNumber;
+		proj.Owner = p.Owner;
+		proj.StartDate = p.StartDate;
+		proj.EndDate = p.EndDate;
+		proj.LastActivity = new Date();
+
+		return Promise.resolve();
 	}
 }

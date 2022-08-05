@@ -2,47 +2,63 @@
 import { type Ref, ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { format } from 'date-fns';
-import Pricing from '../components/pages/project/Pricing.vue';
-import type Project from '@/model/Project';
-import TargetAudienceList from '../components/pages/project/TargetAudienceList.vue';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
-import type { MenuItem } from 'primevue/menuitem';
-import PageDetails from '../components/PageDetails.vue';
-import ProjectService from '@/services/ProjectService';
-import PrimaryButton from '../components/buttons/PrimaryButton.vue';
-import ProjectDetailsModal from '../components/modals/ProjectDetailsModal.vue';
 import { useToast } from 'primevue/usetoast';
+import type Project from '@/model/Project';
+import type { MenuItem } from 'primevue/menuitem';
+import PageDetails from '@/components/PageDetails.vue';
+import ProjectService from '@/services/ProjectService';
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import ProjectDetailsModal from '@/components/modals/ProjectDetailsModal.vue';
+import Pricing from '@/components/pages/project/Pricing.vue';
+import TargetAudienceList from '@/components/pages/project/TargetAudienceList.vue';
 
 const route = useRoute();
 const breadcrumb = useBreadcrumbStore();
 const toast = useToast();
-const project: Ref<Project | null> = ref(null);
-const id = Number.parseInt(route.params.id as string);
 
+const id = Number.parseInt(route.params.id as string);
+const project: Ref<Project | null> = ref(null);
 const visible: Ref<boolean> = ref(false);
+
 const EditProjectDetails = (): void => {
 	if (!project.value) return;
 
 	visible.value = true;
 };
 
-const UpdateProjectDetails = (p: Project): void => {
+const UpdateProjectDetails = async (p: Project): Promise<void> => {
 	if (!project.value) return;
 
-	project.value.Name = p.Name;
-	project.value.MaconomyNumber = p.MaconomyNumber;
-	project.value.Owner = p.Owner;
-	project.value.StartDate = p.StartDate;
-	project.value.EndDate = p.EndDate;
-	project.value.LastActivity = p.LastActivity;
-
 	// TODO: API call to update record in DB.
-	toast.add({
-		severity: 'success',
-		summary: 'Project Updated',
-		detail: 'Successfully updated the Project.',
-		life: 3000,
-	});
+	await ProjectService.UpdateAsync(p)
+		.then(() => {
+			if (project.value) {
+				// TODO: Breadcrumb needs to update Name.
+
+				project.value.Name = p.Name;
+				project.value.Owner = p.Owner;
+				project.value.MaconomyNumber = p.MaconomyNumber;
+				project.value.StartDate = p.StartDate;
+				project.value.EndDate = p.EndDate;
+				project.value.LastActivity = new Date();
+			}
+
+			toast.add({
+				severity: 'success',
+				summary: 'Project Update',
+				detail: 'Successfully updated the Project.',
+				life: 3000,
+			});
+		})
+		.catch(() => {
+			toast.add({
+				severity: 'error',
+				summary: 'Project Update',
+				detail: 'Failed to update the Project.',
+				life: 3000,
+			});
+		});
 
 	visible.value = false;
 };
@@ -50,6 +66,7 @@ const UpdateProjectDetails = (p: Project): void => {
 onMounted(async () => {
 	project.value = await ProjectService.GetAsync(id);
 
+	// If project was not found don't update breadcrumn, how would we handle no project?
 	if (!project.value) return;
 
 	breadcrumb.$patch((state) => {

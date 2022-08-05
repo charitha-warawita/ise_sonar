@@ -86,15 +86,8 @@ const UpdateProject = (): Project => {
 	if (!props.project) throw 'Cannot update project when "project" prop is null.';
 	if (!fields.StartDate || !fields.EndDate) throw 'StartDate or EndDate is null.';
 
-	const project = props.project;
-	project.Name = fields.Name;
-	project.MaconomyNumber = fields.MaconomyNumber;
-	project.Owner = fields.Owner;
-	project.StartDate = fields.StartDate;
-	project.EndDate = fields.EndDate;
-	project.LastActivity = new Date();
-
-	return project;
+	const p: Project = Object.assign({}, props.project, fields);
+	return p;
 };
 
 const SetFields = (): void => {

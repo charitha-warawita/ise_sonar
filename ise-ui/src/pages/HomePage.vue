@@ -1,5 +1,5 @@
 <script async setup lang="ts">
-import { onMounted, reactive, ref, type Ref } from 'vue';
+import { onMounted, ref, type Ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import Panel from 'primevue/panel';
@@ -7,8 +7,8 @@ import InputText from 'primevue/inputtext';
 import type { DataTableRowSelectEvent } from 'primevue/datatable';
 import { useToast } from 'primevue/usetoast';
 
-import ProjectsGrid from '../components/pages/home/ProjectsGrid.vue';
-import PrimaryButton from '../components/buttons/PrimaryButton.vue';
+import ProjectsGrid from '@/components/pages/home/ProjectsGrid.vue';
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import ProjectDetailsModal from '@/components/modals/ProjectDetailsModal.vue';
 
 import ProjectService from '@/services/ProjectService';
@@ -21,9 +21,7 @@ const breadcrumbs = useBreadcrumbStore();
 breadcrumbs.$reset();
 
 const projectFilter: Ref<string | null> = ref(null);
-const projects = reactive({
-	data: [] as Project[],
-});
+const projects: Ref<Project[]> = ref([]);
 
 const visible: Ref<boolean> = ref(false);
 const showModal = () => {
@@ -54,7 +52,7 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 };
 
 const LoadProjects = async (): Promise<void> => {
-	projects.data = await ProjectService.GetAllAsync();
+	projects.value = await ProjectService.GetAllAsync();
 };
 
 onMounted(async () => {
@@ -79,12 +77,12 @@ onMounted(async () => {
 				<template #header>
 					<span>
 						<b style="font-weight: 600">
-							Projects <span style="color: lightskyblue">{{ projects.data.length }}</span>
+							Projects <span style="color: lightskyblue">{{ projects.length }}</span>
 						</b>
 					</span>
 				</template>
 
-				<ProjectsGrid :projects="projects.data" dataKey="Id" @row-select="ProjectSelected" />
+				<ProjectsGrid :projects="projects" dataKey="Id" @row-select="ProjectSelected" />
 			</Panel>
 		</div>
 	</div>
