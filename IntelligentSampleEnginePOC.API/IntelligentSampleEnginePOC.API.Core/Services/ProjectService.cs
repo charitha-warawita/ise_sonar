@@ -6,19 +6,17 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
     public class ProjectService : IProjectService
     {
         private readonly IProjectContext _projectContext;
-        private readonly ITargetAudienceContext _taContext;
+        private readonly ITargetAudienceService _taService;
+        private readonly ISamplingService _cintService;
 
-
-        private ICintService cintService { get; set; }
-
-        public ProjectService(IProjectContext context, ITargetAudienceContext taContext, ICintService cintService)
+        public ProjectService(IProjectContext context, ITargetAudienceService taService, ISamplingService cintService)
         {
             _projectContext = context;
-            _taContext = taContext;
-            this.cintService = cintService;
+            _taService = taService;
+            _cintService = cintService;
         }
 
-        public Project CreateProject(Project project)
+        public async Task<Project> CreateProject(Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("Project model not found", nameof(project));
@@ -30,7 +28,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 {
                     for(int i = 0; i < project.TargetAudiences.Count; i++)
                     {
-                        project.TargetAudiences[i] = _taContext.CreateTargetAudience(project.Id, project.TargetAudiences[i]);
+                        project.TargetAudiences[i] = _taService.CreateTargetAudience(project.Id, project.TargetAudiences[i]);
                     }
                 }
 
@@ -39,6 +37,20 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
             throw new ArgumentException("Project Validation failed", nameof(project));
         }
+
+        public async Task<Project> LaunchProject(Project project)
+        {
+            if (project == null)
+                throw new ArgumentNullException("project model not found", nameof(project));
+
+            project = await CreateProject(project);
+            project = await _cintService.CreateProject(project);
+            project.Status = Model.Status.Created;
+            // ModelMapping(project, true);
+            // _dataContext.SaveChanges();
+            return project;
+        }
+
 
         private bool ProjectValidated(Project project)
         {
@@ -71,24 +83,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                     }
                 }
             }
-            return project;
-        }*/
-
-        /*public async Task<Model.Project> LaunchProject(Model.Project project)
-        {
-            if (project == null)
-                throw new ArgumentNullException("project model not found", nameof(project));
-
-            if (string.IsNullOrEmpty(project.Name))
-            {
-                // This means the project ID and first we need to retrieve all project details and then form json request to CINT API
-            }
-            project = SetupGuids(project);
-            project.LastUpdate = DateTime.UtcNow;
-            project = await cintService.CallCint(project);
-            project.Status = Model.Status.Created;
-            ModelMapping(project, true);
-            _dataContext.SaveChanges();
             return project;
         }*/
 

@@ -11,22 +11,22 @@ using System.Threading.Tasks;
 
 namespace IntelligentSampleEnginePOC.API.Core.Services
 {
-    public  class CintService : ICintService
+    public  class CintSamplingService : ISamplingService
     {
         private readonly HttpClient _httpClient;
         private CintApiSettings _settings;
-        public CintService(HttpClient client, IOptions<CintApiSettings> options)
+        public CintSamplingService(HttpClient client, IOptions<CintApiSettings> options)
         {
             _httpClient = client;
             _settings = options.Value;
         }
 
-        public async Task<Project> CallCint(Project project)
+        public async Task<Project> CreateProject(Project project)
         {
             var cintRequest = ConvertProjectToCintRequest(project);
-            var cintResponse = await CallCintApi(cintRequest);
-            return AddCintResponseToProject(cintResponse, project);
-
+            // var cintResponse = await CallCintApi(cintRequest.FirstOrDefault());
+            // return AddCintResponseToProject(cintResponse, project);
+            throw new NotImplementedException();
         }
 
         private Project AddCintResponseToProject(CintResponse response, Project project)
@@ -52,14 +52,24 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
 
 
-        private CintRequest ConvertProjectToCintRequest(Project project)
+        private List<CintRequest> ConvertProjectToCintRequest(Project project)
         {
+            List<CintRequest> requests = new List<CintRequest>();
+
             var cintRequest = new CintRequest();
 
             cintRequest.name = project.Name;
             cintRequest.referenceNumber = project.Reference;
             cintRequest.purchaseOrderNumber = project.Reference;
             cintRequest.contact = new contact { name = project.User.Name, company = project.User.Name, emailAddress = project.User.Email };
+
+            if(project.TargetAudiences.Any())
+            {
+
+            }
+
+
+
             cintRequest.limit = 200;
             cintRequest.limitType = 0;
             cintRequest.incidenceRate = 80;
@@ -96,7 +106,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 break;
             }*/
 
-            return cintRequest;
+            return requests;
         }
 
         private async Task<CintResponse> CallCintApi(CintRequest request)
