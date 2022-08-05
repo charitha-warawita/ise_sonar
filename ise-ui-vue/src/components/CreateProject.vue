@@ -38,15 +38,15 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputEmail4" class="form-label">Estimated IR (in %)</label>
-                                            <input type="number" class="form-control" id="inputEmail4" v-model="ta.estimatedIR">
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="ta.estimatedIR" v-on:input="useProjStore.CalculateCharges($event)">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputEmail4" class="form-label">Estimated LOI (in mins)</label>
-                                            <input type="number" class="form-control" id="inputEmail4" v-model="ta.estimatedLOI">
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="ta.estimatedLOI" v-on:input="useProjStore.CalculateCharges($event)">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputEmail4" class="form-label">Wanted Completes Count</label>
-                                            <input type="number" class="form-control" id="inputEmail4" v-model="ta.wantedCompletes">
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="ta.wantedCompletes" v-on:input="useProjStore.CalculateCharges($event)">
                                         </div>
                                         <div class="accordion-item-custom">
                                             <h2 class="accordion-header" id="panelsStayOpen-headingThree">
