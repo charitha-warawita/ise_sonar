@@ -67,7 +67,7 @@
     <div class="col-md-12 p-4">
       <button class="btn btn-outline-success searchButton" id="addQutobutton" v-on:click="useQuotaDataStore.addCondition">Add condition</button>  
     </div>
-  <fieldset class="col-md-12 border p-2 fieldsetstyle" v-show ="useQuotaDataStore.conditiongrid">
+  <fieldset class="col-md-12 border p-2 fieldsetstyle" v-show="useQuotaDataStore.conditiongrid">
       <legend  class="float-none w-auto" style="font-size: 18px;">Condition</legend>
       <div class="container">
           <div class="row">

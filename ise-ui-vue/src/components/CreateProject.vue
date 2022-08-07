@@ -66,39 +66,39 @@
                                             </h2>
                                             <div :id="'panelsStayOpen-collapseThree-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                                                 <div class="accordion-body">
-                                                <draggable  v-on:update="useQualStore.sortOrderforQual($event, ta.id)" >
-                                                    <div class="subDivQ row g-3" v-if="ta.qualifications" v-for="(qual, index) in ta.qualifications" :key="qual.id">
-                                                        <div class="col-md-1">{{qual.order}}</div>
-                                                        <div class="col-md-8">
-                                                            <div class="col-md-12"><b>{{qual.question.categoryName}} - {{qual.question.name}}</b></div>
-                                                            <div class="col-md-12">{{qual.question.text}}</div>
-                                                            <div class="col-md-12">
-                                                                <div style="display: inline-block"  v-for="(item) in qual.question.variables" :key="item.id">
-                                                                    <div class="form-check">
-                                                                    <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px"><i>{{item.name}}</i></label>
+                                                    <draggable  v-on:update="useQualStore.sortOrderforQual($event, ta.id)" >
+                                                        <div class="subDivQ row g-3" v-if="ta.qualifications" v-for="(qual, index) in ta.qualifications" :key="qual.id">
+                                                            <div class="col-md-1">{{qual.order}}</div>
+                                                            <div class="col-md-8">
+                                                                <div class="col-md-12"><b>{{qual.question.categoryName}} - {{qual.question.name}}</b></div>
+                                                                <div class="col-md-12">{{qual.question.text}}</div>
+                                                                <div class="col-md-12">
+                                                                    <div style="display: inline-block"  v-for="(item) in qual.question.variables" :key="item.id">
+                                                                        <div class="form-check">
+                                                                            <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px"><i>{{item.name}}</i></label>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>       
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <button 
-                                                                type="button" 
-                                                                @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'AND')"
-                                                                class="btn btn-outline-success QualLogicalButton"
-                                                                :class="[qual.logicalDecision !== 'OR' ? 'searchButton' : 'btn-light']"
-                                                                >Mandatory</button>
-                                                            <button 
-                                                                type="button" 
-                                                                @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'OR')"
-                                                                class="btn btn-outline-success QualLogicalButton"
-                                                                :class="[qual.logicalDecision === 'OR' ? 'searchButton' : 'btn-light']"
-                                                                >Optional</button>
+                                                                </div>       
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <button 
+                                                                    type="button" 
+                                                                    @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'AND')"
+                                                                    class="btn btn-outline-success QualLogicalButton"
+                                                                    :class="[qual.logicalDecision !== 'OR' ? 'searchButton' : 'btn-light']"
+                                                                    >Must</button>
+                                                                <button 
+                                                                    type="button" 
+                                                                    @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'OR')"
+                                                                    class="btn btn-outline-success QualLogicalButton"
+                                                                    :class="[qual.logicalDecision === 'OR' ? 'searchButton' : 'btn-light']"
+                                                                    >Optional</button>
                                                                 <a @click="useQualStore.RemoveQualification(ta.id, qual.id)" class="link-danger" style="float:right; margin-top:10%">
-                                                        Remove</a>
+                                                                Remove</a>
+                                                            </div>
+                                                            <hr/>
                                                         </div>
-                                                        <hr/>
-                                                    </div>
-                                                </draggable>    
+                                                    </draggable>    
                                                 <div class="col-md-12">
                                                     <button class="btn btn-outline-success searchButton mb-4 "  style="float: right" @click="toggleModal(999);useQualStore.GetProfileCategories(ta.id)">Add Qualification</button>
                                                     <CustomModal @close="toggleModal(999)" modalId='999'>
@@ -157,7 +157,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.AddTargetAudienceElement()">Add another Target Audience</button>
+                <button class="btn btn-outline-success btn-light me-2" style="margin-bottom: 20px;" v-on:click="useProjStore.AddTargetAudienceElement()">Add another Target Audience</button>
             </div>
         </div>
     </div>
@@ -352,6 +352,7 @@ onMounted(() => {
 }
 .QualLogicalButton {
     font-size:0.80em;
+    min-width:72px;
 }
 .subDiv {
     margin: 20px auto;
