@@ -2,26 +2,47 @@ import { defineStore } from "pinia";
 import { useProjectStore } from "./projectStore"; 
 export const useQuotaStore = defineStore('quota', {
     state: () => ({
+        selecteDiv:false,
+        conditionlist:[],
+        projectid: useProjectStore.globalTaId,
+        selectedConditionId:'',
+        selectedConditionName:'',
+        selectedConditionText:'',
+        selectedConditioncategoryName:'',
+        Selectedvariables:'',
+        selecttedconditions:[],
+        selecttedAnswer:[],
         currAgeRange: '',
-        error: null,
-        showQuotaCondition:'',
-        status:true,
-        quotaMinAge:0,
+        quotaMinAge: 0,
         quotaMaxAge:0,
-        quotaCountries:[],
-        quotaGenders:[],
-        countriesVariables: [],
-        genderVariables:[],
-        quotaFields:[],
-        showSubPopup: false,
+        error: null,
+        conditiongrid:false,
+        iseUrl: import.meta.env.VITE_ISE_API_URL,
+        iseCountryPath: import.meta.env.VITE_ISE_API_COUNTRIES,
 
         currentQuota: {
             name: '',
-            fieldTarget: 0,
+            selectedServeyQuotaType:'',
+            selectedAdjustmentType:'',
+            fieldTargetPercentage: 0,
+            fieldTargetNominal:0,
             status: 0,
             completes: 0,
-            prescreence: 0,
-            conditions: ["None", "Age", "Gender", "Country"],
+            prescreens: 0,
+            quotaPercentage: 0,
+            quotaNominal: 0,
+            // conditions: [],
+            conditionId:'',
+            conditionName:'',
+            conditiontext:'',
+            conditionCategoryName:'',
+            variableId:'',
+            variableName:'',
+            ServeyQuotaType:["Client","Control","Supplier"],
+            adjustmentType:["Nominal","percentage"],
+            quotaMinAge:0,
+            quotaMaxAge:0,
+            currAgeRange: '',
         }
         
 
@@ -34,197 +55,114 @@ export const useQuotaStore = defineStore('quota', {
         LoadDefaultCurrentQuota() {
             this.currentQuota = {
                 name: '',
-                fieldTarget: 0,
+                selectedServeyQuotaType:'',
+                selectedAdjustmentType:'',
+                fieldTargetPercentage: 0,
+                fieldTargetNominal: 0,
                 status: 0,
                 completes: 0,
-                prescreence: 0,
-                conditions: ["None", "Age", "Gender", "Country"],
-                showQuotaCondition:'age'
+                prescreens: 0,
+                quotaPercentage: 0,
+                quotaNominal: 0,
+                conditionId:'',
+                conditionName:'',
+                conditiontext:'',
+                conditionCategoryName:'',
+                variableId:'',
+                variableName:'',
+                quotaMinAge:0,
+                quotaMaxAge:0,
+                ServeyQuotaType:["Client","Control","Supplier"],
+                adjustmentType:["Nominal","percentage"],
             };
-            this.showSubPopup = false;
         },
-      async  GetQuota(itemtype, taId, qid) {
-            if(itemtype === 'age')
+           serveyQuotaTyp(event){
+            this.currentQuota.selectedServeyQuotaType = event.target.value;    
+        },
+        adjustmentType(event){
+            this.currentQuota.selectedAdjustmentType = event.target.value;    
+        },
+        addCondition(){
+            this.conditionlist = [];
+            this.selectedConditionName = "";
+            this.selectedConditionText ="";
+            this.selectedConditioncategoryName ="";
+            this.Selectedvariables = "";
+            this.selecteDiv =false;
+            this.conditiongrid = true;
+            var project = useProjectStore().project;
+            for (var i = 0; i < project.projectTargetAudiences.length; i++)
             {
-                var project = useProjectStore().project;
-                for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                {
-                    var projectQuotas=project.projectTargetAudiences
-                    if(project.projectTargetAudiences[i].id === taId)
+                for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
                     {
-                        for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
-                        {
-                            if(project.projectTargetAudiences[i].quota[j].id === qid)
-                            {
-                                var variable = project.projectTargetAudiences[i].quota[j].condition.variables[0];
-                                this.currAgeRange = variable.name;
-                                break;
-                            }
-                        }
+                        this.conditionlist.push(project.projectTargetAudiences[i].qualifications[j].question)
+
                     }
-                }
             }
-            if(itemtype === "country")
-            {
-                if(this.quotaCountries.length === 0)
-                {
-                    var countriesList = [{"id":1,"name":"UK","selected":true},{"id":2,"name":"Sweden","selected":false},{"id":3,"name":"Germany","selected":false},{"id":4,"name":"Denmark","selected":false},{"id":5,"name":"Finland","selected":false},{"id":6,"name":"Norway","selected":false},{"id":9,"name":"Spain","selected":false},{"id":10,"name":"Italy","selected":false},{"id":11,"name":"Hungary","selected":false},{"id":12,"name":"Greece","selected":false},{"id":22,"name":"USA","selected":false}];
-                    this.quotaCountries = countriesList;
-                }
-            }
-            if(itemtype === "gender")
-            {
-                if(this.quotaGenders.length === 0)
-                {
-                    console.log('Call made to Gender API');
-                    var gendersList = [{"id":1,"name":"Male","selected":true},{"id":2,"name":"Female","selected":true}];
-                    this.quotaGenders = gendersList;
-                }
-            }
+
         },
         selectQuotaCondition(event){
             console.log(event.target.value.toLowerCase());
-            this.GetQuota(event.target.value.toLowerCase())
-            this.showQuotaCondition = event.target.value.toLowerCase();
-            this.showSubPopup = true;
+            var  selectedConditionId = parseInt(event.target.value);
+            
+            var project = useProjectStore().project;
+            for (var i = 0; i < project.projectTargetAudiences.length; i++)
+            {
+                this.projectId = project.id;
+                for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
+              
+                    {
+                        if( project.projectTargetAudiences[i].qualifications[j].question.id === selectedConditionId)
+                        {
+     
+                            this.selecttedQuestionid = project.projectTargetAudiences[i].qualifications[j].id
+                            this.selectedConditionName = project.projectTargetAudiences[i].qualifications[j].question.name
+                            this.selectedConditionText = project.projectTargetAudiences[i].qualifications[j].question.text
+                            this.selectedConditioncategoryName = project.projectTargetAudiences[i].qualifications[j].question.categoryName
+                            this.Selectedvariables = project.projectTargetAudiences[i].qualifications[j].question.variables;
+                            this.selecteDiv =true
+                        }
+                    }
+            }
             
         },
-        SaveQuota(itemtype, taId, quotaid){
-            console.log(itemtype + '---' + taId + '---' + quotaid);
+        SaveQuotaConditions( selecttedQuestionid, selectedConditioncategoryName, selectedConditionName, selectedConditionText, id, name) {
+            this.currentQuota.conditionId = selecttedQuestionid; 
+            this.currentQuota.conditionName = selectedConditionName;
+            this.currentQuota.conditiontext = selectedConditionText;
+            this.currentQuota.conditionCategoryName = selectedConditioncategoryName;
+            this.currentQuota.variableId = id;
+            this.currentQuota.variableName = name;
+                // this.currentQuota.conditions.push({"id":selecttedQuestionid, "categoryName":selectedConditioncategoryName, "name":selectedConditionName, "text":selectedConditionText, "qId":id, "qName":name})
+        },
+        SaveQuota(itemtype, taid, quotaid,){
+           
             var project = useProjectStore().project;
             for (var i = 0; i < project.projectTargetAudiences.length; i++)
             {
                 var quota = {};
-                if(project.projectTargetAudiences[i].id === taId)
-                {
+
                     quota = {
                         "id": quotaid,
                         "name": this.currentQuota.name,
-                        "fieldTarget": this.currentQuota.fieldTarget,
+                        "fieldTargetNominal": this.currentQuota.fieldTargetNominal,
+                        "fieldTargetPercentage": this.currentQuota.fieldTargetPercentage,
                         "status": this.currentQuota.status,
                         "completes": this.currentQuota.completes,
-                        "prescreence":this.currentQuota.prescreence ,
+                        "prescreence":this.currentQuota.prescreens,
+                        "serveyQuotaTypeSelected": this.currentQuota.selectedServeyQuotaType,
+                        "adjustmentType": this.currentQuota.selectedAdjustmentType,
+                        "quotaPercentage": this.currentQuota.quotaPercentage,
+                        "quotaNominal": this.currentQuota.quotaNominal,
                         "order": quotaid,
                         "logicalDecision": "OR",
                         "NumberOfRequiredConditions": 0,
                         "IsActive": true,
-                        "conditions":[]
+                        "conditions": {
+                            "id":  this.currentQuota.conditionId, "name":  this.currentQuota.conditionName, "text":  this.currentQuota.conditiontext, "categoryName":  this.currentQuota.conditionCategoryName,
+                            "variables": [{ "id":  this.currentQuota.variableId, "name":  this.currentQuota.variableName }]
+                        } 
                         };
-                        
-                    /*for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
-                    {
-                        if(project.projectTargetAudiences[i].quota[j].id === quotaid)
-                        {
-                            project.projectTargetAudiences[i].quota[j].name = this.currentQuota.name;
-                            project.projectTargetAudiences[i].quota[j].fieldTarget = this.currentQuota.fieldTarget;
-                            project.projectTargetAudiences[i].quota[j].completes = this.currentQuota.completes;
-                            project.projectTargetAudiences[i].quota[j].prescreence = this.currentQuota.prescreence;
-                            this.quotaFields.push({ "name": project.projectTargetAudiences[i].quota[j].name, "fieldTarget": project.projectTargetAudiences[i].quota[j].fieldTarget, "completes": project.projectTargetAudiences[i].quota[j].completes,"prescreence": project.projectTargetAudiences[i].quota[j].prescreence})
-                        
-                            break;                           
-                        }
-                    }*/
-                }
-
-                if(itemtype === 'age')
-                {
-                    
-                    var condition = {
-                        "id": 42,
-                        "name": "Age",
-                        "text": "Enter age range for the project",
-                        "categoryName": "Household",
-                        "variables": [
-                            {
-                                "id": this.quotaMinAge,
-                                "name": this.quotaMaxAge
-                            }
-                        ]
-                    }
-                    quota.conditions.push(condition);
-                    /*var project = useProjectStore().project;
-                    for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                    {
-                        if(project.projectTargetAudiences[i].id === taId)
-                        {
-                            for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
-                            {
-                                if(project.projectTargetAudiences[i].quota[j].id === quotaid)
-                                {
-                                    project.projectTargetAudiences[i].quota[j].condition.variables[0].name = this.quotaMinAge + ' - ' + this.quotaMaxAge;
-                                                                    
-                                    break;
-                                }
-                            }
-                        }
-                    }*/
-                }
-                if(itemtype === 'country')
-                {
-                    /*var project = useProjectStore().project;
-                    for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                    {
-                        if(project.projectTargetAudiences[i].id === taId)
-                        {
-                            for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
-                            {
-                                if(project.projectTargetAudiences[i].quota[j].id === quotaid)
-                                { 
-                                    var newCountriesList = this.quotaCountries.filter(x => x.selected);
-                                    for(var k = 0; k < newCountriesList.length; k++)
-                                    {
-                                        this.countriesVariables.push({ "id": newCountriesList[k].id, "name": newCountriesList[k].name })
-                                    }
-                                    
-                                    project.projectTargetAudiences[i].quota[j].condition.variables = this.countriesVariables;
-                                    
-                                    break;
-                                }
-                            }
-                        }
-                    }*/
-                    quota.conditions = [];
-                    var condition = {
-                        "id": 1,
-                        "name": "Country",
-                        "text": "Enter the countries",
-                        "categoryName": "Household",
-                        "variables": [
-                            {
-                                "id": 1,
-                                "name": "UK"
-                            }
-                        ]
-                    }
-                    quota.conditions.push(condition);
-                }
-                if(itemtype === 'gender')
-                {
-                    /*var project = useProjectStore().project;
-                    for (var i = 0; i < project.projectTargetAudiences.length; i++)
-                    {
-                        if(project.projectTargetAudiences[i].id === taId)
-                        {
-                            for(var j = 0; j < project.projectTargetAudiences[i].quota.length; j++)
-                            {
-                                if(project.projectTargetAudiences[i].quota[j].id === quotaid)
-                                {
-                                    
-                                    var newGendersList = this.quotaGenders.filter(x => x.selected);
-                                    for(var k = 0; k < newGendersList.length; k++)
-                                    {
-                                        this.genderVariables.push({ "id": newGendersList[k].id, "name": newGendersList[k].name })
-                                    }
-                                    
-                                    project.projectTargetAudiences[i].quota[j].condition.variables = this.genderVariables;      
-                                    break;
-                                }
-                            }
-                        }
-                    }*/
-                } 
-
-                project.projectTargetAudiences[i].quotas.push(quota);
                 project.projectTargetAudiences[i].quota.push(quota);
                 this.LoadDefaultCurrentQuota();
                 break;

@@ -114,73 +114,29 @@
                                         </div>
                                     </div>
                                     <div class="accordion-item-custom">
-                                        <h2 class="accordion-header" id="panelsStayOpen-headingFour">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseFour-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                                <b>Quota</b>
-                                            </button>
-                                        </h2>
+                                            <h2 class="accordion-header" id="panelsStayOpen-headingFour">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseFour-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                                    <b>Quota</b>
+                                                </button>
+                                            </h2>
                                         <div :id="'panelsStayOpen-collapseFour-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
                                             <div class="accordion-body">
                                                 <div class="container">
-                                                <div class="subDivQ" v-if="ta.quotas.length > 0" >
-                                                <div v-for="item in ta.quotas" >
-                                                    <div class="row">
-                                                        <div class="col-md-2"><h6>Name</h6>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                        <label for="inputEmail4" class="form-label">{{item.name}}</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-2"><h6>FieldTarget</h6>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                        <label for="inputEmail4" class="form-label">{{item.fieldTarget}}</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-2"><h6>Completes</h6>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                        <label for="inputEmail4" class="form-label">{{item.completes}}</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-2"><h6>Prescreence</h6>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                        <label for="inputEmail4" class="form-label">{{item.prescreence}}</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="subDivQ1" v-if="item.conditions.length > 0">
-                                                        <div v-for="subItem in item.conditions">
-                                                            <div class="col-md-12" v-if="subItem.name === 'Country'"><b>Selected Condition :</b>
-                                                                <div><h6>countries</h6>
-                                                                    <div style="display: inline-block" v-for="variable in subItem.variables" :key="variable.id">
-                                                                        <div class="form-check form-check-inline">
-                                                                            <label class="form-check-label" for="inlineCheckbox1">{{variable.name}}</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            <div>
-                                                            <div class="col-md-12" v-if="subItem.name === 'Age'">
-                                                                <div><h6>Gender</h6>
-                                                                    <div style="display: inline-block" v-for="varible in subItem.variables" :key="variable.id">
-                                                                            <div class="form-check form-check-inline">
-                                                                                <label class="form-check-label" for="inlineCheckbox1">{{variable.name}}</label>
-                                                                            </div>
-                                                                    </div>
+                                                    <div class="subDivQ row g-3" v-if="ta.quota" v-for="quota in ta.quota" :key="quota.id">
+                                                        <div class="col-md-9">
+                                                            <div class="col-md-12"><b>{{quota.conditions.categoryName}} - {{quota.conditions.name}}</b></div>
+                                                                <div class="col-md-12">{{quota.conditions.text}}</div>
+                                                                <div class="col-md-12">
+                                                                    <div style="display: inline-block"  v-for="(item) in quota.conditions.variables" :key="item.id">
+                                                                        <div class="form-check">
+                                                                        <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px"><i>{{item.name}}</i></label>
+                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        </div>
-                                                    </div>
-                                                    <a @click="toggleModal();" class="link-primary">Edit</a> |
-                                                    <a @click="" class="link-danger">Delete</a>
                                                     <hr/>
-                                                </div>
-                                            </div>
-                                            </div>
+                                               </div>
+                                               
                                                 <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ (ta.quota.length+1))">Add Quota</button>  
                                                     <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
                                                         <div class="card modal-content">
@@ -360,6 +316,7 @@ async function ProjectValidated(project, action) {
 }
 
 const toggleModal = (id) => {
+    useQuotaDataStore.conditiongrid = false;
     console.log('customModal id or qId is:' + id);
     var classname = 'customModal-' + id
     var element = document.getElementsByClassName(classname)
