@@ -4,18 +4,11 @@ export const useQuotaStore = defineStore('quota', {
     state: () => ({
         selecteDiv:false,
         conditionlist:[],
-        projectid: useProjectStore.globalTaId,
         selectedConditionId:'',
         selectedConditionName:'',
         selectedConditionText:'',
         selectedConditioncategoryName:'',
         Selectedvariables:'',
-        selecttedconditions:[],
-        selecttedAnswer:[],
-        currAgeRange: '',
-        quotaMinAge: 0,
-        quotaMaxAge:0,
-        error: null,
         conditiongrid:false,
         iseUrl: import.meta.env.VITE_ISE_API_URL,
         iseCountryPath: import.meta.env.VITE_ISE_API_COUNTRIES,
@@ -40,9 +33,6 @@ export const useQuotaStore = defineStore('quota', {
             variableName:'',
             ServeyQuotaType:["Client","Control","Supplier"],
             adjustmentType:["Nominal","percentage"],
-            quotaMinAge:0,
-            quotaMaxAge:0,
-            currAgeRange: '',
         }
         
 

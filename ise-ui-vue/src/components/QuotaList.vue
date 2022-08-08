@@ -1,5 +1,5 @@
 <template>
-  <div class="container conditionscroll">
+  <div class="container">
     <div class="row">
       <div class="col-md-6">
         <label for="input" class="form-label">Name</label>
@@ -134,8 +134,6 @@ const {
   status,
   completes,
   prescreence,
-  quotaMinAge,
-  quotaMaxAge,
 } = storeToRefs(useQuotaDataStore);
 </script>
 
@@ -144,8 +142,8 @@ const {
   border: 1px solid #8f959b!important;
 
   }
-.quotaModel{
- max-height: 600px; 
+.conditionscroll{
+    max-height: 600px; 
     min-height:350px;
     overflow-y:auto; 
 }

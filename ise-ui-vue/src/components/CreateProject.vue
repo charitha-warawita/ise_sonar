@@ -155,8 +155,8 @@
                                                          <template v-for="(item) in quota.conditions.variables" :key="item.id">
                                                         <th>{{quota.id}}</th>
                                                         <td>{{quota.name}}</td>
-                                                        <td>{{quota.fieldTargetPercentage}}-{{quota.fieldTargetNominal}}</td>
-                                                        <td>{{quota.quotaPercentage}}-{{quota.quotaNominal}}</td>
+                                                        <td>{{quota.fieldTargetNominal}}-{{quota.fieldTargetPercentage}}</td>
+                                                        <td>{{quota.quotaNominal}}-{{quota.quotaPercentage}}</td>
                                                         <td>{{quota.conditions.name}}</td>
                                                         <td>{{item.name}}</td>
                                                         <!-- <td>
@@ -180,7 +180,7 @@
                                                     <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
                                                         <div class="card modal-content">
                                                             <h3 class="card-header">Quota</h3>
-                                                            <div class="card-body">
+                                                            <div class="card-body conditionscroll">
                                                                 <QuotaList :itemType="quotaPopup" :taId= ta.id :quotaid=ta.quota.length+1 />
                                                             </div>               
                                                         </div> 
