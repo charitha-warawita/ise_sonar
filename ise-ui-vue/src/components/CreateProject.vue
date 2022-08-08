@@ -122,7 +122,7 @@
                                         <div :id="'panelsStayOpen-collapseFour-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
                                             <div class="accordion-body">
                                                 <div class="container">
-                                                    <div class="subDivQ row g-3" v-if="ta.quota" v-for="quota in ta.quota" :key="quota.id">
+                                                    <!-- <div class="subDivQ row g-3" v-if="ta.quota" v-for="quota in ta.quota" :key="quota.id">
                                                         <div class="col-md-9">
                                                             <div class="col-md-12"><b>{{quota.conditions.categoryName}} - {{quota.conditions.name}}</b></div>
                                                                 <div class="col-md-12">{{quota.conditions.text}}</div>
@@ -134,8 +134,47 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    <hr/>
-                                               </div>
+                                                    <hr/> -->
+
+                                                   <table class="table table-striped table-hover">
+                                                    <thead>
+                                                        <tr class="tableHeader">
+                                                        <th><b>Id</b></th>
+                                                        <th><b>Name</b></th>
+                                                        <th><b>fieldTarget</b></th>
+                                                        <th><b>Quota</b></th>
+                                                        <th><b>con-Name</b></th>
+                                                        <th><b>con-Optons</b></th>
+                                                        <!-- <th><b>Actions</b></th> -->
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-if="ta.quota" v-for="quota in ta.quota" :key="quota.id">
+                                                         <template v-for="(item) in quota.conditions.variables" :key="item.id">
+                                                        <th>{{quota.id}}</th>
+                                                        <td>{{quota.name}}</td>
+                                                        <td>{{quota.fieldTargetPercentage}}-{{quota.fieldTargetNominal}}</td>
+                                                        <td>{{quota.quotaPercentage}}-{{quota.quotaNominal}}</td>
+                                                        <td>{{quota.conditions.name}}</td>
+                                                        <td>{{item.name}}</td>
+                                                        <!-- <td>
+                                                            <a type="button" class="link-primary">
+                                                                edit
+                                                            </a>
+                                                            <a type="button" class="link-danger">
+                                                                delete
+                                                            </a>
+                                                        </td> -->
+
+                                                        </template>
+                                                        </tr>
+                                                       
+                                                      
+                                                    </tbody>
+                                                </table>
+                                              
                                                
                                                 <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ (ta.quota.length+1))">Add Quota</button>  
                                                     <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
