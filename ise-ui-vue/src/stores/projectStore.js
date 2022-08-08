@@ -99,13 +99,14 @@ export const useProjectStore = defineStore('project', {
             var removeIndex = this.project.projectTargetAudiences.map(item => item.id).indexOf(ta.id);
             ~removeIndex && this.project.projectTargetAudiences.splice(removeIndex, 1);
         },
-        CalculateCharges() {
+        CalculateCharges(event) {
             if(this.project.projectTargetAudiences !== undefined)
             {
                 console.log("came in running CPI cost");
+                console.log("came in running CPI cost");
                 this.totalCost = 0;
                 for(var i =0; i < this.project.projectTargetAudiences.length; i++) {
-                if(this.project.projectTargetAudiences[i].wantedCompletes > 0 && this.project.projectTargetAudiences[i].estimatedIR > 0 && this.project.projectTargetAudiences[i].estimatedLOI > 0) {
+                if(this.project.projectTargetAudiences[i].wantedCompletes > 0 || this.project.projectTargetAudiences[i].estimatedIR > 0 || this.project.projectTargetAudiences[i].estimatedLOI > 0) {
                     var ir = this.project.projectTargetAudiences[i].estimatedIR; var loi = this.project.projectTargetAudiences[i].estimatedLOI
                     if(ir>= 75 && ir <=100 && loi >0 && loi <=5)
                         this.project.projectTargetAudiences[i].costPerInterview = 2;
