@@ -100,12 +100,12 @@
                                                         </div>
                                                     </draggable>    
                                                 <div class="col-md-12">
-                                                    <button class="btn btn-outline-success searchButton mb-4 "  style="float: right" @click="toggleModal(999);useQualStore.GetProfileCategories(ta.id)">Add Qualification</button>
-                                                    <CustomModal @close="toggleModal(999)" modalId='999'>
+                                                    <button class="btn btn-outline-success searchButton mb-4 "  style="float: right" @click="toggleModal('qual'+ ta.id);useQualStore.GetProfileCategories(ta.id)">Add Qualification</button>
+                                                    <CustomModal @close="toggleModal('qual'+ ta.id)" :modalId="'qual'+ ta.id">
                                                         <div class="card modal-content">
                                                             <h3 class="card-header">Qualifications</h3>
                                                             <div class="card-body">
-                                                                <QualificationsList @close="toggleModal(999)" itemType='profileVars' taId=ta.id qualificationId='999' />
+                                                                <QualificationsList @close="toggleModal('qual'+ ta.id)" itemType='profileVars' :taId='ta.id' :qualificationId="'qual-' + ta.id" />
                                                             </div>
                                                         </div>
                                                     </CustomModal>
@@ -176,12 +176,12 @@
                                                 </table>
                                               
                                                
-                                                <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal(888)">Add Quota</button>  
-                                                    <CustomModal @close="toggleModal(888)" :modalId="888">
+                                                <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ ta.id)">Add Quota</button>  
+                                                    <CustomModal @close="toggleModal('quota'+ ta.id)" :modalId="'quota'+ ta.id">
                                                         <div class="card modal-content">
                                                             <h3 class="card-header">Quota</h3>
                                                             <div class="card-body">
-                                                                <QuotaList :itemType="quotaPopup" :taId= ta.id :quotaid=ta.quota.length+1 />
+                                                                <QuotaList :taId=ta.id />
                                                             </div>               
                                                         </div> 
                                                     </CustomModal>                                                  

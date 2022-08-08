@@ -1,4 +1,5 @@
 <template>
+  <!--<p>TA Id returned as {{ taId }}</p>-->
   <div class="container conditionscroll">
     <div class="row">
       <div class="col-md-6">
@@ -7,14 +8,14 @@
       </div>
       <div class="col-md-6">
         <label for="sel1" class="form-label">Servey Quota Type</label>
-        <select v-model="key" @change="useQuotaDataStore.serveyQuotaTyp($event)" class="form-select" id="sel2" name="sellist1">
+        <select @change="useQuotaDataStore.serveyQuotaTyp($event)" class="form-select" id="sel1" name="sellist1">
          <option v-bind:value=ServeyQuotaTypes v-for="ServeyQuotaTypes in useQuotaDataStore.currentQuota.ServeyQuotaType" :key="ServeyQuotaTypes">{{ServeyQuotaTypes}}</option>
          <label for="sel1" class="form-label">Select list (select one):</label>
         </select>
       </div>
       <div class="col-md-6">
         <label for="sel2" class="form-label">Adjustment Type</label>
-        <select v-model="key" @change="useQuotaDataStore.adjustmentType($event)" class="form-select" id="sel2" name="sellist2">
+        <select @change="useQuotaDataStore.adjustmentType($event)" class="form-select" id="sel2" name="sellist2">
         <option v-bind:value=adjustmentType v-for="adjustmentType in useQuotaDataStore.currentQuota.adjustmentType" :key="adjustmentType">{{adjustmentType}}</option>
 
         </select>
@@ -38,11 +39,11 @@
           </div>
           <div class="col col-lg-3">
               <label for="input" class="form-label">Nominal</label>
-              <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.fieldTargetNominal" />
+              <input :readonly="useQuotaDataStore.currentQuota.selectedAdjustmentType !== 'nominal'" type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.fieldTargetNominal" />
           </div>
           <div class="col col-lg-3">
              <label for="input" class="form-label">Percentage(%)</label>
-             <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.fieldTargetPercentage" />
+             <input :readonly="useQuotaDataStore.currentQuota.selectedAdjustmentType !== 'percentage'" type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.fieldTargetPercentage" />
           </div>
           
       </div>
@@ -54,19 +55,19 @@
           </div>
           <div class="col col-lg-3">
               <label for="input" class="form-label">Nominal</label>
-              <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.quotaNominal" />
+              <input :readonly="useQuotaDataStore.currentQuota.selectedAdjustmentType !== 'nominal'" type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.quotaNominal" />
           </div>
           <div class="col col-lg-3">
              <label for="input" class="form-label">Percentage(%)</label>
-             <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.quotaPercentage" />
+             <input :readonly="useQuotaDataStore.currentQuota.selectedAdjustmentType !== 'percentage'" type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.quotaPercentage" />
           </div>  
       </div>
       </div>
     </div>
   </div> 
-    <div class="col-md-12 p-4">
-      <button class="btn btn-outline-success searchButton" id="addQutobutton" v-on:click="useQuotaDataStore.addCondition">Add condition</button>  
-    </div>
+  <!--<div class="col-md-12 p-4">
+    <button class="btn btn-outline-success searchButton" id="addQutobutton" v-on:click="useQuotaDataStore.addCondition">Add condition</button>  
+  </div>
   <fieldset class="col-md-12 border p-2 fieldsetstyle" v-show="useQuotaDataStore.conditiongrid">
       <legend  class="float-none w-auto" style="font-size: 18px;">Condition</legend>
       <div class="container">
@@ -75,7 +76,7 @@
                   <label for="sel1" class="form-label">Select Condition</label>
               </div>
               <div class="col-md-6">
-                  <select class="form-select" id="sel1" name="sellist1" v-model="key" @change="useQuotaDataStore.selectQuotaCondition($event)">
+                  <select class="form-select" id="sel1" name="sellist1" @change="useQuotaDataStore.selectQuotaCondition($event)">
                   <option v-bind:value=condition.id v-for="condition in useQuotaDataStore.conditionlist" :key="condition.id">{{condition.categoryName}}-{{condition.name}}</option>
               </select>
               </div>
@@ -107,13 +108,13 @@
                  </div>
               </div>
            </div>
-  </fieldset> 
+  </fieldset> -->
   <div class="col-md-12 p-4">
     <button
       class="btn btn-outline-success searchButton me-2"
       style="width: 100%; margin: 5px 0"
       v-on:click="
-        useQuotaDataStore.SaveQuota(useQuotaDataStore.showQuotaCondition, taId, quotaid)
+        SaveCurrentQuota(useQuotaDataStore.showQuotaCondition, taId, quotaid)
       "
     >
       Save quota
@@ -124,7 +125,7 @@
 import { useQuotaStore } from "@/stores/quotaStore";
 import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
-const props = defineProps(["itemType", "taId", "quotaid"]);
+const props = defineProps(["taId", "quotaid"]);
 
 var useQuotaDataStore = useQuotaStore();
 
@@ -137,6 +138,16 @@ const {
   quotaMinAge,
   quotaMaxAge,
 } = storeToRefs(useQuotaDataStore);
+
+function SaveCurrentQuota(showQuotaCondition, taId, quotaid) {
+  useQuotaDataStore.SaveQuota(showQuotaCondition, taId, quotaid)
+  document.getElementById("sel1").selectedIndex = 0;
+  document.getElementById("sel2").selectedIndex = 0;
+}
+
+onMounted(() => {
+  useQuotaDataStore.LoadDefaultCurrentQuota();
+})
 </script>
 
 <style>

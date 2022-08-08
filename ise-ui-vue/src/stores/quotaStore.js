@@ -2,10 +2,6 @@ import { defineStore } from "pinia";
 import { useProjectStore } from "./projectStore"; 
 export const useQuotaStore = defineStore('quota', {
     state: () => ({
-        currentQuota: SetDefaultCurrentQuota(),
-
-
-
         selecteDiv:false,
         conditionlist:[],
         projectid: useProjectStore.globalTaId,
@@ -16,62 +12,16 @@ export const useQuotaStore = defineStore('quota', {
         Selectedvariables:'',
         selecttedconditions:[],
         selecttedAnswer:[],
-        currAgeRange: '',
-        quotaMinAge: 0,
-        quotaMaxAge:0,
         error: null,
         conditiongrid:false,
         iseUrl: import.meta.env.VITE_ISE_API_URL,
         iseCountryPath: import.meta.env.VITE_ISE_API_COUNTRIES,
-
-        currentQuota: {
-            name: '',
-            selectedServeyQuotaType:'',
-            selectedAdjustmentType:'',
-            fieldTargetPercentage: 0,
-            fieldTargetNominal:0,
-            status: '',
-            completes: 0,
-            prescreens: 0,
-            quotaPercentage: 0,
-            quotaNominal: 0,
-            // conditions: [],
-            conditionId:'',
-            conditionName:'',
-            conditiontext:'',
-            conditionCategoryName:'',
-            variableId:'',
-            variableName:'',
-            ServeyQuotaType:["Client","Control","Supplier"],
-            adjustmentType:["Nominal","percentage"],
-            quotaMinAge:0,
-            quotaMaxAge:0,
-            currAgeRange: '',
-        }
-        
-
-
+        currentQuota: []
     }),
     getters: {
         
     },
     actions: {
-        SetDefaultCurrentQuota() {
-            return {
-                tempId: 0,
-                quotaName: '',
-                quotaType: [{'name': 'Started', Selected: false }, {'name': 'Completed', selected: false }],
-                fieldTarget: 0,
-                fieldTargetPercentage: 0,
-                limit: 0,
-                limitPercentage: 0,
-                adjustmentType: [{'name': 'Nominal', selected: false }, { 'name': 'percentage', selected: false }],
-                prescreens: 0,
-                completes: 0,
-                IsActive: true,
-                conditions: []
-            }
-        },
         LoadDefaultCurrentQuota() {
             this.currentQuota = {
                 name: '',
@@ -92,15 +42,19 @@ export const useQuotaStore = defineStore('quota', {
                 variableName:'',
                 quotaMinAge:0,
                 quotaMaxAge:0,
-                ServeyQuotaType:["Client","Control","Supplier"],
-                adjustmentType:["Nominal","percentage"],
+                ServeyQuotaType:["--Select--","Started","Completed"],
+                adjustmentType:["--Select--", "Nominal","percentage"],
             };
         },
-           serveyQuotaTyp(event){
+        serveyQuotaTyp(event){
             this.currentQuota.selectedServeyQuotaType = event.target.value;    
         },
         adjustmentType(event){
-            this.currentQuota.selectedAdjustmentType = event.target.value;    
+            var selectedValue = event.target.value.toLowerCase();  
+            this.currentQuota.selectedAdjustmentType = selectedValue
+            /*if(selectedValue.toLowerCase() === 'nominal') {
+
+            } */ 
         },
         addCondition(){
             this.conditionlist = [];
@@ -119,7 +73,6 @@ export const useQuotaStore = defineStore('quota', {
 
                     }
             }
-
         },
         selectQuotaCondition(event){
             console.log(event.target.value.toLowerCase());
