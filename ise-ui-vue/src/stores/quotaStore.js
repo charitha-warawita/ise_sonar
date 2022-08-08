@@ -16,9 +16,10 @@ export const useQuotaStore = defineStore('quota', {
                 name: '',
                 selectedServeyQuotaType:'',
                 selectedAdjustmentType:'',
+                selectedIsActive:"True",
                 fieldTargetPercentage: 0,
                 fieldTargetNominal: 0,
-                status: '',
+                isActive: ["True", "False"],
                 completes: 0,
                 prescreens: 0,
                 quotaPercentage: 0,
@@ -31,9 +32,13 @@ export const useQuotaStore = defineStore('quota', {
             this.conditionlist = [];
             this.currentCondition = null;
             this.showConditionDetail = false;
+            this.conditiongrid=false;
 
         },
-        serveyQuotaTyp(event){
+        isActiveState(event) {
+            this.currentQuota.selectedIsActive = event.target.value.toLowerCase();
+        },
+        serveyQuotaTyp(event) {
             this.currentQuota.selectedServeyQuotaType = event.target.value.toLowerCase();    
         },
         adjustmentType(event){
@@ -55,16 +60,15 @@ export const useQuotaStore = defineStore('quota', {
                 }
             }        
         },
-        addCondition(){
+        addCondition(taId){
             this.conditionlist = [];
             this.showConditionDetail =false;
             this.conditiongrid = true;
             var project = useProjectStore().project;
-            for (var i = 0; i < project.projectTargetAudiences.length; i++)
-            {
-                for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                {
-                    this.conditionlist.push(JSON.parse(JSON.stringify(project.projectTargetAudiences[i].qualifications[j])));
+            var index = project.projectTargetAudiences.findIndex(x => x.id === taId)
+            if(index > -1) {
+                for(var i = 0; i < project.projectTargetAudiences[index].qualifications.length; i++) {
+                    this.conditionlist.push(JSON.parse(JSON.stringify(project.projectTargetAudiences[index].qualifications[i])));
                 }
             }
         },
@@ -82,6 +86,9 @@ export const useQuotaStore = defineStore('quota', {
             var index = this.currentCondition.question.variables.findIndex(x => x.id === answerId);
             this.currentCondition.question.variables[index].selected = !this.currentCondition.question.variables[index].selected;
         },
+        GoToFirstSection() {
+            this.conditiongrid = false;
+        },
         SaveCondition() {
             if(this.currentCondition !== null) {
                 this.currentCondition.question.variables = this.currentCondition.question.variables.filter(x => x.selected === true)
@@ -96,11 +103,10 @@ export const useQuotaStore = defineStore('quota', {
             if(index > -1)
                 this.currentQuota.conditions.splice(index, 1);
 
-            if(this.currentQuota,conditions.length < 0)
+            if(this.currentQuota.conditions === undefined || this.currentQuota.conditions.length < 1)
                 this.enableSave = false;
         },
         SaveQuota(taid){
-           
             var project = useProjectStore().project;
             var index = project.projectTargetAudiences.findIndex(x => x.id === taid)
             var quotaId = project.projectTargetAudiences[index].quota.length + 1;
@@ -113,7 +119,7 @@ export const useQuotaStore = defineStore('quota', {
                     "limit": this.currentQuota.quotaNominal,
                     "prescreens": this.currentQuota.prescreens,
                     "completes": this.currentQuota.completes,
-                    "isActive": this.currentQuota.status,
+                    "isActive": this.currentQuota.selectedIsActive,
                     "conditions": this.currentQuota.conditions
                 };
                 project.projectTargetAudiences[index].quota.push(quota);
@@ -126,7 +132,7 @@ export const useQuotaStore = defineStore('quota', {
             if(index > -1) {
                 var subInd = project.projectTargetAudiences[index].quota.findIndex(x => x.id === qtId);
                 if(subInd > -1) {
-                    project.projectTargetAudiences[i].quota.splice(subInd, 1);
+                    project.projectTargetAudiences[index].quota.splice(subInd, 1);
                 }
             }
         }

@@ -4,12 +4,12 @@
       <legend class="float-none w-auto" style="font-size: 18px">
         Create - Section 1 of 2
       </legend>
-      <div class="row">
-        <div class="col-md-6">
+      <div class="row g-2">
+        <div class="col-md-12">
           <label for="input" class="form-label">Name</label>
           <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.name" />
         </div>
-        <div class="col-md-6">
+        <div class="col-md-9">
           <label for="sel1" class="form-label">Servey Quota Type</label>
           <select @change="useQuotaDataStore.serveyQuotaTyp($event)" class="form-select" id="sel1" name="sellist1">
             <option v-bind:value="ServeyQuotaTypes" v-for="ServeyQuotaTypes in useQuotaDataStore.currentQuota.ServeyQuotaType" :key="ServeyQuotaTypes">
@@ -18,7 +18,12 @@
             <label for="sel1" class="form-label">Select list (select one):</label>
           </select>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
+          <label for="input" class="form-label">Completes</label>
+          <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.completes" />
+        </div>
+        <div class="col-md-9">
           <label for="sel2" class="form-label">Adjustment Type</label>
           <select @change="useQuotaDataStore.adjustmentType($event)" class="form-select" id="sel2" name="sellist2">
             <option v-bind:value="adjustmentType" v-for="adjustmentType in useQuotaDataStore.currentQuota.adjustmentType" :key="adjustmentType">
@@ -26,17 +31,17 @@
             </option>
           </select>
         </div>
-        <div class="col-md-6">
-          <label for="input" class="form-label">Status</label>
-          <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.status"/>
-        </div>
-        <div class="col-md-6">
-          <label for="input" class="form-label">Completes</label>
-          <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.completes" />
-        </div>
-        <div class="col-md-6">
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
           <label for="input" class="form-label">Prescreens</label>
           <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.prescreens" />
+        </div>
+        <div class="col-md-9">
+          <label for="input" class="form-label">Is Active</label>
+          <select @change="useQuotaDataStore.isActiveState($event)" class="form-select" id="sel3" name="sellist3">
+            <option v-bind:value="isAct" v-for="isAct in useQuotaDataStore.currentQuota.isActive" :key="isAct">{{ isAct }}</option>
+          </select>
+          <!--<input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.isActive"/>-->
         </div>
         <div class="col-md-6">
           <div class="row">
@@ -96,7 +101,7 @@
         </table>
       </div>
       <div class="col-md-12 p-4">
-        <button class="btn btn-outline-success searchButton" id="addQutobutton" v-on:click="useQuotaDataStore.addCondition">
+        <button class="btn btn-outline-success searchButton" id="addQutobutton" v-on:click="useQuotaDataStore.addCondition(taId)">
           Add condition
         </button>
       </div>
@@ -154,6 +159,9 @@
           </div>
         </div>
       </div>
+      <button class="btn btn-outline-success btn-light me-2" style="float:left; margin: 5px 0" v-on:click="useQuotaDataStore.GoToFirstSection()">
+      back
+      </button>
       <button class="btn btn-outline-success searchButton me-2" style="float:right; margin: 5px 0" v-on:click="useQuotaDataStore.SaveCondition()">
       Save Condition
       </button>
