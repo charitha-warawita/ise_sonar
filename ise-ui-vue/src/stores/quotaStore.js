@@ -2,25 +2,14 @@ import { defineStore } from "pinia";
 import { useProjectStore } from "./projectStore"; 
 export const useQuotaStore = defineStore('quota', {
     state: () => ({
-        selecteDiv:false,
+        enableSave: false,
+        showConditionDetail:false,
         conditionlist:[],
-        projectid: useProjectStore.globalTaId,
-        selectedConditionId:'',
-        selectedConditionName:'',
-        selectedConditionText:'',
-        selectedConditioncategoryName:'',
-        Selectedvariables:'',
-        selecttedconditions:[],
-        selecttedAnswer:[],
+        currentCondition: null,
         error: null,
         conditiongrid:false,
-        iseUrl: import.meta.env.VITE_ISE_API_URL,
-        iseCountryPath: import.meta.env.VITE_ISE_API_COUNTRIES,
-        currentQuota: []
+        currentQuota: {}
     }),
-    getters: {
-        
-    },
     actions: {
         LoadDefaultCurrentQuota() {
             this.currentQuota = {
@@ -34,115 +23,112 @@ export const useQuotaStore = defineStore('quota', {
                 prescreens: 0,
                 quotaPercentage: 0,
                 quotaNominal: 0,
-                conditionId:'',
-                conditionName:'',
-                conditiontext:'',
-                conditionCategoryName:'',
-                variableId:'',
-                variableName:'',
-                quotaMinAge:0,
-                quotaMaxAge:0,
+                conditions:[],
                 ServeyQuotaType:["--Select--","Started","Completed"],
                 adjustmentType:["--Select--", "Nominal","percentage"],
             };
+            this.enableSave = false;
+            this.conditionlist = [];
+            this.currentCondition = null;
+            this.showConditionDetail = false;
+
         },
         serveyQuotaTyp(event){
-            this.currentQuota.selectedServeyQuotaType = event.target.value;    
+            this.currentQuota.selectedServeyQuotaType = event.target.value.toLowerCase();    
         },
         adjustmentType(event){
             var selectedValue = event.target.value.toLowerCase();  
             this.currentQuota.selectedAdjustmentType = selectedValue
-            /*if(selectedValue.toLowerCase() === 'nominal') {
-
-            } */ 
+        },
+        UpdateAdjValue(totalCompletes, element, key) {
+            if(Number.isInteger(totalCompletes)) {
+                if(element === 'fieldTarget') {
+                    if(key === 'nominal')
+                        this.currentQuota.fieldTargetPercentage = (this.currentQuota.fieldTargetNominal/totalCompletes) * 100;
+                    else
+                        this.currentQuota.fieldTargetNominal = totalCompletes* (this.currentQuota.fieldTargetPercentage/100);
+                } else {
+                    if(key === 'nominal')
+                        this.currentQuota.quotaPercentage = (this.currentQuota.quotaNominal/totalCompletes) * 100;
+                    else
+                        this.currentQuota.quotaNominal = totalCompletes* (this.currentQuota.quotaPercentage/100);
+                }
+            }        
         },
         addCondition(){
             this.conditionlist = [];
-            this.selectedConditionName = "";
-            this.selectedConditionText ="";
-            this.selectedConditioncategoryName ="";
-            this.Selectedvariables = "";
-            this.selecteDiv =false;
+            this.showConditionDetail =false;
             this.conditiongrid = true;
             var project = useProjectStore().project;
             for (var i = 0; i < project.projectTargetAudiences.length; i++)
             {
                 for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-                    {
-                        this.conditionlist.push(project.projectTargetAudiences[i].qualifications[j].question)
-
-                    }
+                {
+                    this.conditionlist.push(JSON.parse(JSON.stringify(project.projectTargetAudiences[i].qualifications[j])));
+                }
             }
         },
         selectQuotaCondition(event){
             console.log(event.target.value.toLowerCase());
             var  selectedConditionId = parseInt(event.target.value);
-            
-            var project = useProjectStore().project;
-            for (var i = 0; i < project.projectTargetAudiences.length; i++)
-            {
-                this.projectId = project.id;
-                for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++)
-              
-                    {
-                        if( project.projectTargetAudiences[i].qualifications[j].question.id === selectedConditionId)
-                        {
-     
-                            this.selecttedQuestionid = project.projectTargetAudiences[i].qualifications[j].id
-                            this.selectedConditionName = project.projectTargetAudiences[i].qualifications[j].question.name
-                            this.selectedConditionText = project.projectTargetAudiences[i].qualifications[j].question.text
-                            this.selectedConditioncategoryName = project.projectTargetAudiences[i].qualifications[j].question.categoryName
-                            this.Selectedvariables = project.projectTargetAudiences[i].qualifications[j].question.variables;
-                            this.selecteDiv =true
-                        }
-                    }
+
+            var con = this.conditionlist.find(x => x.order === selectedConditionId);
+            this.currentCondition = con;
+            for(var i =0; i < this.currentCondition.question.variables.length; i++)
+                this.currentCondition.question.variables[i].selected = false;
+            this.showConditionDetail =true
+        },
+        SelectQuotaConditionAnswer(answerId) {
+            var index = this.currentCondition.question.variables.findIndex(x => x.id === answerId);
+            this.currentCondition.question.variables[index].selected = !this.currentCondition.question.variables[index].selected;
+        },
+        SaveCondition() {
+            if(this.currentCondition !== null) {
+                this.currentCondition.question.variables = this.currentCondition.question.variables.filter(x => x.selected === true)
+                this.currentQuota.conditions.push(this.currentCondition);
+                this.currentCondition = null;
+                this.conditiongrid = false;
+                this.enableSave = true;
             }
-            
         },
-        SaveQuotaConditions( selecttedQuestionid, selectedConditioncategoryName, selectedConditionName, selectedConditionText, id, name) {
-            this.currentQuota.conditionId = selecttedQuestionid; 
-            this.currentQuota.conditionName = selectedConditionName;
-            this.currentQuota.conditiontext = selectedConditionText;
-            this.currentQuota.conditionCategoryName = selectedConditioncategoryName;
-            this.currentQuota.variableId = id;
-            this.currentQuota.variableName = name;
-                // this.currentQuota.conditions.push({"id":selecttedQuestionid, "categoryName":selectedConditioncategoryName, "name":selectedConditionName, "text":selectedConditionText, "qId":id, "qName":name})
+        RemoveCondition(conditionId) {
+            var index = this.currentQuota.conditions.findIndex(x => x.id === conditionId);
+            if(index > -1)
+                this.currentQuota.conditions.splice(index, 1);
+
+            if(this.currentQuota,conditions.length < 0)
+                this.enableSave = false;
         },
-        SaveQuota(itemtype, taid, quotaid,){
+        SaveQuota(taid){
            
             var project = useProjectStore().project;
-            for (var i = 0; i < project.projectTargetAudiences.length; i++)
-            {
-                var quota = {};
-
-                    quota = {
-                        "id": quotaid,
-                        "name": this.currentQuota.name,
-                        "fieldTargetNominal": this.currentQuota.fieldTargetNominal,
-                        "fieldTargetPercentage": this.currentQuota.fieldTargetPercentage,
-                        "status": this.currentQuota.status,
-                        "completes": this.currentQuota.completes,
-                        "prescreence":this.currentQuota.prescreens,
-                        "serveyQuotaTypeSelected": this.currentQuota.selectedServeyQuotaType,
-                        "adjustmentType": this.currentQuota.selectedAdjustmentType,
-                        "quotaPercentage": this.currentQuota.quotaPercentage,
-                        "quotaNominal": this.currentQuota.quotaNominal,
-                        "order": quotaid,
-                        "logicalDecision": "OR",
-                        "NumberOfRequiredConditions": 0,
-                        "IsActive": true,
-                        "conditions": {
-                            "id":  this.currentQuota.conditionId, "name":  this.currentQuota.conditionName, "text":  this.currentQuota.conditiontext, "categoryName":  this.currentQuota.conditionCategoryName,
-                            "variables": [{ "id":  this.currentQuota.variableId, "name":  this.currentQuota.variableName }]
-                        } 
-                        };
-                project.projectTargetAudiences[i].quota.push(quota);
+            var index = project.projectTargetAudiences.findIndex(x => x.id === taid)
+            var quotaId = project.projectTargetAudiences[index].quota.length + 1;
+            if(index > -1) {
+                var quota = {
+                    "id": quotaId,
+                    "quotaName": this.currentQuota.name,
+                    "quotaType": this.currentQuota.selectedServeyQuotaType,
+                    "fieldTarget": this.currentQuota.fieldTargetNominal,
+                    "limit": this.currentQuota.quotaNominal,
+                    "prescreens": this.currentQuota.prescreens,
+                    "completes": this.currentQuota.completes,
+                    "isActive": this.currentQuota.status,
+                    "conditions": this.currentQuota.conditions
+                };
+                project.projectTargetAudiences[index].quota.push(quota);
                 this.LoadDefaultCurrentQuota();
-                break;
             }
-            
-        
+        },
+        RemoveQuota(taId, qtId) {
+            var project = useProjectStore().project;
+            var index = project.projectTargetAudiences.findIndex(x => x.id === taId)
+            if(index > -1) {
+                var subInd = project.projectTargetAudiences[index].quota.findIndex(x => x.id === qtId);
+                if(subInd > -1) {
+                    project.projectTargetAudiences[i].quota.splice(subInd, 1);
+                }
+            }
         }
-
     }
 })
