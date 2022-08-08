@@ -2,6 +2,10 @@ import { defineStore } from "pinia";
 import { useProjectStore } from "./projectStore"; 
 export const useQuotaStore = defineStore('quota', {
     state: () => ({
+        currentQuota: SetDefaultCurrentQuota(),
+
+
+
         selecteDiv:false,
         conditionlist:[],
         projectid: useProjectStore.globalTaId,
@@ -52,6 +56,22 @@ export const useQuotaStore = defineStore('quota', {
         
     },
     actions: {
+        SetDefaultCurrentQuota() {
+            return {
+                tempId: 0,
+                quotaName: '',
+                quotaType: [{'name': 'Started', Selected: false }, {'name': 'Completed', selected: false }],
+                fieldTarget: 0,
+                fieldTargetPercentage: 0,
+                limit: 0,
+                limitPercentage: 0,
+                adjustmentType: [{'name': 'Nominal', selected: false }, { 'name': 'percentage', selected: false }],
+                prescreens: 0,
+                completes: 0,
+                IsActive: true,
+                conditions: []
+            }
+        },
         LoadDefaultCurrentQuota() {
             this.currentQuota = {
                 name: '',

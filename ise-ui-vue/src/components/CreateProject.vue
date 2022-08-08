@@ -137,8 +137,8 @@
                                                     <hr/>
                                                </div>
                                                
-                                                <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ (ta.quota.length+1))">Add Quota</button>  
-                                                    <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
+                                                <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal(888)">Add Quota</button>  
+                                                    <CustomModal @close="toggleModal(888)" :modalId="888">
                                                         <div class="card modal-content">
                                                             <h3 class="card-header">Quota</h3>
                                                             <div class="card-body">
