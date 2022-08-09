@@ -32,7 +32,7 @@ async function createNewProject() {
         alert(alertMessage);
     }
     else {
-        alert('project successfully created. New project ID is' + this.project.id);
+        alert('project successfully created. New project ID is ' + this.project.id);
         useProjStore.$reset();
     }
     router.push('/');

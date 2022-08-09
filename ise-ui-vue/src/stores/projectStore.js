@@ -74,7 +74,6 @@ export const useProjectStore = defineStore('project', {
                 "cptg": 0,
                 "wantedCompletes": 0,
                 "qualifications": [],
-                "quota": [],
                 "quotas": [],
                 "subtotal": 0,
                 "errors": []

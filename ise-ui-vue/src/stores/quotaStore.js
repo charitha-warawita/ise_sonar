@@ -116,7 +116,7 @@ export const useQuotaStore = defineStore('quota', {
         SaveQuota(taid){
             var project = useProjectStore().project;
             var index = project.targetAudiences.findIndex(x => x.tempId === taid)
-            var quotaId = project.targetAudiences[index].quota.length + 1;
+            var quotaId = project.targetAudiences[index].quotas.length + 1;
             if(index > -1) {
                 var quota = {
                     "tempId": quotaId,
@@ -126,10 +126,13 @@ export const useQuotaStore = defineStore('quota', {
                     "limit": this.currentQuota.quotaNominal,
                     "prescreens": this.currentQuota.prescreens,
                     "completes": this.currentQuota.completes,
-                    "isActive": this.currentQuota.selectedIsActive,
-                    "conditions": this.currentQuota.conditions
+                    "isActive": this.currentQuota.selectedIsActive === "True",
+                    "conditions": []
                 };
-                project.targetAudiences[index].quota.push(quota);
+                for(var i = 0; i < this.currentQuota.conditions.length; i++) {
+                    quota.conditions.push(this.currentQuota.conditions[i].question);
+                }
+                project.targetAudiences[index].quotas.push(quota);
                 this.LoadDefaultCurrentQuota();
             }
         },
@@ -137,9 +140,9 @@ export const useQuotaStore = defineStore('quota', {
             var project = useProjectStore().project;
             var index = project.targetAudiences.findIndex(x => x.tempId === taId)
             if(index > -1) {
-                var subInd = project.targetAudiences[index].quota.findIndex(x => x.tempId === qtId);
+                var subInd = project.targetAudiences[index].quotas.findIndex(x => x.tempId === qtId);
                 if(subInd > -1) {
-                    project.targetAudiences[index].quota.splice(subInd, 1);
+                    project.targetAudiences[index].quotas.splice(subInd, 1);
                 }
             }
         }

@@ -122,15 +122,15 @@
                                         <div :id="'panelsStayOpen-collapseFour-' + ta.tempId" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
                                             <div class="accordion-body">
                                                 <div class="container">
-                                                    <div class="subDivQ row g-3" v-if="ta.quota" v-for="(qt, index) in ta.quota" :key="qt.tempId">
+                                                    <div class="subDivQ row g-3" v-if="ta.quotas" v-for="(qt, index) in ta.quotas" :key="qt.tempId">
                                                         <div class="col-md-1">{{qt.tempId }}</div>
                                                         <div class="col-md-9">
                                                             <div class="col-md-12"><b>{{qt.quotaName}}</b></div>
                                                             <div class="col-md-12">Field Target: {{qt.fieldTarget}}; Limit: {{ qt.limit }}</div>
                                                             <div v-for="condition in qt.conditions" :key="condition.id">
-                                                                <div class="col-md-12">{{condition.question.categoryName}} - {{condition.question.name}}</div>
+                                                                <div class="col-md-12">{{condition.categoryName}} - {{condition.name}}</div>
                                                                 <div class="col-md-12">
-                                                                    <div style="display: inline-block"  v-for="(item) in condition.question.variables" :key="item.id">
+                                                                    <div style="display: inline-block"  v-for="(item) in condition.variables" :key="item.id">
                                                                         <div class="form-check">
                                                                             <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px"><i>{{item.name}}</i></label>
                                                                         </div>
