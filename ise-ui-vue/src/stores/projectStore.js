@@ -6,7 +6,7 @@ export const useProjectStore = defineStore('project', {
         basicSettingDesc:'',
         totalCost: 0,
         project: {
-            "id": 0,
+            "tempId": 0,
             "name": "",
             "reference": "",
             "lastUpdate": "",
@@ -37,19 +37,8 @@ export const useProjectStore = defineStore('project', {
     },
     actions: {
         async CreateProject(project) {
-            project.tempId = project.id;
             project.lastUpdate = new Date();
-            delete project.id;
 
-            for(var i = 0; i < project.targetAudiences.length; i++) {
-                project.targetAudiences[i].tempId = project.targetAudiences[i].id ;
-                delete project.targetAudiences[i].id;
-                for(var j = 0; j < project.targetAudiences[i].qualifications.length; j++) {
-                    project.targetAudiences[i].qualifications[j].tempId = project.targetAudiences[i].qualifications[j].id;
-                    delete project.targetAudiences[i].qualifications[j].id;
-                }
-            }
-            
             this.saveProjectLoading = true;
             var iseUrl = import.meta.env.VITE_ISE_API_URL;
             var saveProjectPath = import.meta.env.VITE_ISE_API_SAVEPROJECT;
@@ -76,7 +65,7 @@ export const useProjectStore = defineStore('project', {
         AddTargetAudienceElement() {  
             var id = this.project.targetAudiences.length;
             var ta = {
-                "id": id+1,
+                "tempId": id+1,
                 "name": "",
                 "audienceNumber":0,
                 "estimatedIR": 0,
@@ -93,7 +82,7 @@ export const useProjectStore = defineStore('project', {
             this.project.targetAudiences.push(ta)
         },
         CancelTargetAudience(ta) {
-            var removeIndex = this.project.targetAudiences.map(item => item.id).indexOf(ta.id);
+            var removeIndex = this.project.targetAudiences.map(item => item.tempId).indexOf(ta.tempId);
             ~removeIndex && this.project.targetAudiences.splice(removeIndex, 1);
         },
         CalculateCharges(event) {

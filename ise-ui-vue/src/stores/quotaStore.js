@@ -64,8 +64,9 @@ export const useQuotaStore = defineStore('quota', {
             this.conditionlist = [];
             this.showConditionDetail =false;
             this.conditiongrid = true;
+            this.enableSave = false;
             var project = useProjectStore().project;
-            var index = project.targetAudiences.findIndex(x => x.id === taId)
+            var index = project.targetAudiences.findIndex(x => x.tempId === taId)
             if(index > -1) {
                 for(var i = 0; i < project.targetAudiences[index].qualifications.length; i++) {
                     this.conditionlist.push(JSON.parse(JSON.stringify(project.targetAudiences[index].qualifications[i])));
@@ -88,6 +89,12 @@ export const useQuotaStore = defineStore('quota', {
         },
         GoToFirstSection() {
             this.conditiongrid = false;
+
+            if(this.currentQuota.conditions === undefined || this.currentQuota.conditions.length < 1)
+                this.enableSave = false;
+            else
+                this.enableSave = true;
+            
         },
         SaveCondition() {
             if(this.currentCondition !== null) {
@@ -99,7 +106,7 @@ export const useQuotaStore = defineStore('quota', {
             }
         },
         RemoveCondition(conditionId) {
-            var index = this.currentQuota.conditions.findIndex(x => x.id === conditionId);
+            var index = this.currentQuota.conditions.findIndex(x => x.tempId === conditionId);
             if(index > -1)
                 this.currentQuota.conditions.splice(index, 1);
 
@@ -108,11 +115,11 @@ export const useQuotaStore = defineStore('quota', {
         },
         SaveQuota(taid){
             var project = useProjectStore().project;
-            var index = project.targetAudiences.findIndex(x => x.id === taid)
+            var index = project.targetAudiences.findIndex(x => x.tempId === taid)
             var quotaId = project.targetAudiences[index].quota.length + 1;
             if(index > -1) {
                 var quota = {
-                    "id": quotaId,
+                    "tempId": quotaId,
                     "quotaName": this.currentQuota.name,
                     "quotaType": this.currentQuota.selectedServeyQuotaType,
                     "fieldTarget": this.currentQuota.fieldTargetNominal,
@@ -128,9 +135,9 @@ export const useQuotaStore = defineStore('quota', {
         },
         RemoveQuota(taId, qtId) {
             var project = useProjectStore().project;
-            var index = project.targetAudiences.findIndex(x => x.id === taId)
+            var index = project.targetAudiences.findIndex(x => x.tempId === taId)
             if(index > -1) {
-                var subInd = project.targetAudiences[index].quota.findIndex(x => x.id === qtId);
+                var subInd = project.targetAudiences[index].quota.findIndex(x => x.tempId === qtId);
                 if(subInd > -1) {
                     project.targetAudiences[index].quota.splice(subInd, 1);
                 }

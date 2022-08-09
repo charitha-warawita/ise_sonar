@@ -10,7 +10,7 @@
           <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.name" />
         </div>
         <div class="col-md-9">
-          <label for="sel1" class="form-label">Servey Quota Type</label>
+          <label for="sel1" class="form-label">Survey Quota Type</label>
           <select @change="useQuotaDataStore.serveyQuotaTyp($event)" class="form-select" id="sel1" name="sellist1">
             <option v-bind:value="ServeyQuotaTypes" v-for="ServeyQuotaTypes in useQuotaDataStore.currentQuota.ServeyQuotaType" :key="ServeyQuotaTypes">
               {{ ServeyQuotaTypes }}
@@ -92,10 +92,10 @@
               </tr>
           </thead>
           <tbody>
-              <tr v-for="condition in useQuotaDataStore.currentQuota.conditions" :key="condition.id">
+              <tr v-for="condition in useQuotaDataStore.currentQuota.conditions" :key="condition.tempId">
               <th>{{condition.question.name}}</th>
               <td><label v-for="variable in condition.question.variables" :key="variable.id"> | {{variable.name}} |</label></td>
-              <td><a @click="useQuotaDataStore.RemoveCondition(condition.id)" class="link-danger">Remove</a></td>
+              <td><a @click="useQuotaDataStore.RemoveCondition(condition.tempId)" class="link-danger">Remove</a></td>
               </tr>
           </tbody>
         </table>
@@ -120,7 +120,7 @@
           <div class="col-md-6">
             <select class="form-select" id="sel1" name="sellist1" @change="useQuotaDataStore.selectQuotaCondition($event)">
               <option disables selected value>--Select--</option>
-              <option v-bind:value="condition.order" v-for="condition in useQuotaDataStore.conditionlist" :key="condition.id">
+              <option v-bind:value="condition.order" v-for="condition in useQuotaDataStore.conditionlist" :key="condition.tempId">
                 {{ condition.order }}-{{ condition.question.categoryName }}-{{ condition.question.name }}
               </option>
             </select>

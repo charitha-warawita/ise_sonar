@@ -20,14 +20,14 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="project.targetAudiences" v-for="ta in project.targetAudiences" :key="ta.id">
+                    <div v-if="project.targetAudiences" v-for="ta in project.targetAudiences" :key="ta.tempId">
                         <div class="accordion-item customItem">
                             <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseTwo-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                <b>Target Audience - {{ta.id}}</b>
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseTwo-' + ta.tempId" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                <b>Target Audience - {{ta.tempId}}</b>
                             </button>
                             </h2>
-                            <div :id="'panelsStayOpen-collapseTwo-' + ta.id" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
+                            <div :id="'panelsStayOpen-collapseTwo-' + ta.tempId" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
                                 <div class="accordion-body">
                                     <div v-if="ta.errors.length > 0" style="color:red">
                                         Validation errors:<br/>
@@ -60,14 +60,14 @@
                                         </div>
                                         <div class="accordion-item-custom">
                                             <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseThree-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseThree-' + ta.tempId" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
                                                     <b>Qualification</b>
                                                 </button>
                                             </h2>
-                                            <div :id="'panelsStayOpen-collapseThree-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                                            <div :id="'panelsStayOpen-collapseThree-' + ta.tempId" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                                                 <div class="accordion-body">
-                                                    <draggable  v-on:update="useQualStore.sortOrderforQual($event, ta.id)" >
-                                                        <div class="subDivQ row g-3" v-if="ta.qualifications" v-for="(qual, index) in ta.qualifications" :key="qual.id">
+                                                    <draggable  v-on:update="useQualStore.sortOrderforQual($event, ta.tempId)" >
+                                                        <div class="subDivQ row g-3" v-if="ta.qualifications" v-for="(qual, index) in ta.qualifications" :key="qual.tempId">
                                                             <div class="col-md-1">{{qual.order}}</div>
                                                             <div class="col-md-8">
                                                                 <div class="col-md-12"><b>{{qual.question.categoryName}} - {{qual.question.name}}</b></div>
@@ -83,29 +83,29 @@
                                                             <div class="col-md-3">
                                                                 <button 
                                                                     type="button" 
-                                                                    @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'AND')"
+                                                                    @click="useQualStore.UpdateQualLogOperation(ta.tempId, qual.tempId, 'AND')"
                                                                     class="btn btn-outline-success QualLogicalButton"
                                                                     :class="[qual.logicalDecision !== 'OR' ? 'searchButton' : 'btn-light']"
                                                                     >Must</button>
                                                                 <button 
                                                                     type="button" 
-                                                                    @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'OR')"
+                                                                    @click="useQualStore.UpdateQualLogOperation(ta.tempId, qual.tempId, 'OR')"
                                                                     class="btn btn-outline-success QualLogicalButton"
                                                                     :class="[qual.logicalDecision === 'OR' ? 'searchButton' : 'btn-light']"
                                                                     >Optional</button>
-                                                                <a @click="useQualStore.RemoveQualification(ta.id, qual.id)" class="link-danger" style="float:right; margin-top:10%">
+                                                                <a @click="useQualStore.RemoveQualification(ta.tempId, qual.tempId)" class="link-danger" style="float:right; margin-top:10%">
                                                                 Remove</a>
                                                             </div>
                                                             <hr/>
                                                         </div>
                                                     </draggable>    
                                                 <div class="col-md-12">
-                                                    <button class="btn btn-outline-success searchButton mb-4 "  style="float: right" @click="toggleModal('qual'+ ta.id);useQualStore.GetProfileCategories(ta.id)">Add Qualification</button>
-                                                    <CustomModal @close="toggleModal('qual'+ ta.id)" :modalId="'qual'+ ta.id">
+                                                    <button class="btn btn-outline-success searchButton mb-4 "  style="float: right" @click="toggleModal('qual'+ ta.tempId);useQualStore.GetProfileCategories(ta.tempId)">Add Qualification</button>
+                                                    <CustomModal @close="toggleModal('qual'+ ta.tempId)" :modalId="'qual'+ ta.tempId">
                                                         <div class="card modal-content">
                                                             <h3 class="card-header">Qualifications</h3>
                                                             <div class="card-body">
-                                                                <QualificationsList @close="toggleModal('qual'+ ta.id)" itemType='profileVars' :taId='ta.id' :qualificationId="'qual-' + ta.id" />
+                                                                <QualificationsList @close="toggleModal('qual'+ ta.tempId)" itemType='profileVars' :taId='ta.tempId' :qualificationId="'qual-' + ta.tempId" />
                                                             </div>
                                                         </div>
                                                     </CustomModal>
@@ -115,15 +115,15 @@
                                     </div>
                                     <div class="accordion-item-custom">
                                             <h2 class="accordion-header" id="panelsStayOpen-headingFour">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseFour-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseFour-' + ta.tempId" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
                                                     <b>Quota</b>
                                                 </button>
                                             </h2>
-                                        <div :id="'panelsStayOpen-collapseFour-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
+                                        <div :id="'panelsStayOpen-collapseFour-' + ta.tempId" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
                                             <div class="accordion-body">
                                                 <div class="container">
-                                                    <div class="subDivQ row g-3" v-if="ta.quota" v-for="(qt, index) in ta.quota" :key="qt.id">
-                                                        <div class="col-md-1">{{qt.id }}</div>
+                                                    <div class="subDivQ row g-3" v-if="ta.quota" v-for="(qt, index) in ta.quota" :key="qt.tempId">
+                                                        <div class="col-md-1">{{qt.tempId }}</div>
                                                         <div class="col-md-9">
                                                             <div class="col-md-12"><b>{{qt.quotaName}}</b></div>
                                                             <div class="col-md-12">Field Target: {{qt.fieldTarget}}; Limit: {{ qt.limit }}</div>
@@ -139,17 +139,17 @@
                                                             </div>       
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <a @click="useQuotaDataStore.RemoveQuota(ta.id, qt.id)" class="link-danger" style="float:right; margin-top:10%">
+                                                            <a @click="useQuotaDataStore.RemoveQuota(ta.tempId, qt.tempId)" class="link-danger" style="float:right; margin-top:10%">
                                                             Remove</a>
                                                         </div>
                                                         <hr/>
                                                     </div>
-                                                    <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ ta.id)">Add Quota</button>  
-                                                    <CustomModal @close="toggleModal('quota'+ ta.id)" :modalId="'quota'+ ta.id">
+                                                    <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ ta.tempId)">Add Quota</button>  
+                                                    <CustomModal @close="toggleModal('quota'+ ta.tempId)" :modalId="'quota'+ ta.tempId">
                                                         <div class="card modal-content">
                                                             <h3 class="card-header">Quota</h3>
                                                             <div class="card-body">
-                                                                <QuotaList :taId=ta.id :totalCompletes=ta.wantedCompletes />
+                                                                <QuotaList :taId=ta.tempId :totalCompletes=ta.wantedCompletes />
                                                             </div>               
                                                         </div> 
                                                     </CustomModal>                                                  
@@ -157,7 +157,7 @@
                                             </div>
                                         </div>      
                                         <div class="col-md-12">
-                                            <button :class="{ hidden: ta.id === 1 }" style="float: right" class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.CancelTargetAudience(ta)">Cancel Target Audience</button>
+                                            <button :class="{ hidden: ta.tempId === 1 }" style="float: right" class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.CancelTargetAudience(ta)">Cancel Target Audience</button>
                                         </div>
                                     </div>
                                 </div>
@@ -174,8 +174,8 @@
                     <div class="col-md-12">
                     <label class="btn costLabel"><b>Cost Estimation</b></label>
                     </div><div class="breakDiv"></div>
-                    <div class="row" v-if="project.targetAudiences" v-for="ta in project.targetAudiences" :key="ta.id">
-                        <h5>Estimation of Target audience - {{ta.id}} </h5><div class="breakDiv"></div>
+                    <div class="row" v-if="project.targetAudiences" v-for="ta in project.targetAudiences" :key="ta.tempId">
+                        <h5>Estimation of Target audience - {{ta.tempId}} </h5><div class="breakDiv"></div>
                         <div class="col-md-8">
                             <label for="inputEmail4" class="form-label">CPI</label>
                         </div>
@@ -273,10 +273,16 @@ async function SubmitProject(project) {
 async function SaveforLater(project) {
     if(await ProjectValidated(project, 'save')) {
         await useProjStore.CreateProject(project);
-        if(typeof(project.id) === undefined || project.errors.length > 0)
-        alert('Project Save as Draft is unsuccessful. Project ID returned is: ' + this.project.id + '. Error returned is: ' + JSON.stringify(this.project.errors));
+        if(typeof(project.tempId) === undefined || project.errors.length > 0) {
+            var newLine = "\r\n"
+            var alertMessage = 'Project Save as Draft is unsuccessful. Project ID returned is: ' + this.project.tempId + '.' + newLine;
+            alertMessage += 'Error returned are: ' + newLine;
+            for(var i =0; i < this.project.errors.length; i++)
+                alertMessage += this.project.errors[i] + newLine;
+            alert(alertMessage);
+        }
         else {
-            alert('project saved as draft successfully. New project ID is ' + project.id);
+            alert('project saved as draft successfully. New project ID is ' + project.tempId);
             useProjStore.$reset();
         }
         router.push('/');

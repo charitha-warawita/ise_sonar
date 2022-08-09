@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useProjectsStore = defineStore('projects', {
     state: () => ({
         projects:[{
-            "id": "e592e1c0-f77b-457d-86e8-19f85ab83722",
+            "tempId": "e592e1c0-f77b-457d-86e8-19f85ab83722",
             "name": "Stocks Study",
             "reference": "MAC001",
             "userId": "09b90eb4-7cd4-4a2c-b587-9629305c7002",
@@ -19,7 +19,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Product Survey",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -35,7 +35,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Study on Mobile Networks",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -51,7 +51,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Study on Drinks",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -67,7 +67,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Test Survey Run",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -83,7 +83,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Bank Statistics",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -99,7 +99,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Coin Survey",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -115,7 +115,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Test Product Survey",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -131,7 +131,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Study on Maps",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -147,7 +147,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Study on Drinks",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -163,7 +163,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Test Run",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -179,7 +179,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Deployment Study",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -195,7 +195,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Modified Stats Response",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -211,7 +211,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "British gas Survey",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -227,7 +227,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Severn Trent Survey",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -243,7 +243,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "Study on Education",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",
@@ -259,7 +259,7 @@ export const useProjectsStore = defineStore('projects', {
             "cintCurrentCostLink": "NA",
             "cintTestingLink": "NA"
         }, {
-            "id": "f6dce440-e50a-4f56-9577-b6028e0603e5",
+            "tempId": "f6dce440-e50a-4f56-9577-b6028e0603e5",
             "name": "System Test",
             "reference": "MAC001",
             "userId": "c04c6e43-1878-4484-acf9-3397a19aa693",

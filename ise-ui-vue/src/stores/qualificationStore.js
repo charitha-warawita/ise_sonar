@@ -110,7 +110,7 @@ export const useQualificationStore = defineStore('qualification', {
         {
             var project = useProjectStore().project;
             try {
-                    var taIndex = project.targetAudiences.findIndex(x => x.id === this.currentTAId);
+                    var taIndex = project.targetAudiences.findIndex(x => x.tempId === this.currentTAId);
                     if(taIndex > -1) {
                         for(var i = 0; i < this.profCategories.length; i++) {
                             if(this.profCategories[i].selected) {
@@ -121,7 +121,7 @@ export const useQualificationStore = defineStore('qualification', {
                                         var currentqas = this.profCategories[i].qas[j];
                                         project.targetAudiences[taIndex].qualifications.push(
                                             {
-                                                "id": currentLength + 1, "order": currentLength + 1, 
+                                                "tempId": currentLength + 1, "order": currentLength + 1, 
                                                 "logicalDecision": "AND", "NumberOfRequiredConditions": 0,
                                                 "IsActive": true,
                                                 "question": {
@@ -146,11 +146,11 @@ export const useQualificationStore = defineStore('qualification', {
             var project = useProjectStore().project;
             for (var i = 0; i < project.targetAudiences.length; i++)
             {
-                if(project.targetAudiences[i].id === taId)
+                if(project.targetAudiences[i].tempId === taId)
                 {
                     for(var j = 0; j < project.targetAudiences[i].qualifications.length; j++)
                     {
-                        if(project.targetAudiences[i].qualifications[j].id === qid)
+                        if(project.targetAudiences[i].qualifications[j].tempId === qid)
                         {
                             project.targetAudiences[i].qualifications[j].logicalDecision = ld;
                         }
@@ -164,7 +164,7 @@ export const useQualificationStore = defineStore('qualification', {
                 var project = useProjectStore().project;
                 for (var i = 0; i < project.targetAudiences.length; i++)
                 {
-                    if(project.targetAudiences[i].id === taId)
+                    if(project.targetAudiences[i].tempId === taId)
                     {
                         var currQual = project.targetAudiences[i].qualifications;
                         var currIndex = added.oldIndex; var newIndex = added.newIndex;
@@ -186,9 +186,9 @@ export const useQualificationStore = defineStore('qualification', {
         },
         RemoveQualification(taId, qualId) {
             var project = useProjectStore().project;
-            var taIndex = project.targetAudiences.findIndex(x => x.id === taId);
+            var taIndex = project.targetAudiences.findIndex(x => x.tempId === taId);
             if(taIndex > -1) {
-                var qualIndex = project.targetAudiences[taIndex].qualifications.findIndex(x => x.id === qualId)
+                var qualIndex = project.targetAudiences[taIndex].qualifications.findIndex(x => x.tempId === qualId)
                 if(qualIndex > -1)
                 project.targetAudiences[taIndex].qualifications.splice(qualIndex,1);
 
