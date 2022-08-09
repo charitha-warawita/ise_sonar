@@ -18,11 +18,11 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] Project project)
+        public async Task<ActionResult> Post([FromBody] Project project)
         {
             try
             {
-                var resultProject = _projectService.CreateProject(project);
+                var resultProject = await _projectService.CreateProject(project);
                 if (resultProject != null)
                 {
                     return Ok(resultProject);
@@ -34,13 +34,12 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             {
                 return StatusCode(500, "Exception occured - " + ex.Message);
             }
-            return Ok();
         }
 
         [HttpPost("launch")]
         public async Task<ActionResult> Launch([FromBody] Project project)
         {
-            /*try
+            try
             {
                 var result = await _projectService.LaunchProject(project);
                 if (result != null)
@@ -53,7 +52,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             catch(Exception ex)
             {
                 return StatusCode(500, "Exception occured - " + ex.Message);
-            }*/
+            }
 
             return Ok();
         }

@@ -66,46 +66,46 @@
                                             </h2>
                                             <div :id="'panelsStayOpen-collapseThree-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                                                 <div class="accordion-body">
-                                                <draggable  v-on:update="useQualStore.sortOrderforQual($event, ta.id)" >
-                                                    <div class="subDivQ row g-3" v-if="ta.qualifications" v-for="(qual, index) in ta.qualifications" :key="qual.id">
-                                                        <div class="col-md-1">{{qual.order}}</div>
-                                                        <div class="col-md-8">
-                                                            <div class="col-md-12"><b>{{qual.question.categoryName}} - {{qual.question.name}}</b></div>
-                                                            <div class="col-md-12">{{qual.question.text}}</div>
-                                                            <div class="col-md-12">
-                                                                <div style="display: inline-block"  v-for="(item) in qual.question.variables" :key="item.id">
-                                                                    <div class="form-check">
-                                                                    <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px"><i>{{item.name}}</i></label>
+                                                    <draggable  v-on:update="useQualStore.sortOrderforQual($event, ta.id)" >
+                                                        <div class="subDivQ row g-3" v-if="ta.qualifications" v-for="(qual, index) in ta.qualifications" :key="qual.id">
+                                                            <div class="col-md-1">{{qual.order}}</div>
+                                                            <div class="col-md-8">
+                                                                <div class="col-md-12"><b>{{qual.question.categoryName}} - {{qual.question.name}}</b></div>
+                                                                <div class="col-md-12">{{qual.question.text}}</div>
+                                                                <div class="col-md-12">
+                                                                    <div style="display: inline-block"  v-for="(item) in qual.question.variables" :key="item.id">
+                                                                        <div class="form-check">
+                                                                            <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px"><i>{{item.name}}</i></label>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>       
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <button 
-                                                                type="button" 
-                                                                @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'AND')"
-                                                                class="btn btn-outline-success QualLogicalButton"
-                                                                :class="[qual.logicalDecision !== 'OR' ? 'searchButton' : 'btn-light']"
-                                                                >Mandatory</button>
-                                                            <button 
-                                                                type="button" 
-                                                                @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'OR')"
-                                                                class="btn btn-outline-success QualLogicalButton"
-                                                                :class="[qual.logicalDecision === 'OR' ? 'searchButton' : 'btn-light']"
-                                                                >Optional</button>
+                                                                </div>       
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <button 
+                                                                    type="button" 
+                                                                    @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'AND')"
+                                                                    class="btn btn-outline-success QualLogicalButton"
+                                                                    :class="[qual.logicalDecision !== 'OR' ? 'searchButton' : 'btn-light']"
+                                                                    >Must</button>
+                                                                <button 
+                                                                    type="button" 
+                                                                    @click="useQualStore.UpdateQualLogOperation(ta.id, qual.id, 'OR')"
+                                                                    class="btn btn-outline-success QualLogicalButton"
+                                                                    :class="[qual.logicalDecision === 'OR' ? 'searchButton' : 'btn-light']"
+                                                                    >Optional</button>
                                                                 <a @click="useQualStore.RemoveQualification(ta.id, qual.id)" class="link-danger" style="float:right; margin-top:10%">
-                                                        Remove</a>
+                                                                Remove</a>
+                                                            </div>
+                                                            <hr/>
                                                         </div>
-                                                        <hr/>
-                                                    </div>
-                                                </draggable>    
+                                                    </draggable>    
                                                 <div class="col-md-12">
-                                                    <button class="btn btn-outline-success searchButton mb-4 "  style="float: right" @click="toggleModal(999);useQualStore.GetProfileCategories(ta.id)">Add Qualification</button>
-                                                    <CustomModal @close="toggleModal(999)" modalId='999'>
+                                                    <button class="btn btn-outline-success searchButton mb-4 "  style="float: right" @click="toggleModal('qual'+ ta.id);useQualStore.GetProfileCategories(ta.id)">Add Qualification</button>
+                                                    <CustomModal @close="toggleModal('qual'+ ta.id)" :modalId="'qual'+ ta.id">
                                                         <div class="card modal-content">
                                                             <h3 class="card-header">Qualifications</h3>
                                                             <div class="card-body">
-                                                                <QualificationsList @close="toggleModal(999)" itemType='profileVars' taId=ta.id qualificationId='999' />
+                                                                <QualificationsList @close="toggleModal('qual'+ ta.id)" itemType='profileVars' :taId='ta.id' :qualificationId="'qual-' + ta.id" />
                                                             </div>
                                                         </div>
                                                     </CustomModal>
@@ -122,126 +122,93 @@
                                         <div :id="'panelsStayOpen-collapseFour-' + ta.id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
                                             <div class="accordion-body">
                                                 <div class="container">
-                                                    <!-- <div class="subDivQ row g-3" v-if="ta.quota" v-for="quota in ta.quota" :key="quota.id">
+                                                    <div class="subDivQ row g-3" v-if="ta.quota" v-for="(qt, index) in ta.quota" :key="qt.id">
+                                                        <div class="col-md-1">{{qt.id }}</div>
                                                         <div class="col-md-9">
-                                                            <div class="col-md-12"><b>{{quota.conditions.categoryName}} - {{quota.conditions.name}}</b></div>
-                                                                <div class="col-md-12">{{quota.conditions.text}}</div>
+                                                            <div class="col-md-12"><b>{{qt.quotaName}}</b></div>
+                                                            <div class="col-md-12">Field Target: {{qt.fieldTarget}}; Limit: {{ qt.limit }}</div>
+                                                            <div v-for="condition in qt.conditions" :key="condition.id">
+                                                                <div class="col-md-12">{{condition.question.categoryName}} - {{condition.question.name}}</div>
                                                                 <div class="col-md-12">
-                                                                    <div style="display: inline-block"  v-for="(item) in quota.conditions.variables" :key="item.id">
+                                                                    <div style="display: inline-block"  v-for="(item) in condition.question.variables" :key="item.id">
                                                                         <div class="form-check">
-                                                                        <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px"><i>{{item.name}}</i></label>
-                                                                     </div>
+                                                                            <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px"><i>{{item.name}}</i></label>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            </div>       
                                                         </div>
-                                                    <hr/> -->
-
-                                                   <table class="table table-striped table-hover">
-                                                    <thead>
-                                                        <tr class="tableHeader">
-                                                        <th><b>Id</b></th>
-                                                        <th><b>Name</b></th>
-                                                        <th><b>fieldTarget</b></th>
-                                                        <th><b>Quota</b></th>
-                                                        <th><b>con-Name</b></th>
-                                                        <th><b>con-Optons</b></th>
-                                                        <!-- <th><b>Actions</b></th> -->
-
-
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr v-if="ta.quota" v-for="quota in ta.quota" :key="quota.id">
-                                                         <template v-for="(item) in quota.conditions.variables" :key="item.id">
-                                                        <th>{{quota.id}}</th>
-                                                        <td>{{quota.name}}</td>
-                                                        <td>{{quota.fieldTargetNominal}}-{{quota.fieldTargetPercentage}}</td>
-                                                        <td>{{quota.quotaNominal}}-{{quota.quotaPercentage}}</td>
-                                                        <td>{{quota.conditions.name}}</td>
-                                                        <td>{{item.name}}</td>
-                                                        <!-- <td>
-                                                            <a type="button" class="link-primary">
-                                                                edit
-                                                            </a>
-                                                            <a type="button" class="link-danger">
-                                                                delete
-                                                            </a>
-                                                        </td> -->
-
-                                                        </template>
-                                                        </tr>
-                                                       
-                                                      
-                                                    </tbody>
-                                                </table>
-                                              
-                                               
-                                                <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ (ta.quota.length+1))">Add Quota</button>  
-                                                    <CustomModal @close="toggleModal('quota'+ (ta.quota.length+1))" :modalId="'quota'+ (ta.quota.length+1)">
+                                                        <div class="col-md-2">
+                                                            <a @click="useQuotaDataStore.RemoveQuota(ta.id, qt.id)" class="link-danger" style="float:right; margin-top:10%">
+                                                            Remove</a>
+                                                        </div>
+                                                        <hr/>
+                                                    </div>
+                                                    <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ ta.id)">Add Quota</button>  
+                                                    <CustomModal @close="toggleModal('quota'+ ta.id)" :modalId="'quota'+ ta.id">
                                                         <div class="card modal-content">
                                                             <h3 class="card-header">Quota</h3>
-                                                            <div class="card-body conditionscroll">
-                                                                <QuotaList :itemType="quotaPopup" :taId= ta.id :quotaid=ta.quota.length+1 />
+                                                            <div class="card-body">
+                                                                <QuotaList :taId=ta.id :totalCompletes=ta.wantedCompletes />
                                                             </div>               
                                                         </div> 
                                                     </CustomModal>                                                  
+                                                </div>
                                             </div>
+                                        </div>      
+                                        <div class="col-md-12">
+                                            <button :class="{ hidden: ta.id === 1 }" style="float: right" class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.CancelTargetAudience(ta)">Cancel Target Audience</button>
                                         </div>
-                                    </div>      
-                                    <div class="col-md-12">
-                                        <button :class="{ hidden: ta.id === 1 }" style="float: right" class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.CancelTargetAudience(ta)">Cancel Target Audience</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <button class="btn btn-outline-success btn-light me-2" style="margin-bottom: 20px;" v-on:click="useProjStore.AddTargetAudienceElement()">Add another Target Audience</button>
                 </div>
-                <button class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.AddTargetAudienceElement()">Add another Target Audience</button>
+            </div>
+        </div>     
+        <div class="col-4">
+            <div class="costSection">
+                <div class="row">
+                    <div class="col-md-12">
+                    <label class="btn costLabel"><b>Cost Estimation</b></label>
+                    </div><div class="breakDiv"></div>
+                    <div class="row" v-if="project.projectTargetAudiences" v-for="ta in project.projectTargetAudiences" :key="ta.id">
+                        <h5>Estimation of Target audience - {{ta.id}} </h5><div class="breakDiv"></div>
+                        <div class="col-md-8">
+                            <label for="inputEmail4" class="form-label">CPI</label>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputEmail4" class="form-label">{{ta.costPerInterview}} USD</label>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="inputEmail4" class="form-label">CPTG</label>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputEmail4" class="form-label">{{ta.cptg}} USD</label>
+                        </div><div class="col-md-12"></div>
+                        <div class="col-md-8">
+                            <label for="inputEmail4" class="form-label"><b>Subtotal</b></label>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputEmail4" class="form-label"><b>{{ta.subtotal}} USD</b></label>
+                        </div><div class="breakDiv"></div><hr/><div class="breakDiv"></div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <label for="inputEmail4" class="form-label" style="margin: auto"><h4>Total: {{totalCost}} USD</h4></label>
+                    </div>
+                    <div class="breakDiv"></div><hr>
+                    <div class="col-md-12">
+                        <button @click="SubmitProject(project)" class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;">Create Project</button>
+                        <button @click="SaveforLater(project)" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;">Save as Draft</button>
+                        <button @click="DiscardProject()" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;">Cancel</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-            
-    <div class="col-4">
-        <div class="costSection">
-            <div class="row">
-                <div class="col-md-12">
-                <label class="btn costLabel"><b>Cost Estimation</b></label>
-                </div><div class="breakDiv"></div>
-                <div class="row" v-if="project.projectTargetAudiences" v-for="ta in project.projectTargetAudiences" :key="ta.id">
-                    <h5>Estimation of Target audience - {{ta.id}} </h5><div class="breakDiv"></div>
-                    <div class="col-md-8">
-                        <label for="inputEmail4" class="form-label">CPI</label>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="inputEmail4" class="form-label">{{ta.costPerInterview}} USD</label>
-                    </div>
-                    <div class="col-md-8">
-                        <label for="inputEmail4" class="form-label">CPTG</label>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="inputEmail4" class="form-label">{{ta.cptg}} USD</label>
-                    </div><div class="col-md-12"></div>
-                    <div class="col-md-8">
-                        <label for="inputEmail4" class="form-label"><b>Subtotal</b></label>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="inputEmail4" class="form-label"><b>{{ta.subtotal}} USD</b></label>
-                    </div><div class="breakDiv"></div><hr/><div class="breakDiv"></div>
-                </div>
-                
-                <div class="col-md-12">
-                    <label for="inputEmail4" class="form-label" style="margin: auto"><h4>Total: {{totalCost}} USD</h4></label>
-                </div>
-                <div class="breakDiv"></div><hr>
-                <div class="col-md-12">
-                    <button @click="SubmitProject(project)" class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;">Create Project</button>
-                    <button @click="SaveforLater(project)" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;">Save as Draft</button>
-                    <button @click="DiscardProject()" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 </div>
 </template>
 <script setup>
@@ -355,7 +322,7 @@ async function ProjectValidated(project, action) {
 }
 
 const toggleModal = (id) => {
-    useQuotaDataStore.conditiongrid = false;
+    // useQuotaDataStore.conditiongrid = false;
     console.log('customModal id or qId is:' + id);
     var classname = 'customModal-' + id
     var element = document.getElementsByClassName(classname)
@@ -372,6 +339,7 @@ const toggleModal = (id) => {
 onMounted(() => {
     useProjStore.$reset()
     useQualStore.$reset()
+    useQuotaDataStore.$reset()
     useProjStore.AddTargetAudienceElement()
 })
 </script>
@@ -391,6 +359,7 @@ onMounted(() => {
 }
 .QualLogicalButton {
     font-size:0.80em;
+    min-width:72px;
 }
 .subDiv {
     margin: 20px auto;
