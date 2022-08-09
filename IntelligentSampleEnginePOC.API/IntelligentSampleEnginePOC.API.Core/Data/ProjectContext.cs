@@ -35,5 +35,34 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             }
             return project;
         }
+
+        public List<Project> GetProjects(int? status, string? searchString, int? recentCount)        {
+
+            List<Project> projects = new List<Project>();
+            using (SqlConnection connection = new SqlConnection(_options.iseDb))
+            {
+                using (SqlCommand command = new SqlCommand("GetProjects"))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Connection = connection;
+                    command.Parameters.AddWithValue("@Status", status);
+                    command.Parameters.AddWithValue("@SearchString", searchString);
+                    command.Parameters.AddWithValue("@RecentCount", recentCount);
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                           
+
+                            
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            return projects;
+        }
     }
 }

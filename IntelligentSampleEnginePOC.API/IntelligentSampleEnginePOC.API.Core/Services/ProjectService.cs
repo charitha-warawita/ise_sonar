@@ -27,9 +27,19 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             throw new ArgumentException("Project Validation failed", nameof(project));
         }
 
+        public List<Project> Getprojects(int? status, string? searchString, int? recentCount)
+        {
+            return _projectContext.GetProjects(status, searchString, recentCount);
+        }
+
         private bool ProjectValidated(Project project)
         {
             return true;
+        }
+
+        public List<Project> GetProjects(int? status, string? searchString, int? recentCount)
+        {
+            throw new NotImplementedException();
         }
 
         /*private Model.Project SetupGuids(Model.Project project)

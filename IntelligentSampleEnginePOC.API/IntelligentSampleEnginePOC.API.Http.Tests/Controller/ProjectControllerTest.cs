@@ -65,7 +65,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         [Fact]
         public void GetAll_ReturnsOk()
         {
-            var okResult = _projectController.GetAll(1,"Test",2);
+            var okResult = _projectController.GetProjects(1,"Test",2);
             Assert.NotNull(okResult);
             Assert.Equal(200, ((StatusCodeResult)okResult).StatusCode);
         }

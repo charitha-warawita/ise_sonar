@@ -108,12 +108,17 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetAll(int? status, string? searchString, int? recentCount)
+        public ActionResult GetProjects(int? status, string? searchString, int? recentCount)
         {
-            /*var projectLists = _projectService.GetProjects(status, searchString, recentCount);
-            return Ok(projectLists);*/
-
-            return Ok();
+            try
+            {
+                var projectLists = _projectService.GetProjects(status, searchString, recentCount);
+                return Ok(projectLists);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Exception occured - " + ex.Message);
+            }           
         }
 
         /*[HttpPost]
