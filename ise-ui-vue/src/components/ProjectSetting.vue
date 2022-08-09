@@ -22,72 +22,76 @@
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Name</label>
-                <input type="text" class="form-control" id="inputEmail4" v-model="project.name">
+                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.name">
+                <!--<span v-for="error in validations.name.$errors" :key="error.$uid" style="color:red">{{ error.message }}</span>-->
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Maconomy Reference</label>
-                <input type="text" class="form-control" id="inputEmail4" v-model="project.reference">
+                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.reference">
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">User</label>
-                <input type="text" class="form-control" id="inputEmail4" v-model="project.user.name">
+                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.user.name">
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">User Email</label>
-                <input type="email" class="form-control" id="inputEmail4" v-model="project.user.email">
+                <input type="email" class="form-control" id="inputEmail4" v-model="useProjStore.project.user.email">
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Start Date</label>
-                <input type="date" class="form-control" id="inputEmail4" v-model="project.startDate">
+                <input type="date" class="form-control" id="inputEmail4" v-model="useProjStore.project.startDate">
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Fielding Period</label>
-                <input type="number" class="form-control" id="inputEmail4" v-model="project.fieldingPeriod">
+                <input type="number" class="form-control" id="inputEmail4" v-model="useProjStore.project.fieldingPeriod">
             </div>
             <div class="col-md-12">
                 <label for="inputEmail4" class="form-label">Testing URL</label>
-                <input type="text" class="form-control" id="inputEmail4" v-model="project.testingUrl">
+                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.testingUrl">
             </div>
             <div class="col-md-12">
                 <label for="inputEmail4" class="form-label">Live URL</label>
-                <input type="text" class="form-control" id="inputEmail4" v-model="project.liveUrl">
+                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.liveUrl">
             </div>
         </div>
-    </div>
-    <!--<RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" to="/confirm">Create Project</RouterLink>
-    <RouterLink @click="useProjStore.CreateProject(project)" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" to="/confirm">Save as Draft</RouterLink>
-    <RouterLink class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;" to="/">Cancel</RouterLink>-->
-                            
+    </div>                  
 </template>
 <script setup>
 import {useProjectSettingStore} from '@/stores/projectSettingStore'
 import { useProjectStore } from "@/stores/projectStore"; 
 import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
+// import useVuelidate from '@vuelidate/core'
+// import { required } from '@vuelidate/validators'
 
 var useProjSettingStore = useProjectSettingStore()
 var useProjStore = useProjectStore();
-var project = useProjStore.project;
 const { categories, loading, error } = storeToRefs(useProjSettingStore)
+// const props = defineProps([ 'validations'])
+
+/*const rules = {
+    name: { required },
+    reference: { required }
+};*/
+
+// const v$ = useVuelidate(rules, useProjStore.project);
 
 const toggleCategory = (id) => {
-    // var project = useProjectStore().project;
     var catId = 'cat'+ id;
     var element = document.getElementById(catId);
     var tempClass = element.className;
     if(tempClass.includes('btn-light')) {
-        project.categories.push(id);
+        useProjStore.project.categories.push(id);
         element.className = tempClass.replace('btn-light', 'searchButton');
     }
     else {
         var currIndex = project.categories.indexOf(id);
-        if(currIndex !== -1) project.categories.splice(currIndex, 1);
+        if(currIndex !== -1) useProjStore.project.categories.splice(currIndex, 1);
         element.className = tempClass.replace('searchButton', 'btn-light');;
     }
 };
 
 onMounted(() => {
-    // console.log('on mounted call');
     useProjSettingStore.$reset()
     useProjSettingStore.FetchCategories()
 })

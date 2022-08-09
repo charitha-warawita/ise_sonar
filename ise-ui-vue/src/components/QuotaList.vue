@@ -1,133 +1,157 @@
 <template>
-  <div class="container">
-  <!--<p>ItemType: {{itemType}} ; TAId: {{ taId }} ; QID: {{ quotaid }} ; showQuotaCondition: {{ showQuotaCondition }}</p>-->
-    <div class="row">
-      <div class="col-md-6">
-        <label for="input" class="form-label">Name</label>
-        <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.name" />
-      </div>
-      <div class="col-md-6">
-        <label for="input" class="form-label">Field Target(in percentage)</label>
-        <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.fieldTarget" />
-      </div>
-      <div class="col-md-6">
-        <label for="input" class="form-label">Status</label>
-        <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.status" />
-      </div>
-      <div class="col-md-6">
-        <label for="input" class="form-label">Completes</label>
-        <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.completes" />
-      </div>
-      <div class="col-md-6">
-        <label for="input" class="form-label">Prescreence</label>
-        <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.prescreence" />
-      </div>
-      <div class="col-md-6">
-        <label for="sel1" class="form-label">Select Condition</label>
-        <select
-          class="form-select"
-          id="sel1"
-          name="sellist1"
-          v-model="key"
-          @change="useQuotaDataStore.selectQuotaCondition($event)">
-          <option value="none">Select </option>
-          <option v-bind:value=condition selected="[condition === 'None' ? 'selected' : '']"  v-for="condition in useQuotaDataStore.currentQuota.conditions" :key="condition">{{condition}}</option>
-        </select>
-      </div>
-    </div>
-  </div>
-  <div v-if="useQuotaDataStore.showSubPopup">
-  <div class="container" v-if="useQuotaDataStore.showQuotaCondition === 'none'">
-    This is nothing
-  </div>
-  <div class="container" v-if="useQuotaDataStore.showQuotaCondition === 'country'">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card" style="margin-top: 5%">
-          <div div class="card-body">
-            <div class="col-md-12"><h5>Select countries</h5></div>
-            <div
-              style="display: inline-block"
-              v-for="item in useQuotaDataStore.quotaCountries"
-              :key="item.id"
-            >
-              <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="item.selected"
-                  :checked="item.selected"
-                  id="inlineCheckbox1"
-                  :value="item.id"
-                />
-                <label class="form-check-label" for="inlineCheckbox1">{{
-                  item.name
-                }}</label>
-              </div>
-            </div>
-          </div>
+  <div v-show="!useQuotaDataStore.conditiongrid">
+    <fieldset class="col-md-12 border p-2 fieldsetstyle">
+      <legend class="float-none w-auto" style="font-size: 18px">
+        Create - Section 1 of 2
+      </legend>
+      <div class="row g-2">
+        <div class="col-md-12">
+          <label for="input" class="form-label">Name</label>
+          <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.name" />
         </div>
-      </div>
-    </div>
-  </div>
-  <div class="container" v-if="useQuotaDataStore.showQuotaCondition === 'age'">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card" style="margin-top: 5%">
-          <div div class="card-body">
-            <div class="col-md-12">
-              <h5>Current Age range is set to {{ currAgeRange }}. Enter new age range</h5>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">Min Age</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="inputEmail4"
-                  v-model="useQuotaDataStore.quotaMinAge"
-                />
-              </div>
-              <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">Max Age</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="inputEmail4"
-                  v-model="useQuotaDataStore.quotaMaxAge"
-                />
-              </div>
-            </div>
-          </div>
+        <div class="col-md-9">
+          <label for="sel1" class="form-label">Survey Quota Type</label>
+          <select @change="useQuotaDataStore.serveyQuotaTyp($event)" class="form-select" id="sel1" name="sellist1">
+            <option v-bind:value="ServeyQuotaTypes" v-for="ServeyQuotaTypes in useQuotaDataStore.currentQuota.ServeyQuotaType" :key="ServeyQuotaTypes">
+              {{ ServeyQuotaTypes }}
+            </option>
+            <label for="sel1" class="form-label">Select list (select one):</label>
+          </select>
         </div>
-      </div>
-    </div>
-  </div>
-  <div class="container" v-if="useQuotaDataStore.showQuotaCondition === 'gender'">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card" style="margin-top: 5%">
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
+          <label for="input" class="form-label">Completes</label>
+          <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.completes" />
+        </div>
+        <div class="col-md-9">
+          <label for="sel2" class="form-label">Adjustment Type</label>
+          <select @change="useQuotaDataStore.adjustmentType($event)" class="form-select" id="sel2" name="sellist2">
+            <option v-bind:value="adjustmentType" v-for="adjustmentType in useQuotaDataStore.currentQuota.adjustmentType" :key="adjustmentType">
+              {{ adjustmentType }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
+          <label for="input" class="form-label">Prescreens</label>
+          <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.prescreens" />
+        </div>
+        <div class="col-md-9">
+          <label for="input" class="form-label">Is Active</label>
+          <select @change="useQuotaDataStore.isActiveState($event)" class="form-select" id="sel3" name="sellist3">
+            <option v-bind:value="isAct" v-for="isAct in useQuotaDataStore.currentQuota.isActive" :key="isAct">{{ isAct }}</option>
+          </select>
+          <!--<input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.isActive"/>-->
+        </div>
+        <div class="col-md-6">
           <div class="row">
-            <div div class="card-body">
-              <div class="col-md-12"><h5>Select genders</h5></div>
+            <div class="col col-lg-4" style="margin-top: 8%">
+              <label for="input" class="form-label">Field Target</label>
+            </div>
+            <div class="col col-lg-3">
+              <label for="input" class="form-label">Nominal</label>
+              <input :readonly="useQuotaDataStore.currentQuota.selectedAdjustmentType !== 'nominal'" 
+              type="text" class="form-control" @change="useQuotaDataStore.UpdateAdjValue(totalCompletes, 'fieldTarget', 'nominal')"
+                v-model="useQuotaDataStore.currentQuota.fieldTargetNominal"/>
+            </div>
+            <div class="col col-lg-3">
+              <label for="input" class="form-label">Percentage(%)</label>
+              <input :readonly="useQuotaDataStore.currentQuota.selectedAdjustmentType !== 'percentage'" type="text" class="form-control"
+                @change="useQuotaDataStore.UpdateAdjValue(totalCompletes, 'fieldTarget', 'percentage')"
+                v-model="useQuotaDataStore.currentQuota.fieldTargetPercentage" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col col-lg-4" style="margin-top: 8%">
+              <label for="input" class="form-label">Quota</label>
+            </div>
+            <div class="col col-lg-3">
+              <label for="input" class="form-label">Nominal</label>
+              <input :readonly="useQuotaDataStore.currentQuota.selectedAdjustmentType !== 'nominal'" type="text"
+                class="form-control" @change="useQuotaDataStore.UpdateAdjValue(totalCompletes, 'quota', 'nominal')"
+                v-model="useQuotaDataStore.currentQuota.quotaNominal"/>
+            </div>
+            <div class="col col-lg-3">
+              <label for="input" class="form-label">Percentage(%)</label>
+              <input :readonly="useQuotaDataStore.currentQuota.selectedAdjustmentType !== 'percentage'" type="text"
+                class="form-control" @change="useQuotaDataStore.UpdateAdjValue(totalCompletes, 'quota', 'percentage')"
+                v-model="useQuotaDataStore.currentQuota.quotaPercentage"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <table v-show="useQuotaDataStore.enableSave" class="table table-striped" style="margin-top: 1%">
+          <thead>
+              <tr class="tableHeader">
+              <th><b>Name</b></th>
+              <th><b>Variables</b></th>
+              <th><b>Action</b></th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr v-for="condition in useQuotaDataStore.currentQuota.conditions" :key="condition.tempId">
+              <th>{{condition.question.name}}</th>
+              <td><label v-for="variable in condition.question.variables" :key="variable.id"> | {{variable.name}} |</label></td>
+              <td><a @click="useQuotaDataStore.RemoveCondition(condition.tempId)" class="link-danger">Remove</a></td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-12 p-4">
+        <button class="btn btn-outline-success searchButton" id="addQutobutton" v-on:click="useQuotaDataStore.addCondition(taId)">
+          Add condition
+        </button>
+      </div>
+    </fieldset>
+  </div>
+  <div v-show="useQuotaDataStore.conditiongrid">
+    <fieldset class="col-md-12 border p-2 fieldsetstyle">
+      <legend class="float-none w-auto" style="font-size: 18px">
+        Condition - Section 2 of 2
+      </legend>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <label for="sel1" class="form-label">Select Condition</label>
+          </div>
+          <div class="col-md-6">
+            <select class="form-select" id="sel1" name="sellist1" @change="useQuotaDataStore.selectQuotaCondition($event)">
+              <option disables selected value>--Select--</option>
+              <option v-bind:value="condition.order" v-for="condition in useQuotaDataStore.conditionlist" :key="condition.tempId">
+                {{ condition.order }}-{{ condition.question.categoryName }}-{{ condition.question.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div
+        class="card"
+        style="margin-top: 5%; border: 1px solid #8f959b !important"
+        v-show="useQuotaDataStore.showConditionDetail"
+      >
+        <div div class="card-body">
+          <div class="subDivQ row g-3">
+            <div v-if="useQuotaDataStore.currentCondition" class="col-md-9">
+              <label style="display: none">{{
+                useQuotaDataStore.currentCondition.id
+              }}</label>
               <div class="col-md-12">
-                <div
-                  style="display: inline-block"
-                  v-for="item in useQuotaDataStore.quotaGenders"
-                  :key="item.id"
-                >
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      v-model="item.selected"
-                      :checked="item.selected"
-                      id="inlineCheckbox1"
-                      :value="item.id"
-                    />
-                    <label class="form-check-label" for="inlineCheckbox1">{{
-                      item.name
-                    }}</label>
+                <b>{{ useQuotaDataStore.currentCondition.question.categoryName }} {{ useQuotaDataStore.currentCondition.question.name }}</b>
+              </div>
+              <div class="col-md-12">
+                {{ useQuotaDataStore.currentCondition.question.text }}
+              </div>
+              <div class="col-md-12">
+                <div style="display: inline-block">
+                  <div class="form-check">
+                    <button v-for="answer in useQuotaDataStore.currentCondition.question.variables" :key="answer.id" type="button"
+                      :id="'answer' + answer.id" @click="useQuotaDataStore.SelectQuotaConditionAnswer(answer.id)"
+                      class="btn btn-outline-success me-2 projSettingTogButton" :class="[answer.selected ? 'searchButton' : 'btn-light']">
+                      {{ answer.name }}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -135,16 +159,19 @@
           </div>
         </div>
       </div>
-    </div>
+      <button class="btn btn-outline-success btn-light me-2" style="float:left; margin: 5px 0" v-on:click="useQuotaDataStore.GoToFirstSection()">
+      back
+      </button>
+      <button class="btn btn-outline-success searchButton me-2" style="float:right; margin: 5px 0" v-on:click="useQuotaDataStore.SaveCondition()">
+      Save Condition
+      </button>
+    </fieldset>
   </div>
-  </div>
-  <div class="col-md-12">
+  <div v-show="useQuotaDataStore.enableSave" class="col-md-12 p-4">
     <button
       class="btn btn-outline-success searchButton me-2"
       style="width: 100%; margin: 5px 0"
-      v-on:click="
-        useQuotaDataStore.SaveQuota(useQuotaDataStore.showQuotaCondition, taId, quotaid)
-      "
+      v-on:click="SaveCurrentQuota(taId)"
     >
       Save quota
     </button>
@@ -154,7 +181,7 @@
 import { useQuotaStore } from "@/stores/quotaStore";
 import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
-const props = defineProps(["itemType", "taId", "quotaid"]);
+const props = defineProps(["taId", "quotaid", "totalCompletes"]);
 
 var useQuotaDataStore = useQuotaStore();
 
@@ -167,4 +194,25 @@ const {
   quotaMinAge,
   quotaMaxAge,
 } = storeToRefs(useQuotaDataStore);
+
+function SaveCurrentQuota(taId) {
+  useQuotaDataStore.SaveQuota(taId);
+  document.getElementById("sel1").selectedIndex = 0;
+  document.getElementById("sel2").selectedIndex = 0;
+}
+
+onMounted(() => {
+  useQuotaDataStore.LoadDefaultCurrentQuota();
+});
 </script>
+
+<style>
+.fieldsetstyle {
+  border: 1px solid #8f959b !important;
+}
+.quotaModel {
+  max-height: 600px;
+  min-height: 350px;
+  overflow-y: auto;
+}
+</style>

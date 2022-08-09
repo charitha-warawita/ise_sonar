@@ -1,60 +1,5 @@
 <template >
     <!--<p>Item type: {{itemType}} ; TAID: {{taId }} ; QID : {{ qualificationId }}</p>-->
-    <div v-if="itemType === 'age'" class="container">
-        <div class="row">
-            <div class="col-md-12"><h5>Current Age range is set to {{ currAgeRange}}. Enter new age range</h5></div>
-            <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">Min Age</label>
-                <input type="text" class="form-control" id="inputEmail4" v-model=minAge >
-            </div>
-            <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">Max Age</label>
-                <input type="text" class="form-control" id="inputEmail4" v-model=maxAge>
-            </div>
-            <div class="col-md-12">
-                <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="useQualStore.SaveAgeQualification(itemType, taId, qualificationId)">Save qualification</button>
-            </div>
-        </div>
-    </div>
-    <div v-if="itemType === 'country'" class="container">
-        <div class="row">
-            <div class="col-md-12"><h5>Select countries</h5></div>
-            <div class="col-md-12">
-                <p v-if="countriesLoading">Loading categories.. </p>
-                <p v-if="countriesError"> {{ countriesError.message }} </p>
-                <div v-if="countries">
-                    <button 
-                        v-for="country in countries" 
-                        :key="country.id" 
-                        @click="useQualStore.UpdateCountrySelection(itemType, taId, qualificationId, country)" 
-                        type="button" 
-                        :id="'country'+country.id" 
-                        class="btn btn-outline-success me-2 projSettingTogButton"
-                        :class="[country.selected ? 'searchButton' : 'btn-light']"
-                        >{{ country.name }}</button>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="useQualStore.SaveCountryQualification(itemType, taId, qualificationId)">Save qualification</button>
-            </div>
-        </div>
-    </div>
-    <div v-if="itemType === 'gender'" class="container">
-        <div class="row">
-            <div class="col-md-12"><h5>Select genders</h5></div>
-            <div class="col-md-12">
-                <div style="display: inline-block" v-for="item in useQualStore.genders" :key="item.id">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" v-model=item.selected :checked=item.selected id="inlineCheckbox1" :value=item.id>
-                            <label class="form-check-label" for="inlineCheckbox1">{{item.name}}</label>
-                        </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <button class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;" v-on:click="useQualStore.SaveGenderQualification(itemType, taId, qualificationId)">Save qualification</button>
-            </div>
-        </div>
-    </div>
     <div v-if="itemType === 'profileVars'" class="container">
         <div class="row">
             <p><b>Choose a global profile category</b></p>
@@ -91,6 +36,9 @@
                 </div>
             </div>
         </div>
+        <br>
+        <button v-if="categoryQAs.length > 0" class="btn btn-outline-success me-2 searchButton" style="width:100%" 
+                @click="SaveQualification()">Save Qualifications</button>
     </div>
 </template>
 <script setup>
@@ -98,11 +46,19 @@ import {useQualificationStore} from '@/stores/qualificationStore'
 import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
 const props = defineProps([ 'itemType' , 'taId', 'qualificationId' ])
-
+const emit = defineEmits(["close"])
 var useQualStore = useQualificationStore()
 
-const { currAgeRange, minAge, maxAge, countries, countriesLoading, countriesError,
-profCategories, profCategoriesLoading, profCategoriesError, categoryQAs, selectedCategory } = storeToRefs(useQualStore)
+const { profCategories, profCategoriesLoading, profCategoriesError, categoryQAs, selectedCategory } = storeToRefs(useQualStore)
+
+function SaveQualification() {
+    useQualStore.saveQualificationDetailstoProject();
+    emit("close");
+}
+
+onMounted(() => {
+    useQualStore.$reset()
+})
 </script>
 <style>
 .projectSetting {
