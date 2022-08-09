@@ -6,7 +6,7 @@ export const useProjectStore = defineStore('project', {
         basicSettingDesc:'',
         totalCost: 0,
         project: {
-            "id": 0,
+            "tempId": 0,
             "name": "",
             "reference": "",
             "lastUpdate": "",
@@ -22,7 +22,7 @@ export const useProjectStore = defineStore('project', {
                 "email": ""
             },
             "errors":[],
-            "projectTargetAudiences": []
+            "targetAudiences": []
         },
         saveProjectLoading: false,
         saveProjectError: null,
@@ -37,21 +37,7 @@ export const useProjectStore = defineStore('project', {
     },
     actions: {
         async CreateProject(project) {
-            project.tempId = project.id;
             project.lastUpdate = new Date();
-            delete project.id;
-
-            for(var i = 0; i < project.projectTargetAudiences.length; i++) {
-                project.projectTargetAudiences[i].tempId = project.projectTargetAudiences[i].id ;
-                delete project.projectTargetAudiences[i].id;
-                for(var j = 0; j < project.projectTargetAudiences[i].qualifications.length; j++) {
-                    project.projectTargetAudiences[i].qualifications[j].tempId = project.projectTargetAudiences[i].qualifications[j].id;
-                    delete project.projectTargetAudiences[i].qualifications[j].id;
-                }
-            }
-
-            project.targetAudiences = project.projectTargetAudiences 
-            delete project.projectTargetAudiences;
 
             this.saveProjectLoading = true;
             var iseUrl = import.meta.env.VITE_ISE_API_URL;
@@ -77,9 +63,9 @@ export const useProjectStore = defineStore('project', {
             }
         },
         AddTargetAudienceElement() {  
-            var id = this.project.projectTargetAudiences.length;
+            var id = this.project.targetAudiences.length;
             var ta = {
-                "id": id+1,
+                "tempId": id+1,
                 "name": "",
                 "audienceNumber":0,
                 "estimatedIR": 0,
@@ -88,61 +74,60 @@ export const useProjectStore = defineStore('project', {
                 "cptg": 0,
                 "wantedCompletes": 0,
                 "qualifications": [],
-                "quota": [],
                 "quotas": [],
                 "subtotal": 0,
                 "errors": []
             };
-            this.project.projectTargetAudiences.push(ta)
+            this.project.targetAudiences.push(ta)
         },
         CancelTargetAudience(ta) {
-            var removeIndex = this.project.projectTargetAudiences.map(item => item.id).indexOf(ta.id);
-            ~removeIndex && this.project.projectTargetAudiences.splice(removeIndex, 1);
+            var removeIndex = this.project.targetAudiences.map(item => item.tempId).indexOf(ta.tempId);
+            ~removeIndex && this.project.targetAudiences.splice(removeIndex, 1);
         },
         CalculateCharges(event) {
-            if(this.project.projectTargetAudiences !== undefined)
+            if(this.project.targetAudiences !== undefined)
             {
                 console.log("came in running CPI cost");
                 console.log("came in running CPI cost");
                 this.totalCost = 0;
-                for(var i =0; i < this.project.projectTargetAudiences.length; i++) {
-                if(this.project.projectTargetAudiences[i].wantedCompletes > 0 || this.project.projectTargetAudiences[i].estimatedIR > 0 || this.project.projectTargetAudiences[i].estimatedLOI > 0) {
-                    var ir = this.project.projectTargetAudiences[i].estimatedIR; var loi = this.project.projectTargetAudiences[i].estimatedLOI
+                for(var i =0; i < this.project.targetAudiences.length; i++) {
+                if(this.project.targetAudiences[i].wantedCompletes > 0 || this.project.targetAudiences[i].estimatedIR > 0 || this.project.targetAudiences[i].estimatedLOI > 0) {
+                    var ir = this.project.targetAudiences[i].estimatedIR; var loi = this.project.targetAudiences[i].estimatedLOI
                     if(ir>= 75 && ir <=100 && loi >0 && loi <=5)
-                        this.project.projectTargetAudiences[i].costPerInterview = 2;
+                        this.project.targetAudiences[i].costPerInterview = 2;
                     else if(ir>= 50 && ir <=74 && loi >0 && loi <=5)
-                        this.project.projectTargetAudiences[i].costPerInterview = 2.5;
+                        this.project.targetAudiences[i].costPerInterview = 2.5;
                     else if(ir>= 35 && ir <=49 && loi >0 && loi <=5)
-                        this.project.projectTargetAudiences[i].costPerInterview = 3;
+                        this.project.targetAudiences[i].costPerInterview = 3;
                     else if(ir>= 11 && ir <=34 && loi >0 && loi <=5)
-                        this.project.projectTargetAudiences[i].costPerInterview = 4;
+                        this.project.targetAudiences[i].costPerInterview = 4;
                     else if(ir>= 1 && ir <=10 && loi >0 && loi <=5)
-                        this.project.projectTargetAudiences[i].costPerInterview = 7;
+                        this.project.targetAudiences[i].costPerInterview = 7;
                     else if(ir>= 75 && ir <=100 && loi >5 && loi <=10)
-                        this.project.projectTargetAudiences[i].costPerInterview = 2.5;
+                        this.project.targetAudiences[i].costPerInterview = 2.5;
                     else if(ir>= 50 && ir <=74 && loi >5 && loi <=10)
-                        this.project.projectTargetAudiences[i].costPerInterview = 3;
+                        this.project.targetAudiences[i].costPerInterview = 3;
                     else if(ir>= 35 && ir <=49 && loi >5 && loi <=10)
-                        this.project.projectTargetAudiences[i].costPerInterview = 4;
+                        this.project.targetAudiences[i].costPerInterview = 4;
                     else if(ir>= 11 && ir <=34 && loi >5 && loi <=10)
-                        this.project.projectTargetAudiences[i].costPerInterview = 7;
+                        this.project.targetAudiences[i].costPerInterview = 7;
                     else if(ir>= 1 && ir <=10 && loi >5 && loi <=10)
-                        this.project.projectTargetAudiences[i].costPerInterview = 8;
+                        this.project.targetAudiences[i].costPerInterview = 8;
                     else if(ir>= 75 && ir <=100 && loi >10 && loi <=15)
-                        this.project.projectTargetAudiences[i].costPerInterview = 3;
+                        this.project.targetAudiences[i].costPerInterview = 3;
                     else if(ir>= 50 && ir <=74 && loi >10 && loi <=15)
-                        this.project.projectTargetAudiences[i].costPerInterview = 3.5;
+                        this.project.targetAudiences[i].costPerInterview = 3.5;
                     else if(ir>= 35 && ir <=49 && loi >10 && loi <=15)
-                        this.project.projectTargetAudiences[i].costPerInterview = 4.5;
+                        this.project.targetAudiences[i].costPerInterview = 4.5;
                     else if(ir>= 11 && ir <=34 && loi >10  && loi <=15)
-                        this.project.projectTargetAudiences[i].costPerInterview = 7.5;
+                        this.project.targetAudiences[i].costPerInterview = 7.5;
                     else if(ir>= 1 && ir <=10 && loi >10 && loi <=15)
-                        this.project.projectTargetAudiences[i].costPerInterview = 8.5;
+                        this.project.targetAudiences[i].costPerInterview = 8.5;
                     else 
-                        this.project.projectTargetAudiences[i].costPerInterview = 10;
-                    var subT = this.project.projectTargetAudiences[i].costPerInterview * this.project.projectTargetAudiences[i].wantedCompletes;
-                    this.project.projectTargetAudiences[i].cptg = subT;
-                    this.project.projectTargetAudiences[i].subtotal = subT;
+                        this.project.targetAudiences[i].costPerInterview = 10;
+                    var subT = this.project.targetAudiences[i].costPerInterview * this.project.targetAudiences[i].wantedCompletes;
+                    this.project.targetAudiences[i].cptg = subT;
+                    this.project.targetAudiences[i].subtotal = subT;
                     this.totalCost = this.totalCost + subT;
                 }
             }

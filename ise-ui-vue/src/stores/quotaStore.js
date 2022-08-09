@@ -64,11 +64,12 @@ export const useQuotaStore = defineStore('quota', {
             this.conditionlist = [];
             this.showConditionDetail =false;
             this.conditiongrid = true;
+            this.enableSave = false;
             var project = useProjectStore().project;
-            var index = project.projectTargetAudiences.findIndex(x => x.id === taId)
+            var index = project.targetAudiences.findIndex(x => x.tempId === taId)
             if(index > -1) {
-                for(var i = 0; i < project.projectTargetAudiences[index].qualifications.length; i++) {
-                    this.conditionlist.push(JSON.parse(JSON.stringify(project.projectTargetAudiences[index].qualifications[i])));
+                for(var i = 0; i < project.targetAudiences[index].qualifications.length; i++) {
+                    this.conditionlist.push(JSON.parse(JSON.stringify(project.targetAudiences[index].qualifications[i])));
                 }
             }
         },
@@ -88,6 +89,12 @@ export const useQuotaStore = defineStore('quota', {
         },
         GoToFirstSection() {
             this.conditiongrid = false;
+
+            if(this.currentQuota.conditions === undefined || this.currentQuota.conditions.length < 1)
+                this.enableSave = false;
+            else
+                this.enableSave = true;
+            
         },
         SaveCondition() {
             if(this.currentCondition !== null) {
@@ -99,7 +106,7 @@ export const useQuotaStore = defineStore('quota', {
             }
         },
         RemoveCondition(conditionId) {
-            var index = this.currentQuota.conditions.findIndex(x => x.id === conditionId);
+            var index = this.currentQuota.conditions.findIndex(x => x.tempId === conditionId);
             if(index > -1)
                 this.currentQuota.conditions.splice(index, 1);
 
@@ -108,31 +115,34 @@ export const useQuotaStore = defineStore('quota', {
         },
         SaveQuota(taid){
             var project = useProjectStore().project;
-            var index = project.projectTargetAudiences.findIndex(x => x.id === taid)
-            var quotaId = project.projectTargetAudiences[index].quota.length + 1;
+            var index = project.targetAudiences.findIndex(x => x.tempId === taid)
+            var quotaId = project.targetAudiences[index].quotas.length + 1;
             if(index > -1) {
                 var quota = {
-                    "id": quotaId,
+                    "tempId": quotaId,
                     "quotaName": this.currentQuota.name,
                     "quotaType": this.currentQuota.selectedServeyQuotaType,
                     "fieldTarget": this.currentQuota.fieldTargetNominal,
                     "limit": this.currentQuota.quotaNominal,
                     "prescreens": this.currentQuota.prescreens,
                     "completes": this.currentQuota.completes,
-                    "isActive": this.currentQuota.selectedIsActive,
-                    "conditions": this.currentQuota.conditions
+                    "isActive": this.currentQuota.selectedIsActive === "True",
+                    "conditions": []
                 };
-                project.projectTargetAudiences[index].quota.push(quota);
+                for(var i = 0; i < this.currentQuota.conditions.length; i++) {
+                    quota.conditions.push(this.currentQuota.conditions[i].question);
+                }
+                project.targetAudiences[index].quotas.push(quota);
                 this.LoadDefaultCurrentQuota();
             }
         },
         RemoveQuota(taId, qtId) {
             var project = useProjectStore().project;
-            var index = project.projectTargetAudiences.findIndex(x => x.id === taId)
+            var index = project.targetAudiences.findIndex(x => x.tempId === taId)
             if(index > -1) {
-                var subInd = project.projectTargetAudiences[index].quota.findIndex(x => x.id === qtId);
+                var subInd = project.targetAudiences[index].quotas.findIndex(x => x.tempId === qtId);
                 if(subInd > -1) {
-                    project.projectTargetAudiences[index].quota.splice(subInd, 1);
+                    project.targetAudiences[index].quotas.splice(subInd, 1);
                 }
             }
         }
