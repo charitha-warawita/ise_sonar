@@ -65,10 +65,10 @@ export const useQuotaStore = defineStore('quota', {
             this.showConditionDetail =false;
             this.conditiongrid = true;
             var project = useProjectStore().project;
-            var index = project.projectTargetAudiences.findIndex(x => x.id === taId)
+            var index = project.targetAudiences.findIndex(x => x.id === taId)
             if(index > -1) {
-                for(var i = 0; i < project.projectTargetAudiences[index].qualifications.length; i++) {
-                    this.conditionlist.push(JSON.parse(JSON.stringify(project.projectTargetAudiences[index].qualifications[i])));
+                for(var i = 0; i < project.targetAudiences[index].qualifications.length; i++) {
+                    this.conditionlist.push(JSON.parse(JSON.stringify(project.targetAudiences[index].qualifications[i])));
                 }
             }
         },
@@ -108,8 +108,8 @@ export const useQuotaStore = defineStore('quota', {
         },
         SaveQuota(taid){
             var project = useProjectStore().project;
-            var index = project.projectTargetAudiences.findIndex(x => x.id === taid)
-            var quotaId = project.projectTargetAudiences[index].quota.length + 1;
+            var index = project.targetAudiences.findIndex(x => x.id === taid)
+            var quotaId = project.targetAudiences[index].quota.length + 1;
             if(index > -1) {
                 var quota = {
                     "id": quotaId,
@@ -122,17 +122,17 @@ export const useQuotaStore = defineStore('quota', {
                     "isActive": this.currentQuota.selectedIsActive,
                     "conditions": this.currentQuota.conditions
                 };
-                project.projectTargetAudiences[index].quota.push(quota);
+                project.targetAudiences[index].quota.push(quota);
                 this.LoadDefaultCurrentQuota();
             }
         },
         RemoveQuota(taId, qtId) {
             var project = useProjectStore().project;
-            var index = project.projectTargetAudiences.findIndex(x => x.id === taId)
+            var index = project.targetAudiences.findIndex(x => x.id === taId)
             if(index > -1) {
-                var subInd = project.projectTargetAudiences[index].quota.findIndex(x => x.id === qtId);
+                var subInd = project.targetAudiences[index].quota.findIndex(x => x.id === qtId);
                 if(subInd > -1) {
-                    project.projectTargetAudiences[index].quota.splice(subInd, 1);
+                    project.targetAudiences[index].quota.splice(subInd, 1);
                 }
             }
         }

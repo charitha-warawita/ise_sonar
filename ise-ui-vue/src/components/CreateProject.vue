@@ -20,7 +20,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="project.projectTargetAudiences" v-for="ta in project.projectTargetAudiences" :key="ta.id">
+                    <div v-if="project.targetAudiences" v-for="ta in project.targetAudiences" :key="ta.id">
                         <div class="accordion-item customItem">
                             <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseTwo-' + ta.id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
@@ -174,7 +174,7 @@
                     <div class="col-md-12">
                     <label class="btn costLabel"><b>Cost Estimation</b></label>
                     </div><div class="breakDiv"></div>
-                    <div class="row" v-if="project.projectTargetAudiences" v-for="ta in project.projectTargetAudiences" :key="ta.id">
+                    <div class="row" v-if="project.targetAudiences" v-for="ta in project.targetAudiences" :key="ta.id">
                         <h5>Estimation of Target audience - {{ta.id}} </h5><div class="breakDiv"></div>
                         <div class="col-md-8">
                             <label for="inputEmail4" class="form-label">CPI</label>
@@ -245,7 +245,7 @@ const rules = {
     liveUrl: { required },
     categories: { required },
     user: { "name": { required }, "email": { required, email }  },
-    projectTargetAudiences: {
+    targetAudiences: {
         $each: helpers.forEach({
             "name": { required: helpers.withMessage('TA Name cannot be empty', required) },
             "audienceNumber":{ required: helpers.withMessage('Audience order cannot be empty', required) },
@@ -276,7 +276,7 @@ async function SaveforLater(project) {
         if(typeof(project.id) === undefined || project.errors.length > 0)
         alert('Project Save as Draft is unsuccessful. Project ID returned is: ' + this.project.id + '. Error returned is: ' + JSON.stringify(this.project.errors));
         else {
-            alert('project saved as draft successfully. New project ID is' + project.id);
+            alert('project saved as draft successfully. New project ID is ' + project.id);
             useProjStore.$reset();
         }
         router.push('/');
@@ -297,8 +297,8 @@ async function ProjectValidated(project, action) {
 
     const result = await v$.value.$validate();
     project.errors = [];
-    for(var i = 0; i < project.projectTargetAudiences.length; i++)
-        project.projectTargetAudiences[i].errors = [];
+    for(var i = 0; i < project.targetAudiences.length; i++)
+        project.targetAudiences[i].errors = [];
 
     if(!result) {
         for(var i = 0; i< v$.value.$errors.length; i++) {
@@ -307,8 +307,8 @@ async function ProjectValidated(project, action) {
                 {
                     for(var k=0; k < v$.value.$errors[i].$message[j].length; k++)
                     {
-                        if(v$.value.$errors[i].$propertyPath === 'projectTargetAudiences')
-                            project.projectTargetAudiences[j].errors.push(v$.value.$errors[i].$propertyPath + (j+1) + ' - ' +  v$.value.$errors[i].$message[j][k]);
+                        if(v$.value.$errors[i].$propertyPath === 'targetAudiences')
+                            project.targetAudiences[j].errors.push(v$.value.$errors[i].$propertyPath + (j+1) + ' - ' +  v$.value.$errors[i].$message[j][k]);
                     }
                 }
             }
