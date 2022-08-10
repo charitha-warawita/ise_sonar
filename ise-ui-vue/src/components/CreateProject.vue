@@ -144,7 +144,7 @@
                                                         </div>
                                                         <hr/>
                                                     </div>
-                                                    <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ ta.tempId)">Add Quota</button>  
+                                                    <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ ta.tempId); useQuotaDataStore.LoadDefaultCurrentQuota();">Add Quota</button>  
                                                     <CustomModal @close="toggleModal('quota'+ ta.tempId)" :modalId="'quota'+ ta.tempId">
                                                         <div class="card modal-content">
                                                             <h3 class="card-header">Quota</h3>

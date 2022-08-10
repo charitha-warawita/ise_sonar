@@ -22,17 +22,17 @@ var useProjStore = useProjectStore()
 const { project } = storeToRefs(useProjStore)
 const router = useRouter();
 async function createNewProject() {
-    await useProjStore.CreateProject(this.project);
-    if(typeof(this.project.id) === undefined || this.project.errors.length > 0) {
+    await useProjStore.CreateProject(useProjStore.project);
+    if(typeof(useProjStore.project.id) === undefined || useProjStore.project.errors.length > 0) {
         var newLine = "\r\n"
-        var alertMessage = 'Project Save as Draft is unsuccessful. Project ID returned is: ' + this.project.id + '.' + newLine;
+        var alertMessage = 'Project Save as Draft is unsuccessful. Project ID returned is: ' + useProjStore.project.id + '.' + newLine;
         alertMessage += 'Error returned are: ' + newLine;
-        for(var i =0; i < this.project.errors.length; i++)
-            alertMessage += this.project.errors[i] + newLine;
+        for(var i =0; i < useProjStore.project.errors.length; i++)
+            alertMessage += useProjStore.project.errors[i] + newLine;
         alert(alertMessage);
     }
     else {
-        alert('project successfully created. New project ID is ' + this.project.id);
+        alert('project successfully created. New project ID is ' + useProjStore.project.id);
         useProjStore.$reset();
     }
     router.push('/');
