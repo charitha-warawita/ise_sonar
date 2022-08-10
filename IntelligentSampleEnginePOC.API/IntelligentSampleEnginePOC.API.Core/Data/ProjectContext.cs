@@ -3,6 +3,7 @@ using IntelligentSampleEnginePOC.API.Core.Model;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace IntelligentSampleEnginePOC.API.Core.Data
 {
@@ -36,7 +37,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             return project;
         }
 
-        public List<Project> GetProjects(int? status, string? searchString, int? recentCount)        {
+        public List<Project> GetProjects(int? status,int pageNumber, string? searchString, int recentCount)        {
 
             List<Project> projects = new List<Project>();
             using (SqlConnection connection = new SqlConnection(_options.iseDb))
@@ -46,6 +47,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                     command.CommandType = System.Data.CommandType.StoredProcedure;
                     command.Connection = connection;
                     command.Parameters.AddWithValue("@Status", status);
+                    command.Parameters.AddWithValue("@PageNumber", pageNumber);
                     command.Parameters.AddWithValue("@SearchString", searchString);
                     command.Parameters.AddWithValue("@RecentCount", recentCount);
                     connection.Open();
@@ -54,9 +56,24 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                     {
                         while (reader.Read())
                         {
-                           
-
-                            
+                            Project project = new Project();
+                            project.Id = reader.IsDBNull("Id") ? 0 : (long)reader["Id"];
+                            project.Name = reader.IsDBNull("Name") ? string.Empty : reader.GetString("Name");
+                            project.Reference= reader.IsDBNull("Reference") ? string.Empty : (string)reader["Reference"];
+                            project.User = new User();
+                            if (!string.IsNullOrEmpty(reader["UserId"].ToString()))
+                            {                          
+                                project.User.Id = reader.IsDBNull("UserId") ? 0 : (long)reader["UserId"];
+                                project.User.Name = reader.IsDBNull("UserName") ? string.Empty : (string)reader["UserName"];
+                                project.User.Email = reader.IsDBNull("UserEmail") ? string.Empty : (string)reader["UserEmail"];
+                            }
+                            project.LastUpdate = reader.IsDBNull("LastUpdate") ? default : (DateTime)reader["LastUpdate"];
+                            project.StartDate = reader.IsDBNull("StartDate") ? default : (DateTime)(reader["StartDate"]);
+                            project.FieldingPeriod = reader.IsDBNull("FieldingPeriod") ? 0 : (int)reader["FieldingPeriod"];
+                            project.Status = (Status)(int)(reader["Status"]);                           
+                            project.TestingUrl = reader.IsDBNull("TestingUrl") ? string.Empty : (string)reader["TestingUrl"];
+                            project.LiveUrl = reader.IsDBNull("LiveUrl") ? string.Empty : (string)reader["LiveUrl"];
+                            projects.Add(project);                           
                         }
                     }
                     connection.Close();

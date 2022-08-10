@@ -6,7 +6,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
     {
         Task<Project> CreateProject(Project project);
         Task<Project> LaunchProject(Project project);
-        /*List<DBModel.Project> GetProjects(int? status, string? searchString, int? recentCount);
+        List<Project> GetProjects(int? status,int pageNumber, string? searchString, int recentCount);
 
         /*Task<Model.Project> LaunchProject(Model.Project project);
        Model.Project GetProjects(string Id);

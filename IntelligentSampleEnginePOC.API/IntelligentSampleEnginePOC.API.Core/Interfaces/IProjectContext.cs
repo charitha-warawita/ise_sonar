@@ -11,6 +11,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
     {
         Project CreateProject(Project project);
 
-        List<Project> GetProjects(int? status, string? searchString, int? recentCount);
+        List<Project> GetProjects(int? status,int pageNumber, string? searchString, int recentCount);
     }
 }

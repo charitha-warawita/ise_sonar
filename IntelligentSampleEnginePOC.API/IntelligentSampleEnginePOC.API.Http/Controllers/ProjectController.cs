@@ -107,11 +107,11 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetProjects(int? status, string? searchString, int? recentCount)
+        public ActionResult GetProjects(int? status,int pageNumber, string? searchString, int recentCount)
         {
             try
             {
-                var projectLists = _projectService.GetProjects(status, searchString, recentCount);
+                var projectLists = _projectService.GetProjects(status, pageNumber, searchString, recentCount);
                 return Ok(projectLists);
             }
             catch (Exception ex)

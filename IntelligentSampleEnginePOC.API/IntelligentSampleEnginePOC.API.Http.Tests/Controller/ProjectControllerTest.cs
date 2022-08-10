@@ -23,7 +23,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         {
             string jsonString = CreateProjects.GetProjectJson();
             Project project = JsonConvert.DeserializeObject<Project>(jsonString);
-            _projectService.Setup(repo => repo.CreateProject(project)).Returns(new CreateProjects().CreateProjectTest(project));
+          //  _projectService.Setup(repo => repo.CreateProject(project)).Returns(new CreateProjects().CreateProjectTest(project));
             var result = _projectController.Post(project);
             Assert.NotNull(result);
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -65,7 +65,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         [Fact]
         public void GetAll_ReturnsOk()
         {
-            var okResult = _projectController.GetProjects(1,"Test",2);
+            var okResult = _projectController.GetProjects(1,1,"Test",2);
             Assert.NotNull(okResult);
             Assert.Equal(200, ((StatusCodeResult)okResult).StatusCode);
         }

@@ -57,9 +57,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             return true;
         }
 
-        public List<Project> GetProjects(int? status, string? searchString, int? recentCount)
+        public List<Project> GetProjects(int? status, int pageNumber, string? searchString, int recentCount)
         {
-            throw new NotImplementedException();
+            return _projectContext.GetProjects(status, pageNumber, searchString, recentCount);
         }
 
         /*private Model.Project SetupGuids(Model.Project project)
