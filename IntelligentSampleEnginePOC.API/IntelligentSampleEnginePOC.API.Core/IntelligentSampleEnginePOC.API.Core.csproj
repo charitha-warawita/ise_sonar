@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Qualification.cs" />
     <Compile Remove="DB\ISEdbContext.cs" />
     <Compile Remove="DB\Project.cs" />
     <Compile Remove="DB\Qualification.cs" />
