@@ -43,7 +43,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             if (project == null)
                 throw new ArgumentNullException("project model not found", nameof(project));
 
-            project = await CreateProject(project);
+            // project = await CreateProject(project);
             project = await _cintService.CreateProject(project);
             project.Status = Model.Status.Created;
             // ModelMapping(project, true);

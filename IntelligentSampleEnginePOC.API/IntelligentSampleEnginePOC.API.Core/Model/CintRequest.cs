@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace IntelligentSampleEnginePOC.API.Core.Model
-{
+{    
     public class CintRequest
     {
         public string name { get; set; }
@@ -58,6 +58,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
     {
         public int minAge { get; set; }
         public int maxAge { get; set; }
+        public int gender { get; set; }
         public List<int> regionIds { get; set; }
         public List<int> variableIds { get; set; }
         public List<int> panelVariableIds { get; set; }
