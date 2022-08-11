@@ -68,8 +68,10 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         private CintRequest CreateIndividualSurvey(Project project, int audienceNumber, int? countryId, string? countryName)
         {
             var isLimitFromCountryQuota = false;
+            StringBuilder surveyName = new StringBuilder();
             CintRequest cintRequest = new CintRequest();
-            cintRequest.name = project.Name;
+            // cintRequest.name = project.Name;
+            surveyName.Append(project.Name);
             cintRequest.referenceNumber = project.Reference;
             cintRequest.purchaseOrderNumber = project.Reference;
             cintRequest.contact = new contact { name = project.User.Name, company = project.User.Name, emailAddress = project.User.Email };
@@ -79,6 +81,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             var ta = project.TargetAudiences.Where(x => x.AudienceNumber == audienceNumber).FirstOrDefault();
             if (ta != null)
             {
+                surveyName.Append("-"); surveyName.Append(ta.Name);
+                surveyName.Append("-"); surveyName.Append(countryName);
+                cintRequest.name = surveyName.ToString();
                 cintRequest.limit = ta.Limit;
                 cintRequest.limitType = 0;
                 cintRequest.incidenceRate = ta.EstimatedIR;

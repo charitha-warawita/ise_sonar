@@ -42,6 +42,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
 
     public class quotaGroup
     {
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int id { get; set; }
         public string name { get; set; }
         public int limitType { get; set; }
@@ -51,6 +52,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
 
     public class quota
     {
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int id { get; set; }
         public string name { get; set; }
         public int limit { get; set; }

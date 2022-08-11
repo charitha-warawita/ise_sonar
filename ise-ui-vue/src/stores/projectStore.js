@@ -24,6 +24,9 @@ export const useProjectStore = defineStore('project', {
             "errors":[],
             "targetAudiences": []
         },
+        getCintRequestLoading: false,
+        getCintRequestError: null,
+        cintRequests: null,
         saveProjectLoading: false,
         saveProjectError: null,
         categories:[],
@@ -36,6 +39,37 @@ export const useProjectStore = defineStore('project', {
         reference: { required }
     },
     actions: {
+        async ProjectAPIValidated(project) {
+            this.getCintRequestLoading = true;
+            var iseUrl = import.meta.env.VITE_ISE_API_URL;
+            var cintRequestPath = import.meta.env.VITE_ISE_API_CINTREQUEST;
+            const settings = { 
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(project)
+            };
+            try {
+                var cintReqs = await fetch((iseUrl + cintRequestPath), settings)
+                .then((response) => response.json());
+                if(cintReqs!== null) {
+                    if(cintReqs.validationResult) {
+                        this.cintRequests = cintReqs;
+                        return true;
+                    }
+                    else
+                        this.getCintRequestError = cintReqs.errors;
+                }
+            } catch (error) {
+                this.getCintRequestError = [];
+                this.getCintRequestError.push(error);
+            } finally {
+                this.getCintRequestLoading = false;
+            }
+            return false;
+        },
         async CreateProject(project) {
             project.lastUpdate = new Date();
 
@@ -72,7 +106,7 @@ export const useProjectStore = defineStore('project', {
                 "estimatedLOI": 0,
                 "costPerInterview": 0,
                 "cptg": 0,
-                "wantedCompletes": 0,
+                "limit": 0,
                 "qualifications": [],
                 "quotas": [],
                 "subtotal": 0,
@@ -91,7 +125,7 @@ export const useProjectStore = defineStore('project', {
                 console.log("came in running CPI cost");
                 this.totalCost = 0;
                 for(var i =0; i < this.project.targetAudiences.length; i++) {
-                if(this.project.targetAudiences[i].wantedCompletes > 0 || this.project.targetAudiences[i].estimatedIR > 0 || this.project.targetAudiences[i].estimatedLOI > 0) {
+                if(this.project.targetAudiences[i].limit > 0 || this.project.targetAudiences[i].estimatedIR > 0 || this.project.targetAudiences[i].estimatedLOI > 0) {
                     var ir = this.project.targetAudiences[i].estimatedIR; var loi = this.project.targetAudiences[i].estimatedLOI
                     if(ir>= 75 && ir <=100 && loi >0 && loi <=5)
                         this.project.targetAudiences[i].costPerInterview = 2;
@@ -125,7 +159,7 @@ export const useProjectStore = defineStore('project', {
                         this.project.targetAudiences[i].costPerInterview = 8.5;
                     else 
                         this.project.targetAudiences[i].costPerInterview = 10;
-                    var subT = this.project.targetAudiences[i].costPerInterview * this.project.targetAudiences[i].wantedCompletes;
+                    var subT = this.project.targetAudiences[i].costPerInterview * this.project.targetAudiences[i].limit;
                     this.project.targetAudiences[i].cptg = subT;
                     this.project.targetAudiences[i].subtotal = subT;
                     this.totalCost = this.totalCost + subT;

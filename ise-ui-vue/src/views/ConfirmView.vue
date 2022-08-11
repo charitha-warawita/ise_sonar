@@ -1,7 +1,22 @@
 <template>
     <PageTitle title="Confirm Project Details"></PageTitle>
-    <div><h5>Project Details: </h5>
-    <pre>{{project}}</pre>
+    <div>
+    <div class="row">
+        <div class="col-md-6">
+            <h5>ISE spec - Request</h5><hr>
+            <pre>{{project}}</pre>
+        </div>
+        <div class="col-md-6">
+            <h5>Converted Cint Specs - Requests </h5><hr>
+            <label><b>Cint Conversion validation result: </b>{{ cintRequests.validationResult }}</label><hr>
+            <div v-for="request in cintRequests.requests" :key=request.name>
+                <label><b>Cint Request:</b> {{ request.name }}</label>
+                <pre>{{ request }}</pre><hr>
+            </div>
+            <!--<pre>{{cintRequests}}</pre>-->
+        </div>
+    </div>
+    
     </div>
 
     <button @click="createNewProject()" class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;">Submit</button>
@@ -19,7 +34,7 @@ import { useRouter } from 'vue-router';
 
 var useProjStore = useProjectStore()
 
-const { project } = storeToRefs(useProjStore)
+const { project, cintRequests } = storeToRefs(useProjStore)
 const router = useRouter();
 async function createNewProject() {
     await useProjStore.CreateProject(useProjStore.project);
