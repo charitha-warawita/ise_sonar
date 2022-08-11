@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace IntelligentSampleEnginePOC.API.Core.Services
 {
-    public  class CintSamplingService : ISamplingService
+    public  class CintSamplingService : ICintSamplingService
     {
         private readonly HttpClient _httpClient;
         private CintApiSettings _settings;
@@ -20,6 +20,20 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             _httpClient = client;
             _settings = options.Value;
+        }
+
+        public CintRequestsModel ConvertToCintRequests(Project project)
+        {
+            var cintRequests = ConvertProjectToCintRequest(project);
+            if(cintRequests != null)
+            {
+                var result = new CintRequestsModel();
+                result.ValidationResult = true;
+                result.Requests = cintRequests;
+                return result;
+            }
+
+            throw new ApplicationException("Validation and conversion failed");
         }
 
         public async Task<Project> CreateProject(Project project)
@@ -54,7 +68,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         private CintRequest CreateIndividualSurvey(Project project, int audienceNumber, int? countryId, string? countryName)
         {
             var isLimitFromCountryQuota = false;
-            var cintRequest = new CintRequest();
+            CintRequest cintRequest = new CintRequest();
             cintRequest.name = project.Name;
             cintRequest.referenceNumber = project.Reference;
             cintRequest.purchaseOrderNumber = project.Reference;

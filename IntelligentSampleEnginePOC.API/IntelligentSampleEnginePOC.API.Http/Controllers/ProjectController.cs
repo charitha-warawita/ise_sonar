@@ -12,9 +12,11 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
     public class ProjectController : ControllerBase
     {
         IProjectService _projectService;
-        public ProjectController(IProjectService projectService)
+        
+        public ProjectController(IProjectService projectService, ICintSamplingService samplingService)
         {
             _projectService = projectService;
+            
         }
 
         [HttpPost]
@@ -35,6 +37,8 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
                 return StatusCode(500, "Exception occured - " + ex.Message);
             }
         }
+
+        
 
         [HttpPost("launch")]
         public async Task<ActionResult> Launch([FromBody] Project project)
