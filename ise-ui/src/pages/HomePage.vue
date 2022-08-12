@@ -11,12 +11,13 @@ import ProjectsGrid from '@/components/pages/home/ProjectsGrid.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import ProjectDetailsModal from '@/components/modals/ProjectDetailsModal.vue';
 
-import ProjectService from '@/services/ProjectService';
+import { useProjectService } from '@/services/ProjectService';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
 import type Project from '@/model/Project';
 
 const router = useRouter();
 const toast = useToast();
+const projectService = useProjectService();
 const breadcrumbs = useBreadcrumbStore();
 breadcrumbs.$reset();
 
@@ -31,7 +32,7 @@ const showModal = () => {
 const ProjectCreated = async (project: Project) => {
 	visible.value = false;
 
-	project.Id = await ProjectService.CreateAsync(project);
+	project.Id = await projectService.CreateAsync(project);
 	await LoadProjects(); // TODO: Can we just push to projects ref or do we need to hit API? Would need to at least update the Total.
 
 	toast.add({
@@ -52,7 +53,7 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 };
 
 const LoadProjects = async (): Promise<void> => {
-	projects.value = await ProjectService.GetAllAsync();
+	projects.value = await projectService.GetAllAsync();
 };
 
 onMounted(async () => {

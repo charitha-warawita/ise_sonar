@@ -7,7 +7,7 @@ import { useToast } from 'primevue/usetoast';
 import type Project from '@/model/Project';
 import type { MenuItem } from 'primevue/menuitem';
 import PageDetails from '@/components/PageDetails.vue';
-import ProjectService from '@/services/ProjectService';
+import { useProjectService } from '@/services/ProjectService';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import ProjectDetailsModal from '@/components/modals/ProjectDetailsModal.vue';
 import Pricing from '@/components/pages/project/Pricing.vue';
@@ -16,6 +16,7 @@ import TargetAudienceList from '@/components/pages/project/TargetAudienceList.vu
 const route = useRoute();
 const breadcrumb = useBreadcrumbStore();
 const toast = useToast();
+const projectService = useProjectService();
 
 const id = Number.parseInt(route.params.id as string);
 const project: Ref<Project | null> = ref(null);
@@ -31,7 +32,8 @@ const UpdateProjectDetails = async (p: Project): Promise<void> => {
 	if (!project.value) return;
 
 	// TODO: API call to update record in DB.
-	await ProjectService.UpdateAsync(p)
+	await projectService
+		.UpdateAsync(p)
 		.then(() => {
 			if (project.value) {
 				// TODO: Breadcrumb needs to update Name.
@@ -64,7 +66,7 @@ const UpdateProjectDetails = async (p: Project): Promise<void> => {
 };
 
 onMounted(async () => {
-	project.value = await ProjectService.GetAsync(id);
+	project.value = await projectService.GetAsync(id);
 
 	// If project was not found don't update breadcrumn, how would we handle no project?
 	if (!project.value) return;

@@ -15,34 +15,35 @@ project.LastActivity = subDays(new Date(), 2);
 
 const projects: Project[] = [project];
 
+// NOTE: Does this need to be a composable? Nothing reactive, but we'll be using a store.
 // TODO: Implement API calls.
-export default class ProjectService {
-	static async GetAllAsync(): Promise<Project[]> {
+export function useProjectService() {
+	const GetAllAsync = async (): Promise<Project[]> => {
 		const result = [...projects]; // Avoid returning a reference to projects const.
 
 		return Promise.resolve(result);
-	}
+	};
 
-	static async GetAsync(id: number): Promise<Project | null> {
+	const GetAsync = async (id: number): Promise<Project | null> => {
 		const result = projects.find((p) => p.Id === id) ?? null;
 
 		const p: Project = { ...result } as Project; // Avoid returning a reference to projects const.
 		return Promise.resolve(p);
-	}
+	};
 
-	static async GetByNameAsync(filter: string): Promise<Project[]> {
+	const GetByNameAsync = async (filter: string): Promise<Project[]> => {
 		const result = projects.filter((p) => p.Name.includes(filter));
 
 		return Promise.resolve(result);
-	}
+	};
 
-	static async CreateAsync(p: Project): Promise<number> {
+	const CreateAsync = async (p: Project): Promise<number> => {
 		const result = projects.push(p);
 
 		return Promise.resolve(result);
-	}
+	};
 
-	static async UpdateAsync(p: Project): Promise<void> {
+	const UpdateAsync = async (p: Project): Promise<void> => {
 		if (p.Id === -1) return Promise.reject('Project does not have a valid Id.');
 
 		const i = projects.findIndex((x) => x.Id == p.Id);
@@ -57,5 +58,13 @@ export default class ProjectService {
 		proj.LastActivity = new Date();
 
 		return Promise.resolve();
-	}
+	};
+
+	return {
+		GetAllAsync,
+		GetAsync,
+		GetByNameAsync,
+		CreateAsync,
+		UpdateAsync,
+	};
 }
