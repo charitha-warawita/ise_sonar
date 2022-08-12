@@ -14,6 +14,24 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
             project.Id = 1;
             return project;
         }
+
+        public List<Country> GetTestCountries()
+        {
+            var Countries = new List<Country>();
+            Countries.Add(new Country()
+            {
+                Id = 8,
+                Name = "Automotive"
+            });
+            Countries.Add(new Country()
+            {
+                Id = 32,
+                Name = "Beverages - alcoholic"
+            });
+            return Countries;
+        }
+
+
         public static string GetProjectJson()
         {
             return @"{

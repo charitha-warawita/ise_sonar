@@ -12,7 +12,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
         public List<Question> GetTestQuestions(string categoryName)
         {
             var questions = new List<Question>();
-            var variable = new List<Variable>();
+          
             questions.Add(new Question()
             {
                 Id = 23,

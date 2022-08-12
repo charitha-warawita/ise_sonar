@@ -68,9 +68,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                                 project.User.Email = reader.IsDBNull("UserEmail") ? string.Empty : (string)reader["UserEmail"];
                             }
                             project.LastUpdate = reader.IsDBNull("LastUpdate") ? default : (DateTime)reader["LastUpdate"];
-                            project.StartDate = reader.IsDBNull("StartDate") ? default : (DateTime)(reader["StartDate"]);
+                            project.StartDate = reader.IsDBNull("StartDate") ? default : (DateTime)reader["StartDate"];
                             project.FieldingPeriod = reader.IsDBNull("FieldingPeriod") ? 0 : (int)reader["FieldingPeriod"];
-                            project.Status = (Status)(int)(reader["Status"]);                           
+                            project.Status = (Status)(int)reader["Status"];                           
                             project.TestingUrl = reader.IsDBNull("TestingUrl") ? string.Empty : (string)reader["TestingUrl"];
                             project.LiveUrl = reader.IsDBNull("LiveUrl") ? string.Empty : (string)reader["LiveUrl"];
                             projects.Add(project);                           

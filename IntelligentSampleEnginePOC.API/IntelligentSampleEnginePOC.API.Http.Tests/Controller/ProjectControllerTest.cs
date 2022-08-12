@@ -19,14 +19,14 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         }
 
         [Fact]
-        public void Post_ReturnsOk()
+        public async void PostProject_ReturnsOk()
         {
             string jsonString = CreateProjects.GetProjectJson();
             Project project = JsonConvert.DeserializeObject<Project>(jsonString);
-          //  _projectService.Setup(repo => repo.CreateProject(project)).Returns(new CreateProjects().CreateProjectTest(project));
-            var result = _projectController.Post(project);
+            _projectService.Setup(repo => repo.CreateProject(project)).ReturnsAsync(new CreateProjects().CreateProjectTest(project));
+            var result = await _projectController.Post(project);
             Assert.NotNull(result);
-            var okResult = Assert.IsType<OkObjectResult>(result);
+            OkObjectResult okResult = Assert.IsType<OkObjectResult>(result);
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
             var projectId = ((Project?)okResult.Value)?.Id;
@@ -35,7 +35,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         }
 
         [Fact]
-        public void Launch_ReturnsOk()
+        public async void LaunchProject_ReturnsOk()
         {
             string jsonString = CreateProjects.GetProjectJson();
             Project project = JsonConvert.DeserializeObject<Project>(jsonString);
@@ -45,7 +45,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         }
 
         [Fact]
-        public void Update_ReturnsOk()
+        public void UpdateProject_ReturnsOk()
         {
             string jsonString = CreateProjects.GetProjectJson();
             Project project = JsonConvert.DeserializeObject<Project>(jsonString);
@@ -55,19 +55,31 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         }
 
         [Fact]
-        public void GetById_ReturnsOk()
+        public void GetProjectById_ReturnsOk()
         {
             var okResult =  _projectController.GetById("1");
             Assert.NotNull(okResult);
             Assert.Equal(200, ((StatusCodeResult)okResult).StatusCode);
         }
 
-        [Fact]
-        public void GetAll_ReturnsOk()
+        [Theory]
+        [InlineData(null,1,null,1)]
+        [InlineData(null, 2, null, 1)]
+        [InlineData(null, 2, null, 5)]
+        [InlineData(null, 1, null,2)]
+        [InlineData(0, 1, null, 3)]
+        [InlineData(null, 1, "Test1", 3)]
+        [InlineData(2, 1, "Test2", 3)]
+        public void GetAllProjects_ReturnsOk(int? status,int pageNumber, string? searchString, int recordCount)
         {
-            var okResult = _projectController.GetProjects(1,1,"Test",2);
+            _projectService.Setup(repo => repo.GetProjects(status, pageNumber, searchString, recordCount)).Returns(new ProjectList().GetTestProjectList(status, pageNumber, searchString, recordCount));
+            var result = _projectController.GetProjects(status, pageNumber, searchString, recordCount);
+            int pageRecordCount = ((List<Project>)((ObjectResult)result).Value).Count;
+            Assert.NotNull(result);
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            Assert.True((pageRecordCount < recordCount) || (recordCount == pageRecordCount), "paging check");
             Assert.NotNull(okResult);
-            Assert.Equal(200, ((StatusCodeResult)okResult).StatusCode);
+            Assert.Equal(200, okResult.StatusCode);            
         }
 
 
