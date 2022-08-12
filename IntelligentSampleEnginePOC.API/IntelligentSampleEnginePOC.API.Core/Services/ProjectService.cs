@@ -58,6 +58,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
             var result = _samplingService.ConvertToCintRequests(project);
             return result;
+        }*/
         public List<Project> GetProjects(int? status, int pageNumber, string? searchString, int recentCount)
         {
             return _projectContext.GetProjects(status, pageNumber, searchString, recentCount);

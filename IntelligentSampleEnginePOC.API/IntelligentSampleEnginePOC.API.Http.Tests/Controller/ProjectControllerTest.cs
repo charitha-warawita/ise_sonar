@@ -12,10 +12,12 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
     {
         private  Mock<IProjectService> _projectService;
         private ProjectController _projectController;
+        private Mock<ICintSamplingService> _samplingService;
         public ProjectControllerTest()
         {
             _projectService = new Mock<IProjectService>();
-            _projectController = new ProjectController(_projectService.Object);
+            _samplingService = new Mock<ICintSamplingService>();
+            _projectController = new ProjectController(_projectService.Object, _samplingService.Object);
         }
 
         [Fact]
