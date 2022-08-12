@@ -24,6 +24,12 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
             });
             return categories;
         }
+
+        public Project CreateProjectTest(Project project)
+        {
+            project.Id = 1;
+            return project;
+        }
     }
    
 }
