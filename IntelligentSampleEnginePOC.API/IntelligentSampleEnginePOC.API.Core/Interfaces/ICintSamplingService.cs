@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 {
-    public interface ISamplingService
+    public interface ICintSamplingService
     {
+        CintRequestsModel ConvertToCintRequests(Project project);
         Task<Project> CreateProject(Project project);
     }
 }

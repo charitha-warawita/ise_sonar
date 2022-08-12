@@ -1,0 +1,24 @@
+{
+  "surveys": {
+    "#loop($.targetAudiences)": {
+      /*"#loop(#currentvalueatpath($.qualifications))": {
+
+      }*/
+      "name": "#concat(#valueof($.name), #currentindex())",
+      "reference": "#valueof($.reference)",
+      "purchaseOrderNumber": "#valueof($.reference)",
+      "contact": {
+        "emailAddress": "#valueof($.user.email)",
+        "name": "#valueof($.user.name)",
+        "company": "kantar"
+      },
+      "limit": "#currentvalueatpath($.wantedCompletes)",
+      "limitType": 0,
+      "incidentRate": "#currentvalueatpath($.estimatedIR)",
+      "lengthOfInterview": "#currentvalueatpath($.estimatedLOI)",
+      "linkTemplate": "#valueof($.liveUrl)",
+      "testLinkTemplate": "#valueof($.testingUrl)"
+    }
+  }
+
+}

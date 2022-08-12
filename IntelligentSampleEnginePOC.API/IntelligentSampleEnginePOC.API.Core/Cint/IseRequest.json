@@ -1,0 +1,206 @@
+{
+  "tempId": 0,
+  "name": "Test Survey",
+  "reference": "MAC001",
+  "lastUpdate": "2022-07-28T00:51:50.752Z",
+  "startDate": "2023-01-01",
+  "fieldingPeriod": 60,
+  "status": 0,
+  "testingUrl": "Testing URL",
+  "liveUrl": "Live URL",
+  "categories": [
+    5
+  ],
+  "user": {
+    "id": 0,
+    "name": "Gopal",
+    "email": "gopal.venkat@kk.com"
+  },
+  "errors": [],
+  "targetAudiences": [
+    {
+      "tempId": 1,
+      "name": "TA001",
+      "audienceNumber": 1,
+      "estimatedIR": 100,
+      "estimatedLOI": 5,
+      "costPerInterview": 2,
+      "cptg": 2000,
+      "wantedCompletes": 1000,
+      "qualifications": [
+        {
+          "tempId": 1,
+          "order": 1,
+          "logicalDecision": "AND",
+          "NumberOfRequiredConditions": 0,
+          "IsActive": true,
+          "question": {
+            "id": 10001,
+            "name": "AgeGroup",
+            "text": "AgeGroup",
+            "categoryName": "Standard",
+            "variables": [
+              {
+                "id": 2,
+                "name": "18-24",
+                "selected": true
+              },
+              {
+                "id": 3,
+                "name": "25-34",
+                "selected": true
+              },
+              {
+                "id": 4,
+                "name": "35-44",
+                "selected": true
+              },
+              {
+                "id": 5,
+                "name": "45-54",
+                "selected": true
+              },
+              {
+                "id": 6,
+                "name": "55-64",
+                "selected": true
+              }
+            ]
+          }
+        },
+        {
+          "tempId": 2,
+          "order": 2,
+          "logicalDecision": "AND",
+          "NumberOfRequiredConditions": 0,
+          "IsActive": true,
+          "question": {
+            "id": 10002,
+            "name": "Country",
+            "text": "Country",
+            "categoryName": "Standard",
+            "variables": [
+              {
+                "id": 1,
+                "name": "UK",
+                "selected": true
+              },
+              {
+                "id": 34,
+                "name": "India",
+                "selected": true
+              }
+            ]
+          }
+        },
+        {
+          "tempId": 3,
+          "order": 3,
+          "logicalDecision": "AND",
+          "NumberOfRequiredConditions": 0,
+          "IsActive": true,
+          "question": {
+            "id": 10003,
+            "name": "Gender",
+            "text": "Gender",
+            "categoryName": "Standard",
+            "variables": [
+              {
+                "id": 1,
+                "name": "M",
+                "selected": true
+              },
+              {
+                "id": 2,
+                "name": "F",
+                "selected": true
+              }
+            ]
+          }
+        }
+      ],
+      "quotas": [
+        {
+          "tempId": 1,
+          "quotaName": "People under 34",
+          "quotaType": "completed",
+          "fieldTarget": 200,
+          "limit": 200,
+          "prescreens": 0,
+          "completes": 0,
+          "isActive": true,
+          "conditions": [
+            {
+              "id": 10001,
+              "name": "AgeGroup",
+              "text": "AgeGroup",
+              "categoryName": "Standard",
+              "variables": [
+                {
+                  "id": 2,
+                  "name": "18-24",
+                  "selected": true
+                },
+                {
+                  "id": 3,
+                  "name": "25-34",
+                  "selected": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tempId": 2,
+          "quotaName": "Interlocked quota for under 54 and from UK",
+          "quotaType": "completed",
+          "fieldTarget": 400,
+          "limit": 400,
+          "prescreens": 0,
+          "completes": 0,
+          "isActive": true,
+          "conditions": [
+            {
+              "id": 10001,
+              "name": "AgeGroup",
+              "text": "AgeGroup",
+              "categoryName": "Standard",
+              "variables": [
+                {
+                  "id": 2,
+                  "name": "18-24",
+                  "selected": true
+                },
+                {
+                  "id": 3,
+                  "name": "25-34",
+                  "selected": true
+                },
+                {
+                  "id": 4,
+                  "name": "35-44",
+                  "selected": true
+                }
+              ]
+            },
+            {
+              "id": 10002,
+              "name": "Country",
+              "text": "Country",
+              "categoryName": "Standard",
+              "variables": [
+                {
+                  "id": 1,
+                  "name": "UK",
+                  "selected": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "subtotal": 2000,
+      "errors": []
+    }
+  ]
+}
