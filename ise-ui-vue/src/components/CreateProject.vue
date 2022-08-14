@@ -56,7 +56,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputEmail4" class="form-label">Wanted Completes Count</label>
-                                            <input type="number" class="form-control" id="inputEmail4" v-model="ta.wantedCompletes" v-on:input="useProjStore.CalculateCharges($event)">
+                                            <input type="number" class="form-control" id="inputEmail4" v-model="ta.limit" v-on:input="useProjStore.CalculateCharges($event)">
                                         </div>
                                         <div class="accordion-item-custom">
                                             <h2 class="accordion-header" id="panelsStayOpen-headingThree">
@@ -149,7 +149,7 @@
                                                         <div class="card modal-content">
                                                             <h3 class="card-header">Quota</h3>
                                                             <div class="card-body">
-                                                                <QuotaList :taId=ta.tempId :totalCompletes=ta.wantedCompletes />
+                                                                <QuotaList :taId=ta.tempId :totalCompletes=ta.limit />
                                                             </div>               
                                                         </div> 
                                                     </CustomModal>                                                  
@@ -251,7 +251,7 @@ const rules = {
             "audienceNumber":{ required: helpers.withMessage('Audience order cannot be empty', required) },
             "estimatedIR": { required, minValueValue: helpers.withMessage(() => "Estimated IR minimum value allowed is 1", minValue(1))   },
             "estimatedLOI": { required, minValueValue: helpers.withMessage(() => 'Estimate LOI minimum value allowed is 1', minValue(1)) },
-            "wantedCompletes": { required, minValueValue:helpers.withMessage(() => 'wanted Completes minimum value allowed is 1', minValue(1)) }
+            "limit": { required, minValueValue:helpers.withMessage(() => 'wanted Completes minimum value allowed is 1', minValue(1)) }
         })
     }
 };
@@ -266,8 +266,10 @@ const saveForLaterRules = {
 const router = useRouter();
 
 async function SubmitProject(project) {
+    project.lastUpdate = new Date();
     if(await ProjectValidated(project, 'create')) {
-        router.push('/confirm');
+        if(await useProjStore.ProjectAPIValidated(project))
+            router.push('/confirm');
     }
 }
 async function SaveforLater(project) {
