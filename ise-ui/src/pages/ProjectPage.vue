@@ -1,22 +1,25 @@
 <script setup lang="ts">
-import { type Ref, ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import { format } from 'date-fns';
-import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
-import { useToast } from 'primevue/usetoast';
-import type Project from '@/model/Project';
-import type { MenuItem } from 'primevue/menuitem';
-import PageDetails from '@/components/PageDetails.vue';
-import { useProjectService } from '@/services/ProjectService';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import ProjectDetailsModal from '@/components/modals/ProjectDetailsModal.vue';
+import PageDetails from '@/components/PageDetails.vue';
 import Pricing from '@/components/pages/project/Pricing.vue';
 import TargetAudienceList from '@/components/pages/project/TargetAudienceList.vue';
+import type Project from '@/model/Project';
+import type TargetAudience from '@/model/TargetAudience';
+import { useProjectService } from '@/services/ProjectService';
+import { useTargetAudienceService } from '@/services/TargetAudienceService';
+import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
+import { format } from 'date-fns';
+import type { MenuItem } from 'primevue/menuitem';
+import { useToast } from 'primevue/usetoast';
+import { onMounted, ref, type Ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const breadcrumb = useBreadcrumbStore();
 const toast = useToast();
 const projectService = useProjectService();
+const targetAudienceService = useTargetAudienceService();
 
 const id = Number.parseInt(route.params.id as string);
 const project: Ref<Project | null> = ref(null);
@@ -65,11 +68,18 @@ const UpdateProjectDetails = async (p: Project): Promise<void> => {
 	visible.value = false;
 };
 
-onMounted(async () => {
-	project.value = await projectService.GetAsync(id);
-
-	// If project was not found don't update breadcrumn, how would we handle no project?
+const TargetAudienceAdded = async (ta: TargetAudience) => {
 	if (!project.value) return;
+
+	project.value.TargetAudiences.push(ta);
+};
+
+onMounted(async () => {
+	const proj = await projectService.GetAsync(id);
+	if (!proj) return;
+
+	project.value = proj;
+	project.value.TargetAudiences = await targetAudienceService.GetAllAsync(project.value.Id);
 
 	breadcrumb.$patch((state) => {
 		const crumbs: MenuItem[] = [
@@ -125,8 +135,9 @@ onMounted(async () => {
 			<div>
 				<TargetAudienceList
 					v-if="project"
-					v-model:target-audiences="project.TargetAudiences"
+					@created="TargetAudienceAdded"
 					:project-id="id"
+					:target-audiences="project.TargetAudiences"
 				/>
 			</div>
 		</div>

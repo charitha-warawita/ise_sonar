@@ -6,8 +6,11 @@ import { useToast } from 'primevue/usetoast';
 import { computed, reactive } from 'vue';
 import PrimaryButton from '../buttons/PrimaryButton.vue';
 
-const props = defineProps({ visible: Boolean });
-const emits = defineEmits(['update:visible', 'created']);
+const props = defineProps({ visible: Boolean, projectId: { type: Number, required: true } });
+const emits = defineEmits<{
+	(event: 'update:visible', value: boolean): void;
+	(event: 'created', value: TargetAudience): void;
+}>();
 const visible = computed({
 	get: () => props.visible,
 	set: (value) => emits('update:visible', value),
@@ -28,6 +31,7 @@ const Create = () => {
 	if (fields.Name == null || fields.EstimatedIR == null || fields.EstimatedLOI == null) return;
 
 	const ta = new TargetAudience();
+	ta.ProjectId = props.projectId;
 	ta.Name = fields.Name;
 	ta.EstimatedIR = Number.parseInt(fields.EstimatedIR);
 	ta.EstimatedLOI = Number.parseInt(fields.EstimatedLOI);

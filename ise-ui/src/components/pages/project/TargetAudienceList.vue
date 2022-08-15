@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import type TargetAudience from '@/model/TargetAudience.js';
-import DataView from 'primevue/dataview';
-import { computed, ref } from 'vue';
-import PrimaryButton from '../../buttons/PrimaryButton.vue';
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import CreateTargetAudienceModal from '@/components/modals/CreateTargetAudienceModal.vue';
+import type TargetAudience from '@/model/TargetAudience.js';
+import { useTargetAudienceService } from '@/services/TargetAudienceService';
+import DataView from 'primevue/dataview';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const targetAudienceService = useTargetAudienceService();
+
 const props = defineProps({
 	targetAudiences: {
 		type: Array<TargetAudience>,
@@ -17,32 +20,23 @@ const props = defineProps({
 		required: true,
 	},
 });
-
 const emits = defineEmits<{
-	(event: 'update:targetAudience', data: Array<TargetAudience>): void;
+	(event: 'created', audience: TargetAudience): void;
 }>();
-
-const audiences = computed({
-	get: () => props.targetAudiences,
-	set: (value) => emits('update:targetAudience', value),
-});
 
 const isModalVisible = ref(false);
 const OpenTargetAudienceModal = () => {
 	isModalVisible.value = true;
 };
 
-const AddTargetAudience = (ta: TargetAudience) => {
-	// TODO: Make API call to persist the Target Audience.
-	const id = audiences.value.length + 1;
-	ta.Id = id;
+const AddTargetAudience = async (ta: TargetAudience) => {
+	ta.Id = await targetAudienceService.CreateAsync(ta);
 
-	console.log(audiences.value);
-
-	audiences.value.push(ta);
+	emits('created', ta);
 };
 
 const EditTargetAudience = (ta: TargetAudience) => {
+	// Or should we emit 'edit' event and let parent handle routing?
 	router.push({
 		name: 'target-audience',
 		params: {
@@ -56,7 +50,7 @@ const EditTargetAudience = (ta: TargetAudience) => {
 <template>
 	<DataView
 		layout="list"
-		:value="audiences"
+		:value="props.targetAudiences"
 		data-key="Id"
 		paginator
 		:always-show-paginator="false"
@@ -66,7 +60,7 @@ const EditTargetAudience = (ta: TargetAudience) => {
 		<template #header>
 			<div class="target-audience-list-header">
 				<div class="target-audience-list-title">Target Audiences</div>
-				<div v-if="audiences.length">
+				<div v-if="props.targetAudiences && props.targetAudiences.length">
 					<PrimaryButton icon="pi pi-plus" @click="OpenTargetAudienceModal" />
 				</div>
 			</div>
@@ -104,7 +98,11 @@ const EditTargetAudience = (ta: TargetAudience) => {
 			</div>
 		</template>
 	</DataView>
-	<CreateTargetAudienceModal v-model:visible="isModalVisible" @created="AddTargetAudience" />
+	<CreateTargetAudienceModal
+		v-model:visible="isModalVisible"
+		:project-id="props.projectId"
+		@created="AddTargetAudience"
+	/>
 </template>
 
 <style scoped lang="scss">

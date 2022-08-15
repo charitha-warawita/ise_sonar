@@ -1,5 +1,6 @@
 export default class TargetAudience {
 	Id: number;
+	ProjectId: number;
 	Name: string;
 	EstimatedIR: number | null;
 	EstimatedLOI: number | null;
@@ -7,6 +8,7 @@ export default class TargetAudience {
 
 	constructor() {
 		this.Id = -1;
+		this.ProjectId = -1;
 		this.Name = '';
 		this.EstimatedIR = null;
 		this.EstimatedLOI = null;

@@ -190,6 +190,7 @@ const ResetFields = () => {
 							dateFormat="dd/mm/yy"
 							:min-date="today"
 							:class="{ 'p-invalid': vuelidate.StartDate.$invalid && submitted }"
+							autocomplete="off"
 						/>
 						<label
 							for="project-start-date"
@@ -215,6 +216,7 @@ const ResetFields = () => {
 							dateFormat="dd/mm/yy"
 							:min-date="vuelidate.StartDate.$model"
 							:class="{ 'p-invalid': vuelidate.EndDate.$invalid && submitted }"
+							autocomplete="off"
 						/>
 						<label
 							for="project-end-date"

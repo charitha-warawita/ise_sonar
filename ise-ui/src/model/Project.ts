@@ -9,7 +9,7 @@ export default class Project {
 	LastActivity: Date = new Date();
 	StartDate: Date;
 	EndDate: Date;
-	TargetAudiences: TargetAudience[] = [];
+	TargetAudiences: TargetAudience[];
 
 	constructor(name: string, maconomyNumber: string, owner: string, start: Date, end: Date) {
 		this.Name = name;
@@ -17,5 +17,6 @@ export default class Project {
 		this.Owner = owner;
 		this.StartDate = start;
 		this.EndDate = end;
+		this.TargetAudiences = [];
 	}
 }
