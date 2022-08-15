@@ -74,8 +74,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             cintRequest.referenceNumber = project.Reference;
             cintRequest.purchaseOrderNumber = project.Reference;
             cintRequest.contact = new contact { name = project.User.Name, company = project.User.Name, emailAddress = project.User.Email };
-            cintRequest.linkTemplate = project.LiveUrl;
-            cintRequest.testLinkTemplate = project.TestingUrl;
+            // cintRequest.linkTemplate = project.LiveUrl;
+            // cintRequest.testLinkTemplate = project.TestingUrl;
 
             var ta = project.TargetAudiences.Where(x => x.AudienceNumber == audienceNumber).FirstOrDefault();
             if (ta != null)
@@ -92,7 +92,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 cintRequest.deviceTypes = new List<int>() { 1, 2, 3 };
                 cintRequest.deviceCapabilities = new List<string>();
                 cintRequest.categories = project.Categories;
-
+                cintRequest.testLinkTemplate = ta.TestingUrl;
+                cintRequest.linkTemplate = ta.LiveUrl;
                
                 // var quotaGroup = new quotaGroup();
 

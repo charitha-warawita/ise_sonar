@@ -107,6 +107,8 @@ export const useProjectStore = defineStore('project', {
                 "costPerInterview": 0,
                 "cptg": 0,
                 "limit": 0,
+                "testingUrl":"",
+                "liveUrl":"",
                 "qualifications": [],
                 "quotas": [],
                 "subtotal": 0,

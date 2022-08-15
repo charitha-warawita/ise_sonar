@@ -58,6 +58,14 @@
                                             <label for="inputEmail4" class="form-label">Wanted Completes Count</label>
                                             <input type="number" class="form-control" id="inputEmail4" v-model="ta.limit" v-on:input="useProjStore.CalculateCharges($event)">
                                         </div>
+                                        <div class="col-md-12">
+                                            <label for="inputEmail4" class="form-label">Testing URL</label>
+                                            <input type="text" class="form-control" id="inputEmail4" v-model="ta.testingUrl">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="inputEmail4" class="form-label">Live URL</label>
+                                            <input type="text" class="form-control" id="inputEmail4" v-model="ta.liveUrl">
+                                        </div>
                                         <div class="accordion-item-custom">
                                             <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseThree-' + ta.tempId" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
@@ -241,8 +249,8 @@ const rules = {
     reference: { required },
     startDate: { required },
     fieldingPeriod: { required, minValueValue:minValue(1) },
-    testingUrl: { required },
-    liveUrl: { required },
+    // testingUrl: { required },
+    // liveUrl: { required },
     categories: { required },
     user: { "name": { required }, "email": { required, email }  },
     targetAudiences: {
@@ -251,7 +259,9 @@ const rules = {
             "audienceNumber":{ required: helpers.withMessage('Audience order cannot be empty', required) },
             "estimatedIR": { required, minValueValue: helpers.withMessage(() => "Estimated IR minimum value allowed is 1", minValue(1))   },
             "estimatedLOI": { required, minValueValue: helpers.withMessage(() => 'Estimate LOI minimum value allowed is 1', minValue(1)) },
-            "limit": { required, minValueValue:helpers.withMessage(() => 'wanted Completes minimum value allowed is 1', minValue(1)) }
+            "limit": { required, minValueValue:helpers.withMessage(() => 'wanted Completes minimum value allowed is 1', minValue(1)) },
+            "testingUrl": { required:helpers.withMessage(() => 'Testing survey URL under target Audiences cannot be empty', required) },
+            "liveUrl": { required:helpers.withMessage(() => 'Live survey URL under target Audiences cannot be empty', required) }
         })
     }
 };
