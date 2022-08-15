@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import TargetAudience from '@/model/TargetAudience.js';
-import { computed } from 'vue';
-import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
+import InputText from 'primevue/inputtext';
+import { computed } from 'vue';
 
 const props = defineProps({
 	targetAudience: {
@@ -90,7 +90,7 @@ const ta = computed<TargetAudience>({
 	</div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .basic-settings-title {
 	padding: 10px 0 10px 10px;
 }
@@ -99,19 +99,19 @@ const ta = computed<TargetAudience>({
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
-}
 
-.basic-input-row {
-	display: flex;
-	flex-direction: row;
-}
+	> .basic-input-row {
+		display: flex;
+		flex-direction: row;
 
-.basic-input {
-	flex-grow: 1;
-	margin: 15px;
-}
+		.basic-input {
+			flex-grow: 1;
+			margin: 15px;
 
-.ta-input {
-	width: 100%;
+			.ta-input {
+				width: 100%;
+			}
+		}
+	}
 }
 </style>

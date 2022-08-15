@@ -10,8 +10,15 @@ export function useTargetAudienceService() {
 		);
 
 		return JSON.parse(JSON.stringify(results)) as TargetAudience[];
+	};
 
-		// return [...results] as TargetAudience[]; // Avoid returning references to persistent array.
+	const GetAsync = async (project: number, id: number): Promise<TargetAudience | null> => {
+		const result = targetAudienceStore.targetAudiences.find(
+			(ta) => ta.ProjectId === project && ta.Id === id
+		);
+
+		const value = result ? JSON.parse(JSON.stringify(result)) : null;
+		return Promise.resolve(value);
 	};
 
 	const CreateAsync = async (targetAudience: TargetAudience): Promise<number> => {
@@ -24,6 +31,7 @@ export function useTargetAudienceService() {
 
 	return {
 		GetAllAsync,
+		GetAsync,
 		CreateAsync,
 	};
 }
