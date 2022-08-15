@@ -2,18 +2,18 @@
 import { onMounted, ref, type Ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import Panel from 'primevue/panel';
-import InputText from 'primevue/inputtext';
 import type { DataTableRowSelectEvent } from 'primevue/datatable';
+import InputText from 'primevue/inputtext';
+import Panel from 'primevue/panel';
 import { useToast } from 'primevue/usetoast';
 
-import ProjectsGrid from '@/components/pages/home/ProjectsGrid.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import ProjectDetailsModal from '@/components/modals/ProjectDetailsModal.vue';
+import ProjectsGrid from '@/components/pages/home/ProjectsGrid.vue';
 
+import type Project from '@/model/Project';
 import { useProjectService } from '@/services/ProjectService';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
-import type Project from '@/model/Project';
 
 const router = useRouter();
 const toast = useToast();
