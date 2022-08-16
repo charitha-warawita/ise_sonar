@@ -9,12 +9,9 @@ export const useProjectStore = defineStore('project', {
             "tempId": 0,
             "name": "",
             "reference": "",
-            "lastUpdate": "",
             "startDate": "",
             "fieldingPeriod": 0,
             "status": 0,
-            "testingUrl": "",
-            "liveUrl": "",
             "categories": [],
             "user": {
                 "id": 0,
@@ -71,7 +68,7 @@ export const useProjectStore = defineStore('project', {
             return false;
         },
         async CreateProject(project) {
-            project.lastUpdate = new Date();
+            // project.lastUpdate = new Date();
 
             this.saveProjectLoading = true;
             var iseUrl = import.meta.env.VITE_ISE_API_URL;

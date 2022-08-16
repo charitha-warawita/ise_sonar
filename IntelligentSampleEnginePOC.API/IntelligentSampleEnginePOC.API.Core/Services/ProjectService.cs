@@ -38,6 +38,15 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             throw new ArgumentException("Project Validation failed", nameof(project));
         }
 
+        public async Task<long> UpdatePrjectStatus(long projectId, Status status)
+        {
+            if(projectId < 1)
+                throw new ArgumentException("Not a valid project", nameof(projectId));
+
+            return _projectContext.UpdateProjectStatus(projectId, status);
+
+        }
+
         public async Task<Project> LaunchProject(Project project)
         {
             if (project == null)
@@ -49,9 +58,10 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
                 project = await CreateProject(project);
                 project = await _samplingService.CreateProject(project);
+                
                 project.Status = Model.Status.Created;
-                // ModelMapping(project, true);
-                // _dataContext.SaveChanges();
+                await UpdatePrjectStatus(project.Id, project.Status);
+
             }
             catch(Exception ex)
             {
@@ -106,6 +116,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
         private bool ProjectValidated(Project project)
         {
+            if (project != null && project.LastUpdate == null)
+                project.LastUpdate = DateTime.Now;
+
             return true;
         }
 

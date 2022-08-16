@@ -70,9 +70,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                             project.LastUpdate = reader.IsDBNull("LastUpdate") ? default : (DateTime)reader["LastUpdate"];
                             project.StartDate = reader.IsDBNull("StartDate") ? default : (DateTime)reader["StartDate"];
                             project.FieldingPeriod = reader.IsDBNull("FieldingPeriod") ? 0 : (int)reader["FieldingPeriod"];
-                            project.Status = (Status)(int)reader["Status"];                           
-                            project.TestingUrl = reader.IsDBNull("TestingUrl") ? string.Empty : (string)reader["TestingUrl"];
-                            project.LiveUrl = reader.IsDBNull("LiveUrl") ? string.Empty : (string)reader["LiveUrl"];
+                            project.Status = (Status)(int)reader["Status"];
                             projects.Add(project);                           
                         }
                     }
@@ -80,6 +78,29 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                 }
             }
             return projects;
+        }
+
+        public long UpdateProjectStatus(long projectId, Status status)
+        {
+            long result = 0;
+            using (SqlConnection connection = new SqlConnection(_options.iseDb))
+            {
+                using (SqlCommand command = new SqlCommand("[UpdateProjectStatus]"))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Connection = connection;
+                    command.Parameters.AddWithValue("@projectId", projectId);
+                    command.Parameters.AddWithValue("@status", status);
+                    connection.Open();
+                    var resultId = command.ExecuteScalar();
+                    if (resultId != null)
+                        result = Convert.ToInt64(resultId);
+
+                    connection.Close();
+
+                }
+            }
+            return result;
         }
     }
 }

@@ -18,9 +18,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
                 LastUpdate = Convert.ToDateTime("2022-08-09"),
                 StartDate = Convert.ToDateTime("2022-08-09"),
                 FieldingPeriod = 10,
-                Status = (Status)2,
-                TestingUrl = "https://sim.cintworks.net/[ID]",
-                LiveUrl = "https://sim.cintworks.net/[ID]",
+                Status = (Status)2
             });
             projects.Add(new Project()
             {
@@ -31,9 +29,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
                 LastUpdate = Convert.ToDateTime("2022-08-09"),
                 StartDate = Convert.ToDateTime("2022-08-09"),
                 FieldingPeriod = 60,
-                Status = (Status)2,
-                TestingUrl = "https://sim.cintworks.net/[ID]",
-                LiveUrl = "https://sim.cintworks.net/[ID]",
+                Status = (Status)2
             });
             projects.Add(new Project()
             {
@@ -44,9 +40,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
                 LastUpdate = Convert.ToDateTime("2022-08-09"),
                 StartDate = Convert.ToDateTime("2022-08-09"),
                 FieldingPeriod = 60,
-                Status = (Status)0,
-                TestingUrl = "https://sim.cintworks.net/[ID]",
-                LiveUrl = "https://sim.cintworks.net/[ID]",
+                Status = (Status)0
             });
             projects.Add(new Project()
             {
@@ -57,9 +51,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
                 LastUpdate = Convert.ToDateTime("2022-08-09"),
                 StartDate = Convert.ToDateTime("2022-08-09"),
                 FieldingPeriod = 60,
-                Status = (Status)0,
-                TestingUrl = "https://sim.cintworks.net/[ID]",
-                LiveUrl = "https://sim.cintworks.net/[ID]",
+                Status = (Status)0
             });
             projects.Add(new Project()
             {
@@ -70,9 +62,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
                 LastUpdate = Convert.ToDateTime("2022-08-09"),
                 StartDate = Convert.ToDateTime("2022-08-09"),
                 FieldingPeriod = 60,
-                Status = (Status)3,
-                TestingUrl = "https://sim.cintworks.net/[ID]",
-                LiveUrl = "https://sim.cintworks.net/[ID]",
+                Status = (Status)3
             });
             projects.Add(new Project()
             {
@@ -83,9 +73,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
                 LastUpdate = Convert.ToDateTime("2022-08-09"),
                 StartDate = Convert.ToDateTime("2022-08-09"),
                 FieldingPeriod = 60,
-                Status = (Status)4,
-                TestingUrl = "https://sim.cintworks.net/[ID]",
-                LiveUrl = "https://sim.cintworks.net/[ID]",
+                Status = (Status)4
             });
             if (string.IsNullOrEmpty(searchString) && status is null)
             {

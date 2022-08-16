@@ -45,14 +45,6 @@
                 <label for="inputEmail4" class="form-label">Fielding Period</label>
                 <input type="number" class="form-control" id="inputEmail4" v-model="useProjStore.project.fieldingPeriod">
             </div>
-            <!--<div class="col-md-12">
-                <label for="inputEmail4" class="form-label">Testing URL</label>
-                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.testingUrl">
-            </div>
-            <div class="col-md-12">
-                <label for="inputEmail4" class="form-label">Live URL</label>
-                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.liveUrl">
-            </div>-->
         </div>
     </div>                  
 </template>
