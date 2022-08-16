@@ -15,20 +15,20 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
     {
         private readonly HttpClient _httpClient;
         private CintApiSettings _settings;
-        public CintSamplingService(HttpClient client, IOptions<CintApiSettings> options)
+        private IProjectCintContext _projectCintContext;
+        public CintSamplingService(HttpClient client, IOptions<CintApiSettings> options, IProjectCintContext projectCintContext)
         {
             _httpClient = client;
             _settings = options.Value;
+            _projectCintContext = projectCintContext;
         }
 
-        public CintRequestsModel ConvertToCintRequests(Project project)
+        public List<CintRequestModel> ConvertToCintRequests(Project project)
         {
             var cintRequests = ConvertProjectToCintRequest(project);
             if(cintRequests != null)
             {
-                var result = new CintRequestsModel();
-                result.ValidationResult = true;
-                result.Requests = cintRequests;
+                var result = cintRequests;
                 return result;
             }
 
@@ -37,31 +37,50 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
         public async Task<Project> CreateProject(Project project)
         {
-            var cintRequest = ConvertProjectToCintRequest(project);
-            // var cintResponse = await CallCintApi(cintRequest.FirstOrDefault());
-            // return AddCintResponseToProject(cintResponse, project);
-            throw new NotImplementedException();
+            try
+            {
+                var cintRequests = ConvertProjectToCintRequest(project);
+                await CallandStoreCintData(project, cintRequests);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return project;
         }
 
-        private Project AddCintResponseToProject(CintResponse response, Project project)
+        private async Task CallandStoreCintData(Project project, List<CintRequestModel> cintRequests)
         {
-            if(response != null)
+ 
+            foreach (var item in cintRequests)
             {
-                /*project.CintResponseId = response.id;
-                if(response.links.Any())
+                var response = await CallCintApi(item.Request);
+                if (response != null)
                 {
-                    foreach(var item in response.links)
+                    var cintResponse = await response.Content.ReadFromJsonAsync<CintResponse>();
+                    if (cintResponse != null)
                     {
-                        if (item.rel == "self")
-                            project.CintSelfLink = item.href;
-                        else if (item.rel == "currentCost")
-                            project.CintCurrentCostLink = item.href;
-                        else if (item.rel == "testing")
-                            project.CintTestingLink = item.href;
+                        var projectCintResponseId =
+                            _projectCintContext.StoreProjectCintResponse(response.IsSuccessStatusCode,
+                            response.StatusCode.ToString(), item, cintResponse);
                     }
-                }*/
+                }
             }
-            return project;
+        }
+
+        private async Task<HttpResponseMessage> CallCintApi(CintRequest request)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(Path.Combine(_settings.Url, _settings.Path));
+            var jsonString = JsonSerializer.Serialize(request);
+
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(builder.ToString(), request);
+            // response.EnsureSuccessStatusCode();
+
+            
+            return response;
         }
 
         private CintRequest CreateIndividualSurvey(Project project, int audienceNumber, int? countryId, string? countryName)
@@ -74,8 +93,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             cintRequest.referenceNumber = project.Reference;
             cintRequest.purchaseOrderNumber = project.Reference;
             cintRequest.contact = new contact { name = project.User.Name, company = project.User.Name, emailAddress = project.User.Email };
-            // cintRequest.linkTemplate = project.LiveUrl;
-            // cintRequest.testLinkTemplate = project.TestingUrl;
 
             var ta = project.TargetAudiences.Where(x => x.AudienceNumber == audienceNumber).FirstOrDefault();
             if (ta != null)
@@ -94,16 +111,15 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 cintRequest.categories = project.Categories;
                 cintRequest.testLinkTemplate = ta.TestingUrl;
                 cintRequest.linkTemplate = ta.LiveUrl;
-               
-                // var quotaGroup = new quotaGroup();
 
                 var quotaswithKeys = new List<QuotaGrouper>();
+                var count = 0;
                 foreach (var item in ta.Quotas)
                 {
                     var quotaWithKeys = new QuotaGrouper();
                     quotaWithKeys.Keywords = new List<string>();
 
-                    var qt = new quota();
+                    var qt = new quota(); count++;
                     qt.name = item.QuotaName;
                     qt.limit = item.Limit;
                     qt.targetGroup = new targetGroup();
@@ -159,14 +175,10 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                     quotaWithKeys.CintQuota = qt;
                     quotaswithKeys.Add(quotaWithKeys);
                 }
-
+          
                 foreach(var item in ta.Qualifications)
                 {
-                    
-
                     var subItem = item.Question;
-                    //foreach (var subItem in item.Conditions)
-                    //{
                     var currentItemFoundinQuotaList = false;
                     foreach(var temp in quotaswithKeys)
                     {
@@ -181,8 +193,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                         var quotaWithKeys = new QuotaGrouper();
                         quotaWithKeys.Keywords = new List<string>();
 
-                        var qt = new quota();
-                        qt.name = string.IsNullOrEmpty(item.Name) ? "" : item.Name;
+                        var qt = new quota(); count++;
+                        qt.name = string.IsNullOrEmpty(item.Name) ? (item.Question.Name + " - " + count) : item.Name;
                         qt.limit = ta.Limit;
                         qt.targetGroup = new targetGroup();
                         var profileVariables = new List<int>();
@@ -215,23 +227,12 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                                         qt.targetGroup.gender = subItem.Variables.FirstOrDefault().Id;
                                 }
                             }
-                            /*else if (subItem.Id == 10002 && siName == "country")
-                            {
-                                if (isLimitFromCountryQuota)
-                                    cintRequest.limit += item.Limit;
-                                else
-                                {
-                                    isLimitFromCountryQuota = true;
-                                    cintRequest.limit = item.Limit;
-                                }
-                            }*/
                         }
                         else
                         {
                             foreach (var temp in subItem.Variables)
                                 profileVariables.Add(temp.Id);
                         }
-                        //}
                         if (profileVariables.Any())
                             qt.targetGroup.variableIds = profileVariables;
 
@@ -241,12 +242,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
                     
                 }
-
-
-
-
                 cintRequest.quotaGroups = new List<quotaGroup>();
-                // var keystoCompare = new List<string>();
                 foreach(var quotaKey in quotaswithKeys)
                 {
                     var tg = quotaKey.CintQuota.targetGroup;
@@ -284,13 +280,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             return cintRequest;
         }
 
-        private List<CintRequest> ConvertProjectToCintRequest(Project project)
+        private List<CintRequestModel> ConvertProjectToCintRequest(Project project)
         {
-            List<CintRequest> requests = new List<CintRequest>();
-
-            // string input = File.ReadAllText("../IntelligentSampleEnginePOC.API.Core/Cint/IseRequest.json");
-            // string transformer = File.ReadAllText("../IntelligentSampleEnginePOC.API.Core/Cint/IsetoCintTransformer.json");
-            // string transformedString = JsonTransformer.Transform(transformer, input);
+            List<CintRequestModel> requests = new List<CintRequestModel>();
 
             if(project.TargetAudiences.Any())
             {
@@ -304,31 +296,29 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                         {
                             foreach(var subSubItem in subItem.Question.Variables)
                             {
-                                requests.Add(CreateIndividualSurvey(project, item.AudienceNumber, subSubItem.Id, subSubItem.Name));
+                                var cintRequetModel = new CintRequestModel();
+                                cintRequetModel.ProjectId = project.Id;
+                                cintRequetModel.TargetAudienceId = item.Id;
+                                cintRequetModel.CountryId = subSubItem.Id;
+                                cintRequetModel.CountryName = subSubItem.Name;
+                                cintRequetModel.Request = CreateIndividualSurvey(project, item.AudienceNumber, subSubItem.Id, subSubItem.Name);
+                                if (cintRequetModel.Request == null)
+                                    cintRequetModel.ValidationResult = false;
+                                else
+                                    cintRequetModel.ValidationResult = true;
+
+                                requests.Add(cintRequetModel);
                             }
                         }
                     }
                     else
                     {
-                        requests.Add(CreateIndividualSurvey(project, item.AudienceNumber, null, null));
+                        throw new Exception("Failed in creating Individual Requests. No country found");
                     }
                 }
             }
             var stringRequest = JsonSerializer.Serialize(requests);
             return requests;
-        }
-
-        private async Task<CintResponse> CallCintApi(CintRequest request)
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(Path.Combine(_settings.Url, _settings.Path));
-            var jsonString = JsonSerializer.Serialize(request);
-
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(builder.ToString(), request);
-            response.EnsureSuccessStatusCode();
-
-            var cintResponse = await response.Content.ReadFromJsonAsync<CintResponse>();
-            return cintResponse;
         }
     }
 }

@@ -55,7 +55,7 @@ export const useProjectStore = defineStore('project', {
                 var cintReqs = await fetch((iseUrl + cintRequestPath), settings)
                 .then((response) => response.json());
                 if(cintReqs!== null) {
-                    if(cintReqs.validationResult) {
+                    if(!(cintReqs.find(x => x.ValidationResult === false))) {
                         this.cintRequests = cintReqs;
                         return true;
                     }
@@ -87,6 +87,8 @@ export const useProjectStore = defineStore('project', {
             try {
                 var savedProject = await fetch((iseUrl + saveProjectPath), settings)
                 .then((response) => response.json());
+                if(savedProject.id === undefined)
+                    throw savedProject;
                 project.id = savedProject.id;
                 project.lastUpdate = savedProject.lastUpdate;
             } catch (error) {

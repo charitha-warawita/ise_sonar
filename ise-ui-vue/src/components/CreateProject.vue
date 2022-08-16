@@ -296,8 +296,9 @@ async function SaveforLater(project) {
         else {
             alert('project saved as draft successfully. New project ID is ' + project.tempId);
             useProjStore.$reset();
+            router.push('/');
         }
-        router.push('/');
+        
     }
 }
 function DiscardProject() {

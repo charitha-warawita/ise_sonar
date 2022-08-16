@@ -21,6 +21,7 @@ builder.Services.AddTransient<IProjectContext, ProjectContext>();
 
 builder.Services.AddTransient<ITargetAudienceService, TargetAudienceService>();
 builder.Services.AddTransient<ITargetAudienceContext, TargetAudienceContext>();
+builder.Services.AddTransient<IProjectCintContext, ProjectCintContext>();
 
 builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("ConnectionStrings"));
 

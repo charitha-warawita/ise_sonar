@@ -43,11 +43,21 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             if (project == null)
                 throw new ArgumentNullException("project model not found", nameof(project));
 
-            // project = await CreateProject(project);
-            project = await _samplingService.CreateProject(project);
-            project.Status = Model.Status.Created;
-            // ModelMapping(project, true);
-            // _dataContext.SaveChanges();
+            try
+            {
+
+
+                project = await CreateProject(project);
+                project = await _samplingService.CreateProject(project);
+                project.Status = Model.Status.Created;
+                // ModelMapping(project, true);
+                // _dataContext.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Failed in Launch project service - " + ex.Message, ex);
+            }
+
             return project;
         }
 
