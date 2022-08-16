@@ -16,8 +16,9 @@ const props = defineProps({
 
 <style scoped>
 .p-button {
-	background-color: var(--blue-300);
+	background-color: #ffffff;
 	border: var(--blue-300) 1px solid;
+	color: var(--blue-300);
 	width: 100%;
 }
 

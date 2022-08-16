@@ -192,7 +192,7 @@ onMounted(async () => {
 	.overview-content {
 		display: flex;
 
-		@media screen and (max-length: $lg) {
+		@media screen and (max-width: $lg) {
 			flex-direction: column;
 		}
 
