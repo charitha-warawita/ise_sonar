@@ -9,10 +9,13 @@ import { useProjectService } from '@/services/ProjectService';
 import { useTargetAudienceService } from '@/services/TargetAudienceService';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore.js';
 import { format } from 'date-fns';
-import { onMounted, ref, type Ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useToast } from 'primevue/usetoast';
+import { onMounted, ref, watch, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
+const router = useRouter();
+const toast = useToast();
 const breadcrumbs = useBreadcrumbStore();
 const projectService = useProjectService();
 const targetAudienceService = useTargetAudienceService();
@@ -20,10 +23,45 @@ const targetAudienceService = useTargetAudienceService();
 const projectId = Number.parseInt(route.params.project as string);
 const audienceId = Number.parseInt(route.params.ta as string);
 
+const hasChanged = ref(false);
 const project: Ref<Project | null> = ref(null);
 const audience: Ref<TargetAudience | null> = ref(null);
 
-const Save = (): void => {};
+const name = ref('');
+
+watch(
+	audience,
+	() => {
+		if (!project.value) return;
+		hasChanged.value = true;
+	},
+	{
+		deep: true,
+	}
+);
+
+const Save = async (): Promise<void> => {
+	if (!audience.value) return;
+
+	await targetAudienceService.UpdateAsync(audience.value).then(() => {
+		hasChanged.value = false;
+
+		toast.add({
+			severity: 'success',
+			summary: 'Target Audience Update',
+			detail: 'Successfully updated the Target Audience.',
+			life: 3000,
+		});
+
+		// Do we want to redirect here?
+		router.push({
+			name: 'project',
+			params: {
+				id: audience.value?.ProjectId,
+			},
+		});
+	});
+};
 
 const AddElement = (): void => {};
 
@@ -31,10 +69,15 @@ onMounted(async () => {
 	audience.value = await targetAudienceService.GetAsync(projectId, audienceId);
 	project.value = await projectService.GetAsync(projectId);
 
+	if (!audience.value || !project.value) return;
+
+	// TODO: Check for null audience/project, handle accordingly.
+	name.value = audience.value.Name;
+
 	if (!breadcrumbs.items.some((i) => i.label === 'Target Audience')) {
 		breadcrumbs.$patch((state) => {
 			state.items.push({
-				label: 'Target Audience', // NOTE: Should this be dynamic to the TA name?
+				label: audience.value?.Name,
 			});
 		});
 	}
@@ -45,7 +88,7 @@ onMounted(async () => {
 	<PageDetails>
 		<div class="page-details">
 			<div class="page-details-top-row">
-				<div class="project-name">{{ project?.Name }} > {{ audience?.Name }}</div>
+				<div class="project-name">{{ project?.Name }} > {{ name }}</div>
 			</div>
 			<div class="page-details-content-row">
 				<div class="page-details-content-start">
@@ -75,7 +118,7 @@ onMounted(async () => {
 						<SecondaryButton square label="Add Element" @click="AddElement" />
 					</div>
 					<div class="detail-button">
-						<PrimaryButton square label="Save" @click="Save" />
+						<PrimaryButton square :disabled="!hasChanged" label="Save" @click="Save" />
 					</div>
 				</div>
 			</div>
@@ -83,7 +126,7 @@ onMounted(async () => {
 	</PageDetails>
 
 	<div v-if="audience">
-		<BasicSettings :target-audience="audience" />
+		<BasicSettings v-model:target-audience="audience" />
 	</div>
 	<div v-else></div>
 </template>
@@ -134,42 +177,6 @@ onMounted(async () => {
 					margin-bottom: 10px;
 				}
 			}
-		}
-	}
-}
-
-.overview {
-	display: grid;
-	grid-gap: 10px;
-	padding: 10px 0;
-
-	.overview-top-row {
-		display: flex;
-
-		.project-name {
-			font-weight: bold;
-			flex-grow: 1;
-		}
-	}
-
-	.overview-content {
-		display: flex;
-
-		@media screen and (max-length: $lg) {
-			flex-direction: column;
-		}
-
-		> div {
-			flex-grow: 1;
-
-			> span:first-of-type {
-				font-weight: bold;
-			}
-		}
-
-		& > .progress-bar {
-			flex-grow: 3;
-			text-align: end;
 		}
 	}
 }

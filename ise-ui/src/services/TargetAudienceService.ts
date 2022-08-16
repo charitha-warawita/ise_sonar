@@ -29,9 +29,19 @@ export function useTargetAudienceService() {
 		return Promise.resolve(id);
 	};
 
+	const UpdateAsync = async (targetAudience: TargetAudience): Promise<void> => {
+		const i = targetAudienceStore.targetAudiences.findIndex(
+			(ta) => ta.ProjectId === targetAudience.ProjectId && ta.Id === targetAudience.Id
+		);
+		if (i === -1) return Promise.reject('Target Audience does not exist.');
+		targetAudienceStore.targetAudiences[i] = targetAudience;
+		return Promise.resolve();
+	};
+
 	return {
 		GetAllAsync,
 		GetAsync,
 		CreateAsync,
+		UpdateAsync,
 	};
 }
