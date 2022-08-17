@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref, watch, type Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import TargetAudienceFeatureModal from '../components/modals/TargetAudienceFeatureModal.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -23,11 +24,11 @@ const targetAudienceService = useTargetAudienceService();
 const projectId = Number.parseInt(route.params.project as string);
 const audienceId = Number.parseInt(route.params.ta as string);
 
+const name = ref('');
 const hasChanged = ref(false);
 const project: Ref<Project | null> = ref(null);
 const audience: Ref<TargetAudience | null> = ref(null);
-
-const name = ref('');
+const featureModalVisible = ref(false);
 
 watch(
 	audience,
@@ -63,7 +64,9 @@ const Save = async (): Promise<void> => {
 	});
 };
 
-const AddElement = (): void => {};
+const AddElement = (): void => {
+	featureModalVisible.value = true;
+};
 
 onMounted(async () => {
 	audience.value = await targetAudienceService.GetAsync(projectId, audienceId);
@@ -129,6 +132,8 @@ onMounted(async () => {
 		<BasicSettings v-model:target-audience="audience" />
 	</div>
 	<div v-else></div>
+
+	<TargetAudienceFeatureModal v-model:visible="featureModalVisible" />
 </template>
 
 <style scoped lang="scss">
