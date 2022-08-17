@@ -1,7 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import FeatureRoot from './FeatureRoot.vue';
+</script>
 
 <template>
-	<div>Profling</div>
+	<FeatureRoot>
+		<div>Profiling</div>
+	</FeatureRoot>
 </template>
 
 <style scoped lang="scss"></style>

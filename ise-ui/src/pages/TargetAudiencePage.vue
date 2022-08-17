@@ -64,8 +64,12 @@ const Save = async (): Promise<void> => {
 	});
 };
 
-const AddElement = (): void => {
+const AddElement = () => {
 	featureModalVisible.value = true;
+};
+
+const FeatureSaved = () => {
+	featureModalVisible.value = false;
 };
 
 onMounted(async () => {
@@ -133,7 +137,11 @@ onMounted(async () => {
 	</div>
 	<div v-else></div>
 
-	<TargetAudienceFeatureModal v-model:visible="featureModalVisible" />
+	<TargetAudienceFeatureModal
+		v-model:visible="featureModalVisible"
+		@selected="FeatureSaved"
+		@canceled="featureModalVisible = false"
+	/>
 </template>
 
 <style scoped lang="scss">
