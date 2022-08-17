@@ -30,7 +30,7 @@ builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("Co
 var cintApiSettings = builder.Configuration.GetSection("CintApiSettings");
 builder.Services.Configure<CintApiSettings>(cintApiSettings);
 
-builder.Services.AddHttpClient<ISamplingService, CintSamplingService>(client =>
+builder.Services.AddHttpClient<ICintSamplingService, CintSamplingService>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("CintApiSettings:Url"));
     client.DefaultRequestHeaders.Accept.Clear();

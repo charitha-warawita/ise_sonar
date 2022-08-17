@@ -4,7 +4,7 @@ using IntelligentSampleEnginePOC.API.Http.Tests.MockModelData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-
+using System;
 
 namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
 {
@@ -95,6 +95,19 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
 
+        }
+
+        [Theory]
+        [InlineData("Travel")]
+        public void GetQuestions_ReturnsStatusCode500(string categoryName)
+        {
+            _projectReferenceService.Setup(repo => repo.GetQuestions(categoryName)).Throws(new Exception("Test Exception"));
+            var result = _referenceController.GetQuestions(categoryName);
+            var objectResult = Assert.IsType<ObjectResult>(result);
+            Assert.NotNull(result);
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal(500, objectResult.StatusCode);
+            Assert.Equal("Exception occured - Test Exception", objectResult.Value);
         }
 
         [Theory]

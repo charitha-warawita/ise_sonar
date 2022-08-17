@@ -85,7 +85,7 @@ const toggleCategory = (id) => {
         element.className = tempClass.replace('btn-light', 'searchButton');
     }
     else {
-        var currIndex = project.categories.indexOf(id);
+        var currIndex = useProjStore.project.categories.indexOf(id);
         if(currIndex !== -1) useProjStore.project.categories.splice(currIndex, 1);
         element.className = tempClass.replace('searchButton', 'btn-light');;
     }

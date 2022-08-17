@@ -20,7 +20,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
         public int EstimatedIR { get; set; }
         [JsonProperty(PropertyName = "estimatedLOI")]
         public int EstimatedLOI { get; set; }
-        [JsonProperty(PropertyName = "wantedCompletes")]
+        [JsonProperty(PropertyName = "limit")]
         public int Limit { get; set; }
         [JsonProperty(PropertyName = "limitType"), System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? LimitType { get; set; }

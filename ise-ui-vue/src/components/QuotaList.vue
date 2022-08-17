@@ -202,7 +202,7 @@ function SaveCurrentQuota(taId) {
 }
 
 onMounted(() => {
-  useQuotaDataStore.LoadDefaultCurrentQuota();
+  useQuotaDataStore.$reset()
 });
 </script>
 
