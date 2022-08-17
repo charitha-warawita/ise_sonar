@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import TargetAudience from '@/model/TargetAudience';
+import type { TargetAudience } from '@/types/TargetAudience';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import { useToast } from 'primevue/usetoast';
 import { computed, reactive } from 'vue';
 import PrimaryButton from '../buttons/PrimaryButton.vue';
 
-const props = defineProps({ visible: Boolean, projectId: { type: Number, required: true } });
+const props = defineProps<{
+	projectId: number;
+	visible: boolean;
+}>();
 const emits = defineEmits<{
 	(event: 'update:visible', value: boolean): void;
 	(event: 'created', value: TargetAudience): void;
 }>();
+
 const visible = computed({
 	get: () => props.visible,
 	set: (value) => emits('update:visible', value),
@@ -30,11 +34,13 @@ const Create = () => {
 	// TODO: Use validator instead.
 	if (fields.Name == null || fields.EstimatedIR == null || fields.EstimatedLOI == null) return;
 
-	const ta = new TargetAudience();
-	ta.ProjectId = props.projectId;
-	ta.Name = fields.Name;
-	ta.EstimatedIR = Number.parseInt(fields.EstimatedIR);
-	ta.EstimatedLOI = Number.parseInt(fields.EstimatedLOI);
+	const ta = {
+		ProjectId: props.projectId,
+		Name: fields.Name,
+		EstimatedIR: Number.parseInt(fields.EstimatedIR),
+		EstimatedLOI: Number.parseInt(fields.EstimatedLOI),
+		Limit: 100,
+	} as TargetAudience;
 
 	emits('created', ta);
 

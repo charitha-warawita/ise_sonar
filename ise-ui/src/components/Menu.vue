@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import Menubar from 'primevue/menubar';
-import type { MenuItem } from 'primevue/menuitem';
-import Breadcrumb from 'primevue/breadcrumb';
-import { ref, type Ref } from 'vue';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore.js';
 import { useMenuStore } from '@/stores/MenuStore.js';
+import Breadcrumb from 'primevue/breadcrumb';
+import Menubar from 'primevue/menubar';
+import type { MenuItem } from 'primevue/menuitem';
+import { ref } from 'vue';
 
 const breadcrumbs = useBreadcrumbStore();
 const menu = useMenuStore();
 
-const items: Ref<MenuItem[]> = ref([
+const items = ref<MenuItem[]>([
 	{
 		label: 'Projects',
 		icon: 'pi pi-circle-fill',

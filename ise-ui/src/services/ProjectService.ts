@@ -1,58 +1,53 @@
-import type Project from '@/model/Project';
+// import type Project from '@/model/Project';
 import { useProjectStore } from '@/stores/ProjectStore';
+import { ProjectSchema, type Project } from '@/types/Project';
+import { z } from 'zod';
 
-// NOTE: Does this need to be a composable? Nothing reactive, but we'll be using a store.
 // TODO: Implement API calls.
 export function useProjectService() {
 	const projectStore = useProjectStore();
 
-	const GetAllAsync = async (): Promise<Project[]> => {
-		const result = [...projectStore.projects] as Project[];
+	const GetAllAsync = async () => {
+		const result = [...projectStore.projects] as Project[]; // TODO: Replace with API Call.
+		if (result.length === 0) return result;
 
-		return Promise.resolve(result);
+		const r = await z.array(ProjectSchema).safeParseAsync(result);
+		return r.success ? r.data : Promise.reject(r.error);
 	};
 
-	const GetAsync = async (id: number): Promise<Project | null> => {
-		const result = projectStore.projects.find((p) => p.Id === id) ?? null;
+	const GetAsync = async (id: number) => {
+		const result = projectStore.projects.find((p) => p.Id === id) ?? null; // TODO: Replace with API Call.
+		if (!result) return null;
 
-		const p = Object.assign({}, result) as Project;
+		const proj = Object.assign({}, result);
 
-		return Promise.resolve(p);
+		const p = await ProjectSchema.safeParseAsync(proj);
+		return p.success ? p.data : Promise.reject(p.error);
 	};
 
-	const GetByNameAsync = async (filter: string): Promise<Project[]> => {
-		const result = projectStore.projects.filter((p) => p.Name.includes(filter));
+	const CreateAsync = async (p: Project) => {
+		const validation = await ProjectSchema.safeParseAsync(p);
+		if (!validation.success) return Promise.reject(validation.error);
 
-		return Promise.resolve(result);
-	};
-
-	const CreateAsync = async (p: Project): Promise<number> => {
-		const result = projectStore.projects.push(p);
-
-		return Promise.resolve(result);
+		p.Id = projectStore.projects.length + 1;
+		const result = projectStore.projects.push(p); // TODO: Replace with API Call.
+		return result;
 	};
 
 	const UpdateAsync = async (p: Project): Promise<void> => {
-		if (p.Id === -1) return Promise.reject('Project does not have a valid Id.');
+		const validation = await ProjectSchema.safeParseAsync(p);
+		if (!validation.success) return Promise.reject(validation.error);
 
-		const i = projectStore.projects.findIndex((x) => x.Id == p.Id);
+		const i = projectStore.projects.findIndex((x) => x.Id == p.Id); // TODO: Replace with API Call.
 		if (i === -1) return Promise.reject('Project Not Found');
 
-		const proj = projectStore.projects[i];
-		proj.Name = p.Name;
-		proj.MaconomyNumber = p.MaconomyNumber;
-		proj.Owner = p.Owner;
-		proj.StartDate = p.StartDate;
-		proj.EndDate = p.EndDate;
-		proj.LastActivity = new Date();
-
-		return Promise.resolve();
+		p.LastActivity = new Date();
+		projectStore.projects[i] = p;
 	};
 
 	return {
 		GetAllAsync,
 		GetAsync,
-		GetByNameAsync,
 		CreateAsync,
 		UpdateAsync,
 	};

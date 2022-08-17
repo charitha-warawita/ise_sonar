@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import TargetAudience from '@/model/TargetAudience.js';
+import type { TargetAudience } from '@/types/TargetAudience.js';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import { computed } from 'vue';
 
-const props = defineProps({
-	targetAudience: {
-		type: TargetAudience,
-		required: true,
-	},
-});
+const props = defineProps<{
+	targetAudience: TargetAudience;
+}>();
 const emits = defineEmits<{
 	(event: 'update:targetAudience', ta: TargetAudience): void;
 }>();

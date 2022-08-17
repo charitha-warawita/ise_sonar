@@ -1,22 +1,19 @@
 <script setup lang="ts">
-import { reactive, computed, ref, type Ref } from 'vue';
-import { required, helpers } from '@vuelidate/validators';
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import type { Project } from '@/types/Project';
 import { useVuelidate } from '@vuelidate/core';
+import { helpers, required } from '@vuelidate/validators';
+import Calendar from 'primevue/calendar';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
-import Calendar from 'primevue/calendar';
-import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
-import Project from '@/model/Project';
+import { computed, reactive, ref } from 'vue';
 
-const props = defineProps({
-	project: {
-		type: Project,
-		required: false,
-	},
-});
+const props = defineProps<{
+	project?: Project;
+}>();
 const emits = defineEmits(['submitted']);
 const today = new Date();
-const submitted: Ref<boolean> = ref(false);
+const submitted = ref(false);
 const fields = reactive<{
 	Name: string;
 	MaconomyNumber: string;
@@ -59,7 +56,7 @@ const rules = computed(() => ({
 }));
 const vuelidate = useVuelidate(rules, fields);
 
-const HandleSubmit = (isFormValid: boolean): void => {
+const HandleSubmit = (isFormValid: boolean) => {
 	submitted.value = true;
 
 	if (!isFormValid) return;
@@ -71,26 +68,26 @@ const HandleSubmit = (isFormValid: boolean): void => {
 const CreateProject = (): Project => {
 	if (!fields.StartDate || !fields.EndDate) throw 'StartDate or EndDate is null.';
 
-	const project = new Project(
-		fields.Name,
-		fields.MaconomyNumber,
-		fields.Owner,
-		fields.StartDate,
-		fields.EndDate
-	);
-
-	return project;
+	return {
+		Id: -1,
+		Name: fields.Name,
+		MaconomyNumber: fields.MaconomyNumber,
+		Owner: fields.Owner,
+		StartDate: fields.StartDate,
+		EndDate: fields.EndDate,
+		CreationDate: new Date(),
+		LastActivity: new Date(),
+	} as Project;
 };
 
 const UpdateProject = (): Project => {
-	if (!props.project) throw 'Cannot update project when "project" prop is null.';
+	if (!props.project) throw 'Cannot update project when "project" prop is undefined.';
 	if (!fields.StartDate || !fields.EndDate) throw 'StartDate or EndDate is null.';
 
-	const p: Project = Object.assign({}, props.project, fields);
-	return p;
+	return Object.assign({} as Project, props.project, fields);
 };
 
-const SetFields = (): void => {
+const SetFields = () => {
 	if (!props.project) return;
 
 	fields.Name = props.project.Name;

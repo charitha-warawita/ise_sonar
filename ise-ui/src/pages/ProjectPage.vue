@@ -2,18 +2,18 @@
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import ProjectDetailsModal from '@/components/modals/ProjectDetailsModal.vue';
 import PageDetails from '@/components/PageDetails.vue';
-import Pricing from '@/components/pages/project/Pricing.vue';
 import TargetAudienceList from '@/components/pages/project/TargetAudienceList.vue';
-import type Project from '@/model/Project';
-import type TargetAudience from '@/model/TargetAudience';
 import { useProjectService } from '@/services/ProjectService';
 import { useTargetAudienceService } from '@/services/TargetAudienceService';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
+import type { Project } from '@/types/Project';
+import type { TargetAudience } from '@/types/TargetAudience';
 import { format } from 'date-fns';
 import type { MenuItem } from 'primevue/menuitem';
 import { useToast } from 'primevue/usetoast';
-import { onMounted, ref, type Ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import PricingBox from '../components/pages/project/PricingBox.vue';
 
 const route = useRoute();
 const breadcrumb = useBreadcrumbStore();
@@ -22,16 +22,16 @@ const projectService = useProjectService();
 const targetAudienceService = useTargetAudienceService();
 
 const id = Number.parseInt(route.params.id as string);
-const project: Ref<Project | null> = ref(null);
-const visible: Ref<boolean> = ref(false);
+const project = ref<Project | null>(null);
+const visible = ref(false);
 
-const EditProjectDetails = (): void => {
+const EditProjectDetails = () => {
 	if (!project.value) return;
 
 	visible.value = true;
 };
 
-const UpdateProjectDetails = async (p: Project): Promise<void> => {
+const UpdateProjectDetails = async (p: Project) => {
 	if (!project.value) return;
 
 	// TODO: API call to update record in DB.
@@ -143,7 +143,7 @@ onMounted(async () => {
 		</div>
 
 		<div class="pricing-container">
-			<Pricing />
+			<PricingBox />
 		</div>
 	</div>
 	<ProjectDetailsModal

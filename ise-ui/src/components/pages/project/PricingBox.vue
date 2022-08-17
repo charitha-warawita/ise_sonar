@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
-import { reactive, computed } from 'vue';
+import { computed, reactive } from 'vue';
 
-const emits = defineEmits(['created']);
+const emits = defineEmits<{
+	(event: 'created'): void;
+}>();
 
-// TODO: Give more complete calculation, take project in as prop?
 const pricing = reactive({
 	FirstField: 100,
 	SecondField: 200,

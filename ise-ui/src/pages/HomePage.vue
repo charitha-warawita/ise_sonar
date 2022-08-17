@@ -1,19 +1,16 @@
 <script async setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue';
-import { useRouter } from 'vue-router';
-
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import ProjectDetailsModal from '@/components/modals/ProjectDetailsModal.vue';
+import ProjectsGrid from '@/components/pages/home/ProjectsGrid.vue';
+import { useProjectService } from '@/services/ProjectService';
+import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
+import type { Project } from '@/types/Project';
 import type { DataTableRowSelectEvent } from 'primevue/datatable';
 import InputText from 'primevue/inputtext';
 import Panel from 'primevue/panel';
 import { useToast } from 'primevue/usetoast';
-
-import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
-import ProjectDetailsModal from '@/components/modals/ProjectDetailsModal.vue';
-import ProjectsGrid from '@/components/pages/home/ProjectsGrid.vue';
-
-import type Project from '@/model/Project';
-import { useProjectService } from '@/services/ProjectService';
-import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const toast = useToast();
@@ -21,10 +18,10 @@ const projectService = useProjectService();
 const breadcrumbs = useBreadcrumbStore();
 breadcrumbs.$reset();
 
-const projectFilter: Ref<string | null> = ref(null);
-const projects: Ref<Project[]> = ref([]);
+const projectFilter = ref<string | null>(null);
+const projects = ref([] as Project[]);
 
-const visible: Ref<boolean> = ref(false);
+const visible = ref(false);
 const showModal = () => {
 	visible.value = true;
 };
@@ -52,7 +49,7 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 	});
 };
 
-const LoadProjects = async (): Promise<void> => {
+const LoadProjects = async () => {
 	projects.value = await projectService.GetAllAsync();
 };
 
@@ -61,7 +58,6 @@ onMounted(async () => {
 });
 </script>
 
-<!-- Should we refactor Project filter, Project Grid and Project Modal into a separate comp? -->
 <template>
 	<div class="home-container">
 		<div class="search-box">

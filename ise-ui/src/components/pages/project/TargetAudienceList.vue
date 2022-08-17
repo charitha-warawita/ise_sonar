@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import CreateTargetAudienceModal from '@/components/modals/CreateTargetAudienceModal.vue';
-import type TargetAudience from '@/model/TargetAudience.js';
 import { useTargetAudienceService } from '@/services/TargetAudienceService';
+import type { TargetAudience } from '@/types/TargetAudience.js';
 import DataView from 'primevue/dataview';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -10,16 +10,10 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const targetAudienceService = useTargetAudienceService();
 
-const props = defineProps({
-	targetAudiences: {
-		type: Array<TargetAudience>,
-		required: true,
-	},
-	projectId: {
-		type: Number,
-		required: true,
-	},
-});
+const props = defineProps<{
+	targetAudiences: TargetAudience[];
+	projectId: number;
+}>();
 const emits = defineEmits<{
 	(event: 'created', audience: TargetAudience): void;
 }>();

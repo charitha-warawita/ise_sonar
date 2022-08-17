@@ -8,7 +8,7 @@ import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import ListBox from 'primevue/listbox';
 import ScrollPanel from 'primevue/scrollpanel';
-import { computed, markRaw, ref, type Component, type Ref } from 'vue';
+import { computed, markRaw, ref, type Component } from 'vue';
 
 const emits = defineEmits<{
 	(event: 'selected'): void;
@@ -25,8 +25,8 @@ type ListItem = {
 	value: ComponentConfig;
 };
 
-const filter: Ref<string | null> = ref(null);
-const selected: Ref<ComponentConfig | null> = ref(null);
+const filter = ref<string | null>(null);
+const selected = ref<ComponentConfig | null>(null);
 const features: ListItem[] = [
 	{
 		label: 'Qualifications',

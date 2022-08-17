@@ -3,14 +3,14 @@ import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import SecondaryButton from '@/components/buttons/SecondaryButton.vue';
 import PageDetails from '@/components/PageDetails.vue';
 import BasicSettings from '@/components/pages/project/target-audience/BasicSettings.vue';
-import type Project from '@/model/Project';
-import type TargetAudience from '@/model/TargetAudience';
 import { useProjectService } from '@/services/ProjectService';
 import { useTargetAudienceService } from '@/services/TargetAudienceService';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore.js';
+import type { Project } from '@/types/Project';
+import type { TargetAudience } from '@/types/TargetAudience';
 import { format } from 'date-fns';
 import { useToast } from 'primevue/usetoast';
-import { onMounted, ref, watch, type Ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import TargetAudienceFeatureModal from '../components/modals/TargetAudienceFeatureModal.vue';
 
@@ -26,8 +26,8 @@ const audienceId = Number.parseInt(route.params.ta as string);
 
 const name = ref('');
 const hasChanged = ref(false);
-const project: Ref<Project | null> = ref(null);
-const audience: Ref<TargetAudience | null> = ref(null);
+const project = ref<Project | null>(null);
+const audience = ref<TargetAudience | null>(null);
 const featureModalVisible = ref(false);
 
 watch(
@@ -54,7 +54,6 @@ const Save = async (): Promise<void> => {
 			life: 3000,
 		});
 
-		// Do we want to redirect here?
 		router.push({
 			name: 'project',
 			params: {
@@ -75,7 +74,6 @@ const FeatureSaved = () => {
 onMounted(async () => {
 	audience.value = await targetAudienceService.GetAsync(projectId, audienceId);
 	project.value = await projectService.GetAsync(projectId);
-
 	if (!audience.value || !project.value) return;
 
 	// TODO: Check for null audience/project, handle accordingly.

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type Project from '@/model/Project.js';
+import type { Project } from '@/types/Project.js';
 import { format } from 'date-fns';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
