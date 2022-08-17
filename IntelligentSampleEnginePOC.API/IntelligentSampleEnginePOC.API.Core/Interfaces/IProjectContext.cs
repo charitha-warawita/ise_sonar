@@ -13,6 +13,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 
         long UpdateProjectStatus(long projectId, Status status);
 
-        List<Project> GetProjects(int? status,int pageNumber, string? searchString, int recentCount);
+        ProjectList GetProjects(int? status,int pageNumber, string? searchString, int recentCount);
     }
 }

@@ -37,9 +37,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             return project;
         }
 
-        public List<Project> GetProjects(int? status,int pageNumber, string? searchString, int recentCount)        {
-
+        public ProjectList GetProjects(int? status,int pageNumber, string? searchString, int recentCount)        
+        {
+            ProjectList projectList = new ProjectList();
             List<Project> projects = new List<Project>();
+            var isTotalCountRecorded = false;
             using (SqlConnection connection = new SqlConnection(_options.iseDb))
             {
                 using (SqlCommand command = new SqlCommand("GetProjects"))
@@ -71,13 +73,20 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                             project.StartDate = reader.IsDBNull("StartDate") ? default : (DateTime)reader["StartDate"];
                             project.FieldingPeriod = reader.IsDBNull("FieldingPeriod") ? 0 : (int)reader["FieldingPeriod"];
                             project.Status = (Status)(int)reader["Status"];
-                            projects.Add(project);                           
+                            projects.Add(project);                         
+                            
+                            if(!isTotalCountRecorded)
+                            {
+                                projectList.TotalItems = reader.IsDBNull("RCount") ? 0: (long)reader["RCount"];
+                                isTotalCountRecorded = true;
+                            }
                         }
+                        projectList.Projects = projects;
                     }
                     connection.Close();
                 }
             }
-            return projects;
+            return projectList;
         }
 
         public long UpdateProjectStatus(long projectId, Status status)
