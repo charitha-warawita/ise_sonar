@@ -65,10 +65,13 @@ onMounted(async () => {
 <template>
 	<div class="home-container">
 		<div class="search-box">
-			<span class="p-float-label">
-				<InputText class="project-filter-input" id="search" type="text" v-model="projectFilter" />
-				<label for="search">Search</label>
-			</span>
+			<InputText
+				class="project-filter-input"
+				id="search"
+				type="text"
+				v-model="projectFilter"
+				placeholder="Search"
+			/>
 		</div>
 		<div class="button-cell">
 			<PrimaryButton square label="Create Project" @click="showModal" />
