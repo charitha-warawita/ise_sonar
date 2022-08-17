@@ -26,19 +26,14 @@ const ta = computed<TargetAudience>({
 			<div class="basic-input-row">
 				<div class="basic-input">
 					<span class="p-float-label">
-						<InputText id="ta-name" class="ta-input" type="text" v-model="ta.Name" />
+						<InputText id="ta-name" class="ta-input" v-model="ta.Name" />
 						<label for="ta-name">Target Audience Name</label>
 					</span>
 				</div>
 
 				<div class="basic-input">
 					<span class="p-float-label">
-						<InputNumber
-							id="ta-estimated-ir"
-							class="ta-input"
-							type="number"
-							v-model="ta.EstimatedIR"
-						/>
+						<InputNumber id="ta-estimated-ir" class="ta-input" v-model="ta.EstimatedIR" />
 						<label for="ta-estimated-ir">Estimated IR</label>
 					</span>
 				</div>
@@ -46,12 +41,7 @@ const ta = computed<TargetAudience>({
 			<div class="basic-input-row">
 				<div class="basic-input">
 					<span class="p-float-label">
-						<InputNumber
-							id="ta-estimated-ir"
-							class="ta-input"
-							type="number"
-							v-model="ta.EstimatedLOI"
-						/>
+						<InputNumber id="ta-estimated-ir" class="ta-input" v-model="ta.EstimatedLOI" />
 						<label for="ta-estimated-loi">Estimated LOI</label>
 					</span>
 				</div>
