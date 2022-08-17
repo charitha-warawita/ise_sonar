@@ -9,7 +9,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 {
     public interface IQualificationService
     {
-        List<Qualification> GetQualification();
+        List<Qualification> GetQualification(long  qid);
 
         Qualification CreateQualification (long? taid,  Qualification qualData);
     

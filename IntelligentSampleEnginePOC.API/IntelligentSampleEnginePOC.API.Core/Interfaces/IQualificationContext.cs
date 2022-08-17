@@ -9,7 +9,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 {
     public interface IQualificationContext
     {
-        List<Qualification> GetQualificationsFromDB();
+        List<Qualification> GetQualificationsFromDB( long qid);
 
         Qualification CreateQualification(long taid, Qualification qualData);
     }

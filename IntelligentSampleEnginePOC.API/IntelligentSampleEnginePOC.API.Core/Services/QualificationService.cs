@@ -20,9 +20,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             _qualificationContext = qualificationContext;
        }
 
-        public List<Qualification> GetQualification()
+        public List<Qualification> GetQualification(long qid)
         {
-            return _qualificationContext.GetQualificationsFromDB();
+            return _qualificationContext.GetQualificationsFromDB( qid);
         }
 
 

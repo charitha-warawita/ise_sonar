@@ -21,11 +21,11 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         }
 
         [HttpGet("qualifications")]
-        public ActionResult GetQualification()
+        public ActionResult GetQualification( long qid)
         {
             try
             {
-                var qualificationList = _qualificationService.GetQualification();
+                var qualificationList = _qualificationService.GetQualification(qid);
                 return Ok(qualificationList);
             }
             catch (Exception ex)

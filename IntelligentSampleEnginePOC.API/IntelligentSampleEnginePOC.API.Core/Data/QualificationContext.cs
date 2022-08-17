@@ -20,37 +20,63 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             _options = databaseOptions.Value;
         }
 
-        public List<Qualification> GetQualificationsFromDB()
+        public List<Qualification> GetQualificationsFromDB(long qid)
         {
             List<Qualification> qualifications = new List<Qualification>();
+            
             using (SqlConnection connection = new SqlConnection(_options.iseDb))
             {
                 using (SqlCommand command = new SqlCommand("GetQualifications"))
                 {
                     command.CommandType = System.Data.CommandType.StoredProcedure;
                     command.Connection = connection;
+                    command.Parameters.AddWithValue("@qid", Convert.ToString(qid));
                     connection.Open();
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.HasRows)
                     {
+                        Qualification qualification = new Qualification();
+                        Question currQuestion = new Question();
                         while (reader.Read())
                         {
-                            Qualification qualification = new Qualification();
-                            
-                            qualification.Id = Convert.ToInt32(reader[0]);
-                            qualification.Name = Convert.ToString(reader[1]);
-                            qualification.Order = Convert.ToInt32(reader[2]);
-                            qualification.LogicalDecision = (string)reader[3];
-                            //qualification.NumberOfRequiredConditions = Convert.ToInt32(reader[4]);
-                            // qualification.IsActive = Convert.ToBoolean(reader[5]);
-                            //if (qualification.Question != null)
-                            //{
-                                Question currQuestion = new Question();
-                                currQuestion.Name = Convert.ToString(reader[6]);
-                                qualification.Question = currQuestion;  
-                            //}
+                            if (qualification.Question is null)
+                            {
+                                qualification.Id = Convert.ToInt32(reader[0]);
+                                qualification.Name = Convert.ToString(reader[1]);
+                                qualification.Order = Convert.ToInt32(reader[2]);
+                                qualification.LogicalDecision = (string)reader[3];
+                                //qualification.NumberOfRequiredConditions = Convert.ToInt32(reader[4]);
+                                // qualification.IsActive = Convert.ToBoolean(reader[5]);
+                                    currQuestion.Id = Convert.ToInt32(reader[6]);
+                                    currQuestion.Name = Convert.ToString(reader[7]);
+                                    currQuestion.Text = Convert.ToString(reader[8]);
+                                    currQuestion.CategoryName = Convert.ToString(reader[9]);
 
-                            qualifications.Add(qualification);
+                                    currQuestion.Variables = new List<Variable>();
+                                    qualification.Question = currQuestion;
+
+                                        if (qualification.Question != null)
+                                        {
+                                            Variable currVar = new Variable();
+                                            currVar.Id = Convert.ToInt32(reader[10]);
+                                            currVar.Name = Convert.ToString(reader[11]);
+                                            Variable Variable = (currVar);
+                                            currQuestion.Variables.Add(Variable);
+                                        }
+                               qualifications.Add(qualification);
+                            }
+                            else
+                            {
+                                if (qualification.Question != null)
+                                {
+                                   Variable currVar = new Variable();
+                                    currVar.Id = Convert.ToInt32(reader[10]);
+                                    currVar.Name = Convert.ToString(reader[11]);
+                                    Variable Variable = (currVar);
+                                    currQuestion.Variables.Add(Variable);
+                                }
+                            }
+                            
                         }
                     }
                     reader.Close();
@@ -59,7 +85,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             }
             return qualifications;
         }
-
+        
 
 
         public Qualification CreateQualification(long taid, Qualification qualData)
