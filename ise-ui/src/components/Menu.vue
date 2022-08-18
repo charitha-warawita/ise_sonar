@@ -13,7 +13,7 @@ const items = ref<MenuItem[]>([
 	{
 		label: 'Projects',
 		icon: 'pi pi-circle-fill',
-		to: '/',
+		to: '/projects',
 	},
 	{
 		label: 'Settings',
