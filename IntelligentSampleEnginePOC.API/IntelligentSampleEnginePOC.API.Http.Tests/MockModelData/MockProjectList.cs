@@ -3,10 +3,11 @@
 
 namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
 {
-    public class ProjectList
+    public class MockProjectList
     {
-        public List<Project> GetTestProjectList(int? status, int pageNumber, string? searchString, int recordCount)
+        public ProjectList GetTestProjectList(int? status, int pageNumber, string? searchString, int recordCount)
         {
+            ProjectList projectList = new ProjectList();
             var projects = new List<Project>();
             
             projects.Add(new Project()
@@ -80,7 +81,9 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
                 if (projects != null)
                 {
                     projects = GetPage(projects, pageNumber, recordCount);
-                    return projects;
+                    projectList.Projects = projects;
+                    projectList.TotalItems = projects.Count();
+                    return projectList;
                 }
                 else
                     return null;
@@ -93,7 +96,12 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
                 projects = projects.FindAll(q => q.Name == searchString && q.Status == (Status)status);
 
             if (projects != null)
-                return projects;
+            {
+                projectList.Projects = projects;
+                projectList.TotalItems = projects.Count();
+                return projectList;
+            }
+                
             else
                 return null;
            

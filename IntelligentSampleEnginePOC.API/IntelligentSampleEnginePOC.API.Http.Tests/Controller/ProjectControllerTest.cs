@@ -76,9 +76,9 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         [InlineData(2, 1, "Test2", 3)]
         public void GetAllProjects_ReturnsOk(int? status,int pageNumber, string? searchString, int recordCount)
         {
-            _projectService.Setup(repo => repo.GetProjects(status, pageNumber, searchString, recordCount)).Returns(new ProjectList().GetTestProjectList(status, pageNumber, searchString, recordCount));
+            _projectService.Setup(repo => repo.GetProjects(status, pageNumber, searchString, recordCount)).Returns(new MockProjectList().GetTestProjectList(status, pageNumber, searchString, recordCount));
             var result = _projectController.GetProjects(status, pageNumber, searchString, recordCount);
-            int pageRecordCount = ((List<Project>)((ObjectResult)result).Value).Count;
+            long pageRecordCount = ((ProjectList)((ObjectResult)result).Value).TotalItems;
             Assert.NotNull(result);
             var okResult = Assert.IsType<OkObjectResult>(result);
             Assert.True((pageRecordCount < recordCount) || (recordCount == pageRecordCount), "paging check");
