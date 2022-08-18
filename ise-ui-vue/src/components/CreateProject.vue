@@ -58,6 +58,14 @@
                                             <label for="inputEmail4" class="form-label">Wanted Completes Count</label>
                                             <input type="number" class="form-control" id="inputEmail4" v-model="ta.limit" v-on:input="useProjStore.CalculateCharges($event)">
                                         </div>
+                                        <div class="col-md-12">
+                                            <label for="inputEmail4" class="form-label">Testing URL</label>
+                                            <input type="text" class="form-control" id="inputEmail4" v-model="ta.testingUrl">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="inputEmail4" class="form-label">Live URL</label>
+                                            <input type="text" class="form-control" id="inputEmail4" v-model="ta.liveUrl">
+                                        </div>
                                         <div class="accordion-item-custom">
                                             <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseThree-' + ta.tempId" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
@@ -202,7 +210,7 @@
                     <div class="breakDiv"></div><hr>
                     <div class="col-md-12">
                         <button @click="SubmitProject(project)" class="btn btn-outline-success searchButton me-2" style="width:100%; margin: 5px 0;">Create Project</button>
-                        <button @click="SaveforLater(project)" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;">Save as Draft</button>
+                        <!--<button @click="SaveforLater(project)" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;">Save as Draft</button>-->
                         <button @click="DiscardProject()" class="btn btn-outline-success btn-light me-2" style="width:100%; margin: 5px 0;">Cancel</button>
                     </div>
                 </div>
@@ -227,7 +235,7 @@ import { VueDraggableNext } from "vue-draggable-next";
 import { useRouter } from 'vue-router';
 
 import useVuelidate from '@vuelidate/core'
-import { helpers, required, minLength, email, minValue } from '@vuelidate/validators'
+import { helpers, required, minLength, email, minValue, url } from '@vuelidate/validators'
 
 defineProps(['open'])
 var draggable = VueDraggableNext
@@ -241,8 +249,6 @@ const rules = {
     reference: { required },
     startDate: { required },
     fieldingPeriod: { required, minValueValue:minValue(1) },
-    testingUrl: { required },
-    liveUrl: { required },
     categories: { required },
     user: { "name": { required }, "email": { required, email }  },
     targetAudiences: {
@@ -251,7 +257,11 @@ const rules = {
             "audienceNumber":{ required: helpers.withMessage('Audience order cannot be empty', required) },
             "estimatedIR": { required, minValueValue: helpers.withMessage(() => "Estimated IR minimum value allowed is 1", minValue(1))   },
             "estimatedLOI": { required, minValueValue: helpers.withMessage(() => 'Estimate LOI minimum value allowed is 1', minValue(1)) },
-            "limit": { required, minValueValue:helpers.withMessage(() => 'wanted Completes minimum value allowed is 1', minValue(1)) }
+            "limit": { required, minValueValue:helpers.withMessage(() => 'wanted Completes minimum value allowed is 1', minValue(1)) },
+            "testingUrl": { url:helpers.withMessage(() => 'Testing survey URL is not a valid URL address', url), 
+                    required:helpers.withMessage(() => 'Testing survey URL under target Audiences cannot be empty', required) },
+            "liveUrl": { url:helpers.withMessage(() => 'Live survey URL is not a valid URL address', url), 
+                    required:helpers.withMessage(() => 'Live survey URL under target Audiences cannot be empty', required) }
         })
     }
 };
@@ -266,7 +276,7 @@ const saveForLaterRules = {
 const router = useRouter();
 
 async function SubmitProject(project) {
-    project.lastUpdate = new Date();
+    // project.lastUpdate = new Date();
     if(await ProjectValidated(project, 'create')) {
         if(await useProjStore.ProjectAPIValidated(project))
             router.push('/confirm');
@@ -286,8 +296,9 @@ async function SaveforLater(project) {
         else {
             alert('project saved as draft successfully. New project ID is ' + project.tempId);
             useProjStore.$reset();
+            router.push('/');
         }
-        router.push('/');
+        
     }
 }
 function DiscardProject() {

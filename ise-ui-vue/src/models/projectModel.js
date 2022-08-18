@@ -1,5 +1,5 @@
 var projectModel = {
-'displayfields': ['status', 'name', 'lastUpdate', 'startDate', 'fieldingPeriod'],
+'displayfields': ['statusValue', 'name', 'lastUpdate', 'startDate', 'fieldingPeriod'],
 'displayFieldFormatted': ['Status', 'Name', 'Last Activity', 'Start Date', 'Fielding Period']
 }
 

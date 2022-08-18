@@ -38,16 +38,36 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             throw new ArgumentException("Project Validation failed", nameof(project));
         }
 
+        public async Task<long> UpdatePrjectStatus(long projectId, Status status)
+        {
+            if(projectId < 1)
+                throw new ArgumentException("Not a valid project", nameof(projectId));
+
+            return _projectContext.UpdateProjectStatus(projectId, status);
+
+        }
+
         public async Task<Project> LaunchProject(Project project)
         {
             if (project == null)
                 throw new ArgumentNullException("project model not found", nameof(project));
 
-            // project = await CreateProject(project);
-            project = await _samplingService.CreateProject(project);
-            project.Status = Model.Status.Created;
-            // ModelMapping(project, true);
-            // _dataContext.SaveChanges();
+            try
+            {
+
+
+                project = await CreateProject(project);
+                project = await _samplingService.CreateProject(project);
+                
+                project.Status = Model.Status.Created;
+                await UpdatePrjectStatus(project.Id, project.Status);
+
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Failed in Launch project service - " + ex.Message, ex);
+            }
+
             return project;
         }
 
@@ -59,7 +79,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             var result = _samplingService.ConvertToCintRequests(project);
             return result;
         }*/
-        public List<Project> GetProjects(int? status, int pageNumber, string? searchString, int recentCount)
+        public ProjectList GetProjects(int? status, int pageNumber, string? searchString, int recentCount)
         {
             return _projectContext.GetProjects(status, pageNumber, searchString, recentCount);
         }
@@ -96,6 +116,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
         private bool ProjectValidated(Project project)
         {
+            if (project != null && project.LastUpdate == null)
+                project.LastUpdate = DateTime.Now;
+
             return true;
         }
 

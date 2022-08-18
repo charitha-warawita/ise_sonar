@@ -33,13 +33,19 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
         public List<string> excludedByTags { get; set; }
         public statistics statistics { get; set; }
         public List<link> links { get; set; }
-        public List<string> errors { get; set; }
+        public List<error> errors { get; set; }
         public int priceSource { get; set; }
         public List<int> targetedPanelIds { get; set; }
         public int pricingStrategy { get; set; }
         public int fieldPeriod { get; set; }
         public bool useDeduplication { get; set; }
         public bool checkGeoIp { get; set; }
+    }
+
+    public class error
+    {
+        public string field { get; set; }
+        public string message { get; set; }
     }
 
     public class Cpi

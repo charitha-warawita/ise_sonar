@@ -45,14 +45,6 @@
                 <label for="inputEmail4" class="form-label">Fielding Period</label>
                 <input type="number" class="form-control" id="inputEmail4" v-model="useProjStore.project.fieldingPeriod">
             </div>
-            <div class="col-md-12">
-                <label for="inputEmail4" class="form-label">Testing URL</label>
-                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.testingUrl">
-            </div>
-            <div class="col-md-12">
-                <label for="inputEmail4" class="form-label">Live URL</label>
-                <input type="text" class="form-control" id="inputEmail4" v-model="useProjStore.project.liveUrl">
-            </div>
         </div>
     </div>                  
 </template>
@@ -61,20 +53,10 @@ import {useProjectSettingStore} from '@/stores/projectSettingStore'
 import { useProjectStore } from "@/stores/projectStore"; 
 import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
-// import useVuelidate from '@vuelidate/core'
-// import { required } from '@vuelidate/validators'
 
 var useProjSettingStore = useProjectSettingStore()
 var useProjStore = useProjectStore();
 const { categories, loading, error } = storeToRefs(useProjSettingStore)
-// const props = defineProps([ 'validations'])
-
-/*const rules = {
-    name: { required },
-    reference: { required }
-};*/
-
-// const v$ = useVuelidate(rules, useProjStore.project);
 
 const toggleCategory = (id) => {
     var catId = 'cat'+ id;

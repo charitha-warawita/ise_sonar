@@ -60,7 +60,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
         public targetGroup targetGroup { get; set; }
         
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public List<string> errors { get; set; }
+        public List<error> errors { get; set; }
 
     }
 
