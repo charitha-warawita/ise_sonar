@@ -26,7 +26,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         }
 
 
-        public Qualification CreateQualification(long? taid, Qualification qualData)
+        public Qualification CreateQualification(long projectId, long? taid, Qualification qualData)
         {
             if (taid == null)
                 throw new ArgumentNullException("TA Id  is not found");
@@ -34,7 +34,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 throw new ArgumentNullException("Qualification model  is not found", nameof(qualData));
 
             if (QualificationValidated(qualData))
-                return _qualificationContext.CreateQualification((long)taid, qualData);
+                return _qualificationContext.CreateQualification(projectId,(long)taid, qualData);
 
             throw new ArgumentException("Target Audience Validation failed", nameof(qualData));
         }

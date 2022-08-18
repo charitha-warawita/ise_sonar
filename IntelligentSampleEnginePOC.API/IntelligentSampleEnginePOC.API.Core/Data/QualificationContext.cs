@@ -88,7 +88,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
         
 
 
-        public Qualification CreateQualification(long taid, Qualification qualData)
+        public Qualification CreateQualification(long projectId ,long taid, Qualification qualData)
         {
             var qualJson = JsonConvert.SerializeObject(qualData);
 
@@ -98,6 +98,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                 {
                     command.CommandType = System.Data.CommandType.StoredProcedure;
                     command.Connection = connection;
+                    command.Parameters.AddWithValue("@projectId", Convert.ToString(projectId));
                     command.Parameters.AddWithValue("@taid", Convert.ToString(taid));
                     command.Parameters.AddWithValue("@QualificationJson", qualJson);
                     connection.Open();

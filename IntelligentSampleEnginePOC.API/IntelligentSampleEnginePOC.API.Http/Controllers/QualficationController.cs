@@ -36,11 +36,11 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
 
 
         [HttpPost("{taid}")]
-        public ActionResult Post(long? taid, [FromBody] Core.Model.Qualification qualData)
+        public ActionResult Post(long projectId ,long? taid, [FromBody] Core.Model.Qualification qualData)
         {
             try
             {
-                var resultQualification = _qualificationService.CreateQualification(taid, qualData);
+                var resultQualification = _qualificationService.CreateQualification(projectId,taid, qualData);
                 if (resultQualification != null)
                 {
                     return Ok(resultQualification);
