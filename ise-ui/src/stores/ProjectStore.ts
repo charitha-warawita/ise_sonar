@@ -18,7 +18,7 @@ export const useProjectStore = defineStore('projects', () => {
 		} as Project,
 		{
 			Id: 2,
-			Status: ProjectStatusEnum.enum.Draft,
+			Status: ProjectStatusEnum.enum.Started,
 			Name: 'An Example Open Project',
 			MaconomyNumber: '102038475',
 			Owner: 'Doe, John',

@@ -106,7 +106,7 @@ onMounted(async () => {
 			<div class="overview-content">
 				<div>
 					<span>Status: </span>
-					<span></span>
+					<span>{{ project?.Status }}</span>
 				</div>
 				<div>
 					<span>Owner: </span>

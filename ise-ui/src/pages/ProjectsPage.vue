@@ -1,7 +1,7 @@
 <script async setup lang="ts">
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import ProjectsGrid from '@/components/grids/ProjectsGrid.vue';
 import ProjectDetailsModal from '@/components/modals/ProjectDetailsModal.vue';
-import ProjectsGrid from '@/components/pages/home/ProjectsGrid.vue';
 import Panel from '@/components/Panel.vue';
 import { useProjectService } from '@/services/ProjectService';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
