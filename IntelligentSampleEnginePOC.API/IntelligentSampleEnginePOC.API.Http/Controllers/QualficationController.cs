@@ -20,7 +20,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             _qualificationService = qualificationService;
         }
 
-        [HttpGet("qualifications")]
+        [HttpGet("{qid}")]
         public ActionResult GetQualification( long qid)
         {
             try
@@ -47,6 +47,26 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
                 }
                 else
                     return StatusCode(500, "Error occured");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Exception occured - " + ex.Message);
+            }
+        }
+
+        [HttpDelete("{qid}")]
+        public ActionResult DeleteQualification(long qid)
+        {
+            try
+            {
+                var resultDeleted = _qualificationService.DeleteQualification( qid);
+                if (resultDeleted > 0)
+                {
+                    return Ok("Record deleted");
+                }
+                else
+                    return StatusCode(500, "No Records Found");
+            
             }
             catch (Exception ex)
             {
