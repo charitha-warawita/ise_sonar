@@ -97,12 +97,6 @@ onMounted(async () => {
 <template>
 	<PageDetails>
 		<div class="overview">
-			<div class="overview-top-row">
-				<div class="project-name">{{ project?.Name }}</div>
-				<div class="project-edit-button">
-					<PrimaryButton square label="Edit" @click="EditProjectDetails" />
-				</div>
-			</div>
 			<div class="overview-content">
 				<div>
 					<span>Status: </span>
@@ -126,6 +120,9 @@ onMounted(async () => {
 				</div>
 				<div class="progress-bar">
 					<p>Progress</p>
+				</div>
+				<div class="project-edit-button">
+					<PrimaryButton square label="Edit" @click="EditProjectDetails" />
 				</div>
 			</div>
 		</div>
@@ -180,33 +177,39 @@ onMounted(async () => {
 	grid-gap: 10px;
 	padding: 10px 0;
 
-	.overview-top-row {
-		display: flex;
-
-		.project-name {
-			font-weight: bold;
-			flex-grow: 1;
-		}
-	}
-
 	.overview-content {
-		display: flex;
+		display: grid;
+		grid-template-columns: repeat(5, max-content) 1fr 0.5fr;
+		gap: 1vh 3vw;
 
 		@media screen and (max-width: $lg) {
-			flex-direction: column;
+			grid-template-columns: 1fr 1fr;
 		}
 
 		> div {
-			flex-grow: 1;
+			margin-top: auto;
+			margin-bottom: auto;
 
 			> span:first-of-type {
 				font-weight: bold;
 			}
 		}
 
-		& > .progress-bar {
-			flex-grow: 3;
-			text-align: end;
+		.progress-bar {
+			justify-self: end;
+
+			@media screen and (max-width: $lg) {
+				grid-row: 1;
+				grid-column: 1 / -1;
+				justify-self: center;
+			}
+		}
+
+		.project-edit-button {
+			@media screen and (max-width: $lg) {
+				grid-row: 5;
+				grid-column: 1 / -1;
+			}
 		}
 	}
 }
