@@ -6,9 +6,11 @@ import { useProjectService } from '@/services/ProjectService';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
 import { ProjectStatusEnum } from '@/types/enums/ProjectStatus';
 import type { Project } from '@/types/Project';
+import type { ProgressCardData } from '@/types/visuals/ProgressCardData';
 import type { DataTableRowSelectEvent } from 'primevue/datatable';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import ProgressCard from '../components/visuals/ProgressCard.vue';
 
 const router = useRouter();
 const breadcrumb = useBreadcrumbStore();
@@ -16,6 +18,32 @@ const projectService = useProjectService();
 
 const projects = ref<Project[]>([]);
 const risks = ref<Project[]>([]);
+
+const statistics: ProgressCardData[] = [
+	{
+		title: 'DROP-OFF RATE',
+		type: 'Goal',
+		operator: 'lt',
+		target: 20,
+		value: 23,
+		description: 'The Drop-Off Rate.',
+	},
+	{
+		title: 'INCIDENT RATE',
+		type: 'Expected',
+		target: 60,
+		value: 58,
+		description: 'The Incident Rate.',
+	},
+	{
+		title: 'OVER-QUOTA RATE',
+		type: 'Goal',
+		operator: 'lt',
+		target: 20,
+		value: 19.9,
+		description: 'The Over-Quota Rate',
+	},
+];
 
 const ProjectSelected = (e: DataTableRowSelectEvent) => {
 	router.push({
@@ -25,6 +53,7 @@ const ProjectSelected = (e: DataTableRowSelectEvent) => {
 		},
 	});
 };
+
 onMounted(async () => {
 	breadcrumb.$reset();
 
@@ -57,7 +86,14 @@ onMounted(async () => {
 				<OpenRisksGrid :risks="risks" @row-select="ProjectSelected" />
 			</Panel>
 		</div>
-		<div>Cards</div>
+		<div class="card-container">
+			<ProgressCard
+				class="progress-card"
+				v-for="(statistic, index) in statistics"
+				:key="index"
+				:data="statistic"
+			/>
+		</div>
 	</div>
 </template>
 
@@ -71,6 +107,15 @@ onMounted(async () => {
 
 	@media screen and (max-width: $xl) {
 		grid-template-columns: 1fr;
+	}
+
+	.card-container {
+		display: flex;
+
+		.progress-card {
+			margin-right: 15px;
+			min-width: 13rem;
+		}
 	}
 }
 </style>

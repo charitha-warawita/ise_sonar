@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
 import Menu from '@/components/Menu.vue';
 import Toast from 'primevue/toast';
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
