@@ -2,28 +2,47 @@
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import SecondaryButton from '@/components/buttons/SecondaryButton.vue';
 import { useAuthentication } from '@/services/AuthenticationService';
+import useVuelidate from '@vuelidate/core';
+import { minLength, required } from '@vuelidate/validators';
 import Divider from 'primevue/divider';
 import InputText from 'primevue/inputtext';
+import Message from 'primevue/message';
 import Password from 'primevue/password';
-import { ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const { authenticating, user, LoginAsync } = useAuthentication();
+const { authenticating, LoginAsync } = useAuthentication();
 
-const username = ref<string>();
-const password = ref<string>();
-watch(user, (newValue) => {
-	if (newValue !== undefined)
-		router.push({
-			path: '/',
-		});
-});
+const username = ref<string>('');
+const password = ref<string>('');
+const error = ref<string>();
+
+const submitted = ref(false);
+const rules = computed(() => ({
+	username: {
+		required,
+		minLength: minLength(1),
+	},
+	password: {
+		required,
+		minLength: minLength(1),
+	},
+}));
+const validator = useVuelidate(rules, { username, password });
 
 const HandleLogin = async () => {
-	if (!username.value || !password.value) return;
+	submitted.value = true;
 
-	await LoginAsync(username.value, password.value);
+	await LoginAsync(username.value, password.value)
+		.then(() => {
+			router.push({
+				path: '/',
+			});
+		})
+		.catch((err: string) => {
+			error.value = err;
+		});
 };
 
 const HandleRegister = () => {
@@ -37,25 +56,44 @@ const HandleRegister = () => {
 	<div class="login-container">
 		<div class="login-form-container">
 			<div class="login-form">
-				<span>
-					<InputText class="login-input" placeholder="Username" v-model="username" />
-				</span>
-				<span>
-					<Password
-						class="login-input"
-						:feedback="false"
-						placeholder="Password"
-						toggleMask
-						v-model="password"
-					/>
-				</span>
+				<div v-if="error">
+					<Message severity="error" :closable="false">{{ error }}</Message>
+				</div>
+				<form @submit.prevent="HandleLogin">
+					<span>
+						<small v-if="validator.username.$invalid && submitted" class="p-error">
+							{{ validator.username.required.$message.replace('Value', 'Name') }}
+						</small>
+						<InputText
+							class="login-input"
+							:class="{ 'p-invalid': submitted && validator.username.$invalid }"
+							placeholder="Username"
+							v-model="username"
+							autocomplete="username"
+						/>
+					</span>
+					<span>
+						<small v-if="validator.password.$invalid && submitted" class="p-error">
+							{{ validator.password.required.$message.replace('Value', 'Password') }}
+						</small>
+						<Password
+							class="login-input"
+							:class="{ 'p-invalid': submitted && validator.password.$invalid }"
+							:feedback="false"
+							placeholder="Password"
+							toggleMask
+							autocomplete="current-password"
+							v-model="password"
+						/>
+					</span>
 
-				<div class="button-container">
-					<PrimaryButton label="Log In" @click="HandleLogin" :loading="authenticating" />
-				</div>
-				<div class="button-container">
-					<SecondaryButton label="Register" @click="HandleRegister" />
-				</div>
+					<div class="button-container">
+						<PrimaryButton type="submit" label="Log In" :loading="authenticating" />
+					</div>
+					<div class="button-container">
+						<SecondaryButton label="Register" @click="HandleRegister" />
+					</div>
+				</form>
 			</div>
 
 			<div style="color: grey"><Divider /></div>

@@ -11,20 +11,30 @@ const isLoggedIn = computed(() => !authenticating.value && user.value);
 export function useAuthentication() {
 	const LoginAsync = async (username: string, password: string) => {
 		if (!username || !password) return;
-
 		authenticating.value = true;
 
-		// Simulate network call;
-		setTimeout(() => {
-			user.value = {
-				Id: 1,
-				UserName: 'johndoe',
-				FirstName: 'John',
-				LastName: 'Doe',
-			} as User;
+		const result = new Promise<void>((res, rej) => {
+			setTimeout(() => {
+				username === 'failme' ? rej('Invalid username or password') : res();
+			}, 1500);
+		});
 
-			authenticating.value = false;
-		}, 1500);
+		await result
+			.then(
+				() =>
+					(user.value = {
+						Id: 1,
+						UserName: 'johndoe',
+						FirstName: 'John',
+						LastName: 'Doe',
+					} as User)
+			)
+			.catch((err) => Promise.reject(err))
+			.finally(() => (authenticating.value = false));
+	};
+
+	const LogoutAsync = async () => {
+		user.value = undefined;
 	};
 
 	return {
@@ -32,5 +42,6 @@ export function useAuthentication() {
 		user,
 		isLoggedIn,
 		LoginAsync,
+		LogoutAsync,
 	};
 }
