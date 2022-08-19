@@ -75,7 +75,7 @@ onMounted(async () => {
 				<ProjectsGrid :projects="projects" @row-select="ProjectSelected" />
 			</Panel>
 		</div>
-		<div>
+		<div class="open-risks-container">
 			<Panel>
 				<template #header>
 					<span style="font-weight: 600">
@@ -99,6 +99,7 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 @use '@/assets/variables.scss' as *;
+@use '@/assets/mixins.scss';
 
 .dashboard-container-grid {
 	display: grid;
@@ -109,12 +110,48 @@ onMounted(async () => {
 		grid-template-columns: 1fr;
 	}
 
+	@media screen and (max-width: $lg) {
+		.card-container {
+			grid-row: 1;
+		}
+	}
+
+	@media screen and (max-width: $md) {
+		.card-container {
+			grid-row: 1;
+		}
+
+		.open-risks-container {
+			grid-row: 2;
+		}
+	}
+
 	.card-container {
 		display: flex;
 
-		.progress-card {
+		> * {
 			margin-right: 15px;
-			min-width: 13rem;
+		}
+
+		:last-child {
+			margin-right: 0;
+		}
+
+		@media screen and (max-width: $md) {
+			flex-direction: column;
+
+			> * {
+				margin-right: 0px;
+				margin-bottom: 15px;
+			}
+		}
+
+		.progress-card {
+			@include mixins.shadowed;
+
+			@media screen and (max-width: $lg) {
+				flex-grow: 1;
+			}
 		}
 	}
 }
