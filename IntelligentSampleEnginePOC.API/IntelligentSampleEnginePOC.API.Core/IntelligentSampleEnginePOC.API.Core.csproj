@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Qualification.cs" />
     <Compile Remove="DB\ISEdbContext.cs" />
     <Compile Remove="DB\Project.cs" />
     <Compile Remove="DB\Qualification.cs" />
@@ -16,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JUST" Version="5.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8">
       <PrivateAssets>all</PrivateAssets>

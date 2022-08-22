@@ -9,12 +9,9 @@ export const useProjectStore = defineStore('project', {
             "tempId": 0,
             "name": "",
             "reference": "",
-            "lastUpdate": "",
             "startDate": "",
             "fieldingPeriod": 0,
             "status": 0,
-            "testingUrl": "",
-            "liveUrl": "",
             "categories": [],
             "user": {
                 "id": 0,
@@ -55,7 +52,7 @@ export const useProjectStore = defineStore('project', {
                 var cintReqs = await fetch((iseUrl + cintRequestPath), settings)
                 .then((response) => response.json());
                 if(cintReqs!== null) {
-                    if(cintReqs.validationResult) {
+                    if(!(cintReqs.find(x => x.ValidationResult === false))) {
                         this.cintRequests = cintReqs;
                         return true;
                     }
@@ -71,7 +68,7 @@ export const useProjectStore = defineStore('project', {
             return false;
         },
         async CreateProject(project) {
-            project.lastUpdate = new Date();
+            // project.lastUpdate = new Date();
 
             this.saveProjectLoading = true;
             var iseUrl = import.meta.env.VITE_ISE_API_URL;
@@ -87,6 +84,8 @@ export const useProjectStore = defineStore('project', {
             try {
                 var savedProject = await fetch((iseUrl + saveProjectPath), settings)
                 .then((response) => response.json());
+                if(savedProject.id === undefined)
+                    throw savedProject;
                 project.id = savedProject.id;
                 project.lastUpdate = savedProject.lastUpdate;
             } catch (error) {
@@ -107,6 +106,8 @@ export const useProjectStore = defineStore('project', {
                 "costPerInterview": 0,
                 "cptg": 0,
                 "limit": 0,
+                "testingUrl":"",
+                "liveUrl":"",
                 "qualifications": [],
                 "quotas": [],
                 "subtotal": 0,

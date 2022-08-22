@@ -38,8 +38,6 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             }
         }
 
-        
-
         [HttpPost("launch")]
         public async Task<ActionResult> Launch([FromBody] Project project)
         {
@@ -64,54 +62,17 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         [HttpPost("update")]
         public ActionResult UpdateProject([FromBody] Project project)
         {
-            /*try
-            {
-                var resultProject = _projectService.UpdateProject(project);
-                if (resultProject != null)
-                {
-                    return Ok(resultProject);
-                }
-                else
-                    return StatusCode(500, "Error occured");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Exception occured - " + ex.Message);
-            }*/
             return Ok();
-
         }
-
-        /*[HttpGet("template")]
-        public ActionResult GetEmptyProjectTemplate()
-        {
-            var projectTemplate = _projectService.GetProjectTemplate();
-            if (projectTemplate != null)
-            {
-                return Ok(projectTemplate);
-            }
-            else
-                return StatusCode(500, "Error response");
-        }*/
 
         [HttpGet("id/{id}")]
         public ActionResult GetById(string id)
         {
-            /*var project = _projectService.GetProjects(id);
-            return Ok(project);*/
-
-            //if (!string.IsNullOrEmpty(id))
-            //{
-            //    return Ok(new Project());
-            //}
-            //else
-            //    return StatusCode(500, "Id not found");
-
             return Ok();
         }
 
         [HttpGet]
-        public ActionResult GetProjects(int? status,int pageNumber, string? searchString, int recentCount)
+        public ActionResult GetProjects(int? status, int pageNumber, string? searchString, int recentCount)
         {
             try
             {
@@ -121,18 +82,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Exception occured - " + ex.Message);
-            }           
+            }
         }
-
-        /*[HttpPost]
-        public ActionResult LaunchProject(Project project)
-        {
-            //Yet to do 
-
-            if (project != null)
-                return Ok(new CintResponse());
-            else
-                return StatusCode(500, "The current project is not launched");
-        }*/
     }
 }

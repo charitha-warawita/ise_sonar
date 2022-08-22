@@ -22,11 +22,17 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
         public int EstimatedLOI { get; set; }
         [JsonProperty(PropertyName = "limit")]
         public int Limit { get; set; }
-        [JsonProperty(PropertyName = "limitType"), System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonProperty(PropertyName = "limitType"), System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int? LimitType { get; set; }
+        [JsonProperty(PropertyName = "testingUrl"), System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string TestingUrl { get; set; }
+        [JsonProperty(PropertyName = "liveUrl"), System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string LiveUrl { get; set; }
         [JsonProperty(PropertyName = "qualifications")]
         public List<Qualification> Qualifications { get; set; }
         [JsonProperty(PropertyName = "quotas")]
         public List<Quota> Quotas { get; set; }
+
+
     }
 }

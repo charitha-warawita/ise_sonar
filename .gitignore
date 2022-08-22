@@ -1,7 +1,7 @@
 ﻿################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
-
+**/.idea/
 /.vs
 /IntelligentSampleEnginePOC.UI/.vs/IntelligentSampleEnginePOC.UI
 /IntelligentSampleEnginePOC.UI/IntelligentSampleEnginePOC.UI/bin/Debug/net6.0

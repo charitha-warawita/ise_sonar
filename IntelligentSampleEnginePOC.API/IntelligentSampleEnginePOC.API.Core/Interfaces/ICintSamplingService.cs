@@ -9,7 +9,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 {
     public interface ICintSamplingService
     {
-        CintRequestsModel ConvertToCintRequests(Project project);
+        List<CintRequestModel> ConvertToCintRequests(Project project);
         Task<Project> CreateProject(Project project);
     }
 }

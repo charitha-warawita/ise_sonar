@@ -8,9 +8,9 @@
         </div>
         <div class="col-md-6">
             <h5>Converted Cint Specs - Requests </h5><hr>
-            <label><b>Cint Conversion validation result: </b>{{ cintRequests.validationResult }}</label><hr>
-            <div v-for="request in cintRequests.requests" :key=request.name>
-                <label><b>Cint Request:</b> {{ request.name }}</label>
+            <div v-for="request in cintRequests" :key=request.name>
+                <label><b>Cint Conversion validation result: </b>{{ request.validationResult }}</label><hr>
+                <label><b>Cint Request:</b> {{ request.request.name }}</label>
                 <pre>{{ request }}</pre><hr>
             </div>
             <!--<pre>{{cintRequests}}</pre>-->
@@ -49,8 +49,8 @@ async function createNewProject() {
     else {
         alert('project successfully created. New project ID is ' + useProjStore.project.id);
         useProjStore.$reset();
+        router.push('/');
     }
-    router.push('/');
 }
 
 function discardNewProject() {
