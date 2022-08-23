@@ -8,6 +8,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
         Task<Project> LaunchProject(Project project);
 
         ProjectList GetProjects(int? status, int pageNumber, string? searchString, int recentCount);
+
+        Project? Get(int id);
+
         // Task<IValidationModel> ValidateProject(Project project);           
 
         /*Task<Model.Project> LaunchProject(Model.Project project);

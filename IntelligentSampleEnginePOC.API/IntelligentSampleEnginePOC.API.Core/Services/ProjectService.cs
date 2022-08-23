@@ -84,6 +84,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             return _projectContext.GetProjects(status, pageNumber, searchString, recentCount);
         }
 
+        public Project? Get(int id)
+        {
+            return _projectContext.Get(id);
+        }
+ 
         /*private Model.Project SetupGuids(Model.Project project)
         {
             //Setting up IDs

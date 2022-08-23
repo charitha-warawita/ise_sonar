@@ -111,5 +111,32 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             }
             return result;
         }
+
+        public Project? Get(int id)
+        {
+            using var connection = new SqlConnection(_options.iseDb);
+            using var command = new SqlCommand("[GetProject]", connection);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("ProjectId", id);
+            connection.Open();
+
+            using var reader = command.ExecuteReader();
+            if (!reader.HasRows) return null;
+            if (!reader.Read()) return null;
+            
+            var project = new Project
+            {
+                Id = long.Parse(reader["Id"].ToString() ?? string.Empty),
+                Name = reader["Name"].ToString() ?? string.Empty,
+                Reference = reader["Reference"].ToString() ?? string.Empty,
+                LastUpdate = DateTime.Parse(reader["LastUpdate"].ToString() ?? string.Empty),
+                StartDate = DateTime.Parse(reader["StartDate"].ToString() ?? string.Empty),
+                FieldingPeriod = int.Parse(reader["FieldingPeriod"].ToString() ?? string.Empty),
+                Status =  Enum.Parse<Status>(reader["Status"].ToString() ?? string.Empty)
+            };
+
+            return project;
+
+        }
     }
 }

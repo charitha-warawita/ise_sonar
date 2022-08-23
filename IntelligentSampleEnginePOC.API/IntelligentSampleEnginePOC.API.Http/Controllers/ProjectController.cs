@@ -66,9 +66,18 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         }
 
         [HttpGet("id/{id}")]
-        public ActionResult GetById(string id)
+        public ActionResult GetById(int id)
         {
-            return Ok();
+            try
+            {
+                var result = _projectService.Get(id);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
         }
 
         [HttpGet]
