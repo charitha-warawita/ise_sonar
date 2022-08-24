@@ -66,6 +66,7 @@ const onClickHandler = (async (page) => {
 function applyStatusFilter(status) {
   useProjsStore.getProjectsBySearchNameAndStartDate(status);
   document.querySelectorAll(".paginate-buttons").forEach((button) => {
+    button.classList.remove("active-page");
     if(button.innerText === '1') {
       button.click();
     }
