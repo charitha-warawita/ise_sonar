@@ -205,6 +205,32 @@ namespace IntelligentSampleEnginePOC.API.Core.Tests.MockModelData
                       ]
                     }";
         }
+
+        public static string GetProjectNoTargetAudienceJson()
+        {
+            return @"{
+                      ""tempId"": 1,
+                      ""name"": ""AutoSurvey01"",
+                      ""reference"": ""MAC001"",
+                      ""lastUpdate"": ""2022-07-28T00:51:50.752Z"",
+                      ""startDate"": ""2023-01-01"",
+                      ""fieldingPeriod"": 60,
+                      ""status"": 0,
+                      ""testingUrl"": ""https://sim.cintworks.net/[ID]"",
+                      ""liveUrl"": ""https://sim.cintworks.net/[ID]"",
+                      ""categories"": [5],
+                      ""user"": {
+                        ""id"": 1,
+                        ""name"": ""Test"",
+                        ""email"": ""test.kantar@kk.com""
+                      },
+                      ""errors"": [],                
+                          ""quota"": [],
+                          ""quotas"": [],
+                          ""subtotal"": 2000,
+                          ""errors"": []                       
+                    }";
+        }
     }
    
 }

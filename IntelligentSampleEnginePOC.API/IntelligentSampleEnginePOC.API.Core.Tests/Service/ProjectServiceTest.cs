@@ -2,7 +2,6 @@ using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
 using IntelligentSampleEnginePOC.API.Core.Services;
 using IntelligentSampleEnginePOC.API.Core.Tests.MockModelData;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
 
@@ -26,12 +25,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Tests.Service
         [Fact]
         public void CreateProject_ReturnsOk()
         {
-            string jsonString = CreateProjects.GetProjectJson();
+            string jsonString = CreateProjects.GetProjectNoTargetAudienceJson();
             Project project = JsonConvert.DeserializeObject<Project>(jsonString);
             _projectContext.Setup(repo => repo.CreateProject(project)).Returns(new CreateProjects().CreateProjectTargetAudience(project));
             var result = _projectService.CreateProject(project);
             Assert.NotNull(result);
-
         }
 
         [Fact]
@@ -41,7 +39,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Tests.Service
             Project project = JsonConvert.DeserializeObject<Project>(jsonString);
             _projectContext.Setup(repo => repo.CreateProject(project)).Returns(new CreateProjects().CreateProjectTest(project));
             var result = _projectService.LaunchProject(project);
-
             Assert.NotNull(result);
         }
 
