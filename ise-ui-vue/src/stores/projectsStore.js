@@ -57,6 +57,7 @@ export const useProjectsStore = defineStore('projects', {
             }
         },
         async getProjectsBySearchNameAndStartDate (status) {
+            this.currentPageNumber = 1;
             console.log("came in.. " + status);
             if(status === undefined || status === '' || status === -1) {
                 this.currentStatus = 7;

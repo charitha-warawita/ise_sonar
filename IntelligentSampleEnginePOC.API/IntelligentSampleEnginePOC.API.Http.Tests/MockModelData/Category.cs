@@ -31,5 +31,4 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
             return project;
         }
     }
-   
 }
