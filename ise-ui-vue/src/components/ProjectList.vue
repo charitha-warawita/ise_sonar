@@ -2,19 +2,19 @@
     <div>
         <ul class="nav nav-pills nav-fill border-bottom">
             <li class="nav-item">
-            <a v-on:click="useProjsStore.getProjectsBySearchNameAndStartDate(7)" :class="[currentStatus === 7 ? 'active' : '']" class="nav-link" aria-current="page" href="#">All</a>
+            <a v-on:click="applyStatusFilter(7)" :class="[currentStatus === 7 ? 'active' : '']" class="nav-link" aria-current="page" href="#">All</a>
             </li>
             <li class="nav-item">
-            <a v-on:click="useProjsStore.getProjectsBySearchNameAndStartDate(2)" :class="[currentStatus === 2 ? 'active' : '']" class="nav-link" href="#">Active</a>
+            <a v-on:click="applyStatusFilter(2)" :class="[currentStatus === 2 ? 'active' : '']" class="nav-link" href="#">Active</a>
             </li>
             <li class="nav-item">
-            <a v-on:click="useProjsStore.getProjectsBySearchNameAndStartDate(1)" :class="[currentStatus === 1 ? 'active' : '']" class="nav-link" href="#">Created</a>
+            <a v-on:click="applyStatusFilter(1)" :class="[currentStatus === 1 ? 'active' : '']" class="nav-link" href="#">Created</a>
             </li>
             <li class="nav-item">
-            <a v-on:click="useProjsStore.getProjectsBySearchNameAndStartDate(0)" :class="[currentStatus === 0 ? 'active' : '']" class="nav-link" href="#">Draft</a>
+            <a v-on:click="applyStatusFilter(0)" :class="[currentStatus === 0 ? 'active' : '']" class="nav-link" href="#">Draft</a>
             </li>
             <li class="nav-item">
-            <a v-on:click="useProjsStore.getProjectsBySearchNameAndStartDate(5)" :class="[currentStatus === 5 ? 'active' : '']" class="nav-link" href="#">Closed</a>
+            <a v-on:click="applyStatusFilter(5)" :class="[currentStatus === 5 ? 'active' : '']" class="nav-link" href="#">Closed</a>
             </li>
         </ul><br /><br/>
         <div class="d-flex">
@@ -25,28 +25,19 @@
         </div>
         <br/><br/>
         <ProjectListTable class="projListTable" :fields='displayfields' :projects='useProjsStore.currentProjects' :fieldTitles='displayFieldFormatted'></ProjectListTable>
-        <div v-if="currentProjects" style="width:100%; text-align: center"><vue-awesome-paginate
+        <div v-if="currentProjects" style="width:100%; text-align: center">
+        <div style="float:left">Page: {{ currentPageNumber }}</div>
+        <vue-awesome-paginate
             :total-items="totalItems"
             :items-per-page="currentPageRowCount"
-            :max-pages-shown="5"
+            :max-pages-shown="4"
             :current-page="currentPageNumber"
             :on-click="onClickHandler"
+            :hide-prev-next-when-ends="true"
         /></div>
-        <!--<nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>-->
+        
         <p v-if="projectListLoading">Loading project list.. </p>
-        <p v-if="projectListError"> {{ error.message }} </p>
+        <p v-if="projectListError"> {{ projectListError }} </p>
     </div>
 </template>
 <script setup>
@@ -72,6 +63,14 @@ const onClickHandler = (async (page) => {
     useProjsStore.currentProjects = await useProjsStore.GetProjectsList();
   });
 
+function applyStatusFilter(status) {
+  useProjsStore.getProjectsBySearchNameAndStartDate(status);
+  document.querySelectorAll(".paginate-buttons").forEach((button) => {
+    if(button.innerText === '1') {
+      button.click();
+    }
+  })
+}
 onMounted(() => {
     // console.log('on mounted call');
     useProjsStore.setDefaultProjectList()
@@ -110,6 +109,6 @@ input[type="date"]:not(.has-value):before{
     color: white;
   }
   .active-page:hover {
-    background-color: #2988c8;
+    background-color: #0D6EFD;
   }
 </style>

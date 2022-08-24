@@ -5,15 +5,17 @@ import Breadcrumb from 'primevue/breadcrumb';
 import Menubar from 'primevue/menubar';
 import type { MenuItem } from 'primevue/menuitem';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const breadcrumbs = useBreadcrumbStore();
 const menu = useMenuStore();
+const router = useRouter();
 
 const items = ref<MenuItem[]>([
 	{
 		label: 'Projects',
 		icon: 'pi pi-circle-fill',
-		to: '/',
+		to: '/projects',
 	},
 	{
 		label: 'Settings',
@@ -30,7 +32,7 @@ const items = ref<MenuItem[]>([
 	<div :class="{ 'top-nav-container': true, shadowed: menu.shadowed }">
 		<Menubar :model="items">
 			<template #start>
-				<h2>ISE</h2>
+				<span @click="router.push('/')" class="ise-icon"><h2>ISE</h2></span>
 			</template>
 		</Menubar>
 
@@ -42,6 +44,11 @@ const items = ref<MenuItem[]>([
 
 <style scoped lang="scss">
 @use '@/assets/variables.scss' as *;
+
+.ise-icon:hover {
+	cursor: pointer;
+	color: skyblue;
+}
 
 .p-menubar {
 	border-radius: 0;

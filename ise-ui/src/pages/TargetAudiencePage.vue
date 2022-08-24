@@ -92,9 +92,6 @@ onMounted(async () => {
 <template>
 	<PageDetails>
 		<div class="page-details">
-			<div class="page-details-top-row">
-				<div class="project-name">{{ project?.Name }} > {{ name }}</div>
-			</div>
 			<div class="page-details-content-row">
 				<div class="page-details-content-start">
 					<div class="detail-item">
@@ -151,6 +148,7 @@ onMounted(async () => {
 
 	> .page-details-content-row {
 		display: flex;
+		// margin-bottom: 1vh;
 
 		@media screen and (max-width: $lg) {
 			flex-direction: column;
@@ -158,14 +156,17 @@ onMounted(async () => {
 
 		> .page-details-content-start {
 			flex-grow: 1;
-			display: flex;
+			display: grid;
+			grid-template-columns: repeat(5, max-content);
+			gap: 1vh 3vw;
 
 			@media screen and (max-width: $lg) {
-				flex-direction: column;
+				grid-template-columns: 1fr 1fr;
+				margin-bottom: 1vh;
 			}
 
 			> .detail-item {
-				flex-grow: 1;
+				margin: auto 0;
 
 				> span:first-of-type {
 					font-weight: bold;

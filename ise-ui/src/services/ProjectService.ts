@@ -1,5 +1,6 @@
 // import type Project from '@/model/Project';
 import { useProjectStore } from '@/stores/ProjectStore';
+import type { ProjectStatusEnum } from '@/types/enums/ProjectStatus';
 import { ProjectSchema, type Project } from '@/types/Project';
 import { z } from 'zod';
 
@@ -10,6 +11,16 @@ export function useProjectService() {
 	const GetAllAsync = async () => {
 		const result = [...projectStore.projects] as Project[]; // TODO: Replace with API Call.
 		if (result.length === 0) return result;
+
+		const r = await z.array(ProjectSchema).safeParseAsync(result);
+		return r.success ? r.data : Promise.reject(r.error);
+	};
+
+	const GetAllByStatusAsync = async (status: ProjectStatusEnum[]) => {
+		const filtered = projectStore.projects.filter((p) => status.includes(p.Status));
+
+		const result = [...filtered] as Project[];
+		if (!result.length) return result;
 
 		const r = await z.array(ProjectSchema).safeParseAsync(result);
 		return r.success ? r.data : Promise.reject(r.error);
@@ -47,6 +58,7 @@ export function useProjectService() {
 
 	return {
 		GetAllAsync,
+		GetAllByStatusAsync,
 		GetAsync,
 		CreateAsync,
 		UpdateAsync,
