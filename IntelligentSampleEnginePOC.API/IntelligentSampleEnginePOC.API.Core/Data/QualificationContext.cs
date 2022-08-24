@@ -111,5 +111,26 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             }
             return qualData;
         }
+
+
+
+
+        public long DeleteQualificationFromDB(long qid)
+        {
+            using (SqlConnection connection = new SqlConnection(_options.iseDb))
+            {
+                using (SqlCommand command = new SqlCommand("DeleteQualification"))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Connection = connection;
+                    command.Parameters.AddWithValue("@qid", Convert.ToString(qid));
+                    connection.Open();
+                    var deletedQId = command.ExecuteNonQuery();
+                    connection.Close();
+                    return deletedQId;
+                }
+            }
+            
+        }
     }
 }

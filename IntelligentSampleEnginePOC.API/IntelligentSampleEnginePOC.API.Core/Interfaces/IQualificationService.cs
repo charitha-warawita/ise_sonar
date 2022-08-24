@@ -12,6 +12,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
         List<Qualification> GetQualification(long  qid);
 
         Qualification CreateQualification (long projectId, long? taid,  Qualification qualData);
-    
+
+        public long DeleteQualification(long qid);
+
+
     }
 }
