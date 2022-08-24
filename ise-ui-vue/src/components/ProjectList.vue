@@ -37,7 +37,7 @@
         /></div>
         
         <p v-if="projectListLoading">Loading project list.. </p>
-        <p v-if="projectListError"> {{ error }} </p>
+        <p v-if="projectListError"> {{ projectListError }} </p>
     </div>
 </template>
 <script setup>
