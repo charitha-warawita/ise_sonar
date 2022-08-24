@@ -9,7 +9,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 
         ProjectList GetProjects(int? status, int pageNumber, string? searchString, int recentCount);
 
-        Project? Get(int id);
+        Project? Get(long id);
 
         // Task<IValidationModel> ValidateProject(Project project);           
 

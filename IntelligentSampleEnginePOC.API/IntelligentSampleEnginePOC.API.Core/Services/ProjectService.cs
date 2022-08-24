@@ -84,9 +84,14 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             return _projectContext.GetProjects(status, pageNumber, searchString, recentCount);
         }
 
-        public Project? Get(int id)
+        public Project? Get(long id)
         {
-            return _projectContext.Get(id);
+            var project = _projectContext.Get(id);
+            if (project is null) return project;
+
+            project.TargetAudiences = _taService.GetAllByProjectId(id).ToList();
+
+            return project;
         }
  
         /*private Model.Project SetupGuids(Model.Project project)

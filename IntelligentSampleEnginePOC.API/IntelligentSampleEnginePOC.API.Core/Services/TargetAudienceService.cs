@@ -29,6 +29,13 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             throw new ArgumentException("Target Audience Validation failed", nameof(audience));
         }
 
+        public IEnumerable<TargetAudience> GetAllByProjectId(long id)
+        {
+            var result = _taContext.GetTargetAudiencesByProjectId(id);
+            
+            return result;
+        }
+
         private bool TargetAudienceValidated(TargetAudience audience)
         {
             return true;

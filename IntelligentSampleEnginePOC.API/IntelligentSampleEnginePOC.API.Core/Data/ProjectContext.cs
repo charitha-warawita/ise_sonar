@@ -4,16 +4,19 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Data;
+using Microsoft.Extensions.Logging;
+using IntelligentSampleEnginePOC.API.Core.Helpers;
 
 namespace IntelligentSampleEnginePOC.API.Core.Data
 {
     public class ProjectContext : IProjectContext
     {
         private readonly DatabaseOptions _options;
-
-        public ProjectContext(IOptions<DatabaseOptions> databaseOptions)
+        private readonly ILogger<ProjectContext> _logger;
+        public ProjectContext(IOptions<DatabaseOptions> databaseOptions, ILogger<ProjectContext> logger)
         {
             _options = databaseOptions.Value;
+            _logger = logger;
         }
         public Project CreateProject(Project project)
         {
@@ -112,7 +115,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             return result;
         }
 
-        public Project? Get(int id)
+        public Project? Get(long id)
         {
             using var connection = new SqlConnection(_options.iseDb);
             using var command = new SqlCommand("[GetProject]", connection);
@@ -123,17 +126,28 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             using var reader = command.ExecuteReader();
             if (!reader.HasRows) return null;
             if (!reader.Read()) return null;
-            
-            var project = new Project
+
+            Project project;
+
+            try
             {
-                Id = long.Parse(reader["Id"].ToString() ?? string.Empty),
-                Name = reader["Name"].ToString() ?? string.Empty,
-                Reference = reader["Reference"].ToString() ?? string.Empty,
-                LastUpdate = DateTime.Parse(reader["LastUpdate"].ToString() ?? string.Empty),
-                StartDate = DateTime.Parse(reader["StartDate"].ToString() ?? string.Empty),
-                FieldingPeriod = int.Parse(reader["FieldingPeriod"].ToString() ?? string.Empty),
-                Status =  Enum.Parse<Status>(reader["Status"].ToString() ?? string.Empty)
-            };
+                project = new Project
+                {
+                    Id = reader.GetInt64("Id"),
+                    Name = reader.GetString("Name"),
+                    Reference = reader.GetString("Reference"),
+                    LastUpdate = reader.GetDateTime("LastUpdate"),
+                    StartDate = reader.GetDateTime("StartDate"),
+                    FieldingPeriod = reader.GetInt32("FieldingPeriod"),
+                    Status = EnumHelper.SafeParse<Status>(reader.GetInt32("Status"))
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                
+                throw;
+            }
 
             return project;
 
