@@ -23,64 +23,70 @@ const ta = computed<TargetAudience>({
 		</div>
 
 		<div class="basic-input-container">
-			<div class="basic-input-row">
-				<div class="basic-input">
-					<span class="p-float-label">
-						<InputText id="ta-name" class="ta-input" v-model="ta.Name" />
-						<label for="ta-name">Target Audience Name</label>
-					</span>
-				</div>
-
-				<div class="basic-input">
-					<span class="p-float-label">
-						<InputNumber id="ta-estimated-ir" class="ta-input" v-model="ta.EstimatedIR" />
-						<label for="ta-estimated-ir">Estimated IR</label>
-					</span>
-				</div>
+			<div class="basic-input">
+				<span class="p-float-label">
+					<InputText id="ta-name" class="ta-input" v-model="ta.Name" />
+					<label for="ta-name">Target Audience Name</label>
+				</span>
 			</div>
-			<div class="basic-input-row">
-				<div class="basic-input">
-					<span class="p-float-label">
-						<InputNumber id="ta-estimated-ir" class="ta-input" v-model="ta.EstimatedLOI" />
-						<label for="ta-estimated-loi">Estimated LOI</label>
-					</span>
-				</div>
 
-				<div class="basic-input">
-					<span class="p-float-label">
-						<InputText id="ta-name" class="ta-input" type="text" />
-						<!-- <label for="ta-name">Target Audience Name</label> -->
-					</span>
-				</div>
+			<div class="basic-input">
+				<span class="p-float-label">
+					<InputNumber id="ta-estimated-ir" class="ta-input" v-model="ta.EstimatedIR" />
+					<label for="ta-estimated-ir">Estimated IR</label>
+				</span>
 			</div>
-			<div class="basic-input-row">
-				<div class="basic-input">
-					<span class="p-float-label">
-						<InputText id="ta-name" class="ta-input" type="text" />
-						<!-- <label for="ta-name">Target Audience Name</label> -->
-					</span>
-				</div>
 
-				<div class="basic-input">
-					<span class="p-float-label">
-						<InputNumber id="ta-estimated-ir" class="ta-input" type="number" />
-						<!-- <label for="ta-estimated-ir">EstimatedIR</label> -->
-					</span>
-				</div>
+			<div class="basic-input">
+				<span class="p-float-label">
+					<InputNumber id="ta-estimated-ir" class="ta-input" v-model="ta.EstimatedLOI" />
+					<label for="ta-estimated-loi">Estimated LOI</label>
+				</span>
+			</div>
+
+			<div class="basic-input">
+				<span class="p-float-label">
+					<InputText id="ta-name" class="ta-input" type="text" />
+				</span>
+			</div>
+
+			<div class="basic-input">
+				<span class="p-float-label">
+					<InputText id="ta-name" class="ta-input" type="text" />
+				</span>
+			</div>
+
+			<div class="basic-input">
+				<span class="p-float-label">
+					<InputNumber id="ta-estimated-ir" class="ta-input" type="number" />
+				</span>
 			</div>
 		</div>
 	</div>
 </template>
 
 <style scoped lang="scss">
+@use '@/assets/variables.scss' as *;
+
 .basic-settings-title {
 	padding: 10px 0 10px 10px;
 }
 
 .basic-input-container {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 30px 15px;
+	padding: 15px;
+
+	@media screen and (max-width: $sm) {
+		grid-template-columns: 1fr;
+	}
+
+	.basic-input {
+		.ta-input {
+			width: 100%;
+		}
+	}
 
 	> .basic-input-row {
 		display: flex;

@@ -1,13 +1,13 @@
 <script async setup lang="ts">
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import ProjectsGrid from '@/components/grids/ProjectsGrid.vue';
 import ProjectDetailsModal from '@/components/modals/ProjectDetailsModal.vue';
-import ProjectsGrid from '@/components/pages/home/ProjectsGrid.vue';
+import Panel from '@/components/Panel.vue';
 import { useProjectService } from '@/services/ProjectService';
 import { useBreadcrumbStore } from '@/stores/BreadcrumbStore';
 import type { Project } from '@/types/Project';
 import type { DataTableRowSelectEvent } from 'primevue/datatable';
 import InputText from 'primevue/inputtext';
-import Panel from 'primevue/panel';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -127,25 +127,6 @@ onMounted(async () => {
 		min-width: 150px;
 		max-width: 250px;
 	}
-}
-
-/* Panel */
-.p-panel :deep(.p-panel-header) {
-	@include mixins.shadowed();
-
-	border: none;
-	z-index: 1;
-	background-color: var(--color-background);
-	border-top-left-radius: $border-radius;
-	border-top-right-radius: $border-radius;
-}
-
-.p-panel :deep(.p-panel-content) {
-	@include mixins.shadowed();
-
-	border: none;
-	border-bottom-left-radius: $border-radius;
-	border-bottom-right-radius: $border-radius;
 }
 
 .project-filter-input {

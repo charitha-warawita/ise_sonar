@@ -74,10 +74,10 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         [InlineData(0, 1, null, 3)]
         [InlineData(null, 1, "Test1", 3)]
         [InlineData(2, 1, "Test2", 3)]
-        public void GetAllProjects_ReturnsOk(int? status,int pageNumber, string? searchString, int recordCount)
+        public async void GetAllProjects_ReturnsOk(int? status,int pageNumber, string? searchString, int recordCount)
         {
-            _projectService.Setup(repo => repo.GetProjects(status, pageNumber, searchString, recordCount)).Returns(new MockProjectList().GetTestProjectList(status, pageNumber, searchString, recordCount));
-            var result = _projectController.GetProjects(status, pageNumber, searchString, recordCount);
+            _projectService.Setup(repo => repo.GetProjects(status, pageNumber, searchString, recordCount)).Returns(Task.FromResult(new MockProjectList().GetTestProjectList(status, pageNumber, searchString, recordCount)));
+            var result = await _projectController.GetProjects(status, pageNumber, searchString, recordCount);
             long pageRecordCount = ((ProjectList)((ObjectResult)result).Value).TotalItems;
             Assert.NotNull(result);
             var okResult = Assert.IsType<OkObjectResult>(result);
