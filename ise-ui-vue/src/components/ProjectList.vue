@@ -33,7 +33,7 @@
             :max-pages-shown="4"
             :current-page="currentPageNumber"
             :on-click="onClickHandler"
-            :hide-prev-next-when-ends="true"
+            :hide-prev-next="true"
         /></div>
         
         <p v-if="projectListLoading">Loading project list.. </p>
@@ -66,6 +66,7 @@ const onClickHandler = (async (page) => {
 function applyStatusFilter(status) {
   useProjsStore.getProjectsBySearchNameAndStartDate(status);
   document.querySelectorAll(".paginate-buttons").forEach((button) => {
+    button.classList.remove("active-page");
     if(button.innerText === '1') {
       button.click();
     }
