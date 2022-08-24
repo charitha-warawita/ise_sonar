@@ -71,9 +71,9 @@ onMounted(() => {
 }
 
 .profileSection2 {
-    /*max-height: 600px;
-    overflow-y:auto;*/
-    max-height: 100%; 
+    max-height: 600px;
+    overflow-y:auto;
+    /*max-height: 100%; */
     min-height:350px; 
     margin-top:25px;
     padding: 10px;

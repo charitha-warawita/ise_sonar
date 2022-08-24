@@ -33,7 +33,7 @@
             :max-pages-shown="4"
             :current-page="currentPageNumber"
             :on-click="onClickHandler"
-            :hide-prev-next-when-ends="true"
+            :hide-prev-next="true"
         /></div>
         
         <p v-if="projectListLoading">Loading project list.. </p>

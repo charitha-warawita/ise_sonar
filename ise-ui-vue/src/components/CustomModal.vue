@@ -67,7 +67,7 @@ export default {
     background-color: #fff;
     padding: 10px 10px;
     overflow-y:auto;
-    max-height:98%;
+    max-height:95%;
   }
 
   .modal-inner i {
