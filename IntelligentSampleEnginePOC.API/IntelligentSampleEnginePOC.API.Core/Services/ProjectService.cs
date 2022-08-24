@@ -8,12 +8,14 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         private readonly IProjectContext _projectContext;
         private readonly ITargetAudienceService _taService;
         private readonly ICintSamplingService _samplingService;
+        private readonly IProjectValidator _projectValidator;
 
-        public ProjectService(IProjectContext context, ITargetAudienceService taService, ICintSamplingService samplingService)
+        public ProjectService(IProjectContext context, ITargetAudienceService taService, ICintSamplingService samplingService, IProjectValidator projectValidator)
         {
             _projectContext = context;
             _taService = taService;
             _samplingService = samplingService;
+            _projectValidator = projectValidator;
         }
 
         public async Task<Project> CreateProject(Project project)
@@ -21,7 +23,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             if (project == null)
                 throw new ArgumentNullException("Project model not found", nameof(project));
 
-            if (ProjectValidated(project))
+            if (_projectValidator.IsValidated(project))
             {
                 project = _projectContext.CreateProject(project);
                 if(project.TargetAudiences.Any())

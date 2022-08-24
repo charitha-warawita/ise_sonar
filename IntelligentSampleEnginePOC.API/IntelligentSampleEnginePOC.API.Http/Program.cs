@@ -29,6 +29,8 @@ builder.Services.AddTransient<ITargetAudienceContext, TargetAudienceContext>();
 builder.Services.AddTransient<ISpecTransform, CintCustomTransform>();
 builder.Services.AddTransient<IProjectCintContext, ProjectCintContext>();
 
+builder.Services.AddTransient<IProjectValidator, ProjectValidator>();
+
 builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("ConnectionStrings"));
 
 var cintApiSettings = builder.Configuration.GetSection("CintApiSettings");
