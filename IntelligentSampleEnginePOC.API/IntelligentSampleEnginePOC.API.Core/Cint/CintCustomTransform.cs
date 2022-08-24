@@ -17,8 +17,10 @@ namespace IntelligentSampleEnginePOC.API.Core.Cint
         public List<CintRequestModel> TransformIseRequestToCintRequests(Project project)
         {
             List<CintRequestModel> requests = new List<CintRequestModel>();
+            if (project == null)
+                throw new ArgumentNullException("No project found to convert to CintRequests");
 
-            if (project.TargetAudiences.Any())
+            if (project.TargetAudiences != null && project.TargetAudiences.Any())
             {
                 foreach (var item in project.TargetAudiences)
                 {
@@ -47,7 +49,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Cint
                     }
                     else
                     {
-                        throw new Exception("Failed in creating Individual Requests. No country found");
+                        throw new ArgumentNullException("Failed in creating Individual Requests. No country found");
                     }
                 }
             }
@@ -234,7 +236,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Cint
         private void ConvertIseQGroupersToCintQGroups(List<QuotaGrouper> quotaswithKeys)
         {
             cintRequest.quotaGroups = new List<quotaGroup>();
-            var cintQGroups = new List<quotaGroup>();
+            // var cintQGroups = new List<quotaGroup>();
             foreach (var quotaKey in quotaswithKeys)
             {
                 var tg = quotaKey.CintQuota.targetGroup;
@@ -246,7 +248,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Cint
                 quotaGroup currentGroup = null;
                 foreach (var item in quotaKey.Keywords)
                 {
-                    currentGroup = cintQGroups.Where(x => x.name.Contains(item)).FirstOrDefault();
+                    currentGroup = cintRequest.quotaGroups.Where(x => x.name.Contains(item)).FirstOrDefault();
                     if (currentGroup != null)
                         break;
                 }

@@ -44,5 +44,12 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             return true;
         }
 
+
+
+        public long DeleteQualification(long qid)
+        {
+            return _qualificationContext.DeleteQualificationFromDB(qid);
+        }
+
     }
 }

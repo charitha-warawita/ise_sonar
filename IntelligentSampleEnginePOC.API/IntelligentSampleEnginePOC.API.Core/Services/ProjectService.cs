@@ -54,8 +54,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
             try
             {
-
-
                 project = await CreateProject(project);
                 project = await _samplingService.CreateProject(project);
                 
@@ -71,15 +69,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             return project;
         }
 
-        /*public async Task<IValidationModel> ValidateProject(Project project)
-        {
-            if (project == null)
-                throw new ArgumentNullException("project model not found", nameof(project));
-
-            var result = _samplingService.ConvertToCintRequests(project);
-            return result;
-        }*/
-        public ProjectList GetProjects(int? status, int pageNumber, string? searchString, int recentCount)
+        public async Task<ProjectList> GetProjects(int? status, int pageNumber, string? searchString, int recentCount)
         {
             return _projectContext.GetProjects(status, pageNumber, searchString, recentCount);
         }
@@ -93,36 +83,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
             return project;
         }
- 
-        /*private Model.Project SetupGuids(Model.Project project)
-        {
-            //Setting up IDs
-            /*if (project?.Id == Guid.Empty)
-                project.Id = Guid.NewGuid();
-
-            if (project?.User != null && project?.User?.Id == Guid.Empty)
-                project.User.Id = Guid.NewGuid();
-
-            if (project.TargetAudiences.Any())
-            {
-                foreach (var item in project.TargetAudiences)
-                {
-                    if (item?.Id == Guid.Empty)
-                        item.Id = Guid.NewGuid();
-
-                    if (item.Qualifications.Any())
-                    {
-                        foreach (var subItem in item.Qualifications)
-                        {
-                            if (subItem?.Id == Guid.Empty)
-                                subItem.Id = Guid.NewGuid();
-                        }
-                    }
-                }
-            }
-            return project;
-        }*/
-
 
         private bool ProjectValidated(Project project)
         {
@@ -131,7 +91,5 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
             return true;
         }
-
-        
     }
 }

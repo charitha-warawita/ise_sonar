@@ -21,7 +21,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
         public Project CreateProject(Project project)
         {
             var projectJson = JsonConvert.SerializeObject(project);
-
             using (SqlConnection connection = new SqlConnection(_options.iseDb))
             {
                 using (SqlCommand command = new SqlCommand("[CreateProject]"))
@@ -38,6 +37,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                 }
             }
             return project;
+        }
+
+        public Project GetProject(long projectId)
+        {
+            return new Project();
         }
 
         public ProjectList GetProjects(int? status,int pageNumber, string? searchString, int recentCount)        

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
+namespace IntelligentSampleEnginePOC.API.Core.Tests.MockModelData
 {
     public class Categories
     {
@@ -31,4 +31,5 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
             return project;
         }
     }
+   
 }
