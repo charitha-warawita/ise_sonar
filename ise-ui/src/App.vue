@@ -1,15 +1,20 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
 import Menu from '@/components/Menu.vue';
 import Toast from 'primevue/toast';
+import { computed } from 'vue';
+import { RouterView, useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const isLoginOrRegister = computed(() => route.name === 'login' || route.name === 'register');
 </script>
 
 <template>
-	<header>
+	<header v-if="!isLoginOrRegister">
 		<Menu></Menu>
 	</header>
 
-	<main>
+	<main :class="{ 'main-margin': !isLoginOrRegister }">
 		<RouterView />
 		<Toast position="bottom-right" />
 	</main>
@@ -19,6 +24,9 @@ import Toast from 'primevue/toast';
 /* Needs media queries */
 main {
 	flex-grow: 1;
+}
+
+.main-margin {
 	margin: 30px;
 }
 </style>
