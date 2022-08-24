@@ -66,24 +66,9 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         }
 
         [HttpGet("id/{id}")]
-        public async Task<ActionResult> GetById(long id)
+        public ActionResult GetById(string id)
         {
-            try
-            {
-                var result = await _projectService.GetProjectById(id);
-                if(result != null)
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return StatusCode(500, "Error occured - result returned null");
-                }
-            }
-            catch(Exception ex)
-            {
-                return StatusCode(500, "Exception occured - " + ex.Message);
-            }
+            return Ok();
         }
 
         [HttpGet]
