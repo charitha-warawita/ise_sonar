@@ -11,11 +11,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 {
     public class ProjectValidator : IProjectValidator
     {
-        private ILogger _logger;
-        public ProjectValidator(ILogger logger)
-        {
-            _logger = logger;
-        }
+       // private ILogger _logger;
+       // public ProjectValidator(ILogger logger)
+       // {
+            //_logger = logger;
+       // }
 
         private List<string> errors;
         public bool IsValidated(Project project)
