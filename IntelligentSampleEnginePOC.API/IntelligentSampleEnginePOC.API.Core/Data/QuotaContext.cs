@@ -175,6 +175,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
 
                             variableList.AddRange(currConditions.Variables);
                             Quota.Conditions.Add(currConditions);
+                            Quota.Conditions[0].Variables = variableList;
                         }
                         quotas.Add(Quota);
                     }
