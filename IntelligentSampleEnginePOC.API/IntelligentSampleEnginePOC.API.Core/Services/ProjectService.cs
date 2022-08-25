@@ -77,10 +77,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         public Project? Get(long id)
         {
             var project = _projectContext.Get(id);
-            if (project is null) return project;
-
-            project.TargetAudiences = _taService.GetAllByProjectId(id).ToList();
-
+            
             return project;
         }
 

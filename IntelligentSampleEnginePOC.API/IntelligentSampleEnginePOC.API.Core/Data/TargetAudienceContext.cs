@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Data;
 using IntelligentSampleEnginePOC.API.Core.Extensions;
-using Microsoft.EntityFrameworkCore.Diagnostics.Internal;
+using IntelligentSampleEnginePOC.API.Core.Results;
 using Microsoft.Extensions.Logging;
 
 namespace IntelligentSampleEnginePOC.API.Core.Data
@@ -44,23 +44,26 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             return audience;
         }
 
-        public IEnumerable<TargetAudience> GetTargetAudiencesByProjectId(long id)
+        public PagedResult<TargetAudience> GetTargetAudiencesByProjectId(long id, int page, int pageSize)
         {
             using var connection = new SqlConnection(_options.iseDb);
-            using var command = new SqlCommand("GetTargetAudiencesByProjectId", connection);
+            using var command = new SqlCommand("GetTargetAudiencesByProjectIdPaged", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("ProjectId", id);
+            command.Parameters.AddWithValue("Page", page);
+            command.Parameters.AddWithValue("PageSize", pageSize);
             connection.Open();
-
+            
             using var reader = command.ExecuteReader();
-            if (!reader.HasRows) return Enumerable.Empty<TargetAudience>();
+            if (!reader.HasRows) return PagedResult<TargetAudience>.Empty();
 
-            var audiences = new List<TargetAudience>();
+            var data = new PagedResult<TargetAudience>();
             while (reader.Read())
             {
-
                 try
                 {
+                    data.TotalResults ??= reader.GetInt32("TotalCount");
+                    
                     var audience = new TargetAudience
                     {
                         Id = reader.GetInt64("Id"),
@@ -74,20 +77,17 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                         LiveUrl = reader.GetNullableString("LiveUrl") ?? string.Empty,
                     };
                     
-                    audiences.Add(audience);
+                    data.Result.Add(audience);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, ex.Message);
+                    _logger.LogError(ex, "TargetAudienceContext: GetTargetAudiencesByProjectId - Error: {Message}", ex.Message);
                     
                     throw;
                 }
             };
                 
-                
-            
-
-            return audiences;
+            return data;
         }
     }
 }

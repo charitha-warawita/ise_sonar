@@ -1,5 +1,6 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
+using IntelligentSampleEnginePOC.API.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
     [ApiController]
     public class TargetAudienceController : ControllerBase
     {
-        ITargetAudienceService _targetAudienceService;
+        readonly ITargetAudienceService _targetAudienceService;
 
         public TargetAudienceController(ITargetAudienceService taService)
         {
@@ -33,6 +34,28 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             {
                 return StatusCode(500, "Exception occured - " + ex.Message);
             }
+        }
+
+        [HttpGet]
+        public ActionResult Get([FromQuery] int page, [FromQuery] int pageSize = 5, [FromQuery] long? projectId = null)
+        {
+            if (page <= 0 || pageSize <= 0)
+                return BadRequest("Invalid paging");
+            
+            var result = new PagedResult<TargetAudience>();
+            try
+            {
+                if (projectId.HasValue)
+                {
+                    result = _targetAudienceService.GetAllByProjectId(projectId.Value, page, pageSize);
+                }
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+            
+            return Ok(result);
         }
     }
 }

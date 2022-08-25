@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IntelligentSampleEnginePOC.API.Core.Results;
 
 namespace IntelligentSampleEnginePOC.API.Core.Services
 {
@@ -29,9 +30,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             throw new ArgumentException("Target Audience Validation failed", nameof(audience));
         }
 
-        public IEnumerable<TargetAudience> GetAllByProjectId(long id)
+        public PagedResult<TargetAudience> GetAllByProjectId(long id, int page, int pageSize = 5)
         {
-            var result = _taContext.GetTargetAudiencesByProjectId(id);
+            var result = _taContext.GetTargetAudiencesByProjectId(id, page, pageSize);
             
             return result;
         }

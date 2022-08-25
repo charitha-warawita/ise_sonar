@@ -1,4 +1,5 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Model;
+using IntelligentSampleEnginePOC.API.Core.Results;
 
 namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 {
@@ -6,6 +7,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
     {
         TargetAudience CreateTargetAudience(long projectId, TargetAudience audience);
 
-        IEnumerable<TargetAudience> GetTargetAudiencesByProjectId(long id);
+        PagedResult<TargetAudience> GetTargetAudiencesByProjectId(long id, int page, int pageSize);
     }
 }
