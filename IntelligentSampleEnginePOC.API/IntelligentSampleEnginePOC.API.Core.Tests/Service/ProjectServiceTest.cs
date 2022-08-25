@@ -20,6 +20,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Tests.Service
             _projectContext = new Mock<IProjectContext>();
             _targetAudienceService = new Mock<ITargetAudienceService>();
             _samplingService = new Mock<ICintSamplingService>();
+            _projectValidator = new Mock<ProjectValidator>();
             _projectService = new ProjectService(_projectContext.Object,_targetAudienceService.Object, _samplingService.Object,_projectValidator.Object);
         }
 
