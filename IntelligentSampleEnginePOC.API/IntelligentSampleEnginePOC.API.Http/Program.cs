@@ -20,6 +20,9 @@ builder.Services.AddTransient<IReferenceContext, ReferenceContext>();
 builder.Services.AddTransient<IQualificationService, QualificationService>();
 builder.Services.AddTransient<IQualificationContext, QualificationContext>();
 
+builder.Services.AddTransient<IQuotaService, QuotaService>();
+builder.Services.AddTransient<IQuotaContext, QuotaContext>();
+
 builder.Services.AddTransient<IProjectService, ProjectService>();
 builder.Services.AddTransient<IProjectContext, ProjectContext>();
 

@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 {
-    internal class IQuotaContext
+    public interface IQuotaContext
     {
+        List<Quota> GetQuotaFromDB(long qtid);
 
+        //Qualification CreateQuota();
     }
+ 
+    
 }
