@@ -16,37 +16,28 @@
             <li class="nav-item" v-show="activecontent">
               <RouterLink @click="activate(3)" :class="{ active : active_el == 3 }" class="nav-link" to="/about">About</RouterLink>
             </li>
-           
-            
           </ul>
-          
-        <!-- <div>
-            <ul class="navbar-nav">
-               <li class="nav-item dropdown">
-               <a class="nav-link dropdown-toggle "  href="" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-               {{this.versiontext}}
-             </a>
-              <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
-               <li class="nav-item">
-              <RouterLink @click="activate(4)" :class="{ active : active_el == 4}" class="nav-link" to="/">POC</RouterLink>
-            </li>
-            <li class="nav-item">
-              <RouterLink @click="activate(5)" :class="{ active : active_el == 5}" class="nav-link" to="/about">Version 1</RouterLink>
-            </li>
-              </ul>
-             </li>
-            </ul>
-        </div>  -->
-        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle btn-outline-success searchButton" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          <!--<div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle btn-outline-success searchButton" type="button" 
+                                      id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               {{this.versiontext}}
-              </button>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                      <li><RouterLink @click="activate(4)" :class="{ active : active_el == 4 }" class="dropdown-item" to="/">Proof of concept</RouterLink></li>
-                      <li><RouterLink @click="activate(5)" :class="{ active : active_el == 5 }" class="dropdown-item" to="/about">Version 1</RouterLink></li>
-                  </ul>
-          </div>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                <li><RouterLink @click="activate(4)" :class="{ active : active_el == 4 }" class="dropdown-item" to="/">Proof of concept</RouterLink></li>
+                <li><RouterLink @click="activate(5)" :class="{ active : active_el == 5 }" class="dropdown-item" to="/about">Version 1</RouterLink></li>
+            </ul>
+          </div>-->
           
+          <div class="dropdown"> 
+          <div class="dropdown-toggle" style="color:white" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              <a href="#" data-toggle="dropdown" style="color:white"><img src="/src/assets/user.png" class="avatar" alt="Avatar"> Gopalakrishnan Venkatakrishnan <b class="caret"></b></a>
+            </div>
+            
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                <li><RouterLink @click="activate(4)" class="dropdown-item" to="/">Profile</RouterLink></li>
+                <li><RouterLink @click="activate(5)" class="dropdown-item" to="/about">Logout</RouterLink></li>
+            </ul>
+          </div>
         </div>
       </div>
     </nav>
