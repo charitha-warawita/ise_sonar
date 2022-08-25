@@ -11,6 +11,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Tests.Service
     {
         private Mock<IProjectContext> _projectContext;
         private Mock<ITargetAudienceService> _targetAudienceService;
+        private Mock<ProjectValidator> _projectValidator;
         private ProjectService _projectService;
         private Mock<ICintSamplingService> _samplingService;           
           
@@ -19,7 +20,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Tests.Service
             _projectContext = new Mock<IProjectContext>();
             _targetAudienceService = new Mock<ITargetAudienceService>();
             _samplingService = new Mock<ICintSamplingService>();
-            _projectService = new ProjectService(_projectContext.Object,_targetAudienceService.Object, _samplingService.Object);
+            _projectService = new ProjectService(_projectContext.Object,_targetAudienceService.Object, _samplingService.Object,_projectValidator.Object);
         }
 
         [Fact]
