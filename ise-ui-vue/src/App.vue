@@ -5,11 +5,11 @@
         {{ error }}
       </div>
 
-      <Login v-if="!user && !error" @loginComplete="updateUser" />
+      <Login v-if="!user && !error" @loginComplete="updateUser()" />
 
       <div v-if="user && !error" class="row g-3">
         <TopHeader />
-        <div class="col-md-4">
+        <!--<div class="col-md-4">
           <h5>Account &amp; Tokens</h5><hr>
           <p><b>Name:</b> {{ user.name }}</p>
           <p><b>Username:</b> {{ user.username }}</p>
@@ -65,7 +65,7 @@
         <div v-if="graphPhoto" class="col-md-4">
           <h5>Photo</h5><hr>
           <p><img class="graphphoto" :src="graphPhoto" alt="user" /></p>
-        </div>
+        </div>-->
 
         <!--<div class="column is-full">
           <Search :user="user" :access-token="accessToken" />
@@ -73,7 +73,7 @@
         <RouterView />
       </div>
     </div>
-    <CustomModal @close="toggleModal('9990')" :modalId="9990">
+    <!--<CustomModal @close="toggleModal('9990')" :modalId="9990">
         <div class="card modal-content">
           <h3 class="card-header">Account &amp; ID Token Details</h3>
             <div class="card-body">
@@ -94,13 +94,34 @@
             <div class="card-body">
             <pre>{{ accessToken }}</pre></div>
           </div>
-    </CustomModal> 
+    </CustomModal> -->
 
 
     
   </div>
 </template>
-<script>
+<script setup>
+import {useUserStore} from '@/stores/userStore'
+import {storeToRefs} from 'pinia'
+import { onMounted } from 'vue'
+import { RouterLink, RouterView } from 'vue-router'
+import TopHeader from '@/components/TopHeader.vue'
+import Login from '@/components/Login.vue'
+
+var userStore = useUserStore()
+const { user, error } = storeToRefs(userStore)
+
+function updateUser() {
+  userStore.updateUser();
+  userStore.fetchGraphDetails();
+}
+
+onMounted(async () => {
+    await userStore.created();
+    await userStore.fetchGraphDetails();
+})
+</script>
+<!--<script>
 import { RouterLink, RouterView } from 'vue-router'
 import TopHeader from '@/components/TopHeader.vue'
 import auth from '@/services/auth'
@@ -203,7 +224,7 @@ export default {
     }
   }
 }
-</script>
+</script>-->
 
 <style>
 @import '@/assets/base.css';

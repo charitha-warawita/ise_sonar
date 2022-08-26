@@ -34,8 +34,8 @@
             </div>
             
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                <li><RouterLink @click="activate(4)" class="dropdown-item" to="/">Profile</RouterLink></li>
-                <li><RouterLink @click="activate(5)" class="dropdown-item" to="/about">Logout</RouterLink></li>
+                <li><RouterLink class="dropdown-item" to="/user">Profile</RouterLink></li>
+                <li><RouterLink class="dropdown-item" to="/about">Logout</RouterLink></li>
             </ul>
           </div>
         </div>
