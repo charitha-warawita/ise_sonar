@@ -191,8 +191,6 @@ const {
   status,
   completes,
   prescreence,
-  quotaMinAge,
-  quotaMaxAge,
 } = storeToRefs(useQuotaDataStore);
 
 function SaveCurrentQuota(taId) {
