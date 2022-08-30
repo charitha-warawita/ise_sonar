@@ -6,7 +6,9 @@ module.exports = {
 	extends: [
 		"plugin:vue/vue3-strongly-recommended",
 		"eslint:recommended",
+		"@vue/eslint-config-typescript/recommended",
 		"@vue/eslint-config-prettier",
+		"prettier",
 	],
 	env: {
 		"vue/setup-compiler-macros": true,
