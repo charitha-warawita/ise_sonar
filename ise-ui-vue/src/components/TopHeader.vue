@@ -42,7 +42,26 @@
       </div>
     </nav>
 </template>
-<script>
+<script setup>
+  var active_el = 1;
+  var activecontent = true;
+  var versiontext = 'Proof of Concept';
+  var apptitle = import.meta.env.VITE_APP_TITLE;
+  var mode = import.meta.env.VITE_ENV;
+
+  function activate(el) {
+    this.active_el = el;
+        if (this.active_el ===5) {
+          this.activecontent = false
+          this.versiontext='Version 1'
+        } else { (this.active_el ===4)
+          this.activecontent = true
+            this.versiontext='Proof of concept'
+        }
+  }
+
+</script>
+<!--<script>
 export default {
   data() {
     console.log('Test: ' + JSON.stringify(import.meta.env))
@@ -67,7 +86,7 @@ export default {
     }
   }   
   }
-</script>
+</script> -->
 <style>
     .searchButton {
         background-color: #34495E;

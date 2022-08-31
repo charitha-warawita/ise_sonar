@@ -31,8 +31,11 @@ import PageTitle from '@/components/PageTitle.vue'
 import {useProjectStore} from '@/stores/projectStore'
 import {storeToRefs} from 'pinia'
 import { useRouter } from 'vue-router';
+import {useUserStore} from '@/stores/userStore'
+import { onMounted } from 'vue'
 
 var useProjStore = useProjectStore()
+var userStore = useUserStore()
 
 const { project, cintRequests } = storeToRefs(useProjStore)
 const router = useRouter();
@@ -59,6 +62,13 @@ function discardNewProject() {
         router.push('/');
     }
 }
+
+onMounted(async () => {
+    if(!userStore.isAuthenticated()) {
+      userStore.shallowLogout();
+      router.push('/');
+    }
+})
 </script>
 <style>
     

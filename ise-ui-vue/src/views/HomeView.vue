@@ -1,10 +1,20 @@
-<script>
+
+<script setup>
 import PageTitle from '@/components/PageTitle.vue'
 import ProjectList from '@/components/ProjectList.vue'
+import {useUserStore} from '@/stores/userStore'
+import { useRouter } from 'vue-router';
+import { onMounted } from 'vue'
 
-export default {
-  components: { PageTitle, ProjectList }
-}
+var userStore = useUserStore()
+const router = useRouter();
+
+onMounted(async () => {
+    if(!userStore.isAuthenticated()) {
+      userStore.shallowLogout();
+      router.push('/');
+    }
+})
 </script>
 
 <template>
