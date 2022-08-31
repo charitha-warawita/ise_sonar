@@ -1,14 +1,16 @@
 <template>
   <div class="centered">
-    <h1 class="title is-5">
-      Please login with Microsoft Identity Platform
-    </h1>
+    <!--<p><img class="graphphoto" src="../assets/logo/kantarlogo.svg" alt="kantar" /></p>-->
+    <h1>Intelligent Sample Engine</h1><br/>
+    <h5 class="title is-5">
+      Please log in with Kantar Office365 Credentials
+    </h5>
     <button class="btn btn-outline-success searchButton me-2" @click="doLogin">
       Sign in with Microsoft <img class="ml-4" src="../assets/mssymbol.svg" alt="MS logo">
     </button>
-    <p class="mt-4">
+    <!--<p class="mt-4">
       Note. You can login with a 'work &amp; school' or personal Microsoft account
-    </p>
+    </p>-->
 
     <div v-if="error" class="notification is-warning mt-4">
       {{ error }}
