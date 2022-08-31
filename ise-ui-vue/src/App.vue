@@ -1,20 +1,40 @@
-<script>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from '@/components/HelloWorld.vue'
-import TopHeader from '@/components/TopHeader.vue'
-
-export default {
-  components: { TopHeader }
-}
-</script>
-
 <template>
   <div>
-    <TopHeader />
-    <RouterView />
+    <div class="container is-fluid" style="margin: 20px 0 20px 0">
+      <div v-if="error" class="notification is-danger is-4 title">
+        {{ error }}
+      </div>
+
+      <Login v-if="!user && !error" @loginComplete="updateUser()" />
+
+      <div v-if="user && !error" class="row g-3">
+        <TopHeader />
+        <RouterView />
+      </div>
+    </div>
   </div>
 </template>
+<script setup>
+import {useUserStore} from '@/stores/userStore'
+import {storeToRefs} from 'pinia'
+import { onMounted } from 'vue'
+import { RouterLink, RouterView } from 'vue-router'
+import TopHeader from '@/components/TopHeader.vue'
+import Login from '@/components/Login.vue'
 
+var userStore = useUserStore()
+const { user, error } = storeToRefs(userStore)
+
+function updateUser() {
+  userStore.updateUser();
+  userStore.fetchGraphDetails();
+}
+
+onMounted(async () => {
+    await userStore.created();
+    await userStore.fetchGraphDetails();
+})
+</script>
 <style>
 @import '@/assets/base.css';
 
@@ -52,6 +72,13 @@ a,
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,102,203, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
 .custom-toggler.navbar-toggler {
   border-color: rgb(255,102,203);
 } 
@@ -111,7 +138,6 @@ nav a:first-of-type {
 
   nav {
     text-align: left;
-    margin-left: -1rem;
     font-size: 1rem;
 
     padding: 1rem 0;
