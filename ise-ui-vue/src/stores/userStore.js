@@ -10,6 +10,7 @@ export const useUserStore = defineStore('user', {
         // Details fetched from Graph API, user object and photo
         graphDetails: null,
         graphPhoto: null,
+        graphSmallPhoto: null,
 
         // Visibility toggles for the three details modal popups
         showUserDetails: false,
@@ -55,6 +56,7 @@ export const useUserStore = defineStore('user', {
             this.graphDetails = null
             this.userDetails = null
             this.graphPhoto = null
+            this.graphSmallPhoto = null
             auth.clearLocal()
         },
     
@@ -64,6 +66,7 @@ export const useUserStore = defineStore('user', {
             this.graphDetails = null
             this.userDetails = null
             this.graphPhoto = null
+            this.graphSmallPhoto = null
             auth.logout()
         },
     
@@ -76,6 +79,7 @@ export const useUserStore = defineStore('user', {
             try {
                 this.graphDetails = await graph.getSelf()
                 this.graphPhoto = await graph.getPhoto()
+                this.graphSmallPhoto = await graph.getSmallPhoto()
                 this.accessToken = graph.getAccessToken()
             } catch (err) {
                 this.error = err

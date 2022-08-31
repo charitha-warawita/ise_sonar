@@ -30,12 +30,14 @@
           
           <div class="dropdown"> 
           <div class="dropdown-toggle" style="color:white" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-              <a href="#" data-toggle="dropdown" style="color:white"><img src="/src/assets/user.png" class="avatar" alt="Avatar"> Gopalakrishnan Venkatakrishnan <b class="caret"></b></a>
+              <a href="#" data-toggle="dropdown" style="color:white">
+                <img v-if="graphSmallPhoto" :src="graphSmallPhoto" class="avatar" alt="Avatar">
+                <img v-if="!graphSmallPhoto" src="/src/assets/user.png" class="avatar" alt="Avatar">  {{ user.name }}  <b class="caret"></b></a>
             </div>
             
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                 <li><RouterLink class="dropdown-item" to="/user">Profile</RouterLink></li>
-                <li><RouterLink class="dropdown-item" to="/about">Logout</RouterLink></li>
+                <li><RouterLink @click="userStore.shallowLogout()" class="dropdown-item" to="/">Logout</RouterLink></li>
             </ul>
           </div>
         </div>
@@ -43,6 +45,10 @@
     </nav>
 </template>
 <script setup>
+  import {useUserStore} from '@/stores/userStore'
+  import {storeToRefs} from 'pinia'
+  var userStore = useUserStore()
+  const { user, graphSmallPhoto } = storeToRefs(userStore)
   var active_el = 1;
   var activecontent = true;
   var versiontext = 'Proof of Concept';
@@ -88,6 +94,9 @@ export default {
   }
 </script> -->
 <style>
+  .avatar {
+    border-radius: 50%;
+  }
     .searchButton {
         background-color: #34495E;
         color: white;

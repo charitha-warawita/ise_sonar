@@ -37,6 +37,13 @@ export default {
       return URL.createObjectURL(blob)
     }
   },
+  async getSmallPhoto() {
+    let resp = await callGraph('/me/photos/48x48/$value')
+    if(resp) {
+      let blob = await resp.blob()
+      return URL.createObjectURL(blob)
+    }
+  },
 
   //
   // Search for users
