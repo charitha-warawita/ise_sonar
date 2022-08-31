@@ -119,15 +119,15 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             return result;
         }
 
-        public Project? Get(long id)
+        public async Task<Project?> GetAsync(long id)
         {
-            using var connection = new SqlConnection(_options.iseDb);
-            using var command = new SqlCommand("[GetProject]", connection);
+            await using var connection = new SqlConnection(_options.iseDb);
+            await using var command = new SqlCommand("[GetProject]", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("ProjectId", id);
             connection.Open();
 
-            using var reader = command.ExecuteReader();
+            await using var reader = await command.ExecuteReaderAsync();
             if (!reader.HasRows) return null;
             if (!reader.Read()) return null;
 
@@ -148,7 +148,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError(ex, "ProjectContext: GetAsync - Error: {Message}", ex.Message);
                 
                 throw;
             }

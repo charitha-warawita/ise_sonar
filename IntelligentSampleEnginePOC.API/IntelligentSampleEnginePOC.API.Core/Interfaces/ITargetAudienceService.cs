@@ -7,6 +7,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
     {
         TargetAudience CreateTargetAudience(long? projectId, TargetAudience audience);
 
-        PagedResult<TargetAudience> GetAllByProjectId(long id, int page, int pageSize);
+        Task<PagedResult<TargetAudience>> GetAllByProjectIdAsync(long id, int page, int pageSize);
     }
 }

@@ -44,17 +44,17 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             return audience;
         }
 
-        public PagedResult<TargetAudience> GetTargetAudiencesByProjectId(long id, int page, int pageSize)
+        public async Task<PagedResult<TargetAudience>> GetTargetAudiencesByProjectIdAsync(long id, int page, int pageSize)
         {
-            using var connection = new SqlConnection(_options.iseDb);
-            using var command = new SqlCommand("GetTargetAudiencesByProjectIdPaged", connection);
+            await using var connection = new SqlConnection(_options.iseDb);
+            await using var command = new SqlCommand("GetTargetAudiencesByProjectIdPaged", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("ProjectId", id);
             command.Parameters.AddWithValue("Page", page);
             command.Parameters.AddWithValue("PageSize", pageSize);
             connection.Open();
-            
-            using var reader = command.ExecuteReader();
+
+            await using var reader = await command.ExecuteReaderAsync();
             if (!reader.HasRows) return PagedResult<TargetAudience>.Empty();
 
             var data = new PagedResult<TargetAudience>();

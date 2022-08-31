@@ -65,11 +65,11 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetById(long id)
+        public async Task<ActionResult> GetByIdAsync(long id)
         {
             try
             {
-                var result = _projectService.Get(id);
+                var result = await _projectService.GetAsync(id);
 
                 return Ok(result);
             }
@@ -94,7 +94,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         }
         
         [HttpGet("{id}/TargetAudiences")]
-        public ActionResult GetTargetAudiencesForProjectPaged(long id, [FromQuery] int page, [FromQuery] int pageSize = 5)
+        public async Task<ActionResult> GetTargetAudiencesForProjectPaged(long id, [FromQuery] int page = 1, [FromQuery] int pageSize = 5)
         {
             if (page <= 0 || pageSize <= 0)
                 return BadRequest("Invalid paging data");
@@ -102,7 +102,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             PagedResult<TargetAudience> result;
             try
             {
-                result = _targetAudienceService.GetAllByProjectId(id, page, pageSize);
+                result = await _targetAudienceService.GetAllByProjectIdAsync(id, page, pageSize);
             }
             catch (Exception e)
             {

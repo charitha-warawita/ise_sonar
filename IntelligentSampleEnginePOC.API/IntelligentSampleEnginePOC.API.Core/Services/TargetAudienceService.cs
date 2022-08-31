@@ -30,9 +30,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             throw new ArgumentException("Target Audience Validation failed", nameof(audience));
         }
 
-        public PagedResult<TargetAudience> GetAllByProjectId(long id, int page, int pageSize = 5)
+        public async Task<PagedResult<TargetAudience>> GetAllByProjectIdAsync(long id, int page, int pageSize = 5)
         {
-            var result = _taContext.GetTargetAudiencesByProjectId(id, page, pageSize);
+            var result = await _taContext.GetTargetAudiencesByProjectIdAsync(id, page, pageSize);
             
             return result;
         }

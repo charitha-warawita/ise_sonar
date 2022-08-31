@@ -9,11 +9,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 
         Task<ProjectList> GetProjects(int? status, int pageNumber, string? searchString, int recentCount);
 
-        Project? Get(long id);
-        // Task<IValidationModel> ValidateProject(Project project);           
-
-        /*Task<Model.Project> LaunchProject(Model.Project project);
-       Model.Project GetProjects(string Id);
-       Model.Project UpdateProject(Model.Project project);*/
+        Task<Project?> GetAsync(long id);
     }
 }

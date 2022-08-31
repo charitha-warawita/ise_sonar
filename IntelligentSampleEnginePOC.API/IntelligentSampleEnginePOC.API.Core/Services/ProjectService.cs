@@ -74,9 +74,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             return _projectContext.GetProjects(status, pageNumber, searchString, recentCount);
         }
 
-        public Project? Get(long id)
+        public async Task<Project?> GetAsync(long id)
         {
-            var project = _projectContext.Get(id);
+            var project = await _projectContext.GetAsync(id);
             
             return project;
         }
