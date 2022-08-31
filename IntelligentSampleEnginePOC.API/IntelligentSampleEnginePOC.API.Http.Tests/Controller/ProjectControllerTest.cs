@@ -76,6 +76,8 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         [InlineData(2, 1, "Test2", 3)]
         public async void GetAllProjects_ReturnsOk(int? status,int pageNumber, string? searchString, int recordCount)
         {
+            pageNumber = pageNumber <= 0 ? 1 : pageNumber;
+            recordCount= recordCount <= 0 ? 10 : recordCount;
             _projectService.Setup(repo => repo.GetProjects(status, pageNumber, searchString, recordCount)).Returns(Task.FromResult(new MockProjectList().GetTestProjectList(status, pageNumber, searchString, recordCount)));
             var result = await _projectController.GetProjects(status, pageNumber, searchString, recordCount);
             long pageRecordCount = ((ProjectList)((ObjectResult)result).Value).TotalItems;

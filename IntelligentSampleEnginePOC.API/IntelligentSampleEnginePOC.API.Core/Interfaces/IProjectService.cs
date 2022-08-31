@@ -7,7 +7,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
         Task<Project> CreateProject(Project project);
         Task<Project> LaunchProject(Project project);
 
-        Task<ProjectList> GetProjects(int? status, int pageNumber, string? searchString, int recentCount);
+        Task<ProjectList> GetProjects(int? status, int pageNumber, string? searchString, int recordCount);
 
         Task<Project?> GetAsync(long id);
     }

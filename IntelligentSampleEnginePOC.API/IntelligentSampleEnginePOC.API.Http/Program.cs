@@ -20,6 +20,9 @@ builder.Services.AddTransient<IReferenceContext, ReferenceContext>();
 builder.Services.AddTransient<IQualificationService, QualificationService>();
 builder.Services.AddTransient<IQualificationContext, QualificationContext>();
 
+builder.Services.AddTransient<IQuotaService, QuotaService>();
+builder.Services.AddTransient<IQuotaContext, QuotaContext>();
+
 builder.Services.AddTransient<IProjectService, ProjectService>();
 builder.Services.AddTransient<IProjectContext, ProjectContext>();
 
@@ -28,6 +31,8 @@ builder.Services.AddTransient<ITargetAudienceContext, TargetAudienceContext>();
 
 builder.Services.AddTransient<ISpecTransform, CintCustomTransform>();
 builder.Services.AddTransient<IProjectCintContext, ProjectCintContext>();
+
+builder.Services.AddTransient<IProjectValidator, ProjectValidator>();
 
 builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("ConnectionStrings"));
 

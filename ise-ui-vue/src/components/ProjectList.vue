@@ -89,7 +89,7 @@
 				:max-pages-shown="4"
 				:current-page="currentPageNumber"
 				:on-click="PageSelectHandler"
-				:hide-prev-next-when-ends="true"
+				hide-prev-next
 			/>
 		</div>
 
@@ -140,6 +140,8 @@ const RowSelectedHandler = (project) => {
 function applyStatusFilter(status) {
 	useProjsStore.getProjectsBySearchNameAndStartDate(status);
 	document.querySelectorAll(".paginate-buttons").forEach((button) => {
+		button.classList.remove("active-page");
+
 		if (button.innerText === "1") {
 			button.click();
 		}
