@@ -71,9 +71,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             return project;
         }
 
-        public async Task<ProjectList> GetProjects(int? status, int pageNumber, string? searchString, int recentCount)
+        public async Task<ProjectList> GetProjects(int? status, int pageNumber, string? searchString, int recordCount)
         {
-            return _projectContext.GetProjects(status, pageNumber, searchString, recentCount);
+            return _projectContext.GetProjects(status, pageNumber, searchString, recordCount);
         }
 
         private bool ProjectValidated(Project project)
