@@ -1,9 +1,7 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using IntelligentSampleEnginePOC.API.Core.Results;
 
 namespace IntelligentSampleEnginePOC.API.Http.Controllers
 {
@@ -11,12 +9,13 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        IProjectService _projectService;
-        
-        public ProjectController(IProjectService projectService, ICintSamplingService samplingService)
+        private readonly IProjectService _projectService;
+        private readonly ITargetAudienceService _targetAudienceService;
+
+        public ProjectController(IProjectService projectService, ITargetAudienceService targetAudienceService, ICintSamplingService samplingService)
         {
             _projectService = projectService;
-            
+            _targetAudienceService = targetAudienceService;
         }
 
         [HttpPost]
@@ -92,6 +91,25 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             {
                 return StatusCode(500, "Exception occured - " + ex.Message);
             }
+        }
+        
+        [HttpGet("{id}/TargetAudiences")]
+        public ActionResult GetTargetAudiencesForProjectPaged(long id, [FromQuery] int page, [FromQuery] int pageSize = 5)
+        {
+            if (page <= 0 || pageSize <= 0)
+                return BadRequest("Invalid paging data");
+            
+            PagedResult<TargetAudience> result;
+            try
+            {
+                result = _targetAudienceService.GetAllByProjectId(id, page, pageSize);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+            
+            return Ok(result);
         }
     }
 }

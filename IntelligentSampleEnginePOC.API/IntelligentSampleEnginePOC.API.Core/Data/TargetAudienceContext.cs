@@ -73,8 +73,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                         EstimatedLOI = reader.GetInt32("EstimatedLOI"),
                         Limit = reader.GetInt32("Limit"),
                         LimitType = reader.GetNullableInt32("LimitType"),
-                        TestingUrl = reader.GetNullableString("TestingUrl") ?? string.Empty,
-                        LiveUrl = reader.GetNullableString("LiveUrl") ?? string.Empty,
+                        TestingUrl = reader.GetNullableString("TestingUrl"),
+                        LiveUrl = reader.GetNullableString("LiveUrl"),
                     };
                     
                     data.Result.Add(audience);

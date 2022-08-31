@@ -28,7 +28,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
         public Status Status { get; set; }
         [JsonProperty(PropertyName = "categories")]
         public List<int> Categories { get; set; }
-        [JsonProperty(PropertyName = "targetAudiences"), Json.JsonIgnore(Condition = Json.JsonIgnoreCondition.WhenWritingNull)]
+        
+        [JsonProperty(PropertyName = "targetAudiences")]
         public List<TargetAudience>? TargetAudiences { get; set; }
     }
 }
