@@ -69,5 +69,25 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
             var qual = ((Qualification?)okResult.Value)?.Id;
             Assert.NotNull(qual);
         }
+
+
+
+        [Theory]
+        [InlineData(331)]
+        [InlineData(3333)]
+        public void DeleteQualification_ReturnsOk(long qid)
+        {
+            string jsonString = QualificationTest.GetQualificationJson();
+            Qualification qualification = JsonConvert.DeserializeObject<Qualification>(jsonString);
+
+            _qualificationService.Setup(repo => repo.DeleteQualification( qid)).Returns(new QualificationTest().DeleteQualificationTest(qid , qualification));
+            var result = _qualificationController.DeleteQualification(qid);
+            Assert.NotNull(result);
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(okResult);
+            Assert.Equal(200, okResult.StatusCode);
+
+
+        }
     }
 }

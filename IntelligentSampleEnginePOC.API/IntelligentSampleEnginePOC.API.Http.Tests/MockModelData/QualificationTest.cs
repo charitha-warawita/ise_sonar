@@ -60,5 +60,12 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
             qualification.Id = 333;
             return qualification;
         }
+
+
+        public long DeleteQualificationTest(long qid, Qualification qualification)
+        {
+            qualification.Id = qid;
+            return qid;
+        }
     }
 }
