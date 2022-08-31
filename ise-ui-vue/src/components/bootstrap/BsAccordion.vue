@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
 	flush: {
 		type: Boolean,
@@ -6,7 +6,8 @@ const props = defineProps({
 		default: false,
 	},
 	items: {
-		type: Array,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		type: Array<any>,
 		required: true,
 	},
 });

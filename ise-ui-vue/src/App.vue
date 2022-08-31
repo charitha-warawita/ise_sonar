@@ -1,60 +1,56 @@
-<script>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from '@/components/HelloWorld.vue'
-import TopHeader from '@/components/TopHeader.vue'
-
-export default {
-  components: { TopHeader }
-}
+<script setup>
+import TopHeader from "@/components/TopHeader.vue";
+import { VueQueryDevTools } from "vue-query/devtools";
 </script>
 
 <template>
-  <div>
-    <TopHeader />
-    <RouterView />
-  </div>
+	<div>
+		<TopHeader />
+		<RouterView />
+		<VueQueryDevTools />
+	</div>
 </template>
 
 <style>
-@import '@/assets/base.css';
+@import "@/assets/base.css";
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 2rem;
+	font-weight: normal;
 }
 
 header {
-  line-height: 1.5;
-  max-height: 100vh;
+	line-height: 1.5;
+	max-height: 100vh;
 }
 
 .logo {
-  display: block;
-  margin: 0 auto 2rem;
+	display: block;
+	margin: 0 auto 2rem;
 }
 
 a,
 .green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
+	text-decoration: none;
+	color: hsla(160, 100%, 37%, 1);
+	transition: 0.4s;
 }
 
 @media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+	a:hover {
+		background-color: hsla(160, 100%, 37%, 0.2);
+	}
 }
 
 .custom-toggler .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,102,203, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,102,203, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 
 .custom-toggler.navbar-toggler {
-  border-color: rgb(255,102,203);
-} 
+	border-color: rgb(255, 102, 203);
+}
 
 /*nav {
   width: 100%;
@@ -82,40 +78,40 @@ nav a:first-of-type {
 }*/
 
 @media (min-width: 1024px) {
-  body {
-    /*display: flex;
+	body {
+		/*display: flex;
     place-items: center;*/
-  }
+	}
 
-  #app {
-    /*display: grid; 
+	#app {
+		/*display: grid;
     grid-template-columns: 1fr 1fr; */
-    padding: 0 2rem;
-  }
+		padding: 0 2rem;
+	}
 
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+	header {
+		display: flex;
+		place-items: center;
+		padding-right: calc(var(--section-gap) / 2);
+	}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+	header .wrapper {
+		display: flex;
+		place-items: flex-start;
+		flex-wrap: wrap;
+	}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+	.logo {
+		margin: 0 2rem 0 0;
+	}
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
+	nav {
+		text-align: left;
+		margin-left: -1rem;
+		font-size: 1rem;
 
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+		padding: 1rem 0;
+		margin-top: 1rem;
+	}
 }
 </style>

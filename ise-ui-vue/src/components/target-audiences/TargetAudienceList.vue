@@ -1,67 +1,61 @@
-<script setup>
+<script setup lang="ts">
+import { useProjectQueries } from "@/api/project/queries";
 import BsAccordion from "@/components/bootstrap/BsAccordion.vue";
 import StyledPaginator from "@/components/general/StyledPaginator.vue";
-import { useAxios } from "@/composables/axios";
-import { computed, ref, watchEffect } from "vue";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { TargetAudience } from "@/models/targetAudience";
+import { computed, ref } from "vue";
 
-const axios = useAxios();
-const props = defineProps({
-	projectId: {
-		type: Number,
-		required: true,
-	},
-});
+const projectQueries = useProjectQueries();
 
-const data = ref([]);
-const total = ref();
-const page = ref(1);
+const props = defineProps<{ projectId: number }>();
+
 const pagesize = 5;
-const loading = ref(false);
-const pagedData = computed(() => data.value[page.value]);
+const page = ref(1);
 
-watchEffect(async () => {
-	if (pagedData.value !== undefined) return;
+const { isLoading, isError, data } = projectQueries.GetProjectTargetAudiences(
+	props.projectId,
+	page,
+	pagesize
+);
 
-	loading.value = true;
+const total = computed(() => data.value?.totalResults ?? 0);
 
-	await axios
-		.get("/TargetAudience", {
-			params: {
-				page: page.value,
-				pageSize: pagesize,
-				projectId: props.projectId,
-			},
-		})
-		.then((response) => {
-			data.value[page.value] = response.data.result;
-			total.value = response.data.totalResults;
-		})
-		.catch((err) => console.error(err))
-		.finally(() => (loading.value = false));
-});
-
-const PageSelectHandler = (p) => {
+const PageSelectHandler = (p: number) => {
 	page.value = p;
+
+	console.log(page.value);
 };
 </script>
 
 <template>
 	<div>
-		<div v-if="!loading">
-			<div v-if="pagedData.length">
-				<bs-accordion flush :items="pagedData">
-					<template #header="{ item }">
+		<div v-if="isLoading" class="spinner-container">
+			<div class="position-absolute top-50 start-50 translate-middle">
+				<div class="spinner-border" role="status">
+					<span class="visually-hidden">Loading...</span>
+				</div>
+			</div>
+		</div>
+		<div v-else-if="isError">
+			An error occurred whilst fetching Target Audiences.
+		</div>
+		<div v-else-if="data">
+			<div v-if="data.result.length">
+				<bs-accordion flush :items="data.result">
+					<template #header="{ item }: { item: TargetAudience }">
 						{{ item.name }}
 					</template>
 
-					<template #body="{ item }">
+					<template #body="{ item }: { item: TargetAudience }">
 						<div class="container">
+							<div>Id: {{ item.id }}</div>
 							<div>Name: {{ item.name }}</div>
 							<div>
 								Audience Number: {{ item.audienceNumber }}
 							</div>
 							<div>Esitimated IR: {{ item.estimatedIR }}</div>
-							<div>Esimated LOI: {{ item.esimatedLOI }}</div>
+							<div>Esimated LOI: {{ item.estimatedLOI }}</div>
 							<div>Limit: {{ item.limit }}</div>
 						</div>
 					</template>
@@ -69,13 +63,6 @@ const PageSelectHandler = (p) => {
 			</div>
 			<div v-else class="no-audiences-message">
 				<span>No Target Audiences To Display.</span>
-			</div>
-		</div>
-		<div v-else class="spinner-container">
-			<div class="position-absolute top-50 start-50 translate-middle">
-				<div class="spinner-border" role="status">
-					<span class="visually-hidden">Loading...</span>
-				</div>
 			</div>
 		</div>
 
