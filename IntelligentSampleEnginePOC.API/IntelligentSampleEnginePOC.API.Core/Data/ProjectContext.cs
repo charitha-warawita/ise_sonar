@@ -41,7 +41,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             return new Project();
         }
 
-        public ProjectList GetProjects(int? status,int pageNumber, string? searchString, int recentCount)        
+        public ProjectList GetProjects(int? status,int pageNumber, string? searchString, int recordCount)        
         {
             ProjectList projectList = new ProjectList();
             List<Project> projects = new List<Project>();
@@ -53,9 +53,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                     command.CommandType = System.Data.CommandType.StoredProcedure;
                     command.Connection = connection;
                     command.Parameters.AddWithValue("@Status", status);
-                    command.Parameters.AddWithValue("@PageNumber", pageNumber);
+                    command.Parameters.AddWithValue("@PageNumber", pageNumber <= 0 ? 1 : pageNumber);
                     command.Parameters.AddWithValue("@SearchString", searchString);
-                    command.Parameters.AddWithValue("@RecentCount", recentCount);
+                    command.Parameters.AddWithValue("@RecordCount", recordCount <= 0 ? 10 : recordCount);
                     connection.Open();
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.HasRows)
