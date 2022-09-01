@@ -31,17 +31,26 @@ export default {
   // https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
   //
   async getPhoto() {
-    let resp = await callGraph('/me/photos/240x240/$value')
-    if (resp) {
-      let blob = await resp.blob()
-      return URL.createObjectURL(blob)
+    try {
+      let resp = await callGraph('/me/photos/240x240/$value')
+      if (resp) {
+        let blob = await resp.blob()
+        return URL.createObjectURL(blob)
+      }
+    }
+    catch(error) {
+      return null;
     }
   },
   async getSmallPhoto() {
-    let resp = await callGraph('/me/photos/48x48/$value')
-    if(resp) {
-      let blob = await resp.blob()
-      return URL.createObjectURL(blob)
+    try {
+      let resp = await callGraph('/me/photos/48x48/$value')
+      if(resp) {
+        let blob = await resp.blob()
+        return URL.createObjectURL(blob)
+      }
+    } catch (error) {
+      return null;
     }
   },
 
