@@ -72,11 +72,11 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetProjects(int? status, int pageNumber, string? searchString, int recentCount)
+        public async Task<ActionResult> GetProjects(int? status, int pageNumber, string? searchString, int recordCount)
         {
             try
             {
-                var projectLists = await _projectService.GetProjects(status, pageNumber, searchString, recentCount);
+                var projectLists = await _projectService.GetProjects(status, pageNumber, searchString, recordCount);
                 return Ok(projectLists);
             }
             catch (Exception ex)
