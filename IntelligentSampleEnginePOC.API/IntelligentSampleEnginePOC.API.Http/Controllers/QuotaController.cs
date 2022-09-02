@@ -29,5 +29,44 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
                 return StatusCode(500, "Exception occured - " + ex.Message);
             }
         }
+        
+        [HttpPost("{taid}")]
+        public ActionResult Post(long projectId, long? taid, [FromBody] Core.Model.Quota qtaData)
+        {
+            try
+            {
+                var resultQuota = _quotaService.CreateQuota(projectId, taid, qtaData);
+                if (resultQuota != null)
+                {
+                    return Ok(resultQuota);
+                }
+                else
+                    return StatusCode(500, "Error occured");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Exception occured - " + ex.Message);
+            }
+        }
+
+        [HttpDelete("{qtid}")]
+        public ActionResult DeleteQuota(long qtid)
+        {
+            try
+            {
+                var resultDeleted = _quotaService.DeleteQuota(qtid);
+                if (resultDeleted > 0)
+                {
+                    return Ok("Record deleted");
+                }
+                else
+                    return StatusCode(500, "No Records Found");
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Exception occured - " + ex.Message);
+            }
+        }
     }
 }
