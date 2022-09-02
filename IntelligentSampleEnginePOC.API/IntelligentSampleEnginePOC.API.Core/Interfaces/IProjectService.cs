@@ -1,4 +1,5 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Model;
+using IntelligentSampleEnginePOC.API.Core.Model.Cint;
 
 namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 {
@@ -10,5 +11,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
         Task<ProjectList> GetProjects(int? status, int pageNumber, string? searchString, int recordCount);
 
         Task<Project?> GetAsync(long id);
+
+        Task<List<Survey>> GetSurveysAsync(long id);
     }
 }

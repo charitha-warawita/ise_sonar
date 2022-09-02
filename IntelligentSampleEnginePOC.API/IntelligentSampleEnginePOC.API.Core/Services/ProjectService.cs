@@ -1,5 +1,6 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
+using IntelligentSampleEnginePOC.API.Core.Model.Cint;
 
 namespace IntelligentSampleEnginePOC.API.Core.Services
 {
@@ -10,7 +11,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         private readonly ICintSamplingService _samplingService;
         private readonly IProjectValidator _projectValidator;
 
-        public ProjectService(IProjectContext context, ITargetAudienceService taService, ICintSamplingService samplingService, IProjectValidator projectValidator)
+        public ProjectService(
+            IProjectContext context,
+            ITargetAudienceService taService,
+            ICintSamplingService samplingService,
+            IProjectValidator projectValidator)
         {
             _projectContext = context;
             _taService = taService;
@@ -81,6 +86,13 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             var project = await _projectContext.GetAsync(id);
             
             return project;
+        }
+
+        public async Task<List<Survey>> GetSurveysAsync(long id)
+        {
+            var surveys = await _samplingService.GetSurveysAsync(id);
+
+            return surveys;
         }
 
         private bool ProjectValidated(Project project)

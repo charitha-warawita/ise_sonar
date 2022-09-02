@@ -6,6 +6,7 @@ using IntelligentSampleEnginePOC.API.Core.Model;
 using IntelligentSampleEnginePOC.API.Core.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
+using IntelligentSampleEnginePOC.API.Core.Cint.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,12 +35,17 @@ builder.Services.AddTransient<IProjectCintContext, ProjectCintContext>();
 
 builder.Services.AddTransient<IProjectValidator, ProjectValidator>();
 
+builder.Services.AddTransient<ISurveysEndpoint, SurveysEndpoint>();
+builder.Services.AddTransient<ITestingEndpoint, TestingEndpoint>();
+
+builder.Services.AddTransient<ICintSamplingService, CintSamplingService>();
+
 builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("ConnectionStrings"));
 
 var cintApiSettings = builder.Configuration.GetSection("CintApiSettings");
 builder.Services.Configure<CintApiSettings>(cintApiSettings);
 
-builder.Services.AddHttpClient<ICintSamplingService, CintSamplingService>(client =>
+builder.Services.AddHttpClient("CintClient", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("CintApiSettings:Url"));
     client.DefaultRequestHeaders.Accept.Clear();
@@ -52,8 +58,7 @@ builder.Services.AddHttpClient<ICintSamplingService, CintSamplingService>(client
     var handler = new HttpClientHandler();
     handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
     return handler;
-})
-.SetHandlerLifetime(TimeSpan.FromMinutes(5));
+}).SetHandlerLifetime(TimeSpan.FromMinutes(5));
 
 builder.Services.AddEndpointsApiExplorer();
 

@@ -9,11 +9,16 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
+        private readonly ILogger<ProjectController> _logger;
         private readonly IProjectService _projectService;
         private readonly ITargetAudienceService _targetAudienceService;
 
-        public ProjectController(IProjectService projectService, ITargetAudienceService targetAudienceService, ICintSamplingService samplingService)
+        public ProjectController(
+            ILogger<ProjectController> logger,
+            IProjectService projectService,
+            ITargetAudienceService targetAudienceService)
         {
+            _logger = logger;
             _projectService = projectService;
             _targetAudienceService = targetAudienceService;
         }
@@ -110,6 +115,23 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             }
             
             return Ok(result);
+        }
+
+        [HttpGet("{id}/Surveys")]
+        public async Task<ActionResult> GetSurveys(long id)
+        {
+            try
+            {
+                var surveys = await _projectService.GetSurveysAsync(id);
+
+                return Ok(surveys);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "ProjectController - GetSurveys - Error: {Message}", e.Message);
+
+                return Problem(e.Message);
+            }
         }
     }
 }
