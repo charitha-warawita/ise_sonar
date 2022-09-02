@@ -9,9 +9,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 {
     public interface IQuotaContext
     {
-        List<Quota> GetQuotaFromDB(long qtid);
+        Quota GetQuota(long qtid);
 
-        //Qualification CreateQuota();
+        Quota CreateQuota(long projectId, long taid, Quota qtaData);
+
+        public long DeleteQuotaFromDB(long qtid);
     }
  
     
