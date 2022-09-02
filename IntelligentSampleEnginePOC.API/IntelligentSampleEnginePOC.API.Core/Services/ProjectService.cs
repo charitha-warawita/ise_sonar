@@ -73,6 +73,10 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
         public async Task<ProjectList> GetProjects(int? status, int pageNumber, string? searchString, int recordCount)
         {
+            if (pageNumber <= 0 && recordCount > 0)
+                pageNumber=Constants.PAGENUMBER_DEFAULT;
+            if (recordCount <= 0 && pageNumber > 0)
+                recordCount = Constants.RECORDCOUNT_DEFAULT;
             return _projectContext.GetProjects(status, pageNumber, searchString, recordCount);
         }
 
