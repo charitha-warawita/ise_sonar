@@ -1,14 +1,13 @@
-<script>
+
+<script setup>
 import PageTitle from '@/components/PageTitle.vue'
 import ProjectList from '@/components/ProjectList.vue'
+import TopHeader from '../components/TopHeader.vue';
 
-export default {
-  components: { PageTitle, ProjectList }
-}
 </script>
 
 <template>
-
+  <TopHeader/>
   <PageTitle title="Projects"></PageTitle>
   <ProjectList/><br/>
   <main>

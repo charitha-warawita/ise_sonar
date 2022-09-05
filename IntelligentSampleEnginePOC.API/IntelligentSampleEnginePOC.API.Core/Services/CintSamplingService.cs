@@ -12,21 +12,27 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         private readonly ITestingEndpoint _testingEndpoint;
         private readonly IProjectCintContext _projectCintContext;
         private readonly ISpecTransform _cintCustomTransform;
+        private readonly IProjectValidator _projectValidator;
 
         public CintSamplingService(
             IProjectCintContext projectCintContext,
             ISpecTransform cintCustomTransform,
             ISurveysEndpoint surveysEndpoint,
-            ITestingEndpoint testingEndpoint)
+            ITestingEndpoint testingEndpoint,
+            IProjectValidator projectValidator)
         {
             _projectCintContext = projectCintContext;
             _cintCustomTransform =  cintCustomTransform;
+            _projectValidator = projectValidator;
             _surveysEndpoint = surveysEndpoint;
             _testingEndpoint = testingEndpoint;
         }
 
         public List<CintRequestModel> ConvertToCintRequests(Project project)
         {
+            if (!_projectValidator.IsValidated(project))
+                throw new ArgumentException("Project Validation failed", nameof(project));
+            
             var cintRequests = _cintCustomTransform.TransformIseRequestToCintRequests(project);
             if (cintRequests != null)
             {

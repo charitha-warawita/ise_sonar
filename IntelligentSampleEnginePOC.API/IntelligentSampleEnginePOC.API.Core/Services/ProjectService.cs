@@ -27,7 +27,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             if (project == null)
                 throw new ArgumentNullException("Project model not found", nameof(project));
-
+            project.LastUpdate = DateTime.Now;
             if (_projectValidator.IsValidated(project))
             {
                 project = _projectContext.CreateProject(project);
@@ -58,7 +58,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             if (project == null)
                 throw new ArgumentNullException("project model not found", nameof(project));
-
+            
+            project.LastUpdate = DateTime.Now;
             try
             {
                 project = await CreateProject(project);
@@ -78,6 +79,10 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
         public async Task<ProjectList> GetProjects(int? status, int pageNumber, string? searchString, int recordCount)
         {
+            if (pageNumber <= 0 && recordCount > 0)
+                pageNumber=Constants.PAGENUMBER_DEFAULT;
+            if (recordCount <= 0 && pageNumber > 0)
+                recordCount = Constants.RECORDCOUNT_DEFAULT;
             return _projectContext.GetProjects(status, pageNumber, searchString, recordCount);
         }
 

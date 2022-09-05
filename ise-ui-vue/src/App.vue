@@ -1,16 +1,20 @@
-<script setup>
-import TopHeader from "@/components/TopHeader.vue";
-import { VueQueryDevTools } from "vue-query/devtools";
-</script>
-
 <template>
 	<div>
-		<TopHeader />
 		<RouterView />
-		<VueQueryDevTools />
 	</div>
 </template>
+<script setup>
+import { useUserStore } from "@/stores/userStore";
+import { onMounted } from "vue";
+import { RouterView } from "vue-router";
 
+const userStore = useUserStore();
+
+onMounted(async () => {
+	await userStore.created();
+	await userStore.fetchGraphDetails();
+});
+</script>
 <style>
 @import "@/assets/base.css";
 
@@ -52,44 +56,19 @@ a {
 	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,102,203, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 
+pre {
+	white-space: pre-wrap; /* css-3 */
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
 .custom-toggler.navbar-toggler {
 	border-color: rgb(255, 102, 203);
 }
 
-/*nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}*/
-
 @media (min-width: 1024px) {
-	body {
-		/*display: flex;
-    place-items: center;*/
-	}
-
 	#app {
-		/*display: grid;
-    grid-template-columns: 1fr 1fr; */
 		padding: 0 2rem;
 	}
 

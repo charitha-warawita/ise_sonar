@@ -18,9 +18,35 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             _logger = logger;
             _quotaContext = quotaContext;
         }
-        public List<Quota> GetQuota(long qtid)
+        public Quota GetQuota(long qtid)
         {
-            return _quotaContext.GetQuotaFromDB(qtid);
+            return _quotaContext.GetQuota(qtid);
         }
+
+        public Quota CreateQuota(long projectId, long? taid, Quota qtaData)
+        {
+            if (taid == null)
+                throw new ArgumentNullException("TA Id  is not found");
+            if (qtaData == null)
+                throw new ArgumentNullException("Quota model  is not found", nameof(qtaData));
+
+            if (QuotaValidated(qtaData))
+                return _quotaContext.CreateQuota(projectId, (long)taid, qtaData);
+
+            throw new ArgumentException("Target Audience Validation failed", nameof(qtaData));
+        }
+
+        private bool QuotaValidated(Quota qtaData)
+        {
+            return true;
+        }
+
+
+
+        public long DeleteQuota(long qtid)
+        {
+            return _quotaContext.DeleteQuotaFromDB(qtid);
+        }
+
     }
 }
