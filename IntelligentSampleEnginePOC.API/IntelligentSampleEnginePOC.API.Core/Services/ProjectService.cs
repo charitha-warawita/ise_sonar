@@ -22,7 +22,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             if (project == null)
                 throw new ArgumentNullException("Project model not found", nameof(project));
-
+            project.LastUpdate = DateTime.Now;
             if (_projectValidator.IsValidated(project))
             {
                 project = _projectContext.CreateProject(project);
@@ -53,7 +53,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             if (project == null)
                 throw new ArgumentNullException("project model not found", nameof(project));
-
+            
+            project.LastUpdate = DateTime.Now;
             try
             {
                 project = await CreateProject(project);

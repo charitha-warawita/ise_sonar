@@ -49,8 +49,13 @@ export const useProjectStore = defineStore('project', {
                 body: JSON.stringify(project)
             };
             try {
-                var cintReqs = await fetch((iseUrl + cintRequestPath), settings)
-                .then((response) => response.json());
+                var cintResponse= await fetch((iseUrl + cintRequestPath), settings);
+                var cintReqs = await cintResponse.json();
+                if(!cintResponse.ok) {
+                    var erro = `Call to ${iseUrl}${cintRequestPath} failed: ${cintReqs.statusText} - ${cintReqs}`;
+                    project.errors.push(erro);
+                    throw new Error(erro);
+                }
                 if(cintReqs!== null) {
                     if(!(cintReqs.find(x => x.ValidationResult === false))) {
                         this.cintRequests = cintReqs;

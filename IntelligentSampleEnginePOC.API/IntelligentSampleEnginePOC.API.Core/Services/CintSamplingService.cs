@@ -17,27 +17,32 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         private CintApiSettings _settings;
         private IProjectCintContext _projectCintContext;
         private ISpecTransform _cintCustomTransform;
+        private IProjectValidator _projectValidator;
 
         public CintSamplingService(HttpClient client, IOptions<CintApiSettings> options, 
-            IProjectCintContext projectCintContext, ISpecTransform cintCustomTransform)
+            IProjectCintContext projectCintContext, ISpecTransform cintCustomTransform, IProjectValidator projectValidator)
         {
             _httpClient = client;
             _settings = options.Value;
             _projectCintContext = projectCintContext;
             _cintCustomTransform =  cintCustomTransform;
+            _projectValidator = projectValidator;
         }
 
         public List<CintRequestModel> ConvertToCintRequests(Project project)
         {
             // var cintRequests = ConvertProjectToCintRequest(project);
-            var cintRequests = _cintCustomTransform.TransformIseRequestToCintRequests(project);
-            if (cintRequests != null)
+            if (_projectValidator.IsValidated(project))
             {
-                var result = cintRequests;
-                return result;
+                var cintRequests = _cintCustomTransform.TransformIseRequestToCintRequests(project);
+                if (cintRequests != null)
+                {
+                    var result = cintRequests;
+                    return result;
+                }
             }
 
-            throw new ApplicationException("Validation and conversion failed");
+            throw new ArgumentException("Project Validation failed", nameof(project));
         }
 
         public async Task<Project> CreateProject(Project project)
