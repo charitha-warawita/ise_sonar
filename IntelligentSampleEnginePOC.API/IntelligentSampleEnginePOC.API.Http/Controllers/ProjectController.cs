@@ -71,6 +71,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpGet("id/{id}")]
         public ActionResult GetById(string id)
         {
