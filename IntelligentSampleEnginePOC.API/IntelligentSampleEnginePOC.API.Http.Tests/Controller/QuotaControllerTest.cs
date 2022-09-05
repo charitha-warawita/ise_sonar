@@ -24,8 +24,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         }
 
         [Theory]
-        [InlineData(331)]
-        [InlineData(0)]
+        [InlineData(501)]
         public void GetQuota_ReturnsOk(long qtid)
         {
             string jsonString = QuotaTest.GetQuotaJson();
@@ -36,6 +35,19 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
             var okResult = Assert.IsType<OkObjectResult>(result);
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
+
+        }
+
+        [Theory]
+        [InlineData(331)]
+        [InlineData(0)]
+        public void GetQuota_NotNull(long qtid)
+        {
+            string jsonString = QuotaTest.GetQuotaJson();
+            Quota quota = JsonConvert.DeserializeObject<Quota>(jsonString);
+            _quotaService.Setup(repo => repo.GetQuota(qtid)).Returns(new QuotaTest().GetQuota(qtid, quota));
+            ActionResult index = (ActionResult)_quotaController.GetQuota(qtid);
+            Assert.NotNull(index);
         }
 
         [Fact]
