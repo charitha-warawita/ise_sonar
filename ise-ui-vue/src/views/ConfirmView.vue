@@ -30,8 +30,10 @@ import PageTitle from '@/components/PageTitle.vue'
 import TopHeader from '@/components/TopHeader.vue'
 import {useProjectStore} from '@/stores/projectStore'
 import {storeToRefs} from 'pinia'
+import { useRouter } from 'vue-router';
 
 var useProjStore = useProjectStore()
+const router = useRouter();
 
 const { project, cintRequests } = storeToRefs(useProjStore)
 async function createNewProject() {
