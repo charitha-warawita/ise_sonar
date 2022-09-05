@@ -11,14 +11,17 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
     {
         public Quota GetQuota(long qtid, Quota quotadata)
         {
+            if(quotadata != null)
+            {
+                if(quotadata.Id == qtid)
+                {
+                    return quotadata;
+                }
+            }
 
-            Quota quota1 = new Quota();
-            quota1.Equals(quotadata);
-            return quota1;  
+            return null; 
 
-
-        }
-
+       }
         public static string GetQuotaJson()
         {
             return @" {
