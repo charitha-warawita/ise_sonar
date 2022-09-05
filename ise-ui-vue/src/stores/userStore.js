@@ -1,11 +1,14 @@
 import auth from '@/services/auth'
 import graph from '@/services/graph'
+import coreapi from '@/services/coreapi'
+
 import { defineStore } from "pinia";
 export const useUserStore = defineStore('user', {
     state: () => ({
         user: {},
         // Access token fetched via MSAL for calling Graph API
         accessToken: '',
+        apiAccessToken: '',
 
         // Details fetched from Graph API, user object and photo
         graphDetails: null,
@@ -81,6 +84,7 @@ export const useUserStore = defineStore('user', {
                 this.graphPhoto = await graph.getPhoto()
                 this.graphSmallPhoto = await graph.getSmallPhoto()
                 this.accessToken = graph.getAccessToken()
+                this.apiAccessToken = await coreapi.getApiAccessToken()
             } catch (err) {
                 this.error = err
             }

@@ -177,16 +177,16 @@ export default {
     try {
       // 1. Try to acquire token silently
       tokenResp = await msalApp.acquireTokenSilent(accessTokenRequest)
-      console.log('### MSAL acquireTokenSilent was successful')
+      console.log('### MSAL acquireTokenSilent was successful for scope: ' + scopes)
     } catch (err) {
       // 2. Silent process might have failed so try via popup
       tokenResp = await msalApp.acquireTokenPopup(accessTokenRequest)
-      console.log('### MSAL acquireTokenPopup was successful')
+      console.log('### MSAL acquireTokenPopup was successful for scope: ' + scopes)
     }
 
     // Just in case check, probably never triggers
     if (!tokenResp.accessToken) {
-      throw new Error("### accessToken not found in response, that's bad")
+      throw new Error("### accessToken not found in response for scopes: " + scopes + ", that's bad")
     }
 
     return tokenResp.accessToken

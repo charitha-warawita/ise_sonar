@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { useProjectStore } from "./projectStore"; 
+import coreapi from '../services/coreapi';
 
 export const useProjectSettingStore = defineStore('projectSetting', {
     state: () => ({
@@ -14,10 +15,7 @@ export const useProjectSettingStore = defineStore('projectSetting', {
             this.categories = []
             this.loading = true
             try {
-                var url = import.meta.env.VITE_ISE_API_URL;
-                var path = import.meta.env.VITE_ISE_API_CATEGORIES;
-                this.categories = await fetch(url+path)
-                .then((response) => response.json())
+                this.categories = await coreapi.getProjectCategories();
             } catch (error) {
                 this.error = error
             } finally {
