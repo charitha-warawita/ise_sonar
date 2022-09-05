@@ -33,7 +33,7 @@ export const useUserStore = defineStore('user', {
               this.error = 'VITE_APP_CLIENT_ID is not set, the app will not function! 😥'
             }
         },
-        isAuthenticated() {
+        /*isAuthenticated() {
             if(this.error !== '')
                 return false;
             try {
@@ -44,7 +44,7 @@ export const useUserStore = defineStore('user', {
                 this.error = err;
                 return false;
             }
-        },
+        },*/
 
         updateUser() {
             this.user = auth.user()

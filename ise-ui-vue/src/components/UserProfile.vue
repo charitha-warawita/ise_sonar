@@ -114,13 +114,13 @@
 
     function shallowLogout() {
         userStore.shallowLogout();
-        router.push('/');
+        router.push('/login');
     }
 
     async function fullLogout() {
         await userStore.fullLogout();
         // userStore.shallowLogout();
-        router.push('/');
+        router.push('/login');
     }
 </script>
 <style lang="">

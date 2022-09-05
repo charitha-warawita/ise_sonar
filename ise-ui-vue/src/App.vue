@@ -1,34 +1,14 @@
 <template>
   <div>
-    <div class="container is-fluid" style="margin: 20px 0 20px 0">
-      <div v-if="error" class="notification is-danger is-4 title">
-        {{ error }}
-      </div>
-
-      <Login v-if="!user && !error" @loginComplete="updateUser()" />
-
-      <div v-if="user && !error" class="row g-3">
-        <TopHeader />
         <RouterView />
-      </div>
-    </div>
   </div>
 </template>
 <script setup>
 import {useUserStore} from '@/stores/userStore'
-import {storeToRefs} from 'pinia'
 import { onMounted } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
-import TopHeader from '@/components/TopHeader.vue'
-import Login from '@/components/Login.vue'
 
 var userStore = useUserStore()
-const { user, error } = storeToRefs(userStore)
-
-function updateUser() {
-  userStore.updateUser();
-  userStore.fetchGraphDetails();
-}
 
 onMounted(async () => {
     await userStore.created();
@@ -83,40 +63,8 @@ pre {
   border-color: rgb(255,102,203);
 } 
 
-/*nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}*/
-
 @media (min-width: 1024px) {
-  body {
-    /*display: flex;
-    place-items: center;*/
-  }
-
   #app {
-    /*display: grid; 
-    grid-template-columns: 1fr 1fr; */
     padding: 0 2rem;
   }
 

@@ -29,7 +29,7 @@
           </div>-->
           
           <div class="dropdown"> 
-          <div class="dropdown-toggle" style="color:white" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          <div v-if="user" class="dropdown-toggle" style="color:white" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               <a href="#" data-toggle="dropdown" style="color:white">
                 <img v-if="graphSmallPhoto" :src="graphSmallPhoto" class="avatar" alt="Avatar">
                 <img v-if="!graphSmallPhoto" src="/src/assets/user.png" class="avatar" alt="Avatar">  {{ user.name }}  <b class="caret"></b></a>
@@ -37,7 +37,7 @@
             
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                 <li><RouterLink class="dropdown-item" to="/user">Profile</RouterLink></li>
-                <li><RouterLink @click="userStore.shallowLogout()" class="dropdown-item" to="/">Logout</RouterLink></li>
+                <li><RouterLink @click="userStore.shallowLogout()" class="dropdown-item" to="/login">Logout</RouterLink></li>
             </ul>
           </div>
         </div>
@@ -67,32 +67,6 @@
   }
 
 </script>
-<!--<script>
-export default {
-  data() {
-    console.log('Test: ' + JSON.stringify(import.meta.env))
-    return {
-      active_el: 1,
-      activecontent : true,
-      versiontext:'Proof of concept',
-      apptitle: import.meta.env.VITE_APP_TITLE,
-      mode: import.meta.env.VITE_ENV
-    }
-  },
-  methods:{
-    activate:function(el){
-        this.active_el = el;
-        if (this.active_el ===5){
-          this.activecontent = false
-          this.versiontext='Version 1'
-        }else{(this.active_el ===4)
-          this.activecontent = true
-            this.versiontext='Proof of concept'
-        }
-    }
-  }   
-  }
-</script> -->
 <style>
   .avatar {
     border-radius: 50%;
