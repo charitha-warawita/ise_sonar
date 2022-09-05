@@ -1,18 +1,29 @@
 <script setup lang="ts">
+import { ProjectKeys } from "@/api/project/keys";
 import { useProjectQueries } from "@/api/project/queries";
 import TargetAudienceList from "@/components/target-audiences/TargetAudienceList.vue";
 import { format } from "date-fns";
+import { ref } from "vue";
+import { useQuery } from "vue-query";
 import { useRoute } from "vue-router";
+import SurveyList from "../components/surveys/SurveyList.vue";
 
 const route = useRoute();
 const projectQueries = useProjectQueries();
 
 const id = parseInt(route.params.id as string);
 
-const { isLoading, isError, data } = projectQueries.GetProject(id);
+const { isLoading, isError, data } = useQuery(ProjectKeys.project(id), () =>
+	projectQueries.GetProject(id)
+);
 
 const ManageProject = () => {
 	console.log("manage button clicked");
+};
+
+const expanded = ref(false);
+const SurveysClicked = () => {
+	expanded.value = !expanded.value;
 };
 </script>
 
@@ -81,6 +92,25 @@ const ManageProject = () => {
 						</span>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col">
+						<a
+							id="link-button"
+							role="button"
+							data-bs-toggle="collapse"
+							href="#surveys"
+							aria-expanded="false"
+							aria-controls="links"
+							@click="SurveysClicked"
+						>
+							{{ expanded ? "Hide" : "Show" }} Surveys
+						</a>
+
+						<div class="collapse" id="surveys">
+							<SurveyList v-if="expanded" :project-id="id" />
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -99,4 +129,8 @@ const ManageProject = () => {
 	</div>
 </template>
 
-<style scoped></style>
+<style scoped>
+#link-button {
+	text-decoration: none;
+}
+</style>

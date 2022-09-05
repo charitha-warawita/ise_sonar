@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { ProjectKeys } from "@/api/project/keys";
 import { useProjectQueries } from "@/api/project/queries";
 import BsAccordion from "@/components/bootstrap/BsAccordion.vue";
 import StyledPaginator from "@/components/general/StyledPaginator.vue";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { TargetAudience } from "@/models/targetAudience";
 import { computed, ref } from "vue";
+import { useQuery } from "vue-query";
 
 const projectQueries = useProjectQueries();
 
@@ -12,19 +14,21 @@ const props = defineProps<{ projectId: number }>();
 
 const pagesize = 5;
 const page = ref(1);
-
-const { isLoading, isError, data } = projectQueries.GetProjectTargetAudiences(
-	props.projectId,
-	page,
-	pagesize
+const { isLoading, isError, data } = useQuery(
+	ProjectKeys.targetAudiences(props.projectId, page),
+	() =>
+		projectQueries.GetProjectTargetAudiences(
+			props.projectId,
+			page.value,
+			pagesize
+		),
+	{ keepPreviousData: true }
 );
 
 const total = computed(() => data.value?.totalResults ?? 0);
 
 const PageSelectHandler = (p: number) => {
 	page.value = p;
-
-	console.log(page.value);
 };
 </script>
 
@@ -48,15 +52,49 @@ const PageSelectHandler = (p: number) => {
 					</template>
 
 					<template #body="{ item }: { item: TargetAudience }">
-						<div class="container">
-							<div>Id: {{ item.id }}</div>
-							<div>Name: {{ item.name }}</div>
-							<div>
-								Audience Number: {{ item.audienceNumber }}
+						<div class="container mx-2">
+							<div class="row">
+								<div class="col">
+									<div>
+										<b>Id:</b>
+										{{ item.id }}
+									</div>
+								</div>
+								<div class="col">
+									<div>
+										<b>Name:</b>
+										{{ item.name }}
+									</div>
+								</div>
 							</div>
-							<div>Esitimated IR: {{ item.estimatedIR }}</div>
-							<div>Esimated LOI: {{ item.estimatedLOI }}</div>
-							<div>Limit: {{ item.limit }}</div>
+							<div class="row">
+								<div class="col">
+									<div>
+										<b>Audience Number:</b>
+										{{ item.audienceNumber }}
+									</div>
+								</div>
+								<div class="col">
+									<div>
+										<b>Esitimated IR:</b>
+										{{ item.estimatedIR }}
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div>
+										<b>Esimated LOI:</b>
+										{{ item.estimatedLOI }}
+									</div>
+								</div>
+								<div class="col">
+									<div>
+										<b>Limit:</b>
+										{{ item.limit }}
+									</div>
+								</div>
+							</div>
 						</div>
 					</template>
 				</bs-accordion>

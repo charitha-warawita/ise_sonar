@@ -1,46 +1,42 @@
 import { useAxios } from "@/composables/axios";
 import { ProjectSchema } from "@/models/project";
+import { SurveySchema } from "@/models/survey";
 import { TargetAudienceSchema } from "@/models/targetAudience";
-import type { Ref } from "vue";
-import { useQuery } from "vue-query";
+import { z } from "zod";
 import { PagedResponseSchema } from "../responseSchemas";
-import { ProjectKeys } from "./keys";
 
 export function useProjectQueries() {
-	const GetProject = (id: number) => {
-		const axios = useAxios();
+	const axios = useAxios();
 
-		return useQuery(ProjectKeys.project(id), () =>
-			axios
-				.get(`/Project/${id}`)
-				.then((response) => ProjectSchema.parse(response.data))
-		);
+	const GetProject = async (id: number) => {
+		return await axios
+			.get(`/Project/${id}`)
+			.then((response) => ProjectSchema.parse(response.data));
 	};
 
-	const GetProjectTargetAudiences = (
+	const GetProjectTargetAudiences = async (
 		id: number,
-		page: Ref<number>,
+		page: number,
 		pageSize = 5
 	) => {
-		const axios = useAxios();
 		const schema = PagedResponseSchema(TargetAudienceSchema);
 
-		return useQuery(
-			ProjectKeys.targetAudiences(id, page),
-			async () =>
-				await axios
-					.get(`/Project/${id}/TargetAudiences`, {
-						params: { page: page.value, pageSize },
-					})
-					.then((response) => schema.parse(response.data)),
-			{
-				keepPreviousData: true,
-			}
-		);
+		return await axios
+			.get(`/Project/${id}/TargetAudiences`, {
+				params: { page, pageSize },
+			})
+			.then((response) => schema.parse(response.data));
+	};
+
+	const GetSurveys = async (id: number) => {
+		return await axios
+			.get(`/Project/${id}/Surveys`)
+			.then((response) => z.array(SurveySchema).parse(response.data));
 	};
 
 	return {
 		GetProject,
 		GetProjectTargetAudiences,
+		GetSurveys,
 	};
 }

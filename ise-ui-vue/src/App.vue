@@ -31,7 +31,11 @@ header {
 	margin: 0 auto 2rem;
 }
 
-a,
+a {
+	/* text-decoration: none; */
+	transition: 0.4s;
+}
+
 .green {
 	text-decoration: none;
 	color: hsla(160, 100%, 37%, 1);
