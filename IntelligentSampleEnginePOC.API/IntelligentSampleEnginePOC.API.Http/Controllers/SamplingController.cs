@@ -1,11 +1,14 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace IntelligentSampleEnginePOC.API.Http.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:scopes")]
     public class SamplingController : ControllerBase
     {
         ICintSamplingService _cintSamplingService;
@@ -15,6 +18,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             _cintSamplingService = samplingService;
         }
 
+        [Authorize]
         [HttpPost("CintRequests")]
         public async Task<ActionResult> CintRequests([FromBody] Project project)
         {

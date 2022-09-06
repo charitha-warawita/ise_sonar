@@ -1,6 +1,8 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,6 +11,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:scopes")]
     public class ProjectController : ControllerBase
     {
         IProjectService _projectService;
@@ -19,6 +22,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] Project project)
         {
@@ -38,6 +42,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost("launch")]
         public async Task<ActionResult> Launch([FromBody] Project project)
         {
@@ -59,18 +64,21 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPost("update")]
         public ActionResult UpdateProject([FromBody] Project project)
         {
             return Ok();
         }
 
+        [Authorize]
         [HttpGet("id/{id}")]
         public ActionResult GetById(string id)
         {
             return Ok();
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult> GetProjects(int? status, int pageNumber, string? searchString, int recordCount)
         {
