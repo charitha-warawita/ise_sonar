@@ -2,6 +2,7 @@ import CreateView from "@/views/CreateView.vue";
 import HomeView from "@/views/HomeView.vue";
 
 import auth from "@/services/auth";
+import ProjectView from "@/views/ProjectView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -17,6 +18,12 @@ const router = createRouter({
 			path: "/create",
 			name: "createProject",
 			component: CreateView,
+			meta: { requiresAuthentication: true },
+		},
+		{
+			path: "/project/:id",
+			name: "project",
+			component: ProjectView,
 			meta: { requiresAuthentication: true },
 		},
 		{

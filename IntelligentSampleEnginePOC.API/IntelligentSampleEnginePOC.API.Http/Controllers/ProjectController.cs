@@ -99,7 +99,10 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         }
         
         [HttpGet("{id}/TargetAudiences")]
-        public async Task<ActionResult> GetTargetAudiencesForProjectPaged(long id, [FromQuery] int page = 1, [FromQuery] int pageSize = 5)
+        public async Task<ActionResult> GetTargetAudiencesForProjectPaged(
+            long id,
+            [FromQuery] int page = Constants.PAGENUMBER_DEFAULT,
+            [FromQuery] int pageSize = Constants.RECORDCOUNT_DEFAULT)
         {
             if (page <= 0 || pageSize <= 0)
                 return BadRequest("Invalid paging data");
