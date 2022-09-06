@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import auth from "@/services/auth";
 import axios from "axios";
 import { parseISO } from "date-fns";
 
-const base = import.meta.env.VITE_ISE_API_URL;
+const CORE_API_BASE = import.meta.env.VITE_ISE_API_URL;
+const CORE_API_SCOPES = [import.meta.env.VITE_CORE_API_SCOPE];
 
 function isIsoDateString(value: any): boolean {
 	const isoDateFormat =
@@ -24,11 +26,15 @@ const transformDates = (body: any) => {
 	}
 };
 
-export function useAxios() {
+export async function useAxiosAsync() {
 	// Can use any authentication stores that we may need here.
+	const token = await auth.acquireToken(CORE_API_SCOPES);
 
 	const instance = axios.create({
-		baseURL: `${base}/api`,
+		baseURL: `${CORE_API_BASE}/api`,
+		headers: {
+			Authorization: `bearer ${token}`,
+		},
 	});
 
 	instance.interceptors.response.use((response) => {
