@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import coreapi from "../services/coreapi";
 
 export const useProjectsStore = defineStore("projects", {
 	state: () => ({
@@ -24,8 +25,8 @@ export const useProjectsStore = defineStore("projects", {
 		projectListError: null,
 
 		currentStatus: 7,
-		iseUrl: import.meta.env.VITE_ISE_API_URL,
-		iseGetProjectsPath: import.meta.env.VITE_ISE_API_GETPROJECTS,
+		// iseUrl: import.meta.env.VITE_ISE_API_URL,
+		// iseGetProjectsPath: import.meta.env.VITE_ISE_API_GETPROJECTS
 	}),
 	getters: {
 		getDraftProjects: (state) => {
@@ -41,6 +42,7 @@ export const useProjectsStore = defineStore("projects", {
 			this.currentStatus = 7;
 		},
 		async GetProjectsList() {
+			this.projectListError = null;
 			var path =
 				"pageNumber=" +
 				this.currentPageNumber +
@@ -52,9 +54,9 @@ export const useProjectsStore = defineStore("projects", {
 				path += "&searchString=" + this.searchByName;
 			try {
 				this.projectListLoading = true;
-				var result = await fetch(
-					this.iseUrl + this.iseGetProjectsPath + path
-				).then((response) => response.json());
+				// var result = await fetch(this.iseUrl + this.iseGetProjectsPath + path)
+				// .then((response) => response.json());
+				var result = await coreapi.getProjects(path);
 				if (result !== null && Array.isArray(result.projects)) {
 					this.totalItems = result.totalItems;
 					for (var i = 0; i < result.projects.length; i++) {

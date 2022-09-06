@@ -1,14 +1,14 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace IntelligentSampleEnginePOC.API.Http.Controllers
 {
     [Route("api/[controller]/project")]
     [ApiController]
-
-   
-
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:scopes")]
     public class QualificationController : ControllerBase
     {
         ILogger _logger;
@@ -20,6 +20,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             _qualificationService = qualificationService;
         }
 
+        [Authorize]
         [HttpGet("{qid}")]
         public ActionResult GetQualification( long qid)
         {
@@ -34,7 +35,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             }
         }
 
-
+        [Authorize]
         [HttpPost("{taid}")]
         public ActionResult Post(long projectId ,long? taid, [FromBody] Core.Model.Qualification qualData)
         {
@@ -54,6 +55,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{qid}")]
         public ActionResult DeleteQualification(long qid)
         {

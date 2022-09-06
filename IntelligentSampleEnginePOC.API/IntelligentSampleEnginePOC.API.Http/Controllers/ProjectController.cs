@@ -1,12 +1,17 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
-using Microsoft.AspNetCore.Mvc;
 using IntelligentSampleEnginePOC.API.Core.Results;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace IntelligentSampleEnginePOC.API.Http.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:scopes")]
     public class ProjectController : ControllerBase
     {
         private readonly ILogger<ProjectController> _logger;
@@ -23,6 +28,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             _targetAudienceService = targetAudienceService;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] Project project)
         {
@@ -42,6 +48,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost("launch")]
         public async Task<ActionResult> Launch([FromBody] Project project)
         {
@@ -63,12 +70,14 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPost("update")]
         public ActionResult UpdateProject([FromBody] Project project)
         {
             return Ok();
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetByIdAsync(long id)
         {
@@ -84,6 +93,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult> GetProjects(int? status, int pageNumber, string? searchString, int recordCount)
         {
@@ -98,6 +108,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             }
         }
         
+        [Authorize]
         [HttpGet("{id}/TargetAudiences")]
         public async Task<ActionResult> GetTargetAudiencesForProjectPaged(
             long id,
@@ -120,6 +131,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpGet("{id}/Surveys")]
         public async Task<ActionResult> GetSurveys(long id)
         {

@@ -4,7 +4,9 @@ using IntelligentSampleEnginePOC.API.Core.Data;
 using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
 using IntelligentSampleEnginePOC.API.Core.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
 using System.Net.Http.Headers;
 using IntelligentSampleEnginePOC.API.Core.Cint.Endpoints;
 
@@ -67,6 +69,9 @@ builder.Services.AddSwaggerGen(c => c.SwaggerDoc ("v1",
 
 builder.Services.AddLogging();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration);
+
 builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
 {
     builder.AllowAnyOrigin()
@@ -86,6 +91,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors("MyPolicy");
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
