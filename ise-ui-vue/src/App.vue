@@ -1,12 +1,22 @@
 <template>
 	<div>
+		<div v-if="showTopBar">
+			<TopHeader />
+		</div>
+
 		<RouterView />
 	</div>
 </template>
 <script setup>
+import TopHeader from "@/components/TopHeader.vue";
 import { useUserStore } from "@/stores/userStore";
-import { onMounted } from "vue";
-import { RouterView } from "vue-router";
+import { computed, onMounted } from "vue";
+import { RouterView, useRoute } from "vue-router";
+
+const route = useRoute();
+const showTopBar = computed(
+	() => route.meta.topBar === undefined || route.meta.topBar === true
+);
 
 const userStore = useUserStore();
 
