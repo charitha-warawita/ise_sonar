@@ -11,8 +11,8 @@ export const TargetAudienceSchema = z
 		limitType: z.number().int().positive().nullable().optional(),
 		testingUrl: z.string().min(1).nullable(),
 		liveUrl: z.string().min(1).nullable(),
-		qualifications: z.object({}).array(), // Placeholder
-		quotas: z.object({}).array(), // Placeholder
+		qualifications: z.object({}).array().nullable(), // Placeholder
+		quotas: z.object({}).array().nullable(), // Placeholder
 	})
 	.strict();
 
