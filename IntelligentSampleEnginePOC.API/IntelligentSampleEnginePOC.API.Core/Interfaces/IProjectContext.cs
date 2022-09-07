@@ -15,6 +15,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 
         ProjectList GetProjects(int? status,int pageNumber, string? searchString, int recordCount);
 
-        Project GetProject(long projectId);
+        Task<Project?> GetAsync(long id);
     }
 }

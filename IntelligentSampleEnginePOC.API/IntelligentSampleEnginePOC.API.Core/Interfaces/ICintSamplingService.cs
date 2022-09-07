@@ -1,9 +1,5 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IntelligentSampleEnginePOC.API.Core.Model.Cint;
 
 namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 {
@@ -11,5 +7,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
     {
         List<CintRequestModel> ConvertToCintRequests(Project project);
         Task<Project> CreateProject(Project project);
+        Task<List<Survey>> GetSurveysAsync(long id);
     }
 }

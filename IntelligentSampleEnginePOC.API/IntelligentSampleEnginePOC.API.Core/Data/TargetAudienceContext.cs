@@ -3,21 +3,22 @@ using IntelligentSampleEnginePOC.API.Core.Model;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using IntelligentSampleEnginePOC.API.Core.Extensions;
+using IntelligentSampleEnginePOC.API.Core.Results;
+using Microsoft.Extensions.Logging;
 
 namespace IntelligentSampleEnginePOC.API.Core.Data
 {
     public class TargetAudienceContext : ITargetAudienceContext
     {
         private readonly DatabaseOptions _options;
+        private readonly ILogger<TargetAudienceContext> _logger;
 
-        public TargetAudienceContext(IOptions<DatabaseOptions> databaseOptions)
+        public TargetAudienceContext(IOptions<DatabaseOptions> databaseOptions, ILogger<TargetAudienceContext> logger)
         {
             _options = databaseOptions.Value;
+            _logger = logger;
         }
 
         public TargetAudience CreateTargetAudience(long projectId, TargetAudience audience)
@@ -41,6 +42,52 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                 }
             }
             return audience;
+        }
+
+        public async Task<PagedResult<TargetAudience>> GetTargetAudiencesByProjectIdAsync(long id, int page, int pageSize)
+        {
+            await using var connection = new SqlConnection(_options.iseDb);
+            await using var command = new SqlCommand("GetTargetAudiencesByProjectIdPaged", connection);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("ProjectId", id);
+            command.Parameters.AddWithValue("Page", page);
+            command.Parameters.AddWithValue("PageSize", pageSize);
+            connection.Open();
+
+            await using var reader = await command.ExecuteReaderAsync();
+            if (!reader.HasRows) return PagedResult<TargetAudience>.Empty();
+
+            var data = new PagedResult<TargetAudience>();
+            while (reader.Read())
+            {
+                try
+                {
+                    data.TotalResults ??= reader.GetInt32("TotalCount");
+                    
+                    var audience = new TargetAudience
+                    {
+                        Id = reader.GetInt64("Id"),
+                        Name = reader.GetString("Name"),
+                        AudienceNumber = reader.GetInt32("AudienceNumber"),
+                        EstimatedIR = reader.GetInt32("EstimatedIR"),
+                        EstimatedLOI = reader.GetInt32("EstimatedLOI"),
+                        Limit = reader.GetInt32("Limit"),
+                        LimitType = reader.GetNullableInt32("LimitType"),
+                        TestingUrl = reader.GetNullableString("TestingUrl"),
+                        LiveUrl = reader.GetNullableString("LiveUrl"),
+                    };
+                    
+                    data.Result.Add(audience);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "TargetAudienceContext: GetTargetAudiencesByProjectId - Error: {Message}", ex.Message);
+                    
+                    throw;
+                }
+            };
+                
+            return data;
         }
     }
 }

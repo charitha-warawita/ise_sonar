@@ -61,7 +61,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         [Fact]
         public void GetProjectById_ReturnsOk()
         {
-            var okResult =  _projectController.GetById("1");
+            var okResult =  _projectController.GetById(1);
             Assert.NotNull(okResult);
             Assert.Equal(200, ((StatusCodeResult)okResult).StatusCode);
         }
