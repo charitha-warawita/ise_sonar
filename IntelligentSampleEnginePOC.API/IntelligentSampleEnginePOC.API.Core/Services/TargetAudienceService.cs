@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IntelligentSampleEnginePOC.API.Core.Results;
 
 namespace IntelligentSampleEnginePOC.API.Core.Services
 {
@@ -27,6 +28,13 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 return _taContext.CreateTargetAudience((long)projectId, audience);
 
             throw new ArgumentException("Target Audience Validation failed", nameof(audience));
+        }
+
+        public async Task<PagedResult<TargetAudience>> GetAllByProjectIdAsync(long id, int page, int pageSize = 5)
+        {
+            var result = await _taContext.GetTargetAudiencesByProjectIdAsync(id, page, pageSize);
+            
+            return result;
         }
 
         private bool TargetAudienceValidated(TargetAudience audience)

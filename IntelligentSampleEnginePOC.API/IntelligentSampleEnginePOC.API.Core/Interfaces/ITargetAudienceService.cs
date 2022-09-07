@@ -1,14 +1,12 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IntelligentSampleEnginePOC.API.Core.Results;
 
 namespace IntelligentSampleEnginePOC.API.Core.Interfaces
 {
     public interface ITargetAudienceService
     {
         TargetAudience CreateTargetAudience(long? projectId, TargetAudience audience);
+
+        Task<PagedResult<TargetAudience>> GetAllByProjectIdAsync(long id, int page, int pageSize);
     }
 }

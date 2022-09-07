@@ -1,11 +1,14 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace IntelligentSampleEnginePOC.API.Http.Controllers
 {
     [Route("api/[controller]/project")]
     [ApiController]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:scopes")]
     public class ReferenceController : ControllerBase
     {
         ILogger _logger;
@@ -17,6 +20,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             _referenceService = referenceService;
         }
 
+        [Authorize]
         [HttpGet("categories")]
         public ActionResult GetCategories()
         {
@@ -31,6 +35,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("countries")]
         public ActionResult GetCountries()
         {
@@ -45,6 +50,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("ProfileCategories")]
         public ActionResult GetProfileCategories()
         {
@@ -59,6 +65,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("questions")]
         public ActionResult GetQuestions(string? category)
         {

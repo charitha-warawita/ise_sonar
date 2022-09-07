@@ -1,5 +1,6 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
+using IntelligentSampleEnginePOC.API.Core.Model.Cint;
 
 namespace IntelligentSampleEnginePOC.API.Core.Services
 {
@@ -10,7 +11,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         private readonly ICintSamplingService _samplingService;
         private readonly IProjectValidator _projectValidator;
 
-        public ProjectService(IProjectContext context, ITargetAudienceService taService, ICintSamplingService samplingService, IProjectValidator projectValidator)
+        public ProjectService(
+            IProjectContext context,
+            ITargetAudienceService taService,
+            ICintSamplingService samplingService,
+            IProjectValidator projectValidator)
         {
             _projectContext = context;
             _taService = taService;
@@ -22,7 +27,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             if (project == null)
                 throw new ArgumentNullException("Project model not found", nameof(project));
-
+            project.LastUpdate = DateTime.Now;
             if (_projectValidator.IsValidated(project))
             {
                 project = _projectContext.CreateProject(project);
@@ -53,7 +58,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             if (project == null)
                 throw new ArgumentNullException("project model not found", nameof(project));
-
+            
+            project.LastUpdate = DateTime.Now;
             try
             {
                 project = await CreateProject(project);
@@ -73,7 +79,25 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
         public async Task<ProjectList> GetProjects(int? status, int pageNumber, string? searchString, int recordCount)
         {
+            if (pageNumber <= 0 && recordCount > 0)
+                pageNumber=Constants.PAGENUMBER_DEFAULT;
+            if (recordCount <= 0 && pageNumber > 0)
+                recordCount = Constants.RECORDCOUNT_DEFAULT;
             return _projectContext.GetProjects(status, pageNumber, searchString, recordCount);
+        }
+
+        public async Task<Project?> GetAsync(long id)
+        {
+            var project = await _projectContext.GetAsync(id);
+            
+            return project;
+        }
+
+        public async Task<List<Survey>> GetSurveysAsync(long id)
+        {
+            var surveys = await _samplingService.GetSurveysAsync(id);
+
+            return surveys;
         }
 
         private bool ProjectValidated(Project project)
@@ -82,14 +106,6 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 project.LastUpdate = DateTime.Now;
 
             return true;
-        }
-
-        public async Task<Project> GetProjectById(long id)
-        {
-            if (id > 0)
-                return _projectContext.GetProject(id);
-            else
-                throw new ArgumentNullException("Project Id submitted in invalid");
         }
     }
 }

@@ -1,13 +1,10 @@
-﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
+﻿using System.Data;
+using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
+using IntelligentSampleEnginePOC.API.Core.Model.Cint;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IntelligentSampleEnginePOC.API.Core.Data
 {
@@ -31,7 +28,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                 {
                     using (SqlCommand command = new SqlCommand("[StoreProjectCintResponse]"))
                     {
-                        command.CommandType = System.Data.CommandType.StoredProcedure;
+                        command.CommandType = CommandType.StoredProcedure;
                         command.Connection = connection;
                         command.Parameters.AddWithValue("@isSuccess", isSuccess);
                         command.Parameters.AddWithValue("@statusCode", statusCode);
@@ -49,6 +46,97 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                 }
             }
             return savedId;
+        }
+
+        public async Task<HashSet<long>> GetCintIdsAsync(long id)
+        {
+            await using var connection = new SqlConnection(_options.iseDb);
+            await using var command = new SqlCommand("GetCintIdsForProject", connection);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("ProjectId", id);
+            await connection.OpenAsync();
+
+            var results = new HashSet<long>();
+            await using var reader = await command.ExecuteReaderAsync();
+            if (!reader.HasRows)
+                return results;
+
+            while (await reader.ReadAsync())
+            {
+                var data = reader.GetInt64("CintResponseId");
+                results.Add(data);
+            }
+
+            return results;
+        }
+        
+        public async Task<List<Link>> GetLinksAsync(long id)
+        {
+            await using var connection = new SqlConnection(_options.iseDb);
+            await using var command = new SqlCommand("GetProjectLinks", connection);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("ProjectId", id);
+
+            var results = new List<Link>();
+            await connection.OpenAsync();
+            await using var reader = await command.ExecuteReaderAsync();
+            if (!reader.HasRows)
+                return results;
+
+            while (await reader.ReadAsync())
+            {
+                var survey = reader.GetInt64("SurveyId");
+                var key = reader.GetString("LinkKey");
+                var value = reader.GetString("LinkValue");
+                var type = reader.GetString("LinkType");
+                
+                var link = new Link(survey, key, value, type);
+                results.Add(link);
+            }
+
+            return results;
+        }
+
+        public async Task InsertLinksAsync(long surveyId, long projectId, List<Link> links)
+        {
+            if (!links.Any())
+                return;
+
+            var table = new DataTable
+            {
+                Columns =
+                {
+                    { "SurveyId", typeof(long) },
+                    { "ProjectId", typeof(long) },
+                    { "Type", typeof(string) },
+                    { "Key", typeof(string) },
+                    { "Value", typeof(string) }
+                },
+            };
+
+            foreach (var link in links)
+            {
+                table.Rows.Add(
+                    surveyId,
+                    projectId,
+                    link.Type,
+                    link.Key,
+                    link.Value);
+            }
+
+            await using var connection = new SqlConnection(_options.iseDb);
+            await using var command = new SqlCommand("InsertProjectLinks", connection);
+            command.CommandType = CommandType.StoredProcedure;
+
+            var param = new SqlParameter("LinksTable", SqlDbType.Structured)
+            {
+                Value = table,
+                TypeName = "dbo.LinkTableType"
+            };
+            command.Parameters.Add(param);
+
+            await connection.OpenAsync();
+            await command.ExecuteNonQueryAsync();
         }
     }
 }

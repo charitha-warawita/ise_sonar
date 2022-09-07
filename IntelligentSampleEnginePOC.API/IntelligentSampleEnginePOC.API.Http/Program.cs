@@ -4,8 +4,11 @@ using IntelligentSampleEnginePOC.API.Core.Data;
 using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
 using IntelligentSampleEnginePOC.API.Core.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
 using System.Net.Http.Headers;
+using IntelligentSampleEnginePOC.API.Core.Cint.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,12 +37,17 @@ builder.Services.AddTransient<IProjectCintContext, ProjectCintContext>();
 
 builder.Services.AddTransient<IProjectValidator, ProjectValidator>();
 
+builder.Services.AddTransient<ISurveysEndpoint, SurveysEndpoint>();
+builder.Services.AddTransient<ITestingEndpoint, TestingEndpoint>();
+
+builder.Services.AddTransient<ICintSamplingService, CintSamplingService>();
+
 builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("ConnectionStrings"));
 
 var cintApiSettings = builder.Configuration.GetSection("CintApiSettings");
 builder.Services.Configure<CintApiSettings>(cintApiSettings);
 
-builder.Services.AddHttpClient<ICintSamplingService, CintSamplingService>(client =>
+builder.Services.AddHttpClient("CintClient", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("CintApiSettings:Url"));
     client.DefaultRequestHeaders.Accept.Clear();
@@ -52,8 +60,7 @@ builder.Services.AddHttpClient<ICintSamplingService, CintSamplingService>(client
     var handler = new HttpClientHandler();
     handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
     return handler;
-})
-.SetHandlerLifetime(TimeSpan.FromMinutes(5));
+}).SetHandlerLifetime(TimeSpan.FromMinutes(5));
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -61,6 +68,9 @@ builder.Services.AddSwaggerGen(c => c.SwaggerDoc ("v1",
     new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Intelligent Sample Engine API - Proof of Concept version" }));
 
 builder.Services.AddLogging();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration);
 
 builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
 {
@@ -81,6 +91,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors("MyPolicy");
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

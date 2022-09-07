@@ -14,11 +14,17 @@
             </span>
             <span>ID Token &amp; Account</span>
           </button>
-          <button class="btn btn-outline-success searchButton me-2" @click="toggleModal(9992); showTokenDetails = true">
+          <!--<button class="btn btn-outline-success searchButton me-2" @click="toggleModal(9992); showTokenDetails = true">
             <span class="icon">
               <i class="fas fa-code fa-fw" />
             </span>
             <span>Access Token</span>
+          </button>-->
+          <button class="btn btn-outline-success searchButton me-2" @click="toggleModal(9993); showTokenDetails = true">
+            <span class="icon">
+              <i class="fas fa-code fa-fw" />
+            </span>
+            <span>API Access Token</span>
           </button>
 
           <div class="columns mt-2">
@@ -86,7 +92,15 @@
             <div class="card-body">
             <pre>{{ accessToken }}</pre></div>
           </div>
-    </CustomModal> 
+    </CustomModal>
+    <CustomModal @close="toggleModal('9993')" :modalId="9993">
+      <div class="card modal-content">
+        <h3 class="card-header">API Access Token Raw Value
+        <a target="_blank" href="https://jwt.ms">https://jwt.ms</a></h3>
+          <div class="card-body">
+          <pre>{{ apiAccessToken }}</pre></div>
+        </div>
+  </CustomModal>  
 </template>
 <script setup>
     import {useUserStore} from '@/stores/userStore'
@@ -95,7 +109,7 @@
     import { useRouter } from 'vue-router';
     var userStore = useUserStore()
 
-    const { user, accessToken, graphDetails, graphPhoto, showUserDetails, showGraphDetails, showTokenDetails, error } = storeToRefs(userStore)
+    const { user, accessToken, apiAccessToken, graphDetails, graphPhoto, showUserDetails, showGraphDetails, showTokenDetails, error } = storeToRefs(userStore)
     const router = useRouter();
     const toggleModal = (id) => {
         // useQuotaDataStore.conditiongrid = false;
@@ -114,13 +128,13 @@
 
     function shallowLogout() {
         userStore.shallowLogout();
-        router.push('/');
+        router.push('/login');
     }
 
     async function fullLogout() {
         await userStore.fullLogout();
         // userStore.shallowLogout();
-        router.push('/');
+        router.push('/login');
     }
 </script>
 <style lang="">
