@@ -44,26 +44,23 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
             return audience;
         }
 
-        public async Task<PagedResult<TargetAudience>> GetTargetAudiencesByProjectIdAsync(long id, int page, int pageSize)
+        public async Task<List<TargetAudience>> GetTargetAudiencesByProjectIdAsync(long id)
         {
             await using var connection = new SqlConnection(_options.iseDb);
-            await using var command = new SqlCommand("GetTargetAudiencesByProjectIdPaged", connection);
+            await using var command = new SqlCommand("GetTargetAudiencesByProjectId", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("ProjectId", id);
-            command.Parameters.AddWithValue("Page", page);
-            command.Parameters.AddWithValue("PageSize", pageSize);
             connection.Open();
 
             await using var reader = await command.ExecuteReaderAsync();
-            if (!reader.HasRows) return PagedResult<TargetAudience>.Empty();
-
-            var data = new PagedResult<TargetAudience>();
+            
+            var data = new List<TargetAudience>();
+            if (!reader.HasRows) return data;
+            
             while (reader.Read())
             {
                 try
                 {
-                    data.TotalResults ??= reader.GetInt32("TotalCount");
-                    
                     var audience = new TargetAudience
                     {
                         Id = reader.GetInt64("Id"),
@@ -77,12 +74,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                         LiveUrl = reader.GetNullableString("LiveUrl"),
                     };
                     
-                    data.Result.Add(audience);
+                    data.Add(audience);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "TargetAudienceContext: GetTargetAudiencesByProjectId - Error: {Message}", ex.Message);
-                    
                     throw;
                 }
             };

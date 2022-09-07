@@ -1,12 +1,13 @@
 <template>
 	<div>
-		<div v-if="showTopBar">
+		<div v-if="showTopBar" class="header-container">
 			<TopHeader />
 		</div>
 
 		<RouterView />
 	</div>
 </template>
+
 <script setup>
 import TopHeader from "@/components/TopHeader.vue";
 import { useUserStore } from "@/stores/userStore";
@@ -25,6 +26,7 @@ onMounted(async () => {
 	await userStore.fetchGraphDetails();
 });
 </script>
+
 <style>
 @import "@/assets/base.css";
 
@@ -104,7 +106,10 @@ pre {
 		font-size: 1rem;
 
 		padding: 1rem 0;
-		margin-top: 1rem;
 	}
+}
+
+.header-container {
+	padding-top: 1rem;
 }
 </style>

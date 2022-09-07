@@ -7,7 +7,6 @@ import { ref } from "vue";
 import { useQuery } from "vue-query";
 import { useRoute } from "vue-router";
 import SurveyList from "../components/surveys/SurveyList.vue";
-import TopHeader from '../components/TopHeader.vue';
 
 const route = useRoute();
 const projectQueries = useProjectQueries();
@@ -29,7 +28,6 @@ const SurveysClicked = () => {
 </script>
 
 <template>
-	<TopHeader/>
 	<div
 		v-if="isLoading"
 		class="h-100 d-flex align-items-center justify-content-center my-3"
