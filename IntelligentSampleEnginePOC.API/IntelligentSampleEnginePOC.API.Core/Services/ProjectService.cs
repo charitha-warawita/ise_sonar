@@ -1,5 +1,6 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
+using IntelligentSampleEnginePOC.API.Core.Model.Cint;
 
 namespace IntelligentSampleEnginePOC.API.Core.Services
 {
@@ -10,7 +11,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         private readonly ICintSamplingService _samplingService;
         private readonly IProjectValidator _projectValidator;
 
-        public ProjectService(IProjectContext context, ITargetAudienceService taService, ICintSamplingService samplingService, IProjectValidator projectValidator)
+        public ProjectService(
+            IProjectContext context,
+            ITargetAudienceService taService,
+            ICintSamplingService samplingService,
+            IProjectValidator projectValidator)
         {
             _projectContext = context;
             _taService = taService;
@@ -81,20 +86,26 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             return _projectContext.GetProjects(status, pageNumber, searchString, recordCount);
         }
 
+        public async Task<Project?> GetAsync(long id)
+        {
+            var project = await _projectContext.GetAsync(id);
+            
+            return project;
+        }
+
+        public async Task<List<Survey>> GetSurveysAsync(long id)
+        {
+            var surveys = await _samplingService.GetSurveysAsync(id);
+
+            return surveys;
+        }
+
         private bool ProjectValidated(Project project)
         {
             if (project != null && project.LastUpdate == null)
                 project.LastUpdate = DateTime.Now;
 
             return true;
-        }
-
-        public async Task<Project> GetProjectById(long id)
-        {
-            if (id > 0)
-                return _projectContext.GetProject(id);
-            else
-                throw new ArgumentNullException("Project Id submitted in invalid");
         }
     }
 }

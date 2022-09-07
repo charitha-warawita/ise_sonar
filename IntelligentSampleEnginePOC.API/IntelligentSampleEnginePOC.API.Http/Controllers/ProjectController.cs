@@ -1,9 +1,9 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
+using IntelligentSampleEnginePOC.API.Core.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
-using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,12 +14,18 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:scopes")]
     public class ProjectController : ControllerBase
     {
-        IProjectService _projectService;
-        
-        public ProjectController(IProjectService projectService, ICintSamplingService samplingService)
+        private readonly ILogger<ProjectController> _logger;
+        private readonly IProjectService _projectService;
+        private readonly ITargetAudienceService _targetAudienceService;
+
+        public ProjectController(
+            ILogger<ProjectController> logger,
+            IProjectService projectService,
+            ITargetAudienceService targetAudienceService)
         {
+            _logger = logger;
             _projectService = projectService;
-            
+            _targetAudienceService = targetAudienceService;
         }
 
         [Authorize]
@@ -72,10 +78,19 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         }
 
         [Authorize]
-        [HttpGet("id/{id}")]
-        public ActionResult GetById(string id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetByIdAsync(long id)
         {
-            return Ok();
+            try
+            {
+                var result = await _projectService.GetAsync(id);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
         }
 
         [Authorize]
@@ -90,6 +105,47 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Exception occured - " + ex.Message);
+            }
+        }
+        
+        [Authorize]
+        [HttpGet("{id}/TargetAudiences")]
+        public async Task<ActionResult> GetTargetAudiencesForProjectPaged(
+            long id,
+            [FromQuery] int page = Constants.PAGENUMBER_DEFAULT,
+            [FromQuery] int pageSize = Constants.RECORDCOUNT_DEFAULT)
+        {
+            if (page <= 0 || pageSize <= 0)
+                return BadRequest("Invalid paging data");
+            
+            PagedResult<TargetAudience> result;
+            try
+            {
+                result = await _targetAudienceService.GetAllByProjectIdAsync(id, page, pageSize);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+            
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("{id}/Surveys")]
+        public async Task<ActionResult> GetSurveys(long id)
+        {
+            try
+            {
+                var surveys = await _projectService.GetSurveysAsync(id);
+
+                return Ok(surveys);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "ProjectController - GetSurveys - Error: {Message}", e.Message);
+
+                return Problem(e.Message);
             }
         }
     }

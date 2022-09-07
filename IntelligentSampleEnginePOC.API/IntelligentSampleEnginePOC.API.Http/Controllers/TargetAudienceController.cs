@@ -1,7 +1,6 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 
@@ -12,7 +11,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:scopes")]
     public class TargetAudienceController : ControllerBase
     {
-        ITargetAudienceService _targetAudienceService;
+        private readonly ITargetAudienceService _targetAudienceService;
 
         public TargetAudienceController(ITargetAudienceService taService)
         {
