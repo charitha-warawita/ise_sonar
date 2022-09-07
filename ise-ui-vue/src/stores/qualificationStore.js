@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { useProjectStore } from "./projectStore"; 
+import coreapi from "../services/coreapi";
 
 export const useQualificationStore = defineStore('qualification', {
     state: () => ({
@@ -12,22 +13,16 @@ export const useQualificationStore = defineStore('qualification', {
         categoryQAs: [],
         selectedCategory: '',
         error: null,
-
-        iseUrl: import.meta.env.VITE_ISE_API_URL,
-        iseCountryPath: import.meta.env.VITE_ISE_API_COUNTRIES,
-        iseProfCatPath: import.meta.env.VITE_ISE_API_PROFILECATEGORIES,
-        iseQAByCategoryPath: import.meta.env.VITE_ISE_API_QABYCATEGORY
     }),
     actions: {
         async GetProfileCategories(taId)
         {
+            this.profCategoriesError = null;
             this.selectedCategory=''; this.categoryQAs=[]; this.profCategories=[];
             this.currentTAId = taId;
             try {
                 this.profCategoriesLoading = true;
-                var currProfCategories = await fetch(this.iseUrl + this.iseProfCatPath)
-                    .then((response) => response.json());
-
+                var currProfCategories = await coreapi.getProfileCategories();
                 for(var i = 0; i < currProfCategories.length; i++)
                 {
                     var currName = currProfCategories[i];
@@ -42,6 +37,7 @@ export const useQualificationStore = defineStore('qualification', {
         },
         async GetQandAForCategory(profCategory)
         {
+            this.profCategoriesError = null;
             var category = profCategory.name
             this.selectedCategory = category;
             this.profCategoriesLoading = true;
@@ -50,9 +46,7 @@ export const useQualificationStore = defineStore('qualification', {
                 var currIndex = this.profCategories.findIndex(x => x.name === category)
                 if(this.profCategories[currIndex].qas.length < 1)
                 {
-                    var qas = await fetch(this.iseUrl + this.iseQAByCategoryPath + encodeURIComponent(category))
-                    .then((response) => response.json())
-
+                    var qas = await coreapi.getQAByCategory(category);
                     for(var i =0; i < qas.length; i++)
                     {
                         for(var j = 0; j< qas[i].variables.length; j++)

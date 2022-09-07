@@ -1,10 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace IntelligentSampleEnginePOC.API.Core.Model
 {
@@ -32,7 +28,5 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
         public List<Qualification> Qualifications { get; set; }
         [JsonProperty(PropertyName = "quotas")]
         public List<Quota> Quotas { get; set; }
-
-
     }
 }

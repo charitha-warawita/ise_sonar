@@ -1,21 +1,24 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace IntelligentSampleEnginePOC.API.Http.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:scopes")]
     public class TargetAudienceController : ControllerBase
     {
-        ITargetAudienceService _targetAudienceService;
+        private readonly ITargetAudienceService _targetAudienceService;
 
         public TargetAudienceController(ITargetAudienceService taService)
         {
             _targetAudienceService = taService;
         }
 
+        [Authorize]
         [HttpPost("{projectId}")]
         public ActionResult Post(long? projectId, [FromBody] TargetAudience taAudience)
         {

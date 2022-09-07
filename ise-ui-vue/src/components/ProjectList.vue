@@ -64,75 +64,96 @@
     </div>
 </template>
 <script setup>
-import {useProjectsStore} from '@/stores/projectsStore'
-import {storeToRefs} from 'pinia'
-import ProjectListTable from '@/components/ProjectListTable.vue'
-import ProjectModel from '@/models/projectModel.js'
-import {ref} from "vue"
-import { onMounted } from 'vue'
+import ProjectListTable from "@/components/ProjectListTable.vue";
+import ProjectModel from "@/models/projectModel.js";
+import { useProjectsStore } from "@/stores/projectsStore";
+import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
+import { useRouter } from "vue-router";
 
-import CustomModal from '@/components/CustomModal.vue'
-import ProjectSetting from '@/components/ProjectSetting.vue'
+const router = useRouter();
 
 // console.log(storeToRefs(useProjectStore()).projects);
-var useProjsStore = useProjectsStore()
-const { searchByName, searchByStartDate, currentProjects, currentStatus, projectListLoading, projectListError, currentPageRowCount, currentPageNumber, selectRowCount, totalItems } = storeToRefs(useProjsStore)
-const displayfields = ProjectModel.displayfields
-const displayFieldFormatted = ProjectModel.displayFieldFormatted
+const useProjsStore = useProjectsStore();
+const {
+	searchByName,
+	searchByStartDate,
+	currentProjects,
+	currentStatus,
+	projectListLoading,
+	projectListError,
+	currentPageRowCount,
+	currentPageNumber,
+    selectRowCount,
+	totalItems,
+} = storeToRefs(useProjsStore);
+const displayfields = ProjectModel.displayfields;
+const displayFieldFormatted = ProjectModel.displayFieldFormatted;
 
-const onClickHandler = (async (page) => {
-    console.log(page);
-    useProjsStore.currentPageNumber = page;
-    useProjsStore.currentProjects = await useProjsStore.GetProjectsList();
-  });
+const PageSelectHandler = async (page) => {
+	useProjsStore.currentPageNumber = page;
+	useProjsStore.currentProjects = await useProjsStore.GetProjectsList();
+};
+
+const RowSelectedHandler = (project) => {
+	router.push({
+		name: "project",
+		params: {
+			id: project.id,
+		},
+	});
+};
 
 function applyStatusFilter(status) {
-  useProjsStore.getProjectsBySearchNameAndStartDate(status);
-  document.querySelectorAll(".paginate-buttons").forEach((button) => {
-    button.classList.remove("active-page");
-    if(button.innerText === '1') {
-      button.click();
-    }
-  })
+	useProjsStore.getProjectsBySearchNameAndStartDate(status);
+	document.querySelectorAll(".paginate-buttons").forEach((button) => {
+		button.classList.remove("active-page");
+
+		if (button.innerText === "1") {
+			button.click();
+		}
+	});
 }
 onMounted(() => {
-    // console.log('on mounted call');
-    useProjsStore.setDefaultProjectList()
-    // alert(totalItems);
-})
+	useProjsStore.setDefaultProjectList();
+});
 </script>
-<style>
-input[type="date"]:not(.has-value):before{
-  color: gray;
-  content: attr(placeholder);
+<style scoped>
+input[type="date"]:not(.has-value):before {
+	color: gray;
+	content: attr(placeholder);
 }
 
 .projListTable {
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
-.pagination-container {
-    display: flex;
-    column-gap: 10px;
-  }
-  .paginate-buttons {
-    height: 40px;
-    width: 40px;
-    border-radius: 20px;
-    cursor: pointer;
-    background-color: rgb(242, 242, 242);
-    border: 1px solid rgb(217, 217, 217);
-    color: black;
-  }
-  .paginate-buttons:hover {
-    background-color: #d8d8d8;
-  }
-  .active-page {
-    background-color: #0D6EFD;
-    border: 1px solid #0D6EFD;
-    color: white;
-  }
-  .active-page:hover {
-    background-color: #0D6EFD;
-  }
+::v-deep(.pagination-container) {
+	display: inline flex;
+	column-gap: 10px;
+}
+
+::v-deep(.paginate-buttons) {
+	height: 40px;
+	width: 40px;
+	border-radius: 20px;
+	cursor: pointer;
+	background-color: rgb(242, 242, 242);
+	border: 1px solid rgb(217, 217, 217);
+	color: black;
+}
+
+::v-deep(.paginate-buttons:hover) {
+	background-color: #d8d8d8;
+}
+
+::v-deep(.active-page) {
+	background-color: #0d6efd;
+	border: 1px solid #0d6efd;
+	color: white;
+}
+
+::v-deep(.active-page:hover) {
+	background-color: #0d6efd;
+}
 </style>

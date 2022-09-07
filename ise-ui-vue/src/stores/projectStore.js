@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
-import useVuelidate from '@vuelidate/core'
+// import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
+import coreapi from "../services/coreapi";
 export const useProjectStore = defineStore('project', {
     state: () => ({
         basicSettingDesc:'',
@@ -31,35 +32,28 @@ export const useProjectStore = defineStore('project', {
         error: null,
 
     }),
-    rules: {
+    /*rules: {
         name: { required },
         reference: { required }
-    },
+    },*/
     actions: {
         async ProjectAPIValidated(project) {
+            project.errors = [];
             this.getCintRequestLoading = true;
-            var iseUrl = import.meta.env.VITE_ISE_API_URL;
-            var cintRequestPath = import.meta.env.VITE_ISE_API_CINTREQUEST;
-            const settings = { 
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(project)
-            };
             try {
-                var cintReqs = await fetch((iseUrl + cintRequestPath), settings)
-                .then((response) => response.json());
+                var cintReqs = await coreapi.performAPIValidation(project); 
                 if(cintReqs!== null) {
                     if(!(cintReqs.find(x => x.ValidationResult === false))) {
                         this.cintRequests = cintReqs;
                         return true;
                     }
-                    else
+                    else {
                         this.getCintRequestError = cintReqs.errors;
+                        throw new Error(cintReqs.errors); 
+                    }
                 }
             } catch (error) {
+                project.errors.push(error);
                 this.getCintRequestError = [];
                 this.getCintRequestError.push(error);
             } finally {
@@ -68,22 +62,9 @@ export const useProjectStore = defineStore('project', {
             return false;
         },
         async CreateProject(project) {
-            // project.lastUpdate = new Date();
-
             this.saveProjectLoading = true;
-            var iseUrl = import.meta.env.VITE_ISE_API_URL;
-            var saveProjectPath = import.meta.env.VITE_ISE_API_SAVEPROJECT;
-            const settings = { 
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(project)
-            }
             try {
-                var savedProject = await fetch((iseUrl + saveProjectPath), settings)
-                .then((response) => response.json());
+                var savedProject = await coreapi.createProject(project);
                 if(savedProject.id === undefined)
                     throw savedProject;
                 project.id = savedProject.id;

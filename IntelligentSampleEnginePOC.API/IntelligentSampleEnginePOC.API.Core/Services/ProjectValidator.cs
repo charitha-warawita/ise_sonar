@@ -74,7 +74,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         }
         private void ValidateProjectFieldingPeriod(Project project)
         {
-            if (project.FieldingPeriod >0)
+            if (project.FieldingPeriod <= 0)
             {
                 errors.Add("No Project FieldingPeriod Identified");
             }
@@ -114,8 +114,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                         errors.Add("No TargetAudiences EstimatedIR Identified");
                     if (ta.EstimatedLOI <=0)
                         errors.Add("No TargetAudiences EstimatedLOI Identified");
-                    if (ta.LimitType == null)
-                        errors.Add("No TargetAudiences LimitType Identified");
+                    /*if (ta.LimitType == null)
+                        errors.Add("No TargetAudiences LimitType Identified");*/
                     if (ta.TestingUrl == null)
                         errors.Add("No TargetAudiences TestingUrl Identified");
                     if (ta.LiveUrl == null)

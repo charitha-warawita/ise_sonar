@@ -1,19 +1,29 @@
 import { defineStore } from "pinia";
+import coreapi from "../services/coreapi";
 
-export const useProjectsStore = defineStore('projects', {
-    state: () => ({
-        projects:[],
-        currentProjects: [],
-        currentPageRowCount: 10,
+export const useProjectsStore = defineStore("projects", {
+	state: () => ({
+		projects: [],
+		currentProjects: [],
+		currentPageRowCount: 10,
         currentPageNumber: 1,
-        selectRowCount: [10,25,50,100],
-        totalItems: 0,
-        searchByName: '',
-        searchByStartDate: '',
-        allStatuses:["Draft", "Created", "Active", "Paused", "Complete", "Closed", "Halt", "All"],
+        selectRowCount: [10, 25, 50, 100],
+		totalItems: 0,
+		searchByName: "",
+		searchByStartDate: "",
+		allStatuses: [
+			"Draft",
+			"Created",
+			"Active",
+			"Paused",
+			"Complete",
+			"Closed",
+			"Halt",
+			"All",
+		],
 
-        projectListLoading: false,
-        projectListError: null,
+		projectListLoading: false,
+		projectListError: null,
 
         currentStatus: 7,
         iseUrl: import.meta.env.VITE_ISE_API_URL,
@@ -29,11 +39,11 @@ export const useProjectsStore = defineStore('projects', {
     actions: {
         async setDefaultProjectList() {
             console.log("came into this function");
-            this.searchByName = '';
-            this.searchByStartDate = '';
+            this.searchByName = ''
+            this.searchByStartDate = ''
             this.currentPageRowCount = 10;
             this.currentProjects = await this.GetProjectsList();
-            this.currentStatus = 7;
+            this.currentStatus = 7
         },
         async GetProjectsList() {
             var path = 'pageNumber=' + this.currentPageNumber + '&recordCount=' + this.currentPageRowCount;
@@ -83,7 +93,8 @@ export const useProjectsStore = defineStore('projects', {
                 curr = curr.filter(project => (project.startDate.includes(this.searchByStartDate)))*/
             
             // this.currentProjects = curr;
-        },
+        }
+        ,
         async selectedOption(event) {
             this.currentPageRowCount = event.target.value;
             this.currentProjects = await this.GetProjectsList();

@@ -5,6 +5,8 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,10 +20,10 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
         {
             _options = databaseOptions.Value;
         }
-
-        public List<Quota> GetQuotaFromDB(long qtid)
+        public Quota GetQuota(long qtid)
         {
-            List<Quota> quotas = new List<Quota>();
+            Quota quotas = new Quota();
+            quotas.Conditions = new List<Question>();
 
             using (SqlConnection connection = new SqlConnection(_options.iseDb))
             {
@@ -32,51 +34,122 @@ namespace IntelligentSampleEnginePOC.API.Core.Data
                     command.Parameters.AddWithValue("@qtid", Convert.ToString(qtid));
                     connection.Open();
                     SqlDataReader reader = command.ExecuteReader();
-                    if (reader.HasRows)
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    if (dt.Rows.Count > 0)
                     {
-                        Quota Quota = new Quota();
-                        Question currConditions = new Question();
-                        var variableList = new List<Variable>();
+                        var list = dt.AsEnumerable().Where(row => row["Id"].ToString() == qtid.ToString());
+
+                        quotas.Id = Convert.ToInt32(list.FirstOrDefault()["Id"]);
+                        quotas.QuotaName = list.FirstOrDefault()["QuotaName"].ToString();
+                        quotas.QuotaType = list.FirstOrDefault()["QuotaType"].ToString();
+                        quotas.FieldTarget = Convert.ToInt32(list.FirstOrDefault()["FieldTarget"]);
+                        quotas.Limit = Convert.ToInt32(list.FirstOrDefault()["Limit"]);
+                        quotas.Prescreens = Convert.ToInt32(list.FirstOrDefault()["Prescreens"]);
+                        quotas.Completes = Convert.ToInt32(list.FirstOrDefault()["Completes"]);
+                        quotas.IsActive = Convert.ToBoolean(list.FirstOrDefault()["IsActive"]);
+
+                        var groupedByValueCodeText = from row in dt.AsEnumerable()
+                                               group row by new
+                                               {
+                                                   QuestionId = row.Field<long>("QuestionId"),
+                                                   QuestionName = row.Field<string>("QuestionName"),
+                                                   QuestionText = row.Field<string>("QuestionText"),
+                                                   QuestionCategory = row.Field<string>("QuestionCategory"),
+                                                   ValueCode = row.Field<int>("ValueCode"),
+                                                   ValueText = row.Field<string>("ValueText"),
+
+                                               } into valueResults
+                                               select new
+                                               {
+                                                   QuestionId = valueResults.Key.QuestionId,
+                                                   QuestionName = valueResults.Key.QuestionName,
+                                                   QuestionText = valueResults.Key.QuestionText,
+                                                   QuestionCategory = valueResults.Key.QuestionCategory,
+                                                   ValueCode = valueResults.Key.ValueCode,
+                                                   ValueText = valueResults.Key.ValueText,
+                                               };
+
+                        var quesSet = groupedByValueCodeText.GroupBy(x => new 
+                        { x.QuestionId, x.QuestionName,x.QuestionText,x.QuestionCategory });
 
 
-                        while (reader.Read())
+                        foreach (var result in quesSet)
                         {
-                            Quota.Id = Convert.ToInt32(reader[0]);
-                            Quota.QuotaName = Convert.ToString(reader[1]);
-                            Quota.QuotaType = Convert.ToString(reader[2]);
-                            Quota.FieldTarget = Convert.ToInt32(reader[3]);
-                            Quota.Limit = Convert.ToInt32(reader[4]);
-                            Quota.Prescreens = Convert.ToInt32(reader[5]);
-                            Quota.Completes = Convert.ToInt32(reader[6]);
-                            Quota.IsActive = Convert.ToBoolean(reader[7]);
+                            Question currConditions = new Question();
+                            currConditions.Id = Convert.ToInt32(result.Key.QuestionId);
+                            currConditions.Name = result.Key.QuestionName;
+                            currConditions.Text = result.Key.QuestionText;
+                            currConditions.CategoryName = result.Key.QuestionCategory;
 
-                            
-                            Quota.Conditions = new List<Question>();
-
-                            currConditions.Id = Convert.ToInt32(reader[8]);
-                            currConditions.Name = Convert.ToString(reader[9]);
-                            currConditions.Text = Convert.ToString(reader[10]);
-                            currConditions.CategoryName = Convert.ToString(reader[11]);
-
-                            currConditions.Variables = new List<Variable>();
-                            currConditions.Variables.Add(
-                                    new Variable
-                                    {
-                                        Id = Convert.ToInt32(reader[12]),
-                                        Name = Convert.ToString(reader[13])
-                                    });
-
-                            variableList.AddRange(currConditions.Variables);
-                            Quota.Conditions.Add(currConditions);
-                            Quota.Conditions[0].Variables = variableList;
+                            var valueSet = groupedByValueCodeText.Where(x => x.QuestionId == currConditions.Id &&
+                                                                             x.QuestionName == currConditions.Name &&
+                                                                             x.QuestionText == currConditions.Text &&
+                                                                             x.QuestionCategory == currConditions.CategoryName)
+                                                                             .Select(y => new {y.ValueCode,y.ValueText});
+                            if(valueSet!=null)
+                            {
+                                currConditions.Variables = new List<Variable>();
+                               
+                                foreach (var value in valueSet)
+                                {
+                                    Variable variableObject = new Variable();
+                                    variableObject.Id = Convert.ToInt32(value.ValueCode);
+                                    variableObject.Name= value.ValueText;
+                                    currConditions.Variables.Add(variableObject);
+                                }
+                            }
+                            quotas.Conditions.Add(currConditions);
                         }
-                        quotas.Add(Quota);
                     }
-                    reader.Close();
+                }
+
+                connection.Close();
+            }
+            
+            return quotas;
+        }
+
+        public Quota CreateQuota(long projectId, long taid, Quota qtaData)
+        {
+                var quotaJson = JsonConvert.SerializeObject(qtaData);
+
+                using (SqlConnection connection = new SqlConnection(_options.iseDb))
+                {
+                    using (SqlCommand command = new SqlCommand("CreateQuota"))
+                    {
+                        command.CommandType = System.Data.CommandType.StoredProcedure;
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@TAID", taid);
+                        command.Parameters.AddWithValue("@projectId", projectId);
+                        command.Parameters.AddWithValue("@QuotaJson", quotaJson);
+                        connection.Open();
+                        var quotaDataId = command.ExecuteScalar();
+                        if (quotaDataId != null)
+                            qtaData.Id = Convert.ToInt64(quotaDataId);
+                        connection.Close();
+                    }
+                }
+           
+            return qtaData;
+        }
+
+        public long DeleteQuotaFromDB(long qtid)
+        {
+            using (SqlConnection connection = new SqlConnection(_options.iseDb))
+            {
+                using (SqlCommand command = new SqlCommand("DeleteQuota"))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Connection = connection;
+                    command.Parameters.AddWithValue("@qtid", Convert.ToString(qtid));
+                    connection.Open();
+                    var deletedQtId = command.ExecuteNonQuery();
                     connection.Close();
+                    return deletedQtId;
                 }
             }
-             return quotas;
+
         }
     }
 }

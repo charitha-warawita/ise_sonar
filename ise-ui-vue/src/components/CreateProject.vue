@@ -254,7 +254,7 @@ const rules = {
     targetAudiences: {
         $each: helpers.forEach({
             "name": { required: helpers.withMessage('TA Name cannot be empty', required) },
-            "audienceNumber":{ required: helpers.withMessage('Audience order cannot be empty', required) },
+            "audienceNumber":{ required: helpers.withMessage('Audience order cannot be empty', required), minValueValue: helpers.withMessage(() => "TA order minimum value allowed is 1", minValue(1)) },
             "estimatedIR": { required, minValueValue: helpers.withMessage(() => "Estimated IR minimum value allowed is 1", minValue(1))   },
             "estimatedLOI": { required, minValueValue: helpers.withMessage(() => 'Estimate LOI minimum value allowed is 1', minValue(1)) },
             "limit": { required, minValueValue:helpers.withMessage(() => 'wanted Completes minimum value allowed is 1', minValue(1)) },
