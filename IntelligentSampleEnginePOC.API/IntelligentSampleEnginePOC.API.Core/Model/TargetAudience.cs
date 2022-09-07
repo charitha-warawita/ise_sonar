@@ -1,43 +1,32 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace IntelligentSampleEnginePOC.API.Core.Model
 {
     public class TargetAudience
     {
-        [JsonPropertyName("id")]
+        [JsonProperty(PropertyName = "id")]
         public long Id { get; set; }
-        
-        [JsonPropertyName("name")]
+        [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
-        
-        [JsonPropertyName("audienceNumber")]
+        [JsonProperty(PropertyName = "audienceNumber")]
         public int AudienceNumber { get; set; }
-        
-        [JsonPropertyName("estimatedIR")]
+        [JsonProperty(PropertyName = "estimatedIR")]
         public int EstimatedIR { get; set; }
-        
-        [JsonPropertyName("estimatedLOI")]
+        [JsonProperty(PropertyName = "estimatedLOI")]
         public int EstimatedLOI { get; set; }
-        
-        [JsonPropertyName("limit")]
+        [JsonProperty(PropertyName = "limit")]
         public int Limit { get; set; }
-        
-        [JsonPropertyName("limitType")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        [JsonProperty(PropertyName = "limitType"), System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int? LimitType { get; set; }
-        
-        [JsonPropertyName("testingUrl")]
-        // [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? TestingUrl { get; set; }
-        
-        [JsonPropertyName("liveUrl")]
-        // [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string? LiveUrl { get; set; }
-
-        [JsonPropertyName("qualifications")]
-        public List<Qualification> Qualifications { get; set; } = new();
-
-        [JsonPropertyName("quotas")]
-        public List<Quota> Quotas { get; set; } = new();
+        [JsonProperty(PropertyName = "testingUrl"), System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string TestingUrl { get; set; }
+        [JsonProperty(PropertyName = "liveUrl"), System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string LiveUrl { get; set; }
+        [JsonProperty(PropertyName = "qualifications")]
+        public List<Qualification> Qualifications { get; set; }
+        [JsonProperty(PropertyName = "quotas")]
+        public List<Quota> Quotas { get; set; }
     }
 }

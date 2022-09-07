@@ -64,8 +64,7 @@ public class SurveysEndpoint : CintEndpoint, ISurveysEndpoint
 
     public async Task<HttpResponseMessage?> PostAsync(CintRequest request)
     {
-        var body = JsonSerializer.Serialize(request);
-        var response = await HttpClient.PostAsJsonAsync("/ordering/Surveys", body);
+        var response = await HttpClient.PostAsJsonAsync("/ordering/Surveys", request);
 
         return response;
     }
