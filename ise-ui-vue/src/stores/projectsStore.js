@@ -6,6 +6,7 @@ export const useProjectsStore = defineStore('projects', {
         currentProjects: [],
         currentPageRowCount: 10,
         currentPageNumber: 1,
+        selectRowCount: [10,25,50,100],
         totalItems: 0,
         searchByName: '',
         searchByStartDate: '',
@@ -28,13 +29,14 @@ export const useProjectsStore = defineStore('projects', {
     actions: {
         async setDefaultProjectList() {
             console.log("came into this function");
-            this.searchByName = ''
-            this.searchByStartDate = ''
+            this.searchByName = '';
+            this.searchByStartDate = '';
+            this.currentPageRowCount = 10;
             this.currentProjects = await this.GetProjectsList();
-            this.currentStatus = 7
+            this.currentStatus = 7;
         },
         async GetProjectsList() {
-            var path = 'pageNumber=' + this.currentPageNumber + '&recentCount=' + this.currentPageRowCount;
+            var path = 'pageNumber=' + this.currentPageNumber + '&recordCount=' + this.currentPageRowCount;
             if(this.currentStatus > -1 && this.currentStatus < 7)
                 path += '&status=' + this.currentStatus;
             if(this.searchByName !== '')
@@ -65,6 +67,7 @@ export const useProjectsStore = defineStore('projects', {
             else {
                 this.currentStatus = status;
             }
+            this.currentPageRowCount = 10;
             this.currentProjects = await this.GetProjectsList();
             
 
@@ -80,6 +83,10 @@ export const useProjectsStore = defineStore('projects', {
                 curr = curr.filter(project => (project.startDate.includes(this.searchByStartDate)))*/
             
             // this.currentProjects = curr;
-        }
+        },
+        async selectedOption(event) {
+            this.currentPageRowCount = event.target.value;
+            this.currentProjects = await this.GetProjectsList();
+        },
     }
 })

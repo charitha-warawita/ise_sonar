@@ -24,18 +24,41 @@
             <a class="btn btn-outline-success searchButton me-2" v-on:click="useProjsStore.setDefaultProjectList">Clear</a>
         </div>
         <br/><br/>
+        <div v-if="currentProjects" style="width:100%; text-align: center">
+          <div style="float:left">Page: {{ currentPageNumber }}</div>
+            <vue-awesome-paginate
+                :total-items="totalItems"
+                :items-per-page="currentPageRowCount"
+                :max-pages-shown="4"
+                :current-page="currentPageNumber"
+                :on-click="onClickHandler"
+                :hide-prev-next="true"
+            />
+            <div style="float:right"> Rows:
+              <select @change="useProjsStore.selectedOption($event)" >
+                  <option value="" disabled>-- Select --</option>
+                  <option v-bind:value="rowCount" v-for="rowCount in selectRowCount" :key="rowCount" :selected="rowCount == currentPageRowCount">{{ rowCount }}</option>
+              </select>
+          </div>
+        </div>
         <ProjectListTable class="projListTable" :fields='displayfields' :projects='useProjsStore.currentProjects' :fieldTitles='displayFieldFormatted'></ProjectListTable>
         <div v-if="currentProjects" style="width:100%; text-align: center">
-        <div style="float:left">Page: {{ currentPageNumber }}</div>
-        <vue-awesome-paginate
-            :total-items="totalItems"
-            :items-per-page="currentPageRowCount"
-            :max-pages-shown="4"
-            :current-page="currentPageNumber"
-            :on-click="onClickHandler"
-            :hide-prev-next="true"
-        /></div>
-        
+          <div style="float:left">Page: {{ currentPageNumber }}</div>
+            <vue-awesome-paginate
+                :total-items="totalItems"
+                :items-per-page="currentPageRowCount"
+                :max-pages-shown="4"
+                :current-page="currentPageNumber"
+                :on-click="onClickHandler"
+                :hide-prev-next="true"
+            />
+            <div style="float:right"> Rows:
+              <select @change="useProjsStore.selectedOption($event)" >
+                  <option value="" disabled>-- Select --</option>
+                  <option v-bind:value="rowCount" v-for="rowCount in selectRowCount" :key="rowCount" :selected="rowCount == currentPageRowCount">{{ rowCount }}</option>
+              </select>
+          </div>
+        </div>
         <p v-if="projectListLoading">Loading project list.. </p>
         <p v-if="projectListError"> {{ projectListError }} </p>
     </div>
@@ -53,7 +76,7 @@ import ProjectSetting from '@/components/ProjectSetting.vue'
 
 // console.log(storeToRefs(useProjectStore()).projects);
 var useProjsStore = useProjectsStore()
-const { searchByName, searchByStartDate, currentProjects, currentStatus, projectListLoading, projectListError, currentPageRowCount, currentPageNumber, totalItems } = storeToRefs(useProjsStore)
+const { searchByName, searchByStartDate, currentProjects, currentStatus, projectListLoading, projectListError, currentPageRowCount, currentPageNumber, selectRowCount, totalItems } = storeToRefs(useProjsStore)
 const displayfields = ProjectModel.displayfields
 const displayFieldFormatted = ProjectModel.displayFieldFormatted
 
