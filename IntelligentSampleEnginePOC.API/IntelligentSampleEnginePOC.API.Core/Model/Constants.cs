@@ -13,7 +13,18 @@
         public const int RECORDCOUNT_DEFAULT = 10;
 
         // Error descriptions
-        public const string PROJVALFAILED = "Project validation failed big time.. You must be ashamed!!!";
+        public const string ProjValFailed = "Project validation failed big time.. You must be ashamed!!!";
+        public const string NoTAFound = "Target audience not available in project id: {0}";
+        public const string TANameErr = "Target Audience name is invalid";
+        public const string MinValCheckErr = "{0} is invalid. Minimum value allowed is {1}";
+        public const string InvalidUrlErr = "Invalid Url entered in the field - {0}";
+        public const string QualValidationMessage = "Each TA must contain atlast one country selected in the qualification " +
+            "list under STANDARD category and should have atleast one more additional qualification like gender, age or " +
+            "profiling questions to support quota groups";
+
+
+
+
         public const string QUALIFICATIONCOUNTERCHECKSTART = "Atleast two Qualification should be present to create a project under Target Audience : ";
         public const string QUALIFICATIONCOUNTERCHECKEND = " provided one of which should be country details qualification";
         public const string TANAME =  " and Target Audience Name : ";
