@@ -82,7 +82,7 @@
 			@row-selected="RowSelectedHandler"
 		></ProjectListTable>
 		<div v-if="currentProjects" style="width: 100%; text-align: center">
-			<!-- <div style="float: left">Page: {{ currentPageNumber }}</div> -->
+			<div style="float: left">Page: {{ currentPageNumber }}</div>
 			<vue-awesome-paginate
 				:total-items="totalItems"
 				:items-per-page="currentPageRowCount"
@@ -162,7 +162,7 @@ input[type="date"]:not(.has-value):before {
 }
 
 ::v-deep(.pagination-container) {
-	display: flex;
+	display: inline flex;
 	column-gap: 10px;
 }
 
