@@ -7,7 +7,7 @@ export const useProjectsStore = defineStore("projects", {
 		currentProjects: [],
 		currentPageRowCount: 10,
         currentPageNumber: 1,
-        selectRowCount: [10, 25, 50, 100],
+        selectRowCount: [10, 25, 50],
 		totalItems: 0,
 		searchByName: "",
 		searchByStartDate: "",
@@ -28,8 +28,6 @@ export const useProjectsStore = defineStore("projects", {
         currentStatus: 7,
         iseUrl: import.meta.env.VITE_ISE_API_URL,
         iseGetProjectsPath: import.meta.env.VITE_ISE_API_GETPROJECTS
-
-
     }),
     getters: {
         getDraftProjects: (state) => {
@@ -46,23 +44,34 @@ export const useProjectsStore = defineStore("projects", {
             this.currentStatus = 7
         },
         async GetProjectsList() {
-            var path = 'pageNumber=' + this.currentPageNumber + '&recordCount=' + this.currentPageRowCount;
-            if(this.currentStatus > -1 && this.currentStatus < 7)
-                path += '&status=' + this.currentStatus;
-            if(this.searchByName !== '')
-                path += '&searchString=' + this.searchByName;
+
+            this.projectListError = null;
+
+            var path =
+                "pageNumber=" +
+                this.currentPageNumber +
+                "&recordCount=" +
+                this.currentPageRowCount;
+            if (this.currentStatus > -1 && this.currentStatus < 7)
+                path += "&status=" + this.currentStatus;
+            if (this.searchByName !== "")
+                path += "&searchString=" + this.searchByName;
             try {
+
                 this.projectListLoading = true;
-                var result = await fetch(this.iseUrl + this.iseGetProjectsPath + path)
-                .then((response) => response.json());
-                if(result !== null && Array.isArray(result.projects)) {
+                // var result = await fetch(this.iseUrl + this.iseGetProjectsPath + path)
+                // .then((response) => response.json());
+                var result = await coreapi.getProjects(path);
+                if (result !== null && Array.isArray(result.projects)) {
                     this.totalItems = result.totalItems;
-                    for(var i =0; i < result.projects.length; i++) {
-                        result.projects[i].statusValue = this.allStatuses[result.projects[i].status];
+                    for (var i = 0; i < result.projects.length; i++) {
+                        result.projects[i].statusValue =
+                            this.allStatuses[result.projects[i].status];
                     }
                 }
                 return result.projects;
-            } catch(error) {
+
+            } catch (error) {
                 this.projectListError = error;
             } finally {
                 this.projectListLoading = false;
@@ -93,8 +102,7 @@ export const useProjectsStore = defineStore("projects", {
                 curr = curr.filter(project => (project.startDate.includes(this.searchByStartDate)))*/
             
             // this.currentProjects = curr;
-        }
-        ,
+        },
         async selectedOption(event) {
             this.currentPageRowCount = event.target.value;
             this.currentProjects = await this.GetProjectsList();

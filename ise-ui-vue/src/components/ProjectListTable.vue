@@ -64,27 +64,27 @@ const RowSelected = (row) => {
 					:class="{ 'table-row-selectable': props.selectable }"
 					@click="RowSelected(item)"
 				>
-					<td v-for="field in fields" :key='field'>
-                    <template v-if="field==='lastUpdate' || field==='startDate'">
-                        <template v-if="field==='lastUpdate'">
-                            {{formatDate(item[field])}}
+                    <td v-for="field in fields" :key='field'>
+                        <template v-if="field==='lastUpdate' || field==='startDate'">
+                            <template v-if="field==='lastUpdate'">
+                                {{formatDate(item[field])}}
+                            </template>
+                            <template v-else>
+                                {{formatDate(item[field],'MM/DD/YYYY')}}
+                            </template>
                         </template>
+                        
                         <template v-else>
-                            {{formatDate(item[field],'MM/DD/YYYY')}}
+                            {{item[field]}}
                         </template>
-                    </template>
-                    
-                    <template v-else>
-                        {{item[field]}}
-                    </template>
-                </td>
+                    </td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 </template>
 <script>
-	import moment from 'moment'
+import moment from 'moment'
 export default {
     name: 'TableComponent',
     props: {
@@ -97,7 +97,6 @@ export default {
         fieldTitles: {
             type: Array
         }
-
     },
     methods: {
         formatDate: function(value, format){
@@ -109,7 +108,6 @@ export default {
           }
         }
     }
-    
 }
 </script>
 <style>
