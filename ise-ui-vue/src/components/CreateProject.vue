@@ -327,12 +327,12 @@ async function ProjectValidated(project, action) {
                     for(var k=0; k < v$.value.$errors[i].$message[j].length; k++)
                     {
                         if(v$.value.$errors[i].$propertyPath === 'targetAudiences')
-                            project.targetAudiences[j].errors.push(v$.value.$errors[i].$propertyPath + (j+1) + ' - ' +  v$.value.$errors[i].$message[j][k]);
+                            project.targetAudiences[j].errors.push(Capitalising(v$.value.$errors[i].$propertyPath) + (j+1) + ' - ' +  v$.value.$errors[i].$message[j][k]);
                     }
                 }
             }
             else {
-                project.errors.push(v$.value.$errors[i].$propertyPath + ' - ' + v$.value.$errors[i].$message);
+                project.errors.push(Capitalising(v$.value.$errors[i].$propertyPath) + ' - ' + v$.value.$errors[i].$message);
             }
         }
     }
@@ -361,6 +361,17 @@ onMounted(() => {
     useQuotaDataStore.$reset()
     useProjStore.AddTargetAudienceElement()
 })
+
+function Capitalising(data) {
+    var capitalized = []
+    data.split(' ').forEach(word => {
+        capitalized.push(
+        word.charAt(0).toUpperCase() +
+        word.slice(1).toLowerCase()
+        )
+    })
+    return capitalized.join(' ')
+}
 </script>
 <style>
 .costSection {
