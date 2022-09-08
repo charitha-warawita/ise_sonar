@@ -68,7 +68,7 @@
         :total-items="totalItems"
         :items-per-page="currentPageRowCount"
         :max-pages-shown="4"
-        :current-page="currentPageNumber"
+        :current-page=1
         :on-click="PageSelectHandler"
         hide-prev-next
         />
@@ -136,6 +136,7 @@
     });
   }
   onMounted(() => {
+	useProjsStore.$reset();
     useProjsStore.setDefaultProjectList();
   });
   </script>

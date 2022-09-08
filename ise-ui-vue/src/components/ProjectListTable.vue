@@ -114,4 +114,9 @@ export default {
     .tableHeader {
         background-color: lightgray;
     }
+	.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+		background-color: #A4BAE3;
+		color: white;
+		cursor: pointer;
+	  }
 </style>
