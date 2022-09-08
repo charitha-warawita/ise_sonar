@@ -124,37 +124,36 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                     {   
                         var qualificationCountcheck = ta.Qualifications.Count > 1;
                         if (!qualificationCountcheck)
-                            errors.Add("Atleast two Qualification should be present to create a project under Target Audience : " + ta.Id + " provided one of which should be country details qualification");
-                        else
+                            errors.Add(Constants.QUALIFICATIONCOUNTERCHECKSTART + ta.Id + Constants.QUALIFICATIONCOUNTERCHECKEND);                       
                             if (qual.Order <= 0)
-                                errors.Add("No Qualification ID Identified for Target Audience : " + ta.Id + " and Target Audience Name : " + ta.Name);
+                                errors.Add(Constants.QORDER + ta.Id + Constants.TANAME + ta.Name);
                             if (qual.LogicalDecision == null)
-                                errors.Add("No Qualification Logical Condition Identified for Target Audience : " + ta.Id + " and Target Audience Name : " + ta.Name);
+                                errors.Add(Constants.QLOGICALDICISION + ta.Id + Constants.TANAME + ta.Name);
                             if (qual.NumberOfRequiredConditions <= 0)
-                                errors.Add("No Qualification Number of Required Conditions Identified for Target Audience : " + ta.Id + " and Target Audience Name : " + ta.Name);
+                                errors.Add(Constants.QNOOFREQUIREDCONDITIONS  + ta.Id + Constants.TANAME + ta.Name);
                             if (!qual.IsActive == false || !qual.IsActive == true)
-                                errors.Add("No Qualification Name Identified for Target Audience : " + ta.Id + " and Target Audience Name : " + ta.Name);
+                                errors.Add(+ ta.Id + Constants.TANAME + ta.Name);
                             if (qual.Question != null)
                             {
                                 var qualificationCountryCheck = ta.Qualifications.Any(i => i.Question.Name == "Country");
                                 if (!qualificationCountryCheck)
-                                    errors.Add("Atleast one Country should be present to create Project under TA ID : " + ta.Id + " and Qualification ID : " + qual.Id);
+                                    errors.Add(Constants.QUALIFICATIONCOUNTRYCHECK + ta.Id + Constants.QID + qual.Id);
                                 if (qual.Question.Id <= 0)
-                                    errors.Add("No Question ID Identified for Qualification ID : " + qual.Id);
+                                    errors.Add(Constants.QQUESTIONID + qual.Id);
                                 if (qual.Question.Name == null)
-                                    errors.Add("No Question Name Identified for Qualification ID : " + qual.Id);
+                                    errors.Add(Constants.QQUESTIONNAME + qual.Id);
                                 if (qual.Question.Text == null)
-                                    errors.Add("No Question Text Identified for Qualification ID : " + qual.Id);
+                                    errors.Add(Constants.QQUESTIONTEXT + qual.Id);
                                 if (qual.Question.CategoryName == null)
-                                    errors.Add("No Question Category Name Identified for Qualification ID : " + qual.Id);
+                                    errors.Add(Constants.QCATEGORYNAME + qual.Id);
                                 if (qual.Question.Variables == null && qual.Question.Variables.Count > 0)
                                 {
                                     foreach (var variable in qual.Question.Variables)
                                     {
                                         if (variable.Id <= 0)
-                                            errors.Add("No Variable ID  Identified for Qualification ID : " + qual.Id);
+                                            errors.Add(Constants.VARIABLEID + qual.Id);
                                         if (variable.Name == null)
-                                            errors.Add("No Variable Name  Identified for Qualification ID : " + qual.Id);
+                                            errors.Add(Constants.VARIABLENAME + qual.Id);
                                     }
                                 }
                             }
