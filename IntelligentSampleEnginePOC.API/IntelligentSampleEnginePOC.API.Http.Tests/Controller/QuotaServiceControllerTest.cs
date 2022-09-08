@@ -50,12 +50,14 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         }
 
         [Theory]
-        [InlineData(301)]
+        [InlineData(0)]
 
         public void GetQuota_Return_Exceptions(long qtid)
         {
-
-            //throw new ArgumentNullException(nameof(qtid));
+            if(qtid <= 0)
+            {
+                _quotaContext.Setup(repo => repo.GetQuota(qtid)).Throws(new Exception("Test Exception"));
+            }
         }
 
         [Fact]
@@ -71,8 +73,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         }
 
         [Theory]
-        [InlineData(301)]
-        
+        [InlineData(501)] 
         public void DeleteQuota_ReturnsOk(long qtid)
         {
             string jsonString = QuotaTest.GetQuotaJson();
@@ -80,9 +81,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
             _quotaContext.Setup(repo => repo.DeleteQuotaFromDB(qtid)).Returns(new QuotaTest().DeleteQuotaTest(qtid,quota));
             var result = _quotaService.DeleteQuota(qtid);
             Assert.NotNull(result);
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            Assert.NotNull(okResult);
-            Assert.Equal(200, result);
+     
         }
      
 
