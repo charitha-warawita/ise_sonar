@@ -1,4 +1,5 @@
-﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
+﻿using IntelligentSampleEnginePOC.API.Core.Exceptions;
+using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
 using IntelligentSampleEnginePOC.API.Core.Results;
 using Microsoft.AspNetCore.Authorization;
@@ -42,9 +43,17 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
                 else
                     return StatusCode(500, "Error occured");
             }
+            catch(BadRequestException ex)
+            {
+                return StatusCode(400, "Bad request exception occured - " + ex.Message);
+            }
+            catch(NotImplementedException ex)
+            {
+                return StatusCode(501, "Application functionality not implemented - " + ex.Message);
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, "Exception occured - " + ex.Message);
+                return StatusCode(500, "Application Exception occured - " + ex.Message);
             }
         }
 
@@ -61,6 +70,18 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
                 }
                 else
                     return StatusCode(500, "Error occured");
+            }
+            catch (BadRequestException ex)
+            {
+                return StatusCode(400, "Bad request exception occured - " + ex.Message);
+            }
+            catch (ISEApplicationException ex)
+            {
+                return StatusCode(500, "Application exception occured - " + ex.Message);
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(503, "Cint API Service unavailable - " + ex.Message);
             }
             catch(Exception ex)
             {

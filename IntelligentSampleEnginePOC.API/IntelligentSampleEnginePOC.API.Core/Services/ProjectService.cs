@@ -1,4 +1,5 @@
-﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
+﻿using IntelligentSampleEnginePOC.API.Core.Exceptions;
+using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
 using IntelligentSampleEnginePOC.API.Core.Model.Cint;
 
@@ -26,7 +27,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         public async Task<Project> CreateProject(Project project)
         {
             if (project == null)
-                throw new ArgumentNullException("Project model not found", nameof(project));
+                throw new BadRequestException("Project model not found");
+                // throw new ArgumentNullException("Project model not found", nameof(project));
             project.LastUpdate = DateTime.Now;
             if (_projectValidator.IsValidated(project))
             {
@@ -41,8 +43,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
                 return project;
             }
-
-            throw new ArgumentException("Project Validation failed", nameof(project));
+            else
+                throw new BadRequestException("ISE project validation failed");
         }
 
         public async Task<long> UpdatePrjectStatus(long projectId, Status status)
@@ -57,8 +59,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         public async Task<Project> LaunchProject(Project project)
         {
             if (project == null)
-                throw new ArgumentNullException("project model not found", nameof(project));
-            
+                throw new BadRequestException("Project model not found");
+            // throw new ArgumentNullException("project model not found", nameof(project));
+
             project.LastUpdate = DateTime.Now;
             try
             {
@@ -69,9 +72,13 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 await UpdatePrjectStatus(project.Id, project.Status);
 
             }
+            catch(HttpRequestException ex)
+            {
+                throw new HttpRequestException("Failing in Cint API call - " + ex.Message, ex);
+            }
             catch(Exception ex)
             {
-                throw new Exception("Failed in Launch project service - " + ex.Message, ex);
+                throw;
             }
 
             return project;
