@@ -39,7 +39,12 @@ const RowSelected = (row) => {
 						:key="field"
 						@click="sortTable(field)"
 					>
-						<b>{{ field }}</b>
+						<b v-if="field==='Fielding Period'">
+							{{field}} (Days)
+						</b> 
+						<b v-else>
+							{{field}}
+						</b> 
 						<i
 							class="bi bi-sort-alpha-down"
 							aria-label="Sort Icon"
@@ -48,27 +53,70 @@ const RowSelected = (row) => {
 				</tr>
 			</thead>
 			<tbody>
+				<tr v-if="!projects" class="table text-center">
+					<td :colspan="fieldTitles.length">
+						No records available!
+					</td>
+				</tr>
 				<tr
 					v-for="item in props.projects"
 					:key="item"
 					:class="{ 'table-row-selectable': props.selectable }"
 					@click="RowSelected(item)"
 				>
-					<td v-for="field in props.fields" :key="field">
-						{{ item[field] }}
-					</td>
+                    <td v-for="field in fields" :key='field'>
+                        <template v-if="field==='lastUpdate' || field==='startDate'">
+                            <template v-if="field==='lastUpdate'">
+                                {{formatDate(item[field])}}
+                            </template>
+                            <template v-else>
+                                {{formatDate(item[field],'MM/DD/YYYY')}}
+                            </template>
+                        </template>
+                        
+                        <template v-else>
+                            {{item[field]}}
+                        </template>
+                    </td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 </template>
-
-<style scoped>
-.tableHeader {
-	background-color: lightgray;
+<script>
+import moment from 'moment'
+export default {
+    name: 'TableComponent',
+    props: {
+        projects: {
+            type: Array
+        },
+        fields: {
+            type: Array
+        },
+        fieldTitles: {
+            type: Array
+        }
+    },
+    methods: {
+        formatDate: function(value, format){
+          if (value) {
+            return moment(String(value)).format(format || 'MM/DD/YYYY hh:mm A');
+          }
+          else {
+            return "";
+          }
+        }
+    }
 }
-
-.table-row-selectable:hover {
-	cursor: pointer;
-}
+</script>
+<style>
+    .tableHeader {
+        background-color: lightgray;
+    }
+	.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+		background-color: #A4BAE3;
+		color: white;
+		cursor: pointer;
+	  }
 </style>

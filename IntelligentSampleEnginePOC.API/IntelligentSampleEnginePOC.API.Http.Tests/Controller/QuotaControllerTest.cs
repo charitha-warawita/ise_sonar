@@ -71,7 +71,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
 
         [Theory]
         [InlineData(501)]
-        [InlineData(3333)]
+        // [InlineData(3333)]
         public void DeleteQuota_ReturnsOk(long qtid)
         {
             string jsonString = QuotaTest.GetQuotaJson();
