@@ -22,7 +22,7 @@ public class PricingEndpoint: CintEndpoint, IPricingEndpoint
 
     public async Task<CurrentCostResponse> GetCurrentCostAsync(long id)
     {
-        var uri = $"/surveys/{id}/CurrentCost";
+        var uri = $"/ordering/surveys/{id}/CurrentCost";
         var response = await HttpClient.GetAsync(uri);
 
         try

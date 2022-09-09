@@ -104,6 +104,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         public async Task<List<Cost>> GetCurrentCostAsync(long id)
         {
             var surveys = await _samplingService.GetSurveyIdsAsync(id);
+            if (!surveys.Any())
+                return new List<Cost>();
             
             // Send all requests to Cint.
             var tasks = surveys.Select(s => _samplingService.GetCurrentCostAsync(s)).ToList();
