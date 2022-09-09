@@ -4,4 +4,5 @@ export const ProjectKeys = {
 	targetAudiences: (id: number) =>
 		[...ProjectKeys.project(id), "target-audiences"] as const,
 	surveys: (id: number) => [...ProjectKeys.project(id), "surveys"],
+	currentCost: (id: number) => [...ProjectKeys.project(id), "current-cost"],
 };

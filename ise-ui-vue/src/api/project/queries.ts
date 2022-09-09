@@ -1,4 +1,5 @@
 import { useAxiosAsync } from "@/composables/axios";
+import { CostSchema } from "@/models/cost";
 import { ProjectSchema } from "@/models/project";
 import { SurveySchema } from "@/models/survey";
 import { TargetAudienceSchema } from "@/models/targetAudience";
@@ -30,9 +31,18 @@ export function useProjectQueries() {
 			.then((response) => z.array(SurveySchema).parse(response.data));
 	};
 
+	const GetCurrentCost = async (id: number) => {
+		const axios = await useAxiosAsync();
+
+		return await axios
+			.get(`/Project/${id}/CurrentCost`)
+			.then((response) => CostSchema.array().parse(response.data));
+	};
+
 	return {
 		GetProject,
 		GetProjectTargetAudiences,
 		GetSurveys,
+		GetCurrentCost,
 	};
 }
