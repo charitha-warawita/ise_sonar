@@ -13,7 +13,7 @@
         public const int RECORDCOUNT_DEFAULT = 10;
 
         // Error descriptions
-        public const string ProjValFailed = "Project validation failed big time.. You must be ashamed!!!";
+        public const string ProjValFailed = "Project validation failed.";
         public const string NoTAFound = "Target audience not available in project id: {0}";
         public const string TANameErr = "Target Audience name is invalid";
         public const string MinValCheckErr = "{0} is invalid. Minimum value allowed is {1}";
