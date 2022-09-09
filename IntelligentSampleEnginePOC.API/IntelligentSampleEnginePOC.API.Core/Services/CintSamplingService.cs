@@ -10,6 +10,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
     {
         private readonly ISurveysEndpoint _surveysEndpoint;
         private readonly ITestingEndpoint _testingEndpoint;
+        private readonly IPricingEndpoint _pricingEndpoint;
         private readonly IProjectCintContext _projectCintContext;
         private readonly ISpecTransform _cintCustomTransform;
         private readonly IProjectValidator _projectValidator;
@@ -19,13 +20,15 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             ISpecTransform cintCustomTransform,
             ISurveysEndpoint surveysEndpoint,
             ITestingEndpoint testingEndpoint,
-            IProjectValidator projectValidator)
+            IProjectValidator projectValidator,
+            IPricingEndpoint pricingEndpoint)
         {
             _projectCintContext = projectCintContext;
             _cintCustomTransform =  cintCustomTransform;
             _projectValidator = projectValidator;
             _surveysEndpoint = surveysEndpoint;
             _testingEndpoint = testingEndpoint;
+            _pricingEndpoint = pricingEndpoint;
         }
 
         public List<CintRequestModel> ConvertToCintRequests(Project project)
@@ -84,6 +87,18 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             }
             
             return surveys;
+        }
+
+        public async Task<HashSet<long>> GetSurveyIdsAsync(long projectId)
+        {
+            var ids = await _projectCintContext.GetCintIdsAsync(projectId);
+            return ids;
+        }
+        
+        public async Task<Cost> GetCurrentCostAsync(long surveyId)
+        {
+            var response = await _pricingEndpoint.GetCurrentCostAsync(surveyId);
+            return new Cost(response.Cost.Amount, response.Cost.Currency);
         }
 
         private async Task CallandStoreCintData(Project project, List<CintRequestModel> cintRequests)

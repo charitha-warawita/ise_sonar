@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Json;
-using System.Text.Json;
 using IntelligentSampleEnginePOC.API.Core.Model;
 using Microsoft.Extensions.Logging;
 
@@ -52,8 +51,6 @@ public class SurveysEndpoint : CintEndpoint, ISurveysEndpoint
             
             throw;
         }
-        
-        response.EnsureSuccessStatusCode();
 
         var survey = await response.Content.ReadFromJsonAsync<CintResponse>();
         if (survey is null)

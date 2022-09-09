@@ -8,5 +8,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
         List<CintRequestModel> ConvertToCintRequests(Project project);
         Task<Project> CreateProject(Project project);
         Task<List<Survey>> GetSurveysAsync(long id);
+        Task<HashSet<long>> GetSurveyIdsAsync(long projectId);
+        Task<Cost> GetCurrentCostAsync(long surveyId);
     }
 }
