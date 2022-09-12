@@ -1,6 +1,7 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
 using IntelligentSampleEnginePOC.API.Core.Model.Cint;
+using TaskExtensions = IntelligentSampleEnginePOC.API.Core.Extensions.TaskExtensions;
 
 namespace IntelligentSampleEnginePOC.API.Core.Services
 {
@@ -98,6 +99,24 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             var surveys = await _samplingService.GetSurveysAsync(id);
 
             return surveys;
+        }
+
+        public async Task<List<Cost>> GetCurrentCostAsync(long id)
+        {
+            var surveys = await _samplingService.GetSurveyIdsAsync(id);
+            if (!surveys.Any())
+                return new List<Cost>();
+            
+            // Send all requests to Cint.
+            var tasks = surveys.Select(s => _samplingService.GetCurrentCostAsync(s)).ToList();
+            var result = await TaskExtensions.WhenAll(tasks); // Wait for all requests to complete. 
+
+            var costs = result
+                .GroupBy(k => k.Currency, v => v.Amount)
+                .Select(g => new Cost(g.Sum(), g.Key))
+                .ToList();
+            
+            return costs;
         }
 
         private bool ProjectValidated(Project project)
