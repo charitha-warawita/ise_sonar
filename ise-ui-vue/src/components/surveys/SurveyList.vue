@@ -48,7 +48,7 @@ const FilterLinks = (links: Link[]) => {
 			</div>
 		</div>
 		<ul v-else-if="data != undefined" class="list-group list-group-flush">
-			<div v-if="data.length == 0">
+			<div v-if="data.length == 0" class="p-3">
 				No Surveys exist for this Project.
 			</div>
 			<li
