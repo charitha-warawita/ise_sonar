@@ -6,6 +6,6 @@
 		"lib": [],
 		"types": ["node", "jsdom"],
 		"allowJs": true,
-		"outDir": "$$ts-jest$$"
+		"outDir": "dist"
 	}
 }
