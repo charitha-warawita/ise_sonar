@@ -128,6 +128,9 @@ function activate(el) {
 }
 </script>
 <style>
+a {
+	text-decoration: none;
+}
 .avatar {
 	border-radius: 50%;
 }

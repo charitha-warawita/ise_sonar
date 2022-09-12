@@ -56,7 +56,7 @@
 				placeholder="Type name here"
 				v-model="searchByName"
 			/>
-			<!--<input class="form-control me-2" type="date" placeholder="Start date  ." aria-label="Date" v-model="searchByStartDate">-->
+			<!--<input class="form-control me-2" type="date" placeholder="Start date  ." aria-label="Date" v-model="searchByStartDate">-->
 			<a
 				class="btn btn-outline-success searchButton me-2"
 				@click="
@@ -82,15 +82,29 @@
 			@row-selected="RowSelectedHandler"
 		></ProjectListTable>
 		<div v-if="currentProjects" style="width: 100%; text-align: center">
-			<!-- <div style="float: left">Page: {{ currentPageNumber }}</div> -->
+			<div style="float: left">Page: {{ currentPageNumber }}</div>
 			<vue-awesome-paginate
 				:total-items="totalItems"
 				:items-per-page="currentPageRowCount"
 				:max-pages-shown="4"
-				:current-page="currentPageNumber"
+				:current-page="1"
 				:on-click="PageSelectHandler"
 				hide-prev-next
 			/>
+			<div style="float: right">
+				Rows:
+				<select @change="useProjsStore.selectedOption($event)">
+					<option value="" disabled>-- Select --</option>
+					<option
+						v-bind:value="rowCount"
+						v-for="rowCount in selectRowCount"
+						:key="rowCount"
+						:selected="rowCount == currentPageRowCount"
+					>
+						{{ rowCount }}
+					</option>
+				</select>
+			</div>
 		</div>
 
 		<p v-if="projectListLoading">Loading project list..</p>
@@ -118,6 +132,7 @@ const {
 	projectListError,
 	currentPageRowCount,
 	currentPageNumber,
+	selectRowCount,
 	totalItems,
 } = storeToRefs(useProjsStore);
 const displayfields = ProjectModel.displayfields;
@@ -148,6 +163,7 @@ function applyStatusFilter(status) {
 	});
 }
 onMounted(() => {
+	useProjsStore.$reset();
 	useProjsStore.setDefaultProjectList();
 });
 </script>
@@ -162,7 +178,7 @@ input[type="date"]:not(.has-value):before {
 }
 
 ::v-deep(.pagination-container) {
-	display: flex;
+	display: inline flex;
 	column-gap: 10px;
 }
 
