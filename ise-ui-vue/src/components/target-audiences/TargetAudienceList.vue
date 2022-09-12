@@ -2,34 +2,18 @@
 import { ProjectKeys } from "@/api/project/keys";
 import { useProjectQueries } from "@/api/project/queries";
 import BsAccordion from "@/components/bootstrap/BsAccordion.vue";
-import StyledPaginator from "@/components/general/StyledPaginator.vue";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { TargetAudience } from "@/models/targetAudience";
-import { computed, ref } from "vue";
 import { useQuery } from "vue-query";
 
 const projectQueries = useProjectQueries();
 
 const props = defineProps<{ projectId: number }>();
 
-const pagesize = 5;
-const page = ref(1);
 const { isLoading, isError, data } = useQuery(
-	ProjectKeys.targetAudiences(props.projectId, page),
-	() =>
-		projectQueries.GetProjectTargetAudiences(
-			props.projectId,
-			page.value,
-			pagesize
-		),
-	{ keepPreviousData: true }
+	ProjectKeys.targetAudiences(props.projectId),
+	() => projectQueries.GetProjectTargetAudiences(props.projectId)
 );
-
-const total = computed(() => data.value?.totalResults ?? 0);
-
-const PageSelectHandler = (p: number) => {
-	page.value = p;
-};
 </script>
 
 <template>
@@ -45,8 +29,8 @@ const PageSelectHandler = (p: number) => {
 			An error occurred whilst fetching Target Audiences.
 		</div>
 		<div v-else-if="data">
-			<div v-if="data.result.length">
-				<bs-accordion flush :items="data.result">
+			<div v-if="data.length">
+				<bs-accordion flush :items="data">
 					<template #header="{ item }: { item: TargetAudience }">
 						{{ item.name }}
 					</template>
@@ -103,32 +87,12 @@ const PageSelectHandler = (p: number) => {
 				<span>No Target Audiences To Display.</span>
 			</div>
 		</div>
-
-		<div>
-			<div class="pager-container">
-				<styled-paginator
-					:total-items="total"
-					:items-per-page="pagesize"
-					:max-pages-shown="4"
-					:current-page="page"
-					:on-click="PageSelectHandler"
-					hide-prev-next-when-ends
-				></styled-paginator>
-			</div>
-		</div>
 	</div>
 </template>
 
 <style scoped>
 .spinner-container {
 	min-height: 10vh;
-}
-
-.pager-container {
-	display: flex;
-	justify-content: center;
-	padding: 10px 0;
-	border-top: 1px solid rgb(217, 217, 217);
 }
 
 .no-audiences-message {

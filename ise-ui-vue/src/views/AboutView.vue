@@ -1,18 +1,15 @@
 <template>
-  <TopHeader/>
-  <div class="about">
-    <h1>This page is under implementation</h1>
-  </div>
+	<div class="about">
+		<h1>This page is under implementation</h1>
+	</div>
 </template>
-<script setup>
-  import TopHeader from '../components/TopHeader.vue';
-  </script>
+<script setup></script>
 <style>
 @media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
+	.about {
+		min-height: 100vh;
+		display: flex;
+		align-items: center;
+	}
 }
 </style>

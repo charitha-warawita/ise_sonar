@@ -1,7 +1,6 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Exceptions;
 using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
-using IntelligentSampleEnginePOC.API.Core.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -130,19 +129,13 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
         }
         
         [Authorize]
-        [HttpGet("{id}/TargetAudiences")]
-        public async Task<ActionResult> GetTargetAudiencesForProjectPaged(
-            long id,
-            [FromQuery] int page = Constants.PAGENUMBER_DEFAULT,
-            [FromQuery] int pageSize = Constants.RECORDCOUNT_DEFAULT)
+        [HttpGet("{id:long}/TargetAudiences")]
+        public async Task<ActionResult> GetTargetAudiencesForProject(long id)
         {
-            if (page <= 0 || pageSize <= 0)
-                return BadRequest("Invalid paging data");
-            
-            PagedResult<TargetAudience> result;
+            List<TargetAudience> result;
             try
             {
-                result = await _targetAudienceService.GetAllByProjectIdAsync(id, page, pageSize);
+                result = await _targetAudienceService.GetAllByProjectIdAsync(id);
             }
             catch (Exception e)
             {
@@ -165,6 +158,23 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "ProjectController - GetSurveys - Error: {Message}", e.Message);
+
+                return Problem(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("{id:long}/CurrentCost")]
+        public async Task<ActionResult> GetCurrentCostAsync(long id)
+        {
+            try
+            {
+                var cost = await _projectService.GetCurrentCostAsync(id);
+                return Ok(cost);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "ProjectController - GetCurrentCostAsync - Error: {Message}", e.Message);
 
                 return Problem(e.Message);
             }
