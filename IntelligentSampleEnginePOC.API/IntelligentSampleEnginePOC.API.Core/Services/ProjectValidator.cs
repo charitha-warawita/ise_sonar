@@ -139,8 +139,52 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                         errors.Add(string.Format(Constants.InvalidUrlErr, "Live Url"));
                     if (ta.Qualifications != null && ta.Qualifications.Count > 1)
                     {
+                        var qualValFailed = false;
                         if (!ta.Qualifications.Any(x => (x.Question != null && x.Question.Name == "Country")))
-                            errors.Add(Constants.QualValidationMessage);
+                        {
+                            errors.Add(Constants.QualValidationMessage); qualValFailed = true;
+                        }
+                        if (!ta.Qualifications.Any(x => (x.Question != null && x.Question.Name != "Country")))
+                        {
+                            errors.Add(Constants.QualValidationMessage); qualValFailed = true;
+                        }
+                        if (ta.Qualifications.Any(x => (x.Question == null) || (x.Question != null && (x.Question.Variables == null || !x.Question.Variables.Any()))))
+                        {
+                            errors.Add("qualification set with either no questions or question identified with no answer variables. Not a valid scenario"); qualValFailed = true;
+                        }
+                        if (!qualValFailed)
+                        {
+                            var repeatQualList = ta.Qualifications.GroupBy(i => i.Question.Name).Where(g => g.Count() > 1).ToList();
+                            if (repeatQualList.Count > 0)
+                            {
+                                List<string> tempVarList = new List<string>();
+                                foreach (var i in repeatQualList)
+                                {
+                                    var quList = i.Select(x => x).ToList();
+                                    foreach (var qua in quList)
+                                    {
+                                        foreach (var quaV in qua.Question.Variables)
+                                        {
+                                            if (!tempVarList.Contains(quaV.Name))
+                                            {
+                                                tempVarList.Add(quaV.Name);
+                                            }
+                                            else
+                                            {
+                                                errors.Add("Under qualifications, same question variables are selected twice");
+                                                qualValFailed = true;
+                                            }
+                                            if (qualValFailed)
+                                                break;
+                                        }
+                                        if (qualValFailed)
+                                            break;
+                                    }
+                                    if (qualValFailed)
+                                        break;
+                                }
+                            }
+                        }
                     }
                     else
                     {
