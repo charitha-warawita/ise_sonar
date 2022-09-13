@@ -26,7 +26,7 @@
         public const string TANameErr = "Target Audience name is invalid";
         public const string MinValCheckErr = "{0} is invalid. Minimum value allowed is {1}";
         public const string InvalidUrlErr = "Invalid Url entered in the field - {0}";
-        public const string QualValidationMessage = "Each TA must contain atlast one country selected in the qualification " +
+        public const string QualValidationMessage = "Each TA must contain atleast one country selected in the qualification " +
                                                     "list under STANDARD category and should have atleast one more additional qualification like gender, age or " +
                                                     "profiling questions to support quota groups";
         public const string DuplicateTAName = "Duplicate Target Audience Name Identified ";

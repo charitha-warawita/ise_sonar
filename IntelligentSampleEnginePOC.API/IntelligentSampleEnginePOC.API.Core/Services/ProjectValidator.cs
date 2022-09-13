@@ -202,11 +202,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                                 if (qual.Question.Id <1)
                                     errors.Add(string.Format(Constants.MinValCheckErr, "Qualification Question Id", 1));
                                 if (string.IsNullOrEmpty(qual.Question.Name))
-                                    errors.Add(string.Format(Constants.NoQualQuestionNameFound, qual.Id));
+                                    errors.Add(string.Format(Constants.NoQualQuestionNameFound, ta.Id));
                                 if (string.IsNullOrEmpty(qual.Question.Text))
-                                    errors.Add(string.Format(Constants.NoQualQuestionTextFound, qual.Id));
+                                    errors.Add(string.Format(Constants.NoQualQuestionTextFound, ta.Id));
                                 if (string.IsNullOrEmpty(qual.Question.CategoryName))
-                                    errors.Add(string.Format(Constants.NoQualQuestionCategoryFound, qual.Id));
+                                    errors.Add(string.Format(Constants.NoQualQuestionCategoryFound, ta.Id));
 
                                 if (qual.Question.Variables != null && qual.Question.Variables.Count > 0)
                                 {
@@ -225,7 +225,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                     {
                         errors.Add(string.Format(Constants.NoQualificationFound, ta.Id));
                     }
-                    if (ta.Quotas != null && ta.Quotas.Count > 1)
+                    if (ta.Quotas != null && ta.Quotas.Any())
                     {
                         foreach (Quota qa in ta.Quotas)
                         {
@@ -233,7 +233,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                             if (quotaName)
                                 errors.Add(Constants.DuplicateQuotaName);                            
                             if (string.IsNullOrEmpty(qa.QuotaName))
-                                errors.Add(string.Format(Constants.NoQuotaNameFound, qa.Id));                            
+                                errors.Add(string.Format(Constants.NoQuotaNameFound, ta.Id));                            
                              if (qa.FieldTarget < 1)
                                  errors.Add(string.Format(Constants.MinValCheckErr, "Quota FieldTarget", 1));
                              if (qa.Limit < 1)
@@ -246,11 +246,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                                     if (qs.Id < 1)
                                         errors.Add(string.Format(Constants.MinValCheckErr, "Quota Question Id", 1));
                                     if (string.IsNullOrEmpty(qs.Name))
-                                        errors.Add(string.Format(Constants.NoQuestionNameFound, qs.Id));
+                                        errors.Add(string.Format(Constants.NoQuestionNameFound, ta.Id));
                                     if (string.IsNullOrEmpty(qs.Text))
-                                        errors.Add(string.Format(Constants.NoQuestionTextFound, qs.Id));
+                                        errors.Add(string.Format(Constants.NoQuestionTextFound, ta.Id));
                                     if (string.IsNullOrEmpty(qs.CategoryName))
-                                        errors.Add(string.Format(Constants.NoQuestionCategoryFound, qs.Id));
+                                        errors.Add(string.Format(Constants.NoQuestionCategoryFound, ta.Id));
                                     if (qs.Variables != null && qs.Variables.Count > 0)
                                     {
                                         foreach (Variable v in qs.Variables)
@@ -258,7 +258,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                                             if (v.Id < 1)
                                                 errors.Add(string.Format(Constants.MinValCheckErr, "VarId", 1));
                                             if (string.IsNullOrEmpty(v.Name))
-                                                errors.Add(string.Format(Constants.NoQuestionVariableNameFound, qs.Id));
+                                                errors.Add(string.Format(Constants.NoQuestionVariableNameFound, ta.Id));
                                         }
                                     }
                                 }
