@@ -101,7 +101,7 @@
                                                                     class="btn btn-outline-success QualLogicalButton"
                                                                     :class="[qual.logicalDecision === 'OR' ? 'searchButton' : 'btn-light']"
                                                                     >Optional</button>
-                                                                <a @click="useQualStore.RemoveQualification(ta.tempId, qual.tempId)" class="link-danger" style="float:right; margin-top:10%">
+                                                                <a @click="useQualStore.RemoveQualification(ta.tempId, qual.tempId)" class="link-danger" style="float:right; margin-top:10%; cursor:pointer;">
                                                                 Remove</a>
                                                             </div>
                                                             <hr/>
@@ -109,9 +109,9 @@
                                                     </draggable>    
                                                 <div class="col-md-12">
                                                     <button class="btn btn-outline-success searchButton mb-4 "  style="float: right" @click="toggleModal('qual'+ ta.tempId);useQualStore.GetProfileCategories(ta.tempId)">Add Qualification</button>
-                                                    <CustomModal @close="toggleModal('qual'+ ta.tempId)" :modalId="'qual'+ ta.tempId">
+                                                    <CustomModal @close="toggleModal('qual'+ ta.tempId)" :modalId="'qual'+ ta.tempId" :modalTitle="'Qualifications'">
                                                         <div class="card modal-content">
-                                                            <h3 class="card-header">Qualifications</h3>
+                                                            <!-- <h3 class="card-header">Qualifications</h3> -->
                                                             <div class="card-body">
                                                                 <QualificationsList @close="toggleModal('qual'+ ta.tempId)" itemType='profileVars' :taId='ta.tempId' :qualificationId="'qual-' + ta.tempId" />
                                                             </div>
@@ -129,10 +129,11 @@
                                             </h2>
                                         <div :id="'panelsStayOpen-collapseFour-' + ta.tempId" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
                                             <div class="accordion-body">
-                                                <div class="container">
+                                                <draggable  v-on:update="useQuotaDataStore.sortOrderforQuota($event, ta.tempId)" >
+                                                <!-- <div class="container"> -->
                                                     <div class="subDivQ row g-3" v-if="ta.quotas" v-for="(qt, index) in ta.quotas" :key="qt.tempId">
-                                                        <div class="col-md-1">{{qt.tempId }}</div>
-                                                        <div class="col-md-9">
+                                                        <div class="col-md-1">{{qt.order }}</div>
+                                                        <!-- <div class="col-md-9">
                                                             <div class="col-md-12"><b>{{qt.quotaName}}</b></div>
                                                             <div class="col-md-12">Field Target: {{qt.fieldTarget}}; Limit: {{ qt.limit }}</div>
                                                             <div v-for="condition in qt.conditions" :key="condition.id">
@@ -145,28 +146,58 @@
                                                                     </div>
                                                                 </div>
                                                             </div>       
+                                                        </div> -->
+                                                        <div class="col-md-3"><b>{{qt.quotaName}}</b></div>
+                                                        <div class="col-md-2">
+                                                            <!-- Field Target: {{qt.fieldTarget}}; -->
+                                                            <label :for="'fieldTarget'+ qt.tempId">Field Target</label>
+                                                            <div class="field">
+                                                                <span class="field-value" v-show="!showField('fieldTarget'+ qt.tempId)" @click="focusField('fieldTarget'+ qt.tempId)">{{qt.fieldTarget}}</span>
+                                                                <input v-model="qt.fieldTarget" v-show="showField('fieldTarget'+ qt.tempId)" :id="'fieldTarget'+ qt.tempId" type="text" class="field-value form-control" @focus="focusField('fieldTarget'+ qt.tempId)" @blur="blurField">
+                                                            </div>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <a @click="useQuotaDataStore.RemoveQuota(ta.tempId, qt.tempId)" class="link-danger" style="float:right; margin-top:10%">
+                                                            <!-- Limit: {{ qt.limit }}; -->
+                                                            <label :for="'limit' + qt.tempId">Limit</label>
+                                                            <div class="field">
+                                                                <span class="field-value" v-show="!showField('limit'+ qt.tempId)" @click="focusField('limit'+ qt.tempId)">{{qt.limit}}</span>
+                                                                <input v-model="qt.limit" v-show="showField('limit'+ qt.tempId)" :id="'limit'+ qt.tempId" type="text" class="field-value form-control" @focus="focusField('limit'+ qt.tempId)" @blur="blurField">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div v-for="condition in qt.conditions" :key="condition.id">
+                                                                <div class="col-md-12">{{condition.categoryName}} - {{condition.name}}</div>
+                                                                <div class="col-md-12">
+                                                                    <div style="display: inline-block; "  v-for="(item) in condition.variables" :key="item.id">
+                                                                        <div class="form-check">
+                                                                            <label style="background-color: lightgrey; border-radius:5px; padding: 0 10px 0 10px;"><i>{{item.name}}</i></label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>  
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <a @click="useQuotaDataStore.RemoveQuota(ta.tempId, qt.tempId)" class="link-danger" style="float:right; margin-top:10%; cursor:pointer;">
                                                             Remove</a>
                                                         </div>
                                                         <hr/>
                                                     </div>
                                                     <button class="btn btn-outline-success searchButton mb-4" id="addQutobutton" @click="toggleModal('quota'+ ta.tempId); useQuotaDataStore.LoadDefaultCurrentQuota();">Add Quota</button>  
-                                                    <CustomModal @close="toggleModal('quota'+ ta.tempId)" :modalId="'quota'+ ta.tempId">
+                                                    <CustomModal @close="toggleModal('quota'+ ta.tempId)" :modalId="'quota'+ ta.tempId" :modalTitle="'Quota'">
                                                         <div class="card modal-content">
-                                                            <h3 class="card-header">Quota</h3>
+                                                            <!-- <h3 class="card-header">Quota</h3> -->
                                                             <div class="card-body">
                                                                 <QuotaList :taId=ta.tempId :totalCompletes=ta.limit />
                                                             </div>               
                                                         </div> 
                                                     </CustomModal>                                                  
-                                                </div>
+                                                <!-- </div> -->
+                                                </draggable>
                                             </div>
                                         </div>      
-                                        <div class="col-md-12">
-                                            <button :class="{ hidden: ta.tempId === 1 }" style="float: right" class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.CancelTargetAudience(ta)">Cancel Target Audience</button>
-                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button :class="{ hidden: ta.tempId === 1 }" style="float: right" class="btn btn-outline-success btn-light me-2 " v-on:click="useProjStore.CancelTargetAudience(ta)">Cancel Target Audience</button>
                                     </div>
                                 </div>
                             </div>
@@ -370,8 +401,20 @@ function Capitalising(data) {
         word.slice(1).toLowerCase()
         )
     })
-    return capitalized.join(' ')
+    return capitalized.join(' ');
 }
+
+const focusField = (name) =>
+{
+    useProjStore.editField = name;
+}
+const blurField = () => {
+    useProjStore.editField  = '';
+    }
+const showField = (name) => {
+    return (useProjStore.editField == name)
+}
+
 </script>
 <style>
 .costSection {
@@ -383,6 +426,7 @@ function Capitalising(data) {
     border-color: lightgray; 
     color: #0c63e4; 
     background-color: #e7f1ff; 
+    cursor:default;
 }
 .hidden {
     display: none;

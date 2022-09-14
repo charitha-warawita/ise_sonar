@@ -1,68 +1,78 @@
 <template>
    <div>
-    <ul class="nav nav-pills nav-fill border-bottom">
-      <li class="nav-item">
-        <a
-        @click="applyStatusFilter(7)"
-        :class="[currentStatus === 7 ? 'active' : '']"
-        class="nav-link"
-        aria-current="page"
-        href="#"
-        >All</a>
-    </li>
-    <li class="nav-item">
-    <a
-      @click="applyStatusFilter(2)"
-      :class="[currentStatus === 2 ? 'active' : '']"
-      class="nav-link"
-      href="#"
-   >Active</a>
-   </li>
-   <li class="nav-item">
-  <a
-  @click="applyStatusFilter(1)"
-  :class="[currentStatus === 1 ? 'active' : '']"
-  class="nav-link"
-  href="#"
-  >Created</a>
-  </li>
-  <li class="nav-item">
-  <a
-   @click="applyStatusFilter(0)"
-   :class="[currentStatus === 0 ? 'active' : '']"
-   class="nav-link"
-  href="#"
-  >Draft</a>
-  </li>
-  <li class="nav-item">
-  <a
-  @click="applyStatusFilter(5)"
-  :class="[currentStatus === 5 ? 'active' : '']"
-  class="nav-link"
-  href="#"
-  >Closed</a>
-  </li>
-  </ul>
-  <br /><br />
-  <div class="d-flex">
-  <input class="form-control me-2" type="name" placeholder="Type name here" v-model="searchByName" />
-  <!--<input class="form-control me-2" type="date" placeholder="Start date  ." aria-label="Date" v-model="searchByStartDate">-->
-  <a class="btn btn-outline-success searchButton me-2"
-    @click="useProjsStore.getProjectsBySearchNameAndStartDate(useProjsStore.currentStatus)">Filter</a>
-  <a class="btn btn-outline-success searchButton me-2"
-      @click="useProjsStore.setDefaultProjectList"
-    >Clear</a>
-  </div>
+      <ul class="nav nav-pills nav-fill border-bottom">
+        <li class="nav-item">
+          <a
+            @click="applyStatusFilter(7)"
+            :class="[currentStatus === 7 ? 'active' : '']"
+            class="nav-link"
+            aria-current="page"
+            href="#"
+          >All</a>
+        </li>
+        <li class="nav-item">
+          <a
+            @click="applyStatusFilter(2)"
+            :class="[currentStatus === 2 ? 'active' : '']"
+            class="nav-link"
+            href="#"
+          >Active</a>
+        </li>
+        <li class="nav-item">
+          <a
+            @click="applyStatusFilter(1)"
+            :class="[currentStatus === 1 ? 'active' : '']"
+            class="nav-link"
+            href="#"
+          >Created</a>
+        </li>
+        <li class="nav-item">
+          <a
+            @click="applyStatusFilter(0)"
+            :class="[currentStatus === 0 ? 'active' : '']"
+            class="nav-link"
+            href="#"
+          >Draft</a>
+        </li>
+        <li class="nav-item">
+          <a
+            @click="applyStatusFilter(5)"
+            :class="[currentStatus === 5 ? 'active' : '']"
+            class="nav-link"
+            href="#"
+          >Closed</a>
+        </li>
+    </ul>
     <br /><br />
-    <ProjectListTable
-    class="projListTable"
-    :fields="displayfields"
-    :projects="useProjsStore.currentProjects"
-    :field-titles="displayFieldFormatted"
-    selectable
-    @row-selected="RowSelectedHandler"
-    ></ProjectListTable>
-    <div v-if="currentProjects" style="width: 100%; text-align: center">
+    <div class="d-flex">
+      <input class="form-control me-2" type="name" placeholder="Type name here" v-model="searchByName" />
+      <!--<input class="form-control me-2" type="date" placeholder="Start date  ." aria-label="Date" v-model="searchByStartDate">-->
+      <a class="btn btn-outline-success searchButton me-2"
+        @click="useProjsStore.getProjectsBySearchNameAndStartDate(useProjsStore.currentStatus)">Filter</a>
+      <a class="btn btn-outline-success searchButton me-2"
+        @click="useProjsStore.setDefaultProjectList">Clear</a>
+    </div>
+    <br /><br />
+    <div v-if="projectListLoading" class="spinner-container">
+      <div class="position-absolute top-50 start-50 translate-middle">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading project list...</span>
+        </div>
+      </div>
+    </div>
+    <div v-else-if="projectListError">
+      <p v-if="projectListError">{{ projectListError }}</p>
+    </div>
+    <div v-else-if="currentProjects" style="width: 100%; text-align: center">
+      <ProjectListTable
+        class="projListTable"
+        :fields="displayfields"
+        :projects="useProjsStore.currentProjects"
+        :field-titles="displayFieldFormatted"
+        selectable
+        @row-selected="RowSelectedHandler"
+      >
+      </ProjectListTable>
       <div style="float: left">Page: {{ currentPageNumber }}</div>
         <vue-awesome-paginate
         :total-items="totalItems"
@@ -79,11 +89,11 @@
             </select>
         </div>
     </div>
-  
-    <p v-if="projectListLoading">Loading project list..</p>
-    <p v-if="projectListError">{{ projectListError }}</p>
+    <div v-else-if="!currentProjects" style="width: 100%; text-align: center">
+      No records available!
+    </div>
   </div>
-  </template>
+</template>
   <script setup>
   import ProjectListTable from "@/components/ProjectListTable.vue";
   import ProjectModel from "@/models/projectModel.js";

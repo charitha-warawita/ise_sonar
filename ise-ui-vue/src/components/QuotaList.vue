@@ -5,17 +5,25 @@
         Create - Section 1 of 2
       </legend>
       <div class="row g-2">
+        <div v-if="useQuotaDataStore.currentQuota.errors && useQuotaDataStore.currentQuota.errors.length > 0" style="color:red">
+          Validation errors:<br/>
+          <span v-for="error in useQuotaDataStore.currentQuota.errors" :key="error" style="color:red">
+              {{ error }}<br/>
+          </span>
+        </div>
         <div class="col-md-12">
           <label for="input" class="form-label">Name</label>
           <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.name" />
         </div>
         <div class="col-md-9">
-          <label for="sel1" class="form-label">Survey Quota Type</label>
-          <select @change="useQuotaDataStore.serveyQuotaTyp($event)" class="form-select" id="sel1" name="sellist1">
-            <option v-bind:value="ServeyQuotaTypes" v-for="ServeyQuotaTypes in useQuotaDataStore.currentQuota.ServeyQuotaType" :key="ServeyQuotaTypes">
+          <label for="selSurveyQuotaType" class="form-label">Survey Quota Type</label>
+          <select @change="useQuotaDataStore.serveyQuotaTyp($event)" class="form-select" id="selSurveyQuotaType" name="sellist1"
+                ref="surveyQuotaType"> 
+            <option v-bind:value="ServeyQuotaTypes" v-for="ServeyQuotaTypes in useQuotaDataStore.currentQuota.ServeyQuotaType" 
+                :key="ServeyQuotaTypes" :disabled="ServeyQuotaTypes == 'Started'" :selected="ServeyQuotaTypes == 'Completed'" >
               {{ ServeyQuotaTypes }}
             </option>
-            <label for="sel1" class="form-label">Select list (select one):</label>
+            <!-- <label for="sel1" class="form-label">Select list (select one):</label> -->
           </select>
         </div>
         <div class="col-md-1"></div>
@@ -24,8 +32,8 @@
           <input type="text" class="form-control" v-model="useQuotaDataStore.currentQuota.completes" />
         </div>
         <div class="col-md-9">
-          <label for="sel2" class="form-label">Adjustment Type</label>
-          <select @change="useQuotaDataStore.adjustmentType($event)" class="form-select" id="sel2" name="sellist2">
+          <label for="selAdjustmentType" class="form-label">Adjustment Type</label>
+          <select @change="useQuotaDataStore.adjustmentType($event)" class="form-select" id="selAdjustmentType" name="sellist2">
             <option v-bind:value="adjustmentType" v-for="adjustmentType in useQuotaDataStore.currentQuota.adjustmentType" :key="adjustmentType">
               {{ adjustmentType }}
             </option>
@@ -95,7 +103,7 @@
               <tr v-for="condition in useQuotaDataStore.currentQuota.conditions" :key="condition.tempId">
               <th>{{condition.question.name}}</th>
               <td><label v-for="variable in condition.question.variables" :key="variable.id"> | {{variable.name}} |</label></td>
-              <td><a @click="useQuotaDataStore.RemoveCondition(condition.tempId)" class="link-danger">Remove</a></td>
+              <td><a @click="useQuotaDataStore.RemoveCondition(condition.tempId)" class="link-danger" style="float:right; margin-top:10%; cursor:pointer;">Remove</a></td>
               </tr>
           </tbody>
         </table>
@@ -115,10 +123,10 @@
       <div class="container">
         <div class="row">
           <div class="col-md-3">
-            <label for="sel1" class="form-label">Select Condition</label>
+            <label for="selCondition" class="form-label">Select Condition</label>
           </div>
           <div class="col-md-6">
-            <select class="form-select" id="sel1" name="sellist1" @change="useQuotaDataStore.selectQuotaCondition($event)">
+            <select class="form-select" id="selCondition" name="sellist1" @change="useQuotaDataStore.selectQuotaCondition($event)">
               <option disables selected value>--Select--</option>
               <option v-bind:value="condition.order" v-for="condition in useQuotaDataStore.conditionlist" :key="condition.tempId">
                 {{ condition.order }}-{{ condition.question.categoryName }}-{{ condition.question.name }}
@@ -181,6 +189,10 @@
 import { useQuotaStore } from "@/stores/quotaStore";
 import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
+
+import useVuelidate from '@vuelidate/core'
+import { helpers, required, minLength, email, minValue, url, requiredIf } from '@vuelidate/validators'
+
 const props = defineProps(["taId", "quotaid", "totalCompletes"]);
 
 var useQuotaDataStore = useQuotaStore();
@@ -193,15 +205,65 @@ const {
   prescreence,
 } = storeToRefs(useQuotaDataStore);
 
-function SaveCurrentQuota(taId) {
-  useQuotaDataStore.SaveQuota(taId);
-  document.getElementById("sel1").selectedIndex = 0;
-  document.getElementById("sel2").selectedIndex = 0;
+// const rules = {
+//     name: { required },
+//     ServeyQuotaType: { required : requiredIf(function () {return useQuotaDataStore.currentQuota.selectedServeyQuotaType=='--select--'})},    
+//     adjustmentType: { required : requiredIf(function () {return useQuotaDataStore.currentQuota.selectedAdjustmentType =='--select--'})},
+//     fieldTargetNominal: { required : requiredIf(function () {return useQuotaDataStore.currentQuota.selectedAdjustmentType =='Nominal'}), minValueValue: helpers.withMessage(() => "Field Target Nominal minimum value allowed is 1", minValue(1))},
+//     fieldTargetPercentage: { required  : requiredIf(function () {return useQuotaDataStore.currentQuota.selectedAdjustmentType =='percentage'}), minValueValue: helpers.withMessage(() => "Field Target Percentage minimum value allowed is 1", minValue(1)) },
+//     quotaNominal: { required  : requiredIf(function () {return useQuotaDataStore.currentQuota.selectedAdjustmentType =='Nominal'}), minValueValue: helpers.withMessage(() => "Quota Nominal minimum value allowed is 1", minValue(1)) },
+//     quotaPercentage: { required  :  requiredIf(function () {return useQuotaDataStore.currentQuota.selectedAdjustmentType =='percentage'}), minValueValue: helpers.withMessage(() => "Quota Percentage minimum value allowed is 1", minValue(1)) },
+// };
+
+const rules = {
+    name: { required },
+    selectedServeyQuotaType: { required : requiredIf(function () {return this.selectedServeyQuotaType=='' || this.selectedServeyQuotaType=='--select--' })},    
+    selectedAdjustmentType: { required},
+    fieldTargetNominal: { required, minValueValue:minValue(1)},
+    fieldTargetPercentage: { required, minValueValue:minValue(1)},
+    quotaNominal: { required, minValueValue:minValue(1) },
+    quotaPercentage: { required, minValueValue:minValue(1)},
+};
+
+async function SaveCurrentQuota(taId) {
+   //if(await QuotaValidated(taId)) {
+      useQuotaDataStore.SaveQuota(taId);
+      document.getElementById("selSurveyQuotaType").selectedIndex = 2;
+      document.getElementById("selAdjustmentType").selectedIndex = 0;
+      document.getElementById("selCondition").selectedIndex = 0;
+   //}
 }
 
 onMounted(() => {
   useQuotaDataStore.$reset()
-});
+})
+
+async function QuotaValidated(taId) {
+    var v$ = {};
+    v$ = useVuelidate(rules, useQuotaDataStore.currentQuota);
+
+    const result = await v$.value.$validate();
+    useQuotaDataStore.currentQuota.errors = [];
+
+    if(!result) {
+        for(var i = 0; i< v$.value.$errors.length; i++) {
+          useQuotaDataStore.currentQuota.errors.push(Capitalising(v$.value.$errors[i].$propertyPath) + ' - ' + v$.value.$errors[i].$message);
+        }
+    }
+
+    return result;
+}
+
+function Capitalising(data) {
+    var capitalized = []
+    data.split(' ').forEach(word => {
+        capitalized.push(
+        word.charAt(0).toUpperCase() +
+        word.slice(1).toLowerCase()
+        )
+    })
+    return capitalized.join(' ');
+}
 </script>
 
 <style>

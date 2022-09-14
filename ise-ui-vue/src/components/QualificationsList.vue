@@ -16,22 +16,34 @@
                         :class="[profCategory.selected ? 'searchButton' : 'btn-light']"
                         >{{ profCategory.name }} - ({{ profCategory.count }})</button>
                 </div>
-                <p v-if="profCategoriesLoading">Loading categories.. </p>
-                <p v-if="profCategoriesError"> {{ profCategoriesError.message }} </p><br/>
-                <h5 v-if="selectedCategory !== ''">Profile Question related to <b>{{ selectedCategory }}</b>:</h5>
-                <div id="section2" class="profileSection2" v-if="categoryQAs.length > 0">
-                    <div v-for="question in categoryQAs" :key="question.Id">
-                        <label class="col-md-12"><b>{{ question.name }}</b></label>
-                        <label class="col-md-12">{{ question.text }}</label>
-                        <button 
-                            v-for="answer in question.variables" 
-                            :key="answer.id" 
-                            type="button" 
-                            :id="'answer'+answer.id" 
-                            @click="useQualStore.SaveQAToProject(question, answer.id, answer.name)"
-                            class="btn btn-outline-success me-2 projSettingTogButton"
-                            :class="[answer.selected ? 'searchButton' : 'btn-light']"
-                            >{{ answer.name }}</button><hr/>
+                <div v-if="profCategoriesLoading" class="spinner-container">
+                    <div class="position-absolute top-50 start-50 translate-middle">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading categories...</span>
+                        </div>
+                    </div>
+                </div>
+                <div v-else-if="profCategoriesError">
+                    <p v-if="profCategoriesError"> {{ profCategoriesError.message }} </p><br/>
+                </div>
+                <div v-else-if="selectedCategory !== ''">
+                <!-- <p v-if="profCategoriesLoading">Loading categories.. </p>
+                <p v-if="profCategoriesError"> {{ profCategoriesError.message }} </p><br/> -->
+                    <h5 v-if="selectedCategory !== ''">Profile Question related to <b>{{ selectedCategory }}</b>:</h5>
+                    <div id="section2" class="profileSection2" v-if="categoryQAs.length > 0">
+                        <div v-for="question in categoryQAs" :key="question.Id">
+                            <label class="col-md-12"><b>{{ question.name }}</b></label>
+                            <label class="col-md-12">{{ question.text }}</label>
+                            <button 
+                                v-for="answer in question.variables" 
+                                :key="answer.id" 
+                                type="button" 
+                                :id="'answer'+answer.id" 
+                                @click="useQualStore.SaveQAToProject(question, answer.id, answer.name)"
+                                class="btn btn-outline-success me-2 projSettingTogButton"
+                                :class="[answer.selected ? 'searchButton' : 'btn-light']"
+                                >{{ answer.name }}</button><hr/>
+                        </div>
                     </div>
                 </div>
             </div>
