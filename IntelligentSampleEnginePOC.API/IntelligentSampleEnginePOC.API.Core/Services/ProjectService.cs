@@ -33,6 +33,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             project.LastUpdate = DateTime.Now;
             if (_projectValidator.IsValidated(project))
             {
+                var updateProjectStatus = project.StartDate.AddDays(project.FieldingPeriod);
+                if (project.StartDate < DateTime.Now && updateProjectStatus > DateTime.Now)
+                {
+                    project.Status = (Status)2;
+                }
                 project = _projectContext.CreateProject(project);
                 if(project.TargetAudiences.Any())
                 {

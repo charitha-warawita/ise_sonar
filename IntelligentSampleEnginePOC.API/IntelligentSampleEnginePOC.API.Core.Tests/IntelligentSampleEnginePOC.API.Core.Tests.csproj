@@ -25,5 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IntelligentSampleEnginePOC.API.Core\IntelligentSampleEnginePOC.API.Core.csproj" />
+    <ProjectReference Include="..\IntelligentSampleEnginePOC.API.Http.Tests\IntelligentSampleEnginePOC.API.Http.Tests.csproj" />
   </ItemGroup>
 </Project>

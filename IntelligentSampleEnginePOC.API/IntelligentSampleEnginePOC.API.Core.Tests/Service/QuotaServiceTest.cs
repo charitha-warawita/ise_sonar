@@ -1,23 +1,22 @@
 ﻿using IntelligentSampleEnginePOC.API.Core.Interfaces;
 using IntelligentSampleEnginePOC.API.Core.Model;
 using IntelligentSampleEnginePOC.API.Core.Services;
-using IntelligentSampleEnginePOC.API.Http.Controllers;
 using IntelligentSampleEnginePOC.API.Http.Tests.MockModelData;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
-using System;
 
-namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
+
+
+namespace IntelligentSampleEnginePOC.API.Core.Tests.Service
 {
-    public class QuotaServiceControllerTest
+    public class QuotaServiceTest
     {
-  
+
         private Mock<ILogger<QuotaService>> _logger;
         private Mock<IQuotaContext> _quotaContext;
         private QuotaService _quotaService;
-        public QuotaServiceControllerTest()
+        public QuotaServiceTest()
         {
             _logger = new Mock<ILogger<QuotaService>>();
             _quotaContext = new Mock<IQuotaContext>();
@@ -25,9 +24,9 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
 
         }
 
-            [Theory]
+        [Theory]
         [InlineData(501)]
-        
+
         public void GetQuota_ReturnsOk(long qtid)
         {
             string jsonString = QuotaTest.GetQuotaJson();
@@ -46,7 +45,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
             Quota quota = JsonConvert.DeserializeObject<Quota>(jsonString);
             _quotaContext.Setup(repo => repo.GetQuota(qtid)).Returns(new QuotaTest().GetQuota(qtid, quota));
             var index = _quotaService.GetQuota(qtid);
-            Assert.NotNull(_quotaContext.Object); 
+            Assert.NotNull(_quotaContext.Object);
         }
 
         [Theory]
@@ -54,7 +53,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
 
         public void GetQuota_Return_Exceptions(long qtid)
         {
-            if(qtid <= 0)
+            if (qtid <= 0)
             {
                 _quotaContext.Setup(repo => repo.GetQuota(qtid)).Throws(new Exception("Test Exception"));
             }
@@ -73,17 +72,17 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
         }
 
         [Theory]
-        [InlineData(501)] 
+        [InlineData(501)]
         public void DeleteQuota_ReturnsOk(long qtid)
         {
             string jsonString = QuotaTest.GetQuotaJson();
             Quota quota = JsonConvert.DeserializeObject<Quota>(jsonString);
-            _quotaContext.Setup(repo => repo.DeleteQuotaFromDB(qtid)).Returns(new QuotaTest().DeleteQuotaTest(qtid,quota));
+            _quotaContext.Setup(repo => repo.DeleteQuotaFromDB(qtid)).Returns(new QuotaTest().DeleteQuotaTest(qtid, quota));
             var result = _quotaService.DeleteQuota(qtid);
             Assert.NotNull(result);
-     
+
         }
-     
+
 
 
 

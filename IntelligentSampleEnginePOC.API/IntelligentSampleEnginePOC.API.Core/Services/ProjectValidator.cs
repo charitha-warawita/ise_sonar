@@ -32,6 +32,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 ValidateProjectStartDate(project);
                 ValidateProjectFieldingPeriod(project);
                 ValidateProjectUser(project);
+                ValidateProjectStartDatewithFieldingPeriod(project);
             }
 
             if (errors.Any())
@@ -65,6 +66,19 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             if (project.FieldingPeriod <= 0)
             {
                 errors.Add(Constants.NoProjFieldingPeriodFound);
+            }
+        }
+        private void ValidateProjectStartDatewithFieldingPeriod(Project project)
+
+        { 
+            if(project.StartDate != DateTime.MinValue && project.FieldingPeriod != 0)
+            {
+                var startDateValidation = project.StartDate.AddDays(project.FieldingPeriod);
+                if (project.StartDate < DateTime.Now && startDateValidation  < DateTime.Now)
+                {
+                    errors.Add("Select valid Date");
+                }
+               
             }
         }
 
