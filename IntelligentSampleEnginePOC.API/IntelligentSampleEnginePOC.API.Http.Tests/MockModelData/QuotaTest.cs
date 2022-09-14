@@ -66,7 +66,17 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.MockModelData
 
         public long DeleteQuotaTest(long qtid, Quota quota)
         {
-            quota.Id = qtid;
+            List<Quota> newQuota = new List<Quota>();
+            newQuota.Add(quota);
+            var quotaIdCeck = newQuota[0].Id.Equals(qtid);
+            if (quotaIdCeck)
+            {
+                newQuota.Remove(quota);
+            }
+            else
+            {
+                return 0;
+            }
             return qtid;
         }
 

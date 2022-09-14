@@ -13,5 +13,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Interfaces
         Task<Project?> GetAsync(long id);
 
         Task<List<Survey>> GetSurveysAsync(long id);
+        
+        Task<List<Cost>> GetCurrentCostAsync(long id);
     }
 }

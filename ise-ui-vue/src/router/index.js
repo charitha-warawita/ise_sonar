@@ -51,7 +51,10 @@ const router = createRouter({
 			path: "/login",
 			name: "login",
 			component: () => import("@/views/LoginView.vue"),
-			meta: { requiresAuthentication: false },
+			meta: {
+				requiresAuthentication: false,
+				topBar: false,
+			},
 		},
 	],
 });

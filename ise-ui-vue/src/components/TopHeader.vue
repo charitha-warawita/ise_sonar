@@ -1,5 +1,5 @@
 <template>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<nav class="top-bar navbar navbar-expand-lg navbar-dark bg-primary">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#"
 				><img src="@/assets/logo.svg" alt="" width="30" height="24" />
@@ -137,5 +137,11 @@ a {
 .searchButton {
 	background-color: #34495e;
 	color: white;
+}
+
+@media (min-width: 1024px) {
+	.top-bar {
+		margin-left: 0;
+	}
 }
 </style>

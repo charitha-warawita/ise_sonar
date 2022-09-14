@@ -1,17 +1,12 @@
-
 <script setup>
-import PageTitle from '@/components/PageTitle.vue'
-import ProjectList from '@/components/ProjectList.vue'
-import TopHeader from '../components/TopHeader.vue';
-
+import PageTitle from "@/components/PageTitle.vue";
+import ProjectList from "@/components/ProjectList.vue";
 </script>
 
 <template>
-  <TopHeader/>
-  <PageTitle title="Projects"></PageTitle>
-  <ProjectList/><br/>
-  <main>
-    <!-- <TheWelcome /> -->
-    
-  </main>
+	<PageTitle title="Projects"></PageTitle>
+	<ProjectList /><br />
+	<main>
+		<!-- <TheWelcome /> -->
+	</main>
 </template>

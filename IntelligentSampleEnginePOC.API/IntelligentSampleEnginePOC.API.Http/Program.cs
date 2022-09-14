@@ -39,6 +39,7 @@ builder.Services.AddTransient<IProjectValidator, ProjectValidator>();
 
 builder.Services.AddTransient<ISurveysEndpoint, SurveysEndpoint>();
 builder.Services.AddTransient<ITestingEndpoint, TestingEndpoint>();
+builder.Services.AddTransient<IPricingEndpoint, PricingEndpoint>();
 
 builder.Services.AddTransient<ICintSamplingService, CintSamplingService>();
 

@@ -30,14 +30,16 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
 
             if (project != null)
             {
-                ValidateProjectCategories(project);
-                ValidateProjectTACountainsCountry(project);
+                //Code review and correction required 
+
+                // ValidateProjectCategories(project);
+                // ValidateProjectTACountainsCountry(project);
                 ValidateProjectAsTA(project);
-                ValidateProjectName(project);
-                ValidateProjectReference(project);
-                ValidateProjectStartDate(project);
-                ValidateProjectFieldingPeriod(project);
-                ValidateProjectUser(project);
+                // ValidateProjectName(project);
+                // ValidateProjectReference(project);
+                // ValidateProjectStartDate(project);
+                // ValidateProjectFieldingPeriod(project);
+                // ValidateProjectUser(project);
             }
 
             if (errors.Any())
@@ -50,7 +52,9 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         {
             
         }
-                
+        
+        
+        // Code review and correction required
         private void ValidateProjectName(Project project)
         {
             if (project.Name == null || !project.Name.Any())
@@ -58,6 +62,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 errors.Add("No Project Name Identified");
             }
         }
+
+        // Code review and correction required
         private void ValidateProjectReference(Project project)
         {
             if (project.Reference == null || !project.Reference.Any())
@@ -65,6 +71,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 errors.Add("No Project Reference Identified");
             }
         }
+
+        // Code review and correction required
         private void ValidateProjectStartDate(Project project)
         {
             if (project.StartDate == DateTime.MinValue)
@@ -72,6 +80,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                  errors.Add("No Project StartDate Identified");
             }
         }
+
+        //valid
         private void ValidateProjectFieldingPeriod(Project project)
         {
             if (project.FieldingPeriod <= 0)
@@ -79,6 +89,8 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 errors.Add("No Project FieldingPeriod Identified");
             }
         }
+
+        //valid
         private void ValidateProjectCategories(Project project)
         {
             if (project.Categories == null || !project.Categories.Any())
@@ -86,8 +98,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 errors.Add("No Categories Identified");
             }
         }
+
+        // Code review and correction required
         private void ValidateProjectUser(Project project)
         {
+            // !!?!?!?!?!!?!!?!
             if (project.User == null)
             {           
             if (project.User.Name == null)               
@@ -96,7 +111,66 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 errors.Add("No Project User Email Identified");            
             }
         }
+
+        private bool ValidateUrl(string url)
+        {
+            if (string.IsNullOrEmpty(url))
+                return false;
+
+            Uri validatedUri;
+
+            if (Uri.TryCreate(url, UriKind.Absolute, out validatedUri)) //.NET URI validation.
+            {
+                //If true: validatedUri contains a valid Uri. Check for the scheme in addition.
+                return (validatedUri.Scheme == Uri.UriSchemeHttp || validatedUri.Scheme == Uri.UriSchemeHttps);
+            }
+            return false;
+        }
+
         private void ValidateProjectAsTA(Project project)
+        {
+            if (project.TargetAudiences != null && project.TargetAudiences.Any())
+            {
+                foreach(var item in project.TargetAudiences)
+                {
+                    if (string.IsNullOrEmpty(item.Name))
+                        errors.Add(Constants.TANameErr);
+                    if (item.AudienceNumber < 1)
+                        errors.Add(string.Format(Constants.MinValCheckErr, "Target Audience number (order)", 1));
+                    if (item.EstimatedIR < 1)
+                        errors.Add(string.Format(Constants.MinValCheckErr, "Estimated IR", 1));
+                    if (item.EstimatedLOI < 1)
+                        errors.Add(string.Format(Constants.MinValCheckErr, "Estimated LOI", 1));
+                    if (item.Limit < 1)
+                        errors.Add(string.Format(Constants.MinValCheckErr, "Wanted Completes (or Limit)", 1));
+                    if (!ValidateUrl(item.TestingUrl))
+                        errors.Add(string.Format(Constants.InvalidUrlErr, "Testing Url"));
+                    if(!ValidateUrl(item.LiveUrl))
+                        errors.Add(string.Format(Constants.InvalidUrlErr, "Live Url"));
+                    if(item.Qualifications != null && item.Qualifications.Count > 1)
+                    {
+                        if (!item.Qualifications.Any(x => (x.Question!= null && x.Question.Name == "Country")))
+                            errors.Add(Constants.QualValidationMessage);
+                    }
+                    else
+                    {
+                        errors.Add(Constants.QualValidationMessage);
+                    }
+
+                    //If required, validate each qualification item fields here
+                    // foreach(var subItem in item.Qualifications) { ValidateForQualification(subItem);  }
+
+                    //if required, valid each quota item fields here
+                    // foreach(var subItem in item.Quotas) { ValidateForQuotas(subItem);  }
+                }
+            }
+            else
+                errors.Add(string.Format(Constants.NoTAFound, project.Id));
+
+        }
+
+        // Code review and correction required
+        private void ValidateProjectAsTAInvalid(Project project)
         {
             if (project.TargetAudiences == null || !project.TargetAudiences.Any())
             {
@@ -124,37 +198,37 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                     {   
                         var qualificationCountcheck = ta.Qualifications.Count > 1;
                         if (!qualificationCountcheck)
-                            errors.Add("Atleast two Qualification should be present to create a project under Target Audience : " + ta.Id + " provided one of which should be country details qualification");
-                        else
+                            errors.Add(Constants.QUALIFICATIONCOUNTERCHECKSTART + ta.Id + Constants.QUALIFICATIONCOUNTERCHECKEND);                       
                             if (qual.Order <= 0)
-                                errors.Add("No Qualification ID Identified for Target Audience : " + ta.Id + " and Target Audience Name : " + ta.Name);
+                                errors.Add(Constants.QORDER + ta.Id + Constants.TANAME + ta.Name);
                             if (qual.LogicalDecision == null)
-                                errors.Add("No Qualification Logical Condition Identified for Target Audience : " + ta.Id + " and Target Audience Name : " + ta.Name);
+                                errors.Add(Constants.QLOGICALDICISION + ta.Id + Constants.TANAME + ta.Name);
                             if (qual.NumberOfRequiredConditions <= 0)
-                                errors.Add("No Qualification Number of Required Conditions Identified for Target Audience : " + ta.Id + " and Target Audience Name : " + ta.Name);
+                                errors.Add(Constants.QNOOFREQUIREDCONDITIONS  + ta.Id + Constants.TANAME + ta.Name);
                             if (!qual.IsActive == false || !qual.IsActive == true)
-                                errors.Add("No Qualification Name Identified for Target Audience : " + ta.Id + " and Target Audience Name : " + ta.Name);
+                                errors.Add(+ ta.Id + Constants.TANAME + ta.Name);
                             if (qual.Question != null)
                             {
                                 var qualificationCountryCheck = ta.Qualifications.Any(i => i.Question.Name == "Country");
                                 if (!qualificationCountryCheck)
-                                    errors.Add("Atleast one Country should be present to create Project under TA ID : " + ta.Id + " and Qualification ID : " + qual.Id);
+                                    errors.Add(Constants.QUALIFICATIONCOUNTRYCHECK + ta.Id + Constants.QID + qual.Id);
                                 if (qual.Question.Id <= 0)
-                                    errors.Add("No Question ID Identified for Qualification ID : " + qual.Id);
+                                    errors.Add(Constants.QQUESTIONID + qual.Id);
                                 if (qual.Question.Name == null)
-                                    errors.Add("No Question Name Identified for Qualification ID : " + qual.Id);
+                                    errors.Add(Constants.QQUESTIONNAME + qual.Id);
                                 if (qual.Question.Text == null)
-                                    errors.Add("No Question Text Identified for Qualification ID : " + qual.Id);
+                                    errors.Add(Constants.QQUESTIONTEXT + qual.Id);
                                 if (qual.Question.CategoryName == null)
-                                    errors.Add("No Question Category Name Identified for Qualification ID : " + qual.Id);
-                                if (qual.Question.Variables == null && qual.Question.Variables.Count > 0)
+                                    errors.Add(Constants.QCATEGORYNAME + qual.Id);
+                            //!!!?!?!?!?!?    
+                            if (qual.Question.Variables == null && qual.Question.Variables.Count > 0)
                                 {
                                     foreach (var variable in qual.Question.Variables)
                                     {
                                         if (variable.Id <= 0)
-                                            errors.Add("No Variable ID  Identified for Qualification ID : " + qual.Id);
+                                            errors.Add(Constants.VARIABLEID + qual.Id);
                                         if (variable.Name == null)
-                                            errors.Add("No Variable Name  Identified for Qualification ID : " + qual.Id);
+                                            errors.Add(Constants.VARIABLENAME + qual.Id);
                                     }
                                 }
                             }
