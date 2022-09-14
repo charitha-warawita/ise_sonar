@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace IntelligentSampleEnginePOC.API.Core.Model
@@ -19,11 +20,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Model
         public int FieldTarget { get; set; }
         [JsonProperty(PropertyName = "limit")]
         public int Limit { get; set; }
-        [JsonProperty(PropertyName = "prescreens")]
+        [JsonProperty(PropertyName = "prescreens"), System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int Prescreens { get; set; }
-        [JsonProperty(PropertyName = "completes")]
+        [JsonProperty(PropertyName = "completes"), System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int Completes { get; set; }
-        [JsonProperty(PropertyName = "isActive")]
+        [JsonProperty(PropertyName = "isActive"), System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool IsActive { get; set; }
         [JsonProperty(PropertyName = "conditions")]
         public List<Question> Conditions { get; set; }

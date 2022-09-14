@@ -13,34 +13,36 @@
         public const int RECORDCOUNT_DEFAULT = 10;
 
         // Error descriptions
-        public const string ProjValFailed = "Project validation failed.";
-        public const string NoTAFound = "Target audience not available in project id: {0}";
+        public const string NoProjNameFound = "Project Name is invalid";
+        public const string NoProjReferenceFound = "Project Reference is invalid";
+        public const string NoProjStartDateFound = "Project StartDate is invalid";
+        public const string NoProjFieldingPeriodFound = "Project FieldingPeriod is invalid";
+        public const string ProjUserNameErr = "User name is invalid";
+        public const string ProjUserEmailErr = "User Email is invalid";
+        public const string NoCategoryFound = "Project Categories not available in project id: {0}";
+        public const string NoUserFound = "User not available in project id: {0}";
+        public const string ProjValFailed = "Project validation failed big time.. You must be ashamed!!!";
+        public const string NoTAFound = "Target Audience not available in project id: {0}";
         public const string TANameErr = "Target Audience name is invalid";
         public const string MinValCheckErr = "{0} is invalid. Minimum value allowed is {1}";
         public const string InvalidUrlErr = "Invalid Url entered in the field - {0}";
-        public const string QualValidationMessage = "Each TA must contain atlast one country selected in the qualification " +
-            "list under STANDARD category and should have atleast one more additional qualification like gender, age or " +
-            "profiling questions to support quota groups";
-
-
-
-
-        public const string QUALIFICATIONCOUNTERCHECKSTART = "Atleast two Qualification should be present to create a project under Target Audience : ";
-        public const string QUALIFICATIONCOUNTERCHECKEND = " provided one of which should be country details qualification";
-        public const string TANAME =  " and Target Audience Name : ";
-        public const string QORDER = "No Qualification Order Identified for Target Audience : ";
-        public const string QLOGICALDICISION= "No Qualification Logical Condition Identified for Target Audience : ";
-        public const string QNOOFREQUIREDCONDITIONS = "No Qualification Number of Required Conditions Identified for Target Audience : ";
-        public const string TAISACTIVE = "No Qualification Data Identified IsActive value for Target Audience : ";
-        public const string QID = " and Qualification ID : ";      
-        public const string QUALIFICATIONCOUNTRYCHECK = "Atleast one Country should be present to create Project under TA ID : ";
-        public const string QQUESTIONID = "No Question ID Identified for Qualification ID : ";
-        public const string QQUESTIONNAME = "No Question Name Identified for Qualification ID : ";
-        public const string QQUESTIONTEXT = "No Question Text Identified for Qualification ID : ";
-        public const string QCATEGORYNAME = "No Question Category Name Identified for Qualification ID : ";
-        public const string VARIABLEID = "No Variable ID  Identified for Qualification ID : ";
-        public const string VARIABLENAME = "No Variable Name  Identified for Qualification ID : ";
-
-
+        public const string QualValidationMessage = "Each TA must contain atleast one country selected in the qualification " +
+                                                    "list under STANDARD category and should have atleast one more additional qualification like gender, age or " +
+                                                    "profiling questions to support quota groups";
+        public const string DuplicateTAName = "Duplicate Target Audience Name Identified ";
+        public const string DuplicateTAOrder = "Duplicate Target Audience Order Identified ";       
+        public const string NoQualVariableNameFound = "Variable Name not available for Qualification: {0}";
+        public const string NoQualQuestionNameFound = "Question Name not available for Qualification: {0}";
+        public const string NoQualQuestionTextFound = "Question Text not available for Qualification: {0}";
+        public const string NoQualQuestionCategoryFound = "Question Category not available for Qualification: {0}";
+        public const string DuplicateQuotaName = "Duplicate Quota Name Identified ";
+        public const string NoQuotaNameFound = "Quota Name not available for Target Audience: {0}";
+        public const string NoQuotaTypeFound = "Quota Type not available for Target Audience: {0}";
+        public const string NoQuestionNameFound = "Question Name not available for Quota: {0}";
+        public const string NoQuestionTextFound = "Question Text not available for Quota: {0}";
+        public const string NoQuestionCategoryFound = "Question Category not available for Quota: {0}";
+        public const string NoQuestionVariableNameFound = "Variable Name not available for Question: {0}";
+        public const string NoQualificationFound = "Qualification not available in Target Audience id: {0}";
+        public const string NoQuotaFound = "Quota not available in Target Audience id: {0}";
     }
 }
