@@ -67,6 +67,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                 errors.Add(Constants.NoProjFieldingPeriodFound);
             }
         }
+
         private void ValidateProjectCategories(Project project)
         {
             if (project.Categories == null || !project.Categories.Any())
@@ -137,7 +138,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                         errors.Add(string.Format(Constants.InvalidUrlErr, "Testing Url"));
                     if (!ValidateUrl(ta.LiveUrl))
                         errors.Add(string.Format(Constants.InvalidUrlErr, "Live Url"));
-                    if (ta.Qualifications != null && ta.Qualifications.Count > 1)
+                    if (ta.Qualifications != null && ta.Qualifications.Any())
                     {
                         var qualValFailed = false;
                         if (!ta.Qualifications.Any(x => (x.Question != null && x.Question.Name == "Country")))
@@ -202,11 +203,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                                 if (qual.Question.Id <1)
                                     errors.Add(string.Format(Constants.MinValCheckErr, "Qualification Question Id", 1));
                                 if (string.IsNullOrEmpty(qual.Question.Name))
-                                    errors.Add(string.Format(Constants.NoQualQuestionNameFound, ta.Id));
+                                    errors.Add(string.Format(Constants.NoQualQuestionNameFound, ta.Name));
                                 if (string.IsNullOrEmpty(qual.Question.Text))
-                                    errors.Add(string.Format(Constants.NoQualQuestionTextFound, ta.Id));
+                                    errors.Add(string.Format(Constants.NoQualQuestionTextFound, ta.Name));
                                 if (string.IsNullOrEmpty(qual.Question.CategoryName))
-                                    errors.Add(string.Format(Constants.NoQualQuestionCategoryFound, ta.Id));
+                                    errors.Add(string.Format(Constants.NoQualQuestionCategoryFound, ta.Name));
 
                                 if (qual.Question.Variables != null && qual.Question.Variables.Count > 0)
                                 {
@@ -223,7 +224,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                     }
                     else
                     {
-                        errors.Add(string.Format(Constants.NoQualificationFound, ta.Id));
+                        errors.Add(string.Format(Constants.NoQualificationFound, ta.Name));
                     }
                     if (ta.Quotas != null && ta.Quotas.Any())
                     {
@@ -233,7 +234,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                             if (quotaName)
                                 errors.Add(Constants.DuplicateQuotaName);                            
                             if (string.IsNullOrEmpty(qa.QuotaName))
-                                errors.Add(string.Format(Constants.NoQuotaNameFound, ta.Id));                            
+                                errors.Add(string.Format(Constants.NoQuotaNameFound, ta.Name));                            
                              if (qa.FieldTarget < 1)
                                  errors.Add(string.Format(Constants.MinValCheckErr, "Quota FieldTarget", 1));
                              if (qa.Limit < 1)
@@ -246,11 +247,11 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                                     if (qs.Id < 1)
                                         errors.Add(string.Format(Constants.MinValCheckErr, "Quota Question Id", 1));
                                     if (string.IsNullOrEmpty(qs.Name))
-                                        errors.Add(string.Format(Constants.NoQuestionNameFound, ta.Id));
+                                        errors.Add(string.Format(Constants.NoQuestionNameFound, ta.Name));
                                     if (string.IsNullOrEmpty(qs.Text))
-                                        errors.Add(string.Format(Constants.NoQuestionTextFound, ta.Id));
+                                        errors.Add(string.Format(Constants.NoQuestionTextFound, ta.Name));
                                     if (string.IsNullOrEmpty(qs.CategoryName))
-                                        errors.Add(string.Format(Constants.NoQuestionCategoryFound, ta.Id));
+                                        errors.Add(string.Format(Constants.NoQuestionCategoryFound, ta.Name));
                                     if (qs.Variables != null && qs.Variables.Count > 0)
                                     {
                                         foreach (Variable v in qs.Variables)
@@ -258,7 +259,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                                             if (v.Id < 1)
                                                 errors.Add(string.Format(Constants.MinValCheckErr, "VarId", 1));
                                             if (string.IsNullOrEmpty(v.Name))
-                                                errors.Add(string.Format(Constants.NoQuestionVariableNameFound, ta.Id));
+                                                errors.Add(string.Format(Constants.NoQuestionVariableNameFound, ta.Name));
                                         }
                                     }
                                 }
@@ -267,7 +268,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                     }
                     else
                     {
-                        errors.Add(string.Format(Constants.NoQuotaFound, ta.Id));
+                        errors.Add(string.Format(Constants.NoQuotaFound, ta.Name));
                     }
                 }
             }
