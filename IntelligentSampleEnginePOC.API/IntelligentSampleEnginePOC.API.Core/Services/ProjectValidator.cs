@@ -73,10 +73,10 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
         { 
             if(project.StartDate != DateTime.MinValue && project.FieldingPeriod != 0)
             {
-                var startDateValidation = project.StartDate.AddDays(project.FieldingPeriod);
-                if (project.StartDate < DateTime.Now && startDateValidation  < DateTime.Now)
+                var fieldingPeriodDate = project.StartDate.AddDays(project.FieldingPeriod);
+                if (project.StartDate < DateTime.Now && fieldingPeriodDate < DateTime.Now)
                 {
-                    errors.Add("Select valid Date");
+                    errors.Add(string.Format(Constants.StartDateAndFieldingPeriodErr, fieldingPeriodDate, project.StartDate));
                 }
                
             }
