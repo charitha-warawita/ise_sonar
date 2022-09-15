@@ -25,7 +25,7 @@ export const useProjectsStore = defineStore("projects", {
 		projectListLoading: false,
 		projectListError: null,
 
-        currentStatus: 7,
+        currentStatus: 1,
         iseUrl: import.meta.env.VITE_ISE_API_URL,
         iseGetProjectsPath: import.meta.env.VITE_ISE_API_GETPROJECTS
     }),
@@ -41,7 +41,7 @@ export const useProjectsStore = defineStore("projects", {
             this.searchByStartDate = ''
             this.currentPageRowCount = 10;
             this.currentProjects = await this.GetProjectsList();
-            this.currentStatus = 7
+            this.currentStatus = 1;
         },
         async GetProjectsList() {
 
@@ -81,7 +81,7 @@ export const useProjectsStore = defineStore("projects", {
             this.currentPageNumber = 1;
             console.log("came in.. " + status);
             if(status === undefined || status === '' || status === -1) {
-                this.currentStatus = 7;
+                this.currentStatus = 1;
             }
             else {
                 this.currentStatus = status;

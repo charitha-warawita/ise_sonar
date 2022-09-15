@@ -73,43 +73,47 @@
 			>
 		</div>
 		<br /><br />
-		<ProjectListTable
-			class="projListTable"
-			:fields="displayfields"
-			:projects="useProjsStore.currentProjects"
-			:field-titles="displayFieldFormatted"
-			selectable
-			@row-selected="RowSelectedHandler"
-		></ProjectListTable>
-		<div v-if="currentProjects" style="width: 100%; text-align: center">
-			<div style="float: left">Page: {{ currentPageNumber }}</div>
-			<vue-awesome-paginate
-				:total-items="totalItems"
-				:items-per-page="currentPageRowCount"
-				:max-pages-shown="4"
-				:current-page="1"
-				:on-click="PageSelectHandler"
-				hide-prev-next
-			/>
-			<div style="float: right">
-				Rows:
-				<select @change="useProjsStore.selectedOption($event)">
-					<option value="" disabled>-- Select --</option>
-					<option
-						v-bind:value="rowCount"
-						v-for="rowCount in selectRowCount"
-						:key="rowCount"
-						:selected="rowCount == currentPageRowCount"
-					>
-						{{ rowCount }}
-					</option>
-				</select>
-			</div>
-		</div>
-
-		<p v-if="projectListLoading">Loading project list..</p>
-		<p v-if="projectListError">{{ projectListError }}</p>
-	</div>
+    <div v-if="projectListLoading" class="spinner-container">
+      <div class="position-absolute top-50 start-50 translate-middle">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading project list...</span>
+        </div>
+      </div>
+    </div>
+    <div v-else-if="projectListError">
+      <p v-if="projectListError">{{ projectListError }}</p>
+    </div>
+    <div v-else-if="currentProjects" style="width: 100%; text-align: center">
+      <ProjectListTable
+        class="projListTable"
+        :fields="displayfields"
+        :projects="useProjsStore.currentProjects"
+        :field-titles="displayFieldFormatted"
+        selectable
+        @row-selected="RowSelectedHandler"
+      >
+      </ProjectListTable>
+      <div style="float: left">Page: {{ currentPageNumber }}</div>
+        <vue-awesome-paginate
+        :total-items="totalItems"
+        :items-per-page="currentPageRowCount"
+        :max-pages-shown="4"
+        :current-page="currentPageNumber"
+        :on-click="PageSelectHandler"
+        hide-prev-next
+        />
+        <div style="float:right">
+            <label>Rows: </label>
+            <select @change="useProjsStore.selectedOption($event)" >
+                <option value="" disabled>-- Select --</option>
+                <option v-bind:value="rowCount" v-for="rowCount in selectRowCount" :key="rowCount" :selected="rowCount == currentPageRowCount">{{ rowCount }}</option>
+            </select>
+        </div>
+    </div>
+    <div v-else-if="!currentProjects" style="width: 100%; text-align: center">
+      No records available!
+    </div>
+  </div>
 </template>
 <script setup>
 import ProjectListTable from "@/components/ProjectListTable.vue";

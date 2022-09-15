@@ -8,13 +8,13 @@ export const useQuotaStore = defineStore('quota', {
         currentCondition: null,
         error: null,
         conditiongrid:false,
-        currentQuota: {}
+        currentQuota: {},
     }),
     actions: {
         LoadDefaultCurrentQuota() {
             this.currentQuota = {
                 name: '',
-                selectedServeyQuotaType:'',
+                selectedServeyQuotaType:'Completed',
                 selectedAdjustmentType:'',
                 selectedIsActive:"True",
                 fieldTargetPercentage: 0,
@@ -26,7 +26,8 @@ export const useQuotaStore = defineStore('quota', {
                 quotaNominal: 0,
                 conditions:[],
                 ServeyQuotaType:["--Select--","Started","Completed"],
-                adjustmentType:["--Select--", "Nominal","percentage"],
+                adjustmentType:["--Select--", "Nominal","Percentage"],
+                errors:[],
             };
             this.enableSave = false;
             this.conditionlist = [];
@@ -48,7 +49,7 @@ export const useQuotaStore = defineStore('quota', {
         UpdateAdjValue(totalCompletes, element, key) {
             if(Number.isInteger(totalCompletes)) {
                 if(element === 'fieldTarget') {
-                    if(key === 'nominal')
+                    if(key === 'nominal')   //this.currentQuota.fieldTargetNominal > totalCompletes ? this.currentQuota.fieldTargetNominal / 100 : (this.currentQuota.fieldTargetNominal/totalCompletes) * 100;
                         this.currentQuota.fieldTargetPercentage = (this.currentQuota.fieldTargetNominal/totalCompletes) * 100;
                     else
                         this.currentQuota.fieldTargetNominal = totalCompletes* (this.currentQuota.fieldTargetPercentage/100);
@@ -120,6 +121,7 @@ export const useQuotaStore = defineStore('quota', {
             if(index > -1) {
                 var quota = {
                     "tempId": quotaId,
+                    "order": quotaId, 
                     "quotaName": this.currentQuota.name,
                     "quotaType": this.currentQuota.selectedServeyQuotaType,
                     "fieldTarget": this.currentQuota.fieldTargetNominal,
@@ -136,13 +138,47 @@ export const useQuotaStore = defineStore('quota', {
                 this.LoadDefaultCurrentQuota();
             }
         },
+        sortOrderforQuota(added, taId) 
+        {
+            if (added.item) {
+                var project = useProjectStore().project;
+                for (var i = 0; i < project.targetAudiences.length; i++)
+                {
+                    if(project.targetAudiences[i].tempId === taId)
+                    {
+                        var currQuota = project.targetAudiences[i].quotas;
+                        var currIndex = added.oldIndex; var newIndex = added.newIndex;
+
+                        var tmp = currQuota[currIndex];
+                        currQuota.splice(currIndex, 1);
+                        currQuota.splice(newIndex, 0, tmp);
+
+                        for(var j = 0; j < currQuota.length; j++)
+                        {
+                            currQuota[j].order = j+1;
+                        }
+
+                        project.targetAudiences[i].quotas = currQuota;
+                        break;
+                    }
+                }
+            }
+        },
         RemoveQuota(taId, qtId) {
             var project = useProjectStore().project;
-            var index = project.targetAudiences.findIndex(x => x.tempId === taId)
-            if(index > -1) {
-                var subInd = project.targetAudiences[index].quotas.findIndex(x => x.tempId === qtId);
-                if(subInd > -1) {
-                    project.targetAudiences[index].quotas.splice(subInd, 1);
+            var taIndex = project.targetAudiences.findIndex(x => x.tempId === taId)
+            if(taIndex > -1) {
+                // var subInd = project.targetAudiences[taIndex].quotas.findIndex(x => x.tempId === qtId);
+                // if(subInd > -1) {
+                //     project.targetAudiences[taIndex].quotas.splice(subInd, 1);
+                // }
+                var quotaIndex = project.targetAudiences[taIndex].quotas.findIndex(x => x.tempId === qtId)
+                if(quotaIndex > -1)
+                project.targetAudiences[taIndex].quotas.splice(quotaIndex,1);
+
+                for(var j = 0; j < project.targetAudiences[taIndex].quotas.length; j++)
+                {
+                    project.targetAudiences[taIndex].quotas[j].order = j+1;
                 }
             }
         }
