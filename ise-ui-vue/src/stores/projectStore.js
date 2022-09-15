@@ -30,7 +30,7 @@ export const useProjectStore = defineStore('project', {
         categories:[],
         loading: false,
         error: null,
-
+        editField: ''
     }),
     /*rules: {
         name: { required },
