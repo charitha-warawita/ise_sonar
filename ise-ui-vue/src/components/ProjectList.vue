@@ -102,7 +102,8 @@
         :on-click="PageSelectHandler"
         hide-prev-next
         />
-        <div style="float:right"> Rows:
+        <div style="float:right">
+            <label>Rows: </label>
             <select @change="useProjsStore.selectedOption($event)" >
                 <option value="" disabled>-- Select --</option>
                 <option v-bind:value="rowCount" v-for="rowCount in selectRowCount" :key="rowCount" :selected="rowCount == currentPageRowCount">{{ rowCount }}</option>
@@ -113,7 +114,6 @@
       No records available!
     </div>
   </div>
-
 </template>
 <script setup>
 import ProjectListTable from "@/components/ProjectListTable.vue";

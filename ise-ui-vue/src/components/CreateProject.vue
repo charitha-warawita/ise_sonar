@@ -132,7 +132,6 @@
                                                 <draggable  v-on:update="useQuotaDataStore.sortOrderforQuota($event, ta.tempId)" >
                                                 <!-- <div class="container"> -->
                                                     <div class="subDivQ row g-3" v-if="ta.quotas" v-for="(qt, index) in ta.quotas" :key="qt.tempId">
-                                                        <div class="col-md-1">{{qt.order }}</div>
                                                         <!-- <div class="col-md-9">
                                                             <div class="col-md-12"><b>{{qt.quotaName}}</b></div>
                                                             <div class="col-md-12">Field Target: {{qt.fieldTarget}}; Limit: {{ qt.limit }}</div>
@@ -147,23 +146,8 @@
                                                                 </div>
                                                             </div>       
                                                         </div> -->
-                                                        <div class="col-md-3"><b>{{qt.quotaName}}</b></div>
-                                                        <div class="col-md-2">
-                                                            <!-- Field Target: {{qt.fieldTarget}}; -->
-                                                            <label :for="'fieldTarget'+ qt.tempId">Field Target</label>
-                                                            <div class="field">
-                                                                <span class="field-value" v-show="!showField('fieldTarget'+ qt.tempId)" @click="focusField('fieldTarget'+ qt.tempId)">{{qt.fieldTarget}}</span>
-                                                                <input v-model="qt.fieldTarget" v-show="showField('fieldTarget'+ qt.tempId)" :id="'fieldTarget'+ qt.tempId" type="text" class="field-value form-control" @focus="focusField('fieldTarget'+ qt.tempId)" @blur="blurField">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <!-- Limit: {{ qt.limit }}; -->
-                                                            <label :for="'limit' + qt.tempId">Limit</label>
-                                                            <div class="field">
-                                                                <span class="field-value" v-show="!showField('limit'+ qt.tempId)" @click="focusField('limit'+ qt.tempId)">{{qt.limit}}</span>
-                                                                <input v-model="qt.limit" v-show="showField('limit'+ qt.tempId)" :id="'limit'+ qt.tempId" type="text" class="field-value form-control" @focus="focusField('limit'+ qt.tempId)" @blur="blurField">
-                                                            </div>
-                                                        </div>
+                                                        <!-- <div class="col-md-1">{{qt.order }}</div> -->
+                                                        <div class="col-md-4"><b>{{qt.quotaName}}</b></div>
                                                         <div class="col-md-3">
                                                             <div v-for="condition in qt.conditions" :key="condition.id">
                                                                 <div class="col-md-12">{{condition.categoryName}} - {{condition.name}}</div>
@@ -176,6 +160,25 @@
                                                                 </div>
                                                             </div>  
                                                         </div>
+                                                        <div class="col-md-2">
+                                                            <!-- Field Target: {{qt.fieldTarget}}; -->
+                                                            <label :for="'fieldTarget'+ qt.tempId">Field Target</label>
+                                                            <div class="field">
+                                                                <!-- <span class="field-value" v-show="!showField('fieldTarget'+ qt.tempId)" @click="focusField('fieldTarget'+ qt.tempId)">{{qt.fieldTarget}}</span>
+                                                                <input v-model="qt.fieldTarget" v-show="showField('fieldTarget'+ qt.tempId)" :id="'fieldTarget'+ qt.tempId" type="text" class="field-value form-control" @focus="focusField('fieldTarget'+ qt.tempId)" @blur="blurField"> -->
+                                                                <input v-model="qt.fieldTarget" :id="'fieldTarget'+ qt.tempId" type="text" class="form-control" >
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <!-- Limit: {{ qt.limit }}; -->
+                                                            <label :for="'limit' + qt.tempId">Limit</label>
+                                                            <div class="field">
+                                                                <!-- <span class="field-value" v-show="!showField('limit'+ qt.tempId)" @click="focusField('limit'+ qt.tempId)">{{qt.limit}}</span>
+                                                                <input v-model="qt.limit" v-show="showField('limit'+ qt.tempId)" :id="'limit'+ qt.tempId" type="text" class="field-value form-control" @focus="focusField('limit'+ qt.tempId)" @blur="blurField"> -->
+                                                                <input v-model="qt.limit" :id="'limit'+ qt.tempId" type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        
                                                         <div class="col-md-1">
                                                             <a @click="useQuotaDataStore.RemoveQuota(ta.tempId, qt.tempId)" class="link-danger" style="float:right; margin-top:10%; cursor:pointer;">
                                                             Remove</a>

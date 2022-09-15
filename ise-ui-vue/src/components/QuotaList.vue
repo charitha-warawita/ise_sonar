@@ -216,8 +216,10 @@ const {
 // };
 
 const rules = {
-    name: { required },
-    selectedServeyQuotaType: { required : requiredIf(function () {return this.selectedServeyQuotaType=='' || this.selectedServeyQuotaType=='--select--' })},    
+    name: { required},
+    selectedServeyQuotaType: { required : requiredIf(function () {
+        return (this.selectedServeyQuotaType !='');
+    })},    
     selectedAdjustmentType: { required},
     fieldTargetNominal: { required, minValueValue:minValue(1)},
     fieldTargetPercentage: { required, minValueValue:minValue(1)},
