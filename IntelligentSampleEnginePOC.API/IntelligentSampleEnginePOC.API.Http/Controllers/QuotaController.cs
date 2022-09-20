@@ -63,12 +63,8 @@ namespace IntelligentSampleEnginePOC.API.Http.Controllers
             try
             {
                 var resultDeleted = _quotaService.DeleteQuota(qtid);
-                if (resultDeleted > 0)
-                {
-                    return Ok("Record deleted");
-                }
-                else
-                    return StatusCode(500, "No Records Found");
+
+                return Ok();
 
             }
             catch (Exception ex)
