@@ -39,7 +39,7 @@
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Start Date</label>
-                <input type="date" class="form-control" id="inputEmail4" v-model="useProjStore.project.startDate">
+                <input type="date" class="form-control" id="inputEmail4" v-model="useProjStore.project.startDate" v-bind:min="getTodaysDate()"> 
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Fielding Period</label>
@@ -71,6 +71,22 @@ const toggleCategory = (id) => {
         if(currIndex !== -1) useProjStore.project.categories.splice(currIndex, 1);
         element.className = tempClass.replace('searchButton', 'btn-light');;
     }
+};
+
+function getTodaysDate(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    today = yyyy + '-' + mm + '-' + dd;
+    return today;
 };
 
 onMounted(() => {

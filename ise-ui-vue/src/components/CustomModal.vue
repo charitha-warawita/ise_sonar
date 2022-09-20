@@ -3,6 +3,14 @@
     <div :id="'customModal-' + modalId" style="display:none"  class="modal" :class="'customModal-' + modalId">
       <transition name="modal-animation-inner">
         <div class="modal-inner" v-show=modalActive :class="'customModal-' + modalId">
+          <div style="float:left">
+            <h3 class="card-header">{{modalTitle}}</h3>
+          </div>
+          <div style="float:right">
+            <button type="button" class="close" 
+              @click="close"> X 
+          </button>
+          </div>
           <!--<i @click="close" class="">minimize</i>-->
           <!-- Modal Content -->
           <!--<label>TTT{{modalId}}</label>-->
@@ -15,7 +23,7 @@
 </template>
 <script>
 export default {
-  props: ["modalId", "modalActive"],
+  props: ["modalId", "modalActive", "modalTitle"],
   setup(props, { emit }) {
     const close = () => {
       emit("close");
