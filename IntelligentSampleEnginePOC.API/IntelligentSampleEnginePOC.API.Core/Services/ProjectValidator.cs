@@ -240,7 +240,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                     {
                         errors.Add(string.Format(Constants.NoQualificationFound, ta.Name));
                     }
-                    if (ta.Quotas != null && ta.Quotas.Count > 0)
+                    if (ta.Quotas != null && ta.Quotas.Any())
                     {
                         foreach (Quota qa in ta.Quotas)
                         {
@@ -279,11 +279,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-                        errors.Add(string.Format(Constants.NoQuotaFound, ta.Name));
-                    }
+                    }                  
                 }
             }
             else
