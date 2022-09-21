@@ -80,7 +80,7 @@ namespace IntelligentSampleEnginePOC.API.Http.Tests.Controller
             _quotaService.Setup(repo => repo.DeleteQuota(qtid)).Returns(new QuotaTest().DeleteQuotaTest(qtid, quota));
             var result = _quotaController.DeleteQuota(qtid);
             Assert.NotNull(result);
-            var okResult = Assert.IsType<OkObjectResult>(result);
+            var okResult = Assert.IsType<OkResult>(result);
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
 

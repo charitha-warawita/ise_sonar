@@ -44,5 +44,6 @@
         public const string NoQuestionVariableNameFound = "Variable Name not available for Question: {0}";
         public const string NoQualificationFound = "Qualification not available in Target Audience id: {0}";
         public const string NoQuotaFound = "Quota not available in Target Audience id: {0}";
+        public const string StartDateAndFieldingPeriodErr = "Field period days count {0} from start date {1} is set to be in the past. Set start date in the future or set start date and fielding period such that it is in the current active period.";
     }
 }

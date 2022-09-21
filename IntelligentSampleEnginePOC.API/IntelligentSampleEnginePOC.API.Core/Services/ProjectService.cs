@@ -68,8 +68,17 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             {
                 project = await CreateProject(project);
                 project = await _samplingService.CreateProject(project);
+
+                var updateProjectStatus = project.StartDate.AddDays(project.FieldingPeriod);
+                if (project.StartDate < DateTime.Now && updateProjectStatus > DateTime.Now)
+                {
+                    project.Status = Model.Status.Live;
+                }
+                else 
+                {
+                    project.Status = Model.Status.Created;
+                }
                 
-                project.Status = Model.Status.Created;
                 await UpdatePrjectStatus(project.Id, project.Status);
 
             }
