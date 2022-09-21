@@ -20,7 +20,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             if (project == null)
             {
                 errors.Add("Project return is null");
-                isValidationSuccess = true;
+                isValidationSuccess = false;
             }
 
             if (project != null)
@@ -45,7 +45,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
             if (string.IsNullOrEmpty(project.Name))
             {
                 errors.Add(Constants.NoProjNameFound);
-            }
+            }             
         }
         private void ValidateProjectReference(Project project)
         {
@@ -279,11 +279,7 @@ namespace IntelligentSampleEnginePOC.API.Core.Services
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-                        errors.Add(string.Format(Constants.NoQuotaFound, ta.Name));
-                    }
+                    }                  
                 }
             }
             else
